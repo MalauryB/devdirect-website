@@ -6,7 +6,8 @@ export function CTA() {
   return (
     <section id="contact" className="py-20 px-4">
       <div className="container mx-auto">
-        <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
           <CardContent className="p-12">
             <h2 className="text-2xl md:text-3xl font-semibold mb-4">Prêt à démarrer votre projet ?</h2>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl">
@@ -28,7 +29,8 @@ export function CTA() {
               Réponse garantie sous 24h • Devis gratuit • Sans engagement
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </div>
       </div>
     </section>
   )

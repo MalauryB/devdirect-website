@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="pt-32 pb-20 px-4 relative overflow-hidden bg-white">
+    <section className="pt-8 pb-20 px-4 relative overflow-hidden bg-white">
       <div className="container mx-auto relative z-10">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl md:text-5xl font-semibold mb-6 text-balance leading-tight">

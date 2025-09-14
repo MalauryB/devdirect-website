@@ -4,7 +4,8 @@ export function Footer() {
   return (
     <footer className="bg-white border-t border-border py-12 px-4">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
@@ -88,10 +89,11 @@ export function Footer() {
               </li>
             </ul>
           </div>
-        </div>
+          </div>
 
-        <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; 2024 DevDirect. Tous droits réservés.</p>
+          <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
+            <p>&copy; 2024 DevDirect. Tous droits réservés.</p>
+          </div>
         </div>
       </div>
     </footer>

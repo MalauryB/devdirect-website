@@ -51,16 +51,17 @@ export function Team() {
   return (
     <section id="team" className="py-20 px-4 relative overflow-hidden bg-white">
       <div className="container mx-auto relative z-10">
-        <div className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-            Notre <span className="text-primary">Équipe</span>
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl">
-            Une équipe soudée de professionnels expérimentés, passionnés par les nouvelles technologies.
-          </p>
-        </div>
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-2xl md:text-3xl font-semibold mb-4">
+              Notre <span className="text-primary">Équipe</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl">
+              Une équipe soudée de professionnels expérimentés, passionnés par les nouvelles technologies.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           {stats.map((stat, index) => (
             <Card key={index} className="bg-white border border-primary/20 text-center group">
               <CardContent className="pt-8 pb-6">
@@ -69,9 +70,9 @@ export function Team() {
               </CardContent>
             </Card>
           ))}
-        </div>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {teamMembers.map((member, index) => (
             <Card key={index} className="bg-white border border-primary/20 group">
               <CardHeader className="text-center">
@@ -105,6 +106,7 @@ export function Team() {
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
       </div>
     </section>

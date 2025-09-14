@@ -8,9 +8,10 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-primary/20 z-50 relative">
+    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-primary/20 z-50">
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <span className="text-lg font-bold" style={{ color: "#bda3cc" }}>
               DevDirect
@@ -66,9 +67,9 @@ export function Header() {
           >
             {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-        </div>
+          </div>
 
-        {isMenuOpen && (
+          {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 border-t border-primary/20 pt-4">
             <div className="flex flex-col space-y-4">
               <a href="#services" className="text-foreground hover:text-primary transition-colors font-medium">
@@ -101,7 +102,8 @@ export function Header() {
               </div>
             </div>
           </nav>
-        )}
+          )}
+        </div>
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 overflow-hidden">

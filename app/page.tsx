@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       <Header />
-      <main>
+      <main className="pt-20">
         <Hero />
         <Services />
         <Process />

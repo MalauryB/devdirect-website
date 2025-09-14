@@ -34,16 +34,17 @@ export function Services() {
   return (
     <section id="services" className="py-20 px-4 relative overflow-hidden bg-[#141414] rounded-3xl">
       <div className="container mx-auto relative z-10">
-        <div className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
-            Nos <span className="text-[#ba9fdf]">Services</span>
-          </h2>
-          <p className="text-xl text-white/70 max-w-2xl">
-            De l'idée à la réalisation, nous maîtrisons toutes les technologies pour donner vie à vos projets digitaux.
-          </p>
-        </div>
+        <div className="max-w-4xl mx-auto">
+          <div className="mb-16">
+            <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
+              Nos <span className="text-[#ba9fdf]">Services</span>
+            </h2>
+            <p className="text-xl text-white/70 max-w-2xl">
+              De l'idée à la réalisation, nous maîtrisons toutes les technologies pour donner vie à vos projets digitaux.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {services.map((service, index) => (
             <Card
               key={index}
@@ -73,6 +74,7 @@ export function Services() {
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
       </div>
     </section>
