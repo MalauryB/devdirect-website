@@ -1,0 +1,155 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* Updated to use the new natural color palette */
+  /* New palette: 38392c,faf8f2,9c9899,9c984d,7f7074,bda3cc,d3cfc2,6cb1bb,cbc3a3,d0d1d9 */
+  --background: #faf8f2; /* Cream white background */
+  --foreground: #38392c; /* Dark olive green for text */
+  --card: #faf8f2; /* Same as background for cards */
+  --card-foreground: #38392c;
+  --popover: #faf8f2;
+  --popover-foreground: #38392c;
+  /* Updated primary color to user's preferred lavender */
+  --primary: #ba9fdf; /* User's preferred lavender as primary */
+  --primary-foreground: #faf8f2;
+  --secondary: #6cb1bb; /* Moved turquoise to secondary */
+  --secondary-foreground: #38392c;
+  --muted: #d3cfc2; /* Light beige */
+  --muted-foreground: #7f7074; /* Gray-violet for muted text */
+  --accent: #9c984d; /* Olive yellow accent */
+  --accent-foreground: #faf8f2;
+  --destructive: #7f7074;
+  --destructive-foreground: #faf8f2;
+  --border: #d0d1d9; /* Very light gray for borders */
+  --input: #faf8f2;
+  /* Updated ring color to match new primary */
+  --ring: #ba9fdf;
+  /* Updated chart colors to include new primary */
+  --chart-1: #ba9fdf;
+  --chart-2: #6cb1bb;
+  --chart-3: #9c984d;
+  --chart-4: #7f7074;
+  --chart-5: #cbc3a3;
+  --radius: 1rem;
+  --sidebar: #faf8f2;
+  --sidebar-foreground: #38392c;
+  /* Updated sidebar primary to match new primary */
+  --sidebar-primary: #ba9fdf;
+  --sidebar-primary-foreground: #faf8f2;
+  --sidebar-accent: #6cb1bb;
+  --sidebar-accent-foreground: #38392c;
+  --sidebar-border: #d0d1d9;
+  /* Updated sidebar ring to match new primary */
+  --sidebar-ring: #ba9fdf;
+  --font-inter: "Inter", sans-serif; /* Added font configuration */
+}
+
+.dark {
+  /* Updated dark mode colors to complement the new palette */
+  --background: #38392c; /* Dark olive as background */
+  --foreground: #faf8f2; /* Cream as text */
+  --card: #38392c;
+  --card-foreground: #faf8f2;
+  --popover: #38392c;
+  --popover-foreground: #faf8f2;
+  /* Updated dark mode primary color */
+  --primary: #ba9fdf;
+  --primary-foreground: #38392c;
+  --secondary: #6cb1bb;
+  --secondary-foreground: #38392c;
+  --muted: #7f7074;
+  --muted-foreground: #9c9899;
+  --accent: #9c984d;
+  --accent-foreground: #38392c;
+  --destructive: #7f7074;
+  --destructive-foreground: #faf8f2;
+  --border: #7f7074;
+  --input: #7f7074;
+  /* Updated dark mode ring color */
+  --ring: #ba9fdf;
+  /* Updated dark mode chart colors */
+  --chart-1: #ba9fdf;
+  --chart-2: #6cb1bb;
+  --chart-3: #9c984d;
+  --chart-4: #9c9899;
+  --chart-5: #cbc3a3;
+  --sidebar: #38392c;
+  --sidebar-foreground: #faf8f2;
+  /* Updated dark mode sidebar primary */
+  --sidebar-primary: #ba9fdf;
+  --sidebar-primary-foreground: #faf8f2;
+  --sidebar-accent: #6cb1bb;
+  --sidebar-accent-foreground: #38392c;
+  --sidebar-border: #7f7074;
+  /* Updated dark mode sidebar ring */
+  --sidebar-ring: #ba9fdf;
+}
+
+@theme inline {
+  /* Updated font configuration to use Inter */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Updated services section background to darker black */
+.services-dark-section {
+  background-color: #141414;
+}
+
+/* Added subtle blue gradient background for sections after the dark section */
+.subtle-blue-gradient {
+  background: linear-gradient(135deg, #faf8f2 0%, #f0f4f8 50%, #e8f2f6 100%);
+}
+
+/* Alternative subtle gradient with more blue tint */
+.light-blue-gradient {
+  background: linear-gradient(to bottom, #faf8f2 0%, #f8fafc 30%, #f1f5f9 70%, #e2e8f0 100%);
+}
