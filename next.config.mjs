@@ -11,6 +11,8 @@ const nextConfig = {
   },
   output: 'export',
   trailingSlash: true,
+  basePath: '/devdirect-website',
+  assetPrefix: '/devdirect-website',
 }
 
 export default nextConfig
