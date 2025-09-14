@@ -97,3 +97,5 @@ coverage/
 .out
 .storybook-out
 storybook-static
+# Claude Code files
+CLAUDE.md
