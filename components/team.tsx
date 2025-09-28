@@ -4,21 +4,21 @@ import { Users, Award, Clock } from "lucide-react"
 
 const teamMembers = [
   {
-    role: "Développeur Full-Stack Senior",
-    experience: "8+ ans",
-    skills: ["React", "Node.js", "Python", "AWS"],
-    avatar: "/professional-developer-portrait.png",
+    role: "Développeuse Full-Stack Senior",
+    experience: "6+ ans",
+    skills: ["React", "Angular", "Java", "Node.js", "Spring Boot", "Flutter", "PostgreSQL"],
+    avatar: "/experts/malaury_boudon.jpg",
   },
   {
-    role: "Développeur Mobile Expert",
-    experience: "6+ ans",
-    skills: ["React Native", "Flutter", "iOS", "Android"],
+    role: "Développeur Full-Stack Expert",
+    experience: "5+ ans",
+    skills: ["TypeScript", "Java", "Angular", "React", "Spring Boot", "Kubernetes", "Docker"],
     avatar: "/mobile-developer-portrait.jpg",
   },
   {
-    role: "Développeur IoT & Backend",
-    experience: "7+ ans",
-    skills: ["Arduino", "Raspberry Pi", "C++", "Docker"],
+    role: "Développeur Mobile Expert",
+    experience: "4+ ans",
+    skills: ["Swift", "Kotlin", "Flutter", "React Native", "iOS", "Android", "TypeScript"],
     avatar: "/iot-developer-portrait.jpg",
   },
   {
