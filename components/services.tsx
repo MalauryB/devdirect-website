@@ -13,31 +13,31 @@ export function Services() {
       icon: Globe,
       title: t('services.webDev.title'),
       description: t('services.webDev.description'),
-      image: "/modern-web-dev-workspace.png",
+      image: "/devdirect-website/modern-web-dev-workspace.png",
     },
     {
       icon: Smartphone,
       title: t('services.mobileDev.title'),
       description: t('services.mobileDev.description'),
-      image: "/project-3.png",
+      image: "/devdirect-website/project-3.png",
     },
     {
       icon: Cpu,
       title: t('services.iot.title'),
       description: t('services.iot.description'),
-      image: "/iot-devices-and-sensors-connected.jpg",
+      image: "/devdirect-website/iot-devices-and-sensors-connected.jpg",
     },
     {
       icon: Palette,
       title: t('services.ai.title'),
       description: t('services.ai.description'),
-      image: "/IA.jpg",
+      image: "/devdirect-website/IA.jpg",
     },
     {
       icon: PenTool,
       title: t('services.design.title'),
       description: t('services.design.description'),
-      image: "/maquette_et_design.jpg",
+      image: "/devdirect-website/maquette_et_design.jpg",
     },
   ]
   return (
