@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 import { Service } from "@/data/services"
+import { getImagePath } from "@/lib/assets"
 
 interface ServiceCardProps {
   service: Service
@@ -16,7 +17,7 @@ export function ServiceCard({ service, onDetailsClick, className = "" }: Service
     <Card className={`bg-white border-0 rounded-2xl shadow-lg group hover:shadow-xl transition-all duration-300 overflow-hidden ${className}`}>
       <div className="aspect-video bg-gray-100 rounded-t-2xl overflow-hidden">
         <img
-          src={service.image || "/placeholder.svg"}
+          src={getImagePath(service.image)}
           alt={`Illustration pour ${service.title}`}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
         />

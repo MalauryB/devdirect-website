@@ -4,8 +4,11 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  basePath: '/devdirect-website',
-  assetPrefix: '/devdirect-website/',
+  ...(process.env.NODE_ENV === 'production' && {
+    basePath: '/devdirect-website',
+    assetPrefix: '/devdirect-website/',
+  }),
+  trailingSlash: true,
 };
 
 export default nextConfig;

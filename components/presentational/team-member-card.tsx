@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { TeamMember } from "@/data/team"
+import { getImagePath } from "@/lib/assets"
 
 interface TeamMemberCardProps {
   member: TeamMember
@@ -18,7 +19,7 @@ export function TeamMemberCard({ member, onMemberClick, className = "" }: TeamMe
         <div className="relative mx-auto mb-4">
           <div className="w-20 h-20 rounded-full overflow-hidden bg-primary/10 border-2 border-primary/30 group-hover:border-primary/50 transition-colors">
             <img
-              src={member.avatar || "/placeholder.svg"}
+              src={getImagePath(member.avatar)}
               alt={`Portrait de ${member.role}`}
               className="w-full h-full object-cover"
             />

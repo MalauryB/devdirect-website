@@ -16,7 +16,7 @@ export const servicesData: Service[] = [
     title: "Applications Web",
     description:
       "Sites vitrine, plateformes SaaS, e-commerce. Technologies modernes et performantes pour tous vos besoins digitaux.",
-    image: "/modern-web-dev-workspace.png",
+    image: "modern-web-dev-workspace.png",
     features: ["React", "Next.js", "TypeScript", "Node.js"]
   },
   {
@@ -24,7 +24,7 @@ export const servicesData: Service[] = [
     icon: Smartphone,
     title: "Applications Mobiles",
     description: "Applications natives et cross-platform pour iOS et Android avec une expérience utilisateur optimale.",
-    image: "assets/images/projects/project-3.png",
+    image: "project-3.png",
     features: ["React Native", "Flutter", "iOS", "Android"]
   },
   {
@@ -32,7 +32,7 @@ export const servicesData: Service[] = [
     icon: Cpu,
     title: "IoT & Intégrations",
     description: "Objets connectés, automatisation et intégrations système pour moderniser vos processus.",
-    image: "/iot-devices-and-sensors-connected.jpg",
+    image: "iot-devices-and-sensors-connected.jpg",
     features: ["Arduino", "Raspberry Pi", "C++", "Docker"]
   },
   {
@@ -40,7 +40,7 @@ export const servicesData: Service[] = [
     icon: Palette,
     title: "UX/UI Design",
     description: "Conception d'interfaces utilisateur modernes, intuitives et centrées sur l'expérience utilisateur.",
-    image: "/ui-ux-design-mockups-and-wireframes.jpg",
+    image: "ui-ux-design-mockups-and-wireframes.jpg",
     features: ["Figma", "Adobe XD", "Prototyping", "User Research"]
   },
 ]

@@ -23,28 +23,28 @@ export const teamMembersData: TeamMember[] = [
     role: "Développeur Full-Stack Senior",
     experience: "8+ ans",
     skills: ["React", "Node.js", "Python", "AWS"],
-    avatar: "/professional-developer-portrait.png",
+    avatar: "professional-developer-portrait.png",
   },
   {
     id: "mobile-expert",
     role: "Développeur Mobile Expert",
     experience: "6+ ans",
     skills: ["React Native", "Flutter", "iOS", "Android"],
-    avatar: "/mobile-developer-portrait.jpg",
+    avatar: "mobile-developer-portrait.jpg",
   },
   {
     id: "iot-backend",
     role: "Développeur IoT & Backend",
     experience: "7+ ans",
     skills: ["Arduino", "Raspberry Pi", "C++", "Docker"],
-    avatar: "/iot-developer-portrait.jpg",
+    avatar: "iot-developer-portrait.jpg",
   },
   {
     id: "ux-designer",
     role: "UX/UI Designer",
     experience: "5+ ans",
     skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
-    avatar: "/ux-designer-portrait.png",
+    avatar: "ux-designer-portrait.png",
   },
 ]
 
