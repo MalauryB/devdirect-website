@@ -56,7 +56,7 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
           camera={{
-            position: [6, 4, 6],
+            position: [20, 10, 18],
             fov: 50,
             near: 0.1,
             far: 1000
@@ -102,9 +102,10 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
             enableRotate={true}
             autoRotate={false}
             minDistance={5}
-            maxDistance={15}
+            maxDistance={60}
             minPolarAngle={Math.PI / 6}
             maxPolarAngle={Math.PI - Math.PI / 6}
+            target={[0, 0, 0]}
           />
         </Canvas>
       </Suspense>
