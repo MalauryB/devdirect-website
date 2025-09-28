@@ -1,19 +1,19 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle } from "lucide-react"
-import { Telescope3D } from "@/components/telescope-3d"
+import { VoxelWebDev } from "@/components/voxel-web-dev"
 
 export function Hero() {
   return (
     <section className="pt-8 pb-20 px-4 relative overflow-hidden bg-white">
       <div className="container mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Télescope 3D à gauche */}
+          {/* Modèle 3D de développement web à gauche */}
           <div className="lg:col-span-4 order-2 lg:order-1">
             <div className="w-full h-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-xl">
-              <Telescope3D className="w-full h-full" />
+              <VoxelWebDev className="w-full h-full" />
             </div>
             <div className="mt-3 text-sm text-center text-gray-600">
-              🔭 <strong>Télescope interactif</strong> - Glissez pour tourner, molette pour zoomer
+              💻 <strong>Développement Web 3D</strong> - Glissez pour tourner, molette pour zoomer
             </div>
           </div>
 
