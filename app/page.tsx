@@ -1,8 +1,8 @@
 import { Header } from "@/components/header"
 import { Hero } from "@/components/hero"
-import { Services } from "@/components/services"
+import { ServicesContainer } from "@/components/sections/services-container"
 import { Process } from "@/components/process"
-import { Team } from "@/components/team"
+import { TeamContainer } from "@/components/sections/team-container"
 import { CTA } from "@/components/cta"
 import { Footer } from "@/components/footer"
 
@@ -12,9 +12,9 @@ export default function HomePage() {
       <Header />
       <main className="pt-20">
         <Hero />
-        <Services />
+        <ServicesContainer />
         <Process />
-        <Team />
+        <TeamContainer />
         <CTA />
       </main>
       <Footer />
