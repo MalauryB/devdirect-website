@@ -2,7 +2,7 @@
 
 import React, { Suspense, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF, OrbitControls, Environment } from '@react-three/drei'
+import { useGLTF, OrbitControls, Environment, Center } from '@react-three/drei'
 import * as THREE from 'three'
 
 interface VoxelWebDevModelProps {
@@ -11,26 +11,25 @@ interface VoxelWebDevModelProps {
 
 function VoxelWebDevModel({ modelPath }: VoxelWebDevModelProps) {
   const group = useRef<THREE.Group>(null)
-
-  // Chargement du modèle GLTF voxel
   const { scene } = useGLTF(modelPath)
 
   // Animation de rotation douce et flottement
   useFrame((state) => {
     if (group.current) {
-      // Rotation automatique lente
       group.current.rotation.y = state.clock.elapsedTime * 0.2
-      // Léger flottement vertical
       group.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.1
     }
   })
 
-  // Cloner la scène pour éviter les conflits de réutilisation
+  // Cloner la scène pour éviter les conflits
   const clonedScene = scene.clone()
 
   return (
     <group ref={group}>
-      <primitive object={clonedScene} scale={[2, 2, 2]} />
+      {/* Décalage vers le haut */}
+      <Center position={[0, 0.5, 0]}>
+        <primitive object={clonedScene} scale={[2, 2, 2]} />
+      </Center>
     </group>
   )
 }
@@ -56,7 +55,7 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
           camera={{
-            position: [20, 10, 18],
+            position: [26, 16, 18],
             fov: 50,
             near: 0.1,
             far: 1000
@@ -66,7 +65,7 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
           }}
         >
-          {/* Éclairage optimisé pour les voxels */}
+          {/* Lumières */}
           <ambientLight intensity={0.6} />
           <directionalLight
             position={[10, 10, 5]}
@@ -83,19 +82,19 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
           <pointLight position={[-5, 5, -5]} color="#4169E1" intensity={0.4} />
           <pointLight position={[5, -2, 5]} color="#FFD700" intensity={0.3} />
 
-          {/* Environnement de développement */}
+          {/* Environnement */}
           <Environment preset="city" />
 
-          {/* Modèle voxel de développement web */}
+          {/* Modèle voxel */}
           <VoxelWebDevModel modelPath="/voxel_web_development/scene.gltf" />
 
-          {/* Plan au sol pour les ombres */}
+          {/* Plan pour ombres */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>
             <planeGeometry args={[20, 20]} />
             <shadowMaterial transparent opacity={0.3} />
           </mesh>
 
-          {/* Contrôles d'orbite pour interaction */}
+          {/* Contrôles */}
           <OrbitControls
             enablePan={false}
             enableZoom={true}
@@ -113,5 +112,5 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
   )
 }
 
-// Préchargement du modèle pour de meilleures performances
+// Préchargement du modèle
 useGLTF.preload("/voxel_web_development/scene.gltf")
