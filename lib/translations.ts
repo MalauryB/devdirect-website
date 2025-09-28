@@ -53,6 +53,10 @@ export const translations = {
       maintenance: {
         title: "Maintenance & Support",
         description: "Support technique et maintenance de vos applications."
+      },
+      design: {
+        title: "Maquettes & Design",
+        description: "Création de maquettes et prototypes pour visualiser votre projet avant développement."
       }
     },
     process: {
@@ -174,6 +178,10 @@ export const translations = {
       maintenance: {
         title: "Maintenance & Support",
         description: "Technical support and maintenance for your applications."
+      },
+      design: {
+        title: "Mockups & Design",
+        description: "Creation of mockups and prototypes to visualize your project before development."
       }
     },
     process: {

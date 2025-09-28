@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Globe, Smartphone, Cpu, Palette, ArrowRight } from "lucide-react"
+import { Globe, Smartphone, Cpu, Palette, ArrowRight, PenTool } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 
 export function Services() {
@@ -19,7 +19,7 @@ export function Services() {
       icon: Smartphone,
       title: t('services.mobileDev.title'),
       description: t('services.mobileDev.description'),
-      image: "assets/images/projects/project-3.png",
+      image: "/project-3.png",
     },
     {
       icon: Cpu,
@@ -31,7 +31,13 @@ export function Services() {
       icon: Palette,
       title: t('services.ai.title'),
       description: t('services.ai.description'),
-      image: "/ui-ux-design-mockups-and-wireframes.jpg",
+      image: "/IA.jpg",
+    },
+    {
+      icon: PenTool,
+      title: t('services.design.title'),
+      description: t('services.design.description'),
+      image: "/maquette_et_design.jpg",
     },
   ]
   return (
@@ -47,7 +53,7 @@ export function Services() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
             <Card
               key={index}

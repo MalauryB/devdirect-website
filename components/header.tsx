@@ -56,8 +56,7 @@ export function Header() {
             </Button>
             <Button
               size="sm"
-              className="border border-gray-300 hover:border-gray-400 bg-transparent hover:bg-transparent"
-              style={{ color: "#bda3cc" }}
+              className="bg-action hover:bg-action/90 text-white border-0"
             >
               {t('navigation.contact')}
             </Button>
@@ -98,8 +97,7 @@ export function Header() {
                 </Button>
                 <Button
                   size="sm"
-                  className="border border-gray-300 hover:border-gray-400 bg-transparent hover:bg-transparent"
-                  style={{ color: "#bda3cc" }}
+                  className="bg-action hover:bg-action/90 text-white border-0"
                 >
                   {t('navigation.contact')}
                 </Button>
