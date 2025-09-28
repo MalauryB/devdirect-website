@@ -29,8 +29,8 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
             <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground">
               Devis Gratuit
-              <div className="ml-2 w-6 h-6 bg-white rounded-full flex items-center justify-center">
-                <ArrowRight className="w-4 h-4" style={{ color: "#bda3cc" }} />
+              <div className="ml-2 w-6 h-6 bg-action rounded-full flex items-center justify-center">
+                <ArrowRight className="w-4 h-4 text-white" />
               </div>
             </Button>
             <Button

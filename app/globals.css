@@ -20,6 +20,8 @@
   --muted-foreground: #7f7074; /* Gray-violet for muted text */
   --accent: #9c984d; /* Olive yellow accent */
   --accent-foreground: #faf8f2;
+  --action: 332 75% 61%; /* Pink action color #ea4c89 */
+  --action-foreground: #faf8f2;
   --destructive: #7f7074;
   --destructive-foreground: #faf8f2;
   --border: #d0d1d9; /* Very light gray for borders */
@@ -63,6 +65,8 @@
   --muted-foreground: #9c9899;
   --accent: #9c984d;
   --accent-foreground: #38392c;
+  --action: 332 75% 61%; /* Pink action color #ea4c89 */
+  --action-foreground: #faf8f2;
   --destructive: #7f7074;
   --destructive-foreground: #faf8f2;
   --border: #7f7074;
