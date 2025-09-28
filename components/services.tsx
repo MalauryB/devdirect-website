@@ -1,46 +1,49 @@
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Globe, Smartphone, Cpu, Palette, ArrowRight } from "lucide-react"
-
-const services = [
-  {
-    icon: Globe,
-    title: "Applications Web",
-    description:
-      "Sites vitrine, plateformes SaaS, e-commerce. Technologies modernes et performantes pour tous vos besoins digitaux.",
-    image: "/modern-web-dev-workspace.png",
-  },
-  {
-    icon: Smartphone,
-    title: "Applications Mobiles",
-    description: "Applications natives et cross-platform pour iOS et Android avec une expérience utilisateur optimale.",
-    image: "assets/images/projects/project-3.png",
-  },
-  {
-    icon: Cpu,
-    title: "IoT & Intégrations",
-    description: "Objets connectés, automatisation et intégrations système pour moderniser vos processus.",
-    image: "/iot-devices-and-sensors-connected.jpg",
-  },
-  {
-    icon: Palette,
-    title: "UX/UI Design",
-    description: "Conception d'interfaces utilisateur modernes, intuitives et centrées sur l'expérience utilisateur.",
-    image: "/ui-ux-design-mockups-and-wireframes.jpg",
-  },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export function Services() {
+  const { t } = useLanguage()
+
+  const services = [
+    {
+      icon: Globe,
+      title: t('services.webDev.title'),
+      description: t('services.webDev.description'),
+      image: "/modern-web-dev-workspace.png",
+    },
+    {
+      icon: Smartphone,
+      title: t('services.mobileDev.title'),
+      description: t('services.mobileDev.description'),
+      image: "assets/images/projects/project-3.png",
+    },
+    {
+      icon: Cpu,
+      title: t('services.iot.title'),
+      description: t('services.iot.description'),
+      image: "/iot-devices-and-sensors-connected.jpg",
+    },
+    {
+      icon: Palette,
+      title: t('services.ai.title'),
+      description: t('services.ai.description'),
+      image: "/ui-ux-design-mockups-and-wireframes.jpg",
+    },
+  ]
   return (
     <section id="services" className="py-20 px-4 relative overflow-hidden bg-[#141414] rounded-3xl">
       <div className="container mx-auto relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-16">
             <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
-              Nos <span className="text-[#ba9fdf]">Services</span>
+              {t('services.title')}
             </h2>
             <p className="text-xl text-white/70 max-w-2xl">
-              De l'idée à la réalisation, nous maîtrisons toutes les technologies pour donner vie à vos projets digitaux.
+              {t('services.webDev.description')}
             </p>
           </div>
 
@@ -68,7 +71,7 @@ export function Services() {
                   variant="ghost"
                   className="text-[#38392c] hover:text-[#ba9fdf] hover:bg-[#ba9fdf]/10 p-0 h-auto font-medium group/btn"
                 >
-                  En savoir plus
+                  {t('hero.moreDetails')}
                   <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                 </Button>
               </CardContent>

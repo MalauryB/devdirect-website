@@ -1,6 +1,10 @@
+"use client"
+
 import { Code2, Mail, Phone, MapPin } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
 
 export function Footer() {
+  const { t } = useLanguage()
   return (
     <footer className="bg-white border-t border-border py-12 px-4">
       <div className="container mx-auto">
@@ -13,12 +17,11 @@ export function Footer() {
                 <Code2 className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-lg font-bold" style={{ color: "#bda3cc" }}>
-                Memo'ry
+                {t('name')}
               </span>
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
-              Votre équipe de développeurs expérimentés pour tous vos projets digitaux. Sans intermédiaires, à prix
-              justes.
+              {t('footer.description')}
             </p>
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
@@ -38,26 +41,26 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="font-medium mb-4">Services</h3>
+            <h3 className="font-medium mb-4">{t('footer.services')}</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  Applications Web
+                  {t('services.webDev.title')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  Applications Mobiles
+                  {t('services.mobileDev.title')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  IoT & Intégrations
+                  {t('services.iot.title')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  UX/UI Design
+                  {t('services.ai.title')}
                 </a>
               </li>
             </ul>
@@ -65,26 +68,26 @@ export function Footer() {
 
           {/* Company */}
           <div>
-            <h3 className="font-medium mb-4">Entreprise</h3>
+            <h3 className="font-medium mb-4">{t('footer.company')}</h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  À propos
+                  {t('footer.about')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  Notre équipe
+                  {t('navigation.equipe')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  Processus
+                  {t('navigation.processus')}
                 </a>
               </li>
               <li>
                 <a href="#" className="hover:text-primary transition-colors">
-                  Contact
+                  {t('footer.contact')}
                 </a>
               </li>
             </ul>
@@ -92,7 +95,7 @@ export function Footer() {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 Memo'ry. Tous droits réservés.</p>
+            <p>&copy; 2024 {t('name')}. {t('footer.rights')}</p>
           </div>
         </div>
       </div>

@@ -1,57 +1,39 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Users, Award, Clock } from "lucide-react"
-
-const teamMembers = [
-  {
-    name: "Malaury Boudon",
-    role: "Développeuse Full-Stack Senior",
-    experience: "6+ ans",
-    skills: ["React", "Angular", "Java", "Node.js", "Spring Boot", "Flutter", "PostgreSQL"],
-    avatar: "/experts/malaury_boudon.jpg",
-  },
-  {
-    name: "Alexandre Picavet",
-    role: "Développeur Full-Stack Expert",
-    experience: "5+ ans",
-    skills: ["TypeScript", "Java", "Angular", "React", "Spring Boot", "Kubernetes", "Docker"],
-    avatar: "/mobile-developer-portrait.jpg",
-  },
-  {
-    name: "Victor Talbot",
-    role: "Développeur Mobile Expert",
-    experience: "4+ ans",
-    skills: ["Swift", "Kotlin", "Flutter", "React Native", "iOS", "Android", "TypeScript"],
-    avatar: "/iot-developer-portrait.jpg",
-  },
-]
-
-const stats = [
-  {
-    icon: Users,
-    value: "3",
-    label: "Experts dédiés",
-  },
-  {
-    icon: Award,
-    value: "15+",
-    label: "Années d'expérience cumulées",
-  },
-  {
-    icon: Clock,
-    value: "100%",
-    label: "Projets livrés à temps",
-  },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export function Team() {
+  const { t } = useLanguage()
+
+  const teamMembers = t('team.members')
+
+  const stats = [
+    {
+      icon: Users,
+      value: "4",
+      label: t('team.title'),
+    },
+    {
+      icon: Award,
+      value: "15+",
+      label: "Années d'expérience",
+    },
+    {
+      icon: Clock,
+      value: "100%",
+      label: "Projets livrés",
+    },
+  ]
   return (
     <section id="team" className="py-20 px-4 relative overflow-hidden bg-white">
       <div className="container mx-auto relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-16">
             <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-              Notre <span className="text-primary">Équipe</span>
+              {t('team.title')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl">
               Une équipe soudée de professionnels expérimentés, passionnés par les nouvelles technologies.
@@ -70,13 +52,13 @@ export function Team() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teamMembers.map((member, index) => (
+          {teamMembers.map((member: any, index: number) => (
             <Card key={index} className="bg-white border border-primary/20 group">
               <CardHeader className="text-center">
                 <div className="relative mx-auto mb-4">
                   <div className="w-20 h-20 rounded-full overflow-hidden bg-primary/10 border-2 border-primary/30">
                     <img
-                      src={member.avatar || "/placeholder.svg"}
+                      src={member.image || "/placeholder.svg"}
                       alt={member.role}
                       className="w-full h-full object-cover"
                     />
@@ -87,19 +69,11 @@ export function Team() {
                 </div>
                 <CardTitle className="text-lg font-semibold leading-tight">{member.name}</CardTitle>
                 <div className="text-sm text-muted-foreground mb-1">{member.role}</div>
-                <div className="text-primary font-semibold text-sm">{member.experience}</div>
+                <div className="text-primary font-semibold text-sm">{member.description}</div>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-wrap gap-2 justify-center">
-                  {member.skills.map((skill, skillIndex) => (
-                    <Badge
-                      key={skillIndex}
-                      variant="secondary"
-                      className="text-xs bg-primary/10 border-primary/20 hover:border-primary/40 transition-colors"
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
+                <div className="text-sm text-muted-foreground text-center">
+                  {member.description}
                 </div>
               </CardContent>
             </Card>

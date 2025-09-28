@@ -1,0 +1,71 @@
+{
+  "site": {
+    "name": "Memo'ry",
+    "title": "Memo'ry - Experts in computer science, mathematics and AI",
+    "description": "Quality IT services at fair prices. Web, mobile, IoT applications. Team of experienced developers."
+  },
+  "navigation": {
+    "services": "Services",
+    "process": "Process",
+    "team": "Team",
+    "contact": "Contact",
+    "freeQuote": "Free Quote",
+    "contactUs": "Contact Us"
+  },
+  "hero": {
+    "title": "Develop your projects with experts in computer science, mathematics and AI",
+    "subtitle": "A team of passionate developers working directly for you. From IoT to web and mobile applications, we bring your ideas to life.",
+    "freeQuote": "Free Quote",
+    "discoverServices": "Discover our services",
+    "features": {
+      "freeMeeting": {
+        "title": "Free initial meeting",
+        "description": "Let's analyze your needs together"
+      },
+      "transparentQuote": {
+        "title": "Transparent quote",
+        "description": "No surprises, everything is clear"
+      },
+      "fullSupport": {
+        "title": "End-to-end support",
+        "description": "From idea to deployment"
+      }
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "learnMore": "Learn more"
+  },
+  "team": {
+    "experts": "Specialized experts",
+    "expertsDescription": "A multidisciplinary team in AI, math and computer science",
+    "experience": "Years of cumulative experience",
+    "experienceDescription": "Recognized academic and industrial expertise",
+    "delivery": "Projects delivered on time",
+    "deliveryDescription": "Respect for deadlines and scientific quality"
+  },
+  "footer": {
+    "description": "Your team of experienced developers for all your digital projects. No intermediaries, at fair prices.",
+    "email": "contact@memory.com",
+    "phone": "+33 1 23 45 67 89",
+    "address": "Paris, France",
+    "services": "Services",
+    "company": "Company",
+    "servicesList": {
+      "webApps": "Web Applications",
+      "mobileApps": "Mobile Applications",
+      "iot": "IoT & Integrations",
+      "design": "UX/UI Design"
+    },
+    "companyList": {
+      "about": "About",
+      "team": "Our team",
+      "process": "Process",
+      "contact": "Contact"
+    },
+    "copyright": "© 2024 Memo'ry. All rights reserved."
+  },
+  "cta": {
+    "guarantee": "Response guaranteed within 24h • Free quote • No commitment"
+  }
+}

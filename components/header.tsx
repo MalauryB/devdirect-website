@@ -3,9 +3,12 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
+import { useLanguage } from "@/contexts/language-context"
+import { LanguageSwitcher } from "@/components/language-switcher"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { t } = useLanguage()
 
   return (
     <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-primary/20 z-50">
@@ -13,8 +16,8 @@ export function Header() {
         <div className="max-w-4xl mx-auto">
           <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <span className="text-lg font-bold" style={{ color: "#bda3cc" }}>
-              Memo'ry
+            <span className="text-lg font-bold logo-cubic" style={{ color: "#bda3cc" }}>
+              {t('name')}
             </span>
           </div>
 
@@ -24,22 +27,22 @@ export function Header() {
               href="#services"
               className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
             >
-              Services
+              {t('navigation.services')}
             </a>
             <a
               href="#process"
               className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
             >
-              Processus
+              {t('navigation.processus')}
             </a>
             <a href="#team" className="text-foreground hover:text-primary transition-colors duration-300 font-medium">
-              Équipe
+              {t('navigation.equipe')}
             </a>
             <a
               href="#contact"
               className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
             >
-              Contact
+              {t('navigation.contact')}
             </a>
           </nav>
 
@@ -49,15 +52,16 @@ export function Header() {
               size="sm"
               className="border-primary/50 hover:border-primary text-foreground hover:text-primary bg-transparent"
             >
-              Devis Gratuit
+              {t('hero.cta')}
             </Button>
             <Button
               size="sm"
               className="border border-gray-300 hover:border-gray-400 bg-transparent hover:bg-transparent"
               style={{ color: "#bda3cc" }}
             >
-              Nous Contacter
+              {t('navigation.contact')}
             </Button>
+            <LanguageSwitcher />
           </div>
 
           {/* Mobile Menu Button */}
@@ -73,16 +77,16 @@ export function Header() {
           <nav className="md:hidden mt-4 pb-4 border-t border-primary/20 pt-4">
             <div className="flex flex-col space-y-4">
               <a href="#services" className="text-foreground hover:text-primary transition-colors font-medium">
-                Services
+                {t('navigation.services')}
               </a>
               <a href="#process" className="text-foreground hover:text-primary transition-colors font-medium">
-                Processus
+                {t('navigation.processus')}
               </a>
               <a href="#team" className="text-foreground hover:text-primary transition-colors font-medium">
-                Équipe
+                {t('navigation.equipe')}
               </a>
               <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
-                Contact
+                {t('navigation.contact')}
               </a>
               <div className="flex flex-col space-y-2 pt-4">
                 <Button
@@ -90,15 +94,18 @@ export function Header() {
                   size="sm"
                   className="border-primary/50 hover:border-primary text-foreground bg-transparent"
                 >
-                  Devis Gratuit
+                  {t('hero.cta')}
                 </Button>
                 <Button
                   size="sm"
                   className="border border-gray-300 hover:border-gray-400 bg-transparent hover:bg-transparent"
                   style={{ color: "#bda3cc" }}
                 >
-                  Nous Contacter
+                  {t('navigation.contact')}
                 </Button>
+                <div className="flex justify-center pt-2">
+                  <LanguageSwitcher />
+                </div>
               </div>
             </div>
           </nav>

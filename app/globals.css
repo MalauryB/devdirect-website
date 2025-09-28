@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Police Cubic pour le logo */
+@font-face {
+  font-family: 'Cubic';
+  src: url('/devdirect-website/cubic/cubic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Fallback pour développement */
+@supports not (font-display: swap) {
+  @font-face {
+    font-family: 'Cubic';
+    src: url('/cubic/cubic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+}
+
 :root {
   /* Updated to use the new natural color palette */
   /* New palette: 38392c,faf8f2,9c9899,9c984d,7f7074,bda3cc,d3cfc2,6cb1bb,cbc3a3,d0d1d9 */
@@ -114,4 +133,9 @@
 /* Alternative subtle gradient with more blue tint */
 .light-blue-gradient {
   background: linear-gradient(to bottom, #faf8f2 0%, #f8fafc 30%, #f1f5f9 70%, #e2e8f0 100%);
+}
+
+/* Logo avec police Cubic */
+.logo-cubic {
+  font-family: 'Cubic', sans-serif;
 }

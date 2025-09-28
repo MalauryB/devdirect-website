@@ -1,44 +1,48 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MessageCircle, FileText, Code, Rocket } from "lucide-react"
-
-const steps = [
-  {
-    icon: MessageCircle,
-    title: "Rencontre Gratuite",
-    description: "Nous analysons vos besoins et définissons ensemble les objectifs de votre projet.",
-    duration: "1h",
-  },
-  {
-    icon: FileText,
-    title: "Spécifications",
-    description: "Rédaction détaillée du cahier des charges et estimation précise des coûts.",
-    duration: "2-3 jours",
-  },
-  {
-    icon: Code,
-    title: "Développement",
-    description: "Réalisation de votre projet avec des points réguliers et une communication transparente.",
-    duration: "Variable",
-  },
-  {
-    icon: Rocket,
-    title: "Mise en Ligne",
-    description: "Tests, déploiement et formation pour une mise en production réussie.",
-    duration: "1-2 jours",
-  },
-]
+import { useLanguage } from "@/contexts/language-context"
 
 export function Process() {
+  const { t } = useLanguage()
+
+  const steps = [
+    {
+      icon: MessageCircle,
+      title: t('process.analysis.title'),
+      description: t('process.analysis.description'),
+      duration: "1h",
+    },
+    {
+      icon: FileText,
+      title: t('process.development.title'),
+      description: t('process.development.description'),
+      duration: "2-3 jours",
+    },
+    {
+      icon: Code,
+      title: t('process.testing.title'),
+      description: t('process.testing.description'),
+      duration: "Variable",
+    },
+    {
+      icon: Rocket,
+      title: t('process.deployment.title'),
+      description: t('process.deployment.description'),
+      duration: "1-2 jours",
+    },
+  ]
   return (
     <section id="process" className="py-20 px-4 bg-white">
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto">
           <div className="mb-16">
             <h2 className="text-2xl md:text-3xl font-semibold mb-4">
-              Notre <span className="text-primary">Processus</span>
+              {t('process.title')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl">
-              Une méthodologie éprouvée pour mener votre projet de l'idée à la réalisation, en toute transparence.
+              {t('process.analysis.description')}
             </p>
           </div>
 

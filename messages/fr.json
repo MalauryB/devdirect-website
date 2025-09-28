@@ -1,0 +1,71 @@
+{
+  "site": {
+    "name": "Memo'ry",
+    "title": "Memo'ry - Experts en informatique, mathématiques et IA",
+    "description": "Services informatiques de qualité à prix justes. Applications web, mobiles, IoT. Équipe de développeurs expérimentés."
+  },
+  "navigation": {
+    "services": "Services",
+    "process": "Processus",
+    "team": "Équipe",
+    "contact": "Contact",
+    "freeQuote": "Devis Gratuit",
+    "contactUs": "Nous Contacter"
+  },
+  "hero": {
+    "title": "Développez vos projets avec des experts en informatique, mathématiques et IA",
+    "subtitle": "Une équipe de développeurs passionnés qui travaillent directement pour vous. De l'IoT aux applications web et mobiles, nous concrétisons vos idées.",
+    "freeQuote": "Devis Gratuit",
+    "discoverServices": "Découvrir nos services",
+    "features": {
+      "freeMeeting": {
+        "title": "Première rencontre gratuite",
+        "description": "Analysons ensemble vos besoins"
+      },
+      "transparentQuote": {
+        "title": "Devis transparent",
+        "description": "Pas de surprises, tout est clair"
+      },
+      "fullSupport": {
+        "title": "Accompagnement A à Z",
+        "description": "De l'idée à la mise en ligne"
+      }
+    }
+  },
+  "services": {
+    "title": "Nos Services",
+    "learnMore": "En savoir plus"
+  },
+  "team": {
+    "experts": "Experts spécialisés",
+    "expertsDescription": "Une équipe pluridisciplinaire en IA, maths et informatique",
+    "experience": "Années d'expérience cumulées",
+    "experienceDescription": "Expertise académique et industrielle reconnue",
+    "delivery": "Projets livrés à temps",
+    "deliveryDescription": "Respect des délais et de la qualité scientifique"
+  },
+  "footer": {
+    "description": "Votre équipe de développeurs expérimentés pour tous vos projets digitaux. Sans intermédiaires, à prix justes.",
+    "email": "contact@memory.fr",
+    "phone": "+33 1 23 45 67 89",
+    "address": "Paris, France",
+    "services": "Services",
+    "company": "Entreprise",
+    "servicesList": {
+      "webApps": "Applications Web",
+      "mobileApps": "Applications Mobiles",
+      "iot": "IoT & Intégrations",
+      "design": "UX/UI Design"
+    },
+    "companyList": {
+      "about": "À propos",
+      "team": "Notre équipe",
+      "process": "Processus",
+      "contact": "Contact"
+    },
+    "copyright": "© 2024 Memo'ry. Tous droits réservés."
+  },
+  "cta": {
+    "guarantee": "Réponse garantie sous 24h • Devis gratuit • Sans engagement"
+  }
+}
