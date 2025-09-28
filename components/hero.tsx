@@ -12,9 +12,6 @@ export function Hero() {
             <div className="w-full h-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-xl">
               <VoxelWebDev className="w-full h-full" />
             </div>
-            <div className="mt-3 text-sm text-center text-gray-600">
-              💻 <strong>Développement Web 3D</strong> - Glissez pour tourner, molette pour zoomer
-            </div>
           </div>
 
           {/* Contenu principal à droite */}
