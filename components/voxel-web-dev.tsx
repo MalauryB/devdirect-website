@@ -4,6 +4,7 @@ import React, { Suspense, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF, OrbitControls, Environment, Center } from '@react-three/drei'
 import * as THREE from 'three'
+import { getAssetPath } from '@/lib/assets'
 
 interface VoxelWebDevModelProps {
   modelPath: string
@@ -86,7 +87,7 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
           <Environment preset="city" />
 
           {/* Modèle voxel */}
-          <VoxelWebDevModel modelPath="/voxel_web_development/scene.gltf" />
+          <VoxelWebDevModel modelPath={getAssetPath("voxel_web_development/scene.gltf")} />
 
           {/* Plan pour ombres */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -2, 0]} receiveShadow>
@@ -113,4 +114,4 @@ export function VoxelWebDev({ className = "" }: VoxelWebDevProps) {
 }
 
 // Préchargement du modèle
-useGLTF.preload("/voxel_web_development/scene.gltf")
+useGLTF.preload(getAssetPath("voxel_web_development/scene.gltf"))

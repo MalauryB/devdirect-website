@@ -15,12 +15,14 @@ export function ServiceCard({ service, onDetailsClick, className = "" }: Service
 
   return (
     <Card className={`bg-white border-0 rounded-2xl shadow-lg group hover:shadow-xl transition-all duration-300 overflow-hidden ${className}`}>
-      <div className="aspect-video bg-gray-100 rounded-t-2xl overflow-hidden">
-        <img
-          src={getImagePath(service.image)}
-          alt={`Illustration pour ${service.title}`}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+      <div className="aspect-video bg-white rounded-t-2xl px-3 pt-4">
+        <div className="w-full h-full bg-gray-100 rounded-t-xl overflow-hidden">
+          <img
+            src={getImagePath(service.image)}
+            alt={`Illustration pour ${service.title}`}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+        </div>
       </div>
       <CardHeader className="pb-4">
         <CardTitle className="text-lg font-semibold text-foreground mb-2 flex items-center gap-2">
