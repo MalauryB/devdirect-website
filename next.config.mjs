@@ -5,8 +5,8 @@ const nextConfig = {
     unoptimized: true,
   },
   ...(process.env.NODE_ENV === 'production' && {
-    basePath: '/memory-website',
-    assetPrefix: '/memory-website/',
+    basePath: '/devdirect-website',
+    assetPrefix: '/devdirect-website/',
   }),
   trailingSlash: true,
 };

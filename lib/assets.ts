@@ -2,7 +2,7 @@
  * Utility functions for handling asset paths with basePath support
  */
 
-const basePath = process.env.NODE_ENV === 'production' ? '/memory-website' : ''
+const basePath = process.env.NODE_ENV === 'production' ? '/devdirect-website' : ''
 
 /**
  * Get the correct asset path considering the basePath configuration
