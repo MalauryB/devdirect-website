@@ -1,11 +1,25 @@
 import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle } from "lucide-react"
+import { Telescope3D } from "@/components/telescope-3d"
 
 export function Hero() {
   return (
     <section className="pt-8 pb-20 px-4 relative overflow-hidden bg-white">
       <div className="container mx-auto relative z-10">
-        <div className="max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          {/* Télescope 3D à gauche */}
+          <div className="lg:col-span-4 order-2 lg:order-1">
+            <div className="w-full h-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-xl">
+              <Telescope3D className="w-full h-full" />
+            </div>
+            <div className="mt-3 text-sm text-center text-gray-600">
+              🔭 <strong>Télescope interactif</strong> - Glissez pour tourner, molette pour zoomer
+            </div>
+          </div>
+
+          {/* Contenu principal à droite */}
+          <div className="lg:col-span-8 order-1 lg:order-2">
+            <div className="max-w-3xl">
           <h1 className="text-3xl md:text-5xl font-semibold mb-6 text-balance leading-tight">
             Développez vos projets avec des <span className="text-primary">experts directs</span>
           </h1>
@@ -31,21 +45,23 @@ export function Hero() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-            <div className="bg-white border border-border rounded-xl p-6">
-              <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
-              <h3 className="font-medium mb-2">Première rencontre gratuite</h3>
-              <p className="text-sm text-muted-foreground">Analysons ensemble vos besoins</p>
-            </div>
-            <div className="bg-white border border-border rounded-xl p-6">
-              <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
-              <h3 className="font-medium mb-2">Devis transparent</h3>
-              <p className="text-sm text-muted-foreground">Pas de surprises, tout est clair</p>
-            </div>
-            <div className="bg-white border border-border rounded-xl p-6">
-              <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
-              <h3 className="font-medium mb-2">Accompagnement A à Z</h3>
-              <p className="text-sm text-muted-foreground">De l'idée à la mise en ligne</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="bg-white border border-border rounded-xl p-6">
+                  <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
+                  <h3 className="font-medium mb-2">Première rencontre gratuite</h3>
+                  <p className="text-sm text-muted-foreground">Analysons ensemble vos besoins</p>
+                </div>
+                <div className="bg-white border border-border rounded-xl p-6">
+                  <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
+                  <h3 className="font-medium mb-2">Devis transparent</h3>
+                  <p className="text-sm text-muted-foreground">Pas de surprises, tout est clair</p>
+                </div>
+                <div className="bg-white border border-border rounded-xl p-6">
+                  <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
+                  <h3 className="font-medium mb-2">Accompagnement A à Z</h3>
+                  <p className="text-sm text-muted-foreground">De l'idée à la mise en ligne</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -107,8 +107,8 @@ export function Header() {
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 overflow-hidden">
-        <svg width="100%" height="2" className="block">
-          <path d="M 80 1 Q 400 1 600 1.5 T 100% 1" stroke="#9ca3af" strokeWidth="1" fill="none" opacity="0.6" />
+        <svg width="100%" height="2" className="block" viewBox="0 0 800 2" preserveAspectRatio="none">
+          <path d="M 80 1 Q 400 1 600 1.5 T 720 1" stroke="#9ca3af" strokeWidth="1" fill="none" opacity="0.6" />
         </svg>
       </div>
     </header>
