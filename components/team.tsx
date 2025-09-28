@@ -4,40 +4,37 @@ import { Users, Award, Clock } from "lucide-react"
 
 const teamMembers = [
   {
+    name: "Malaury Boudon",
     role: "Développeuse Full-Stack Senior",
     experience: "6+ ans",
     skills: ["React", "Angular", "Java", "Node.js", "Spring Boot", "Flutter", "PostgreSQL"],
     avatar: "/experts/malaury_boudon.jpg",
   },
   {
+    name: "Alexandre Picavet",
     role: "Développeur Full-Stack Expert",
     experience: "5+ ans",
     skills: ["TypeScript", "Java", "Angular", "React", "Spring Boot", "Kubernetes", "Docker"],
     avatar: "/mobile-developer-portrait.jpg",
   },
   {
+    name: "Victor Talbot",
     role: "Développeur Mobile Expert",
     experience: "4+ ans",
     skills: ["Swift", "Kotlin", "Flutter", "React Native", "iOS", "Android", "TypeScript"],
     avatar: "/iot-developer-portrait.jpg",
-  },
-  {
-    role: "UX/UI Designer",
-    experience: "5+ ans",
-    skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
-    avatar: "/ux-designer-portrait.png",
   },
 ]
 
 const stats = [
   {
     icon: Users,
-    value: "4",
+    value: "3",
     label: "Experts dédiés",
   },
   {
     icon: Award,
-    value: "25+",
+    value: "15+",
     label: "Années d'expérience cumulées",
   },
   {
@@ -72,7 +69,7 @@ export function Team() {
           ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {teamMembers.map((member, index) => (
             <Card key={index} className="bg-white border border-primary/20 group">
               <CardHeader className="text-center">
@@ -88,7 +85,8 @@ export function Team() {
                     <div className="w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full" />
                   </div>
                 </div>
-                <CardTitle className="text-base font-medium leading-tight">{member.role}</CardTitle>
+                <CardTitle className="text-lg font-semibold leading-tight">{member.name}</CardTitle>
+                <div className="text-sm text-muted-foreground mb-1">{member.role}</div>
                 <div className="text-primary font-semibold text-sm">{member.experience}</div>
               </CardHeader>
               <CardContent>
