@@ -13,7 +13,7 @@ export function Footer() {
                 <Code2 className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-lg font-bold" style={{ color: "#bda3cc" }}>
-                Cortex
+                Memo'ry
               </span>
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
@@ -23,7 +23,7 @@ export function Footer() {
             <div className="space-y-2 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
                 <Mail className="w-4 h-4" />
-                <span>contact@cortex.fr</span>
+                <span>contact@memory.fr</span>
               </div>
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
@@ -92,7 +92,7 @@ export function Footer() {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 Cortex. Tous droits réservés.</p>
+            <p>&copy; 2024 Memo'ry. Tous droits réservés.</p>
           </div>
         </div>
       </div>

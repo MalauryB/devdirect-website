@@ -18,7 +18,7 @@ export function Hero() {
           <div className="lg:col-span-8 order-1 lg:order-2">
             <div className="max-w-3xl">
           <h1 className="text-3xl md:text-5xl font-semibold mb-6 text-balance leading-tight">
-            Développez vos projets avec des <span className="text-primary">experts directs</span>
+            Développez vos projets avec des <span className="text-primary">experts en informatique, mathématiques et IA</span>
           </h1>
 
           <p className="text-lg md:text-xl text-muted-foreground mb-8 text-pretty max-w-3xl">
@@ -27,7 +27,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground">
+            <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground border border-action">
               Devis Gratuit
               <div className="ml-2 w-6 h-6 bg-action rounded-full flex items-center justify-center">
                 <ArrowRight className="w-4 h-4 text-white" />

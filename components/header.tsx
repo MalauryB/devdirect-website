@@ -14,7 +14,7 @@ export function Header() {
           <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <span className="text-lg font-bold" style={{ color: "#bda3cc" }}>
-              Cortex
+              Memo'ry
             </span>
           </div>
 

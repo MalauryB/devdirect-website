@@ -37,7 +37,7 @@ export function ServiceCard({ service, onDetailsClick, className = "" }: Service
           onClick={() => onDetailsClick?.(service.id)}
           className="text-foreground hover:text-primary hover:bg-primary/10 p-0 h-auto font-medium group/btn"
         >
-          More details
+          En savoir plus
           <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
         </Button>
       </CardContent>

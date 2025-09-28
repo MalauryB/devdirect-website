@@ -12,10 +12,10 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "Cortex - Développeurs Sans Intermédiaires",
+  title: "Memo'ry - Experts en informatique, mathématiques et IA",
   description:
     "Services informatiques de qualité à prix justes. Applications web, mobiles, IoT. Équipe de développeurs expérimentés.",
-  generator: "Cortex",
+  generator: "Memo'ry",
 }
 
 export default function RootLayout({

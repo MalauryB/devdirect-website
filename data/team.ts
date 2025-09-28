@@ -19,32 +19,36 @@ export interface TeamStat {
 
 export const teamMembersData: TeamMember[] = [
   {
-    id: "fullstack-senior",
-    role: "Développeur Full-Stack Senior",
+    id: "ai-researcher",
+    role: "Expert en Intelligence Artificielle",
+    experience: "10+ ans",
+    skills: ["Machine Learning", "Deep Learning", "TensorFlow", "PyTorch"],
+    avatar: "ai-researcher-portrait.png",
+    bio: "Docteur en IA, spécialisé dans les réseaux de neurones et l'apprentissage automatique"
+  },
+  {
+    id: "data-scientist",
+    role: "Data Scientist & Mathématicien",
     experience: "8+ ans",
-    skills: ["React", "Node.js", "Python", "AWS"],
-    avatar: "professional-developer-portrait.png",
+    skills: ["Statistiques", "Python", "R", "Optimisation"],
+    avatar: "data-scientist-portrait.jpg",
+    bio: "Expert en analyse de données complexes et modélisation mathématique"
   },
   {
-    id: "mobile-expert",
-    role: "Développeur Mobile Expert",
-    experience: "6+ ans",
-    skills: ["React Native", "Flutter", "iOS", "Android"],
-    avatar: "mobile-developer-portrait.jpg",
+    id: "software-architect",
+    role: "Architecte Logiciel Senior",
+    experience: "12+ ans",
+    skills: ["Architecture", "Microservices", "Cloud", "DevOps"],
+    avatar: "software-architect-portrait.jpg",
+    bio: "Spécialisé dans la conception de systèmes distribués et scalables"
   },
   {
-    id: "iot-backend",
-    role: "Développeur IoT & Backend",
+    id: "research-engineer",
+    role: "Ingénieur de Recherche",
     experience: "7+ ans",
-    skills: ["Arduino", "Raspberry Pi", "C++", "Docker"],
-    avatar: "iot-developer-portrait.jpg",
-  },
-  {
-    id: "ux-designer",
-    role: "UX/UI Designer",
-    experience: "5+ ans",
-    skills: ["Figma", "Adobe XD", "Prototyping", "User Research"],
-    avatar: "ux-designer-portrait.png",
+    skills: ["Algorithmes", "Optimisation", "Calcul Scientifique", "HPC"],
+    avatar: "research-engineer-portrait.png",
+    bio: "Expert en algorithmes avancés et calcul haute performance"
   },
 ]
 
@@ -53,21 +57,21 @@ export const teamStatsData: TeamStat[] = [
     id: "experts",
     icon: Users,
     value: "4",
-    label: "Experts dédiés",
-    description: "Une équipe soudée et complémentaire"
+    label: "Experts spécialisés",
+    description: "Une équipe pluridisciplinaire en IA, maths et informatique"
   },
   {
     id: "experience",
     icon: Award,
-    value: "25+",
+    value: "37+",
     label: "Années d'expérience cumulées",
-    description: "Expertise reconnue dans nos domaines"
+    description: "Expertise académique et industrielle reconnue"
   },
   {
     id: "delivery",
     icon: Clock,
     value: "100%",
     label: "Projets livrés à temps",
-    description: "Respect des délais garantis"
+    description: "Respect des délais et de la qualité scientifique"
   },
 ]
