@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { getPath } from "@/lib/utils-path"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -53,7 +54,7 @@ export function Header() {
               variant="outline"
               size="sm"
               className="border-primary/50 hover:border-primary text-foreground hover:text-primary bg-transparent"
-              onClick={() => window.location.href = '/devis'}
+              onClick={() => window.location.href = getPath('/devis')}
             >
               {t('hero.cta')}
             </Button>
@@ -96,7 +97,7 @@ export function Header() {
                   variant="outline"
                   size="sm"
                   className="border-primary/50 hover:border-primary text-foreground bg-transparent"
-                  onClick={() => window.location.href = '/devis'}
+                  onClick={() => window.location.href = getPath('/devis')}
                 >
                   {t('hero.cta')}
                 </Button>

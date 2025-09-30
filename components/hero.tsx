@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, CheckCircle } from "lucide-react"
 import { VoxelWebDev } from "@/components/voxel-web-dev"
 import { useLanguage } from "@/contexts/language-context"
+import { getPath } from "@/lib/utils-path"
 
 export function Hero() {
   const { t } = useLanguage()
@@ -31,7 +32,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground border border-action" onClick={() => window.location.href = '/devis'}>
+            <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground border border-action" onClick={() => window.location.href = getPath('/devis')}>
               {t('hero.cta')}
               <div className="ml-2 w-6 h-6 bg-action rounded-full flex items-center justify-center">
                 <ArrowRight className="w-4 h-4 text-white" />

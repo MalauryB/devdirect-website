@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Phone, Mail, Send } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
+import { getPath } from "@/lib/utils-path"
 
 export function CTA() {
   const { t } = useLanguage()
@@ -54,7 +55,7 @@ export function CTA() {
                   <Phone className="mr-2 w-5 h-5" />
                   {t('navigation.contact')}
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent" onClick={() => window.location.href = '/devis'}>
+                <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent" onClick={() => window.location.href = getPath('/devis')}>
                   <Mail className="mr-2 w-5 h-5" />
                   {t('cta.button')}
                 </Button>
