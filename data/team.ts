@@ -28,11 +28,11 @@ export const teamMembersData: TeamMember[] = [
   },
   {
     id: "alexandre-picavet",
-    role: "Développeur Full Stack Senior",
+    role: "Développeur Full Stack & DevOps",
     experience: "5+ ans",
     skills: ["Java", "TypeScript", "Angular", "React", "Spring Boot", "Kubernetes"],
     avatar: "nobody.jpg",
-    bio: "Développeur passionné spécialisé en architecture moderne et environnements Linux, expert en DevOps"
+    bio: "Développeur passionné spécialisé en architecture moderne et environnements Linux, expert en DevOps et gestion de serveurs"
   },
   {
     id: "victor-talbot",

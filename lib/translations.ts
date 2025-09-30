@@ -89,8 +89,8 @@ export const translations = {
         },
         {
           name: "Alexandre",
-          role: "Développeur Full Stack Senior",
-          description: "Développeur passionné avec 5+ ans d'expérience, spécialisé en architecture moderne et environnements Linux. Expert en Java, TypeScript, Angular, React, Spring Boot et Kubernetes.",
+          role: "Développeur Full Stack & DevOps",
+          description: "Développeur passionné avec 5+ ans d'expérience, spécialisé en architecture moderne et environnements Linux. Expert en développement full stack, gestion de serveurs, DevOps et infrastructure cloud (Kubernetes, Docker, CI/CD).",
           image: "/devdirect-website/nobody.jpg"
         },
         {
@@ -220,8 +220,8 @@ export const translations = {
         },
         {
           name: "Alexandre",
-          role: "Senior Full Stack Developer",
-          description: "Passionate developer with 5+ years of experience, specialized in modern architecture and Linux environments. Expert in Java, TypeScript, Angular, React, Spring Boot and Kubernetes.",
+          role: "Full Stack Developer & DevOps",
+          description: "Passionate developer with 5+ years of experience, specialized in modern architecture and Linux environments. Expert in full stack development, server management, DevOps and cloud infrastructure (Kubernetes, Docker, CI/CD).",
           image: "/devdirect-website/nobody.jpg"
         },
         {
