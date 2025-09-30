@@ -58,20 +58,28 @@ export const teamMembersData: TeamMember[] = [
     avatar: "nobody.jpg",
     bio: "Designer UX/UI avec formation en développement, spécialisée en recherche utilisateur et conception d'interfaces"
   },
+  {
+    id: "alex-podgorny",
+    role: "Data Scientist & Statisticien",
+    experience: "3+ ans",
+    skills: ["Python", "Machine Learning", "R", "Statistics", "PyTorch", "SQL"],
+    avatar: "nobody.jpg",
+    bio: "Doctorant en statistique spécialisé en modélisation des risques extrêmes, machine learning et analyse de données massives. Expert en théorie des valeurs extrêmes (EVT)"
+  },
 ]
 
 export const teamStatsData: TeamStat[] = [
   {
     id: "experts",
     icon: Users,
-    value: "5",
+    value: "6",
     label: "Experts spécialisés",
     description: "Une équipe pluridisciplinaire en développement, design et IA"
   },
   {
     id: "experience",
     icon: Award,
-    value: "23+",
+    value: "26+",
     label: "Années d'expérience cumulées",
     description: "Expertise académique et industrielle reconnue"
   },

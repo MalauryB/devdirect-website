@@ -13,12 +13,12 @@ export function Team() {
   const stats = [
     {
       icon: Users,
-      value: "5",
+      value: "6",
       label: t('team.title'),
     },
     {
       icon: Award,
-      value: "23+",
+      value: "26+",
       label: "Années d'expérience",
     },
     {

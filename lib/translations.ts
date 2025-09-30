@@ -110,6 +110,12 @@ export const translations = {
           role: "UX UI Designer",
           description: "Designer UX/UI avec 5+ ans d'expérience et formation en développement. Experte en recherche utilisateur, design system, Figma et méthodes de design thinking.",
           image: "/devdirect-website/nobody.jpg"
+        },
+        {
+          name: "Alex",
+          role: "Data Scientist & Statisticien",
+          description: "Doctorant en statistique avec 3+ ans d'expérience en modélisation des risques. Spécialisé en machine learning, théorie des valeurs extrêmes (EVT) et analyse de données massives. Expert en Python, R, PyTorch et modélisation statistique avancée.",
+          image: "/devdirect-website/nobody.jpg"
         }
       ]
     },
@@ -240,6 +246,12 @@ export const translations = {
           name: "Juliette",
           role: "UX UI Designer",
           description: "UX/UI Designer with 5+ years of experience and development background. Expert in user research, design systems, Figma and design thinking methodologies.",
+          image: "/devdirect-website/nobody.jpg"
+        },
+        {
+          name: "Alex",
+          role: "Data Scientist & Statistician",
+          description: "PhD candidate in statistics with 3+ years of experience in risk modeling. Specialized in machine learning, extreme value theory (EVT) and big data analysis. Expert in Python, R, PyTorch and advanced statistical modeling.",
           image: "/devdirect-website/nobody.jpg"
         }
       ]
