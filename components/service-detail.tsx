@@ -101,7 +101,104 @@ const servicesData = {
       }
     ]
   },
-  // Add other services data here...
+
+  "developpement-mobile": {
+    title: "Développement Mobile",
+    subtitle: "Applications natives et cross-platform",
+    description: "Nous développons des applications mobiles performantes pour iOS et Android.",
+    icon: Code,
+    whatWeOffer: ["Applications iOS natives", "Applications Android natives", "Applications cross-platform (Flutter, React Native)"],
+    technologies: [
+      { name: "iOS", items: ["Swift", "SwiftUI", "Xcode"] },
+      { name: "Android", items: ["Kotlin", "Java"] },
+      { name: "Cross-platform", items: ["Flutter", "React Native"] }
+    ],
+    process: [
+      { title: "Analyse", description: "Étude des besoins", duration: "1-2 semaines" },
+      { title: "Design", description: "Maquettes mobiles", duration: "2-3 semaines" },
+      { title: "Développement", description: "Développement de l'app", duration: "Variable" }
+    ],
+    pricing: {
+      small: { title: "App Simple", price: "8 000€ - 20 000€", features: ["Cross-platform", "5-8 écrans"] },
+      medium: { title: "App Standard", price: "20 000€ - 50 000€", features: ["Fonctionnalités avancées", "Paiements"] },
+      large: { title: "App Complexe", price: "50 000€+", features: ["Architecture complexe", "Intégrations"] }
+    },
+    faqs: [
+      { question: "Native ou cross-platform ?", answer: "Cela dépend de vos besoins." }
+    ]
+  },
+
+  "iot-embarque": {
+    title: "IoT & Systèmes Embarqués",
+    subtitle: "Solutions connectées",
+    description: "Nous développons des solutions IoT sur mesure.",
+    icon: Code,
+    whatWeOffer: ["Firmware embarqué", "Objets connectés", "Solutions industrielles"],
+    technologies: [
+      { name: "Hardware", items: ["ESP32", "Arduino", "Raspberry Pi"] },
+      { name: "Protocols", items: ["MQTT", "LoRaWAN", "Bluetooth"] }
+    ],
+    process: [
+      { title: "Conception", description: "Architecture", duration: "2-3 semaines" },
+      { title: "Prototypage", description: "Prototype", duration: "3-4 semaines" }
+    ],
+    pricing: {
+      small: { title: "Prototype", price: "5 000€ - 15 000€", features: ["Prototype fonctionnel"] },
+      medium: { title: "Solution Standard", price: "15 000€ - 40 000€", features: ["Firmware optimisé"] },
+      large: { title: "Industrielle", price: "40 000€+", features: ["Production série"] }
+    },
+    faqs: [
+      { question: "Quels protocoles ?", answer: "MQTT, LoRaWAN, Zigbee, etc." }
+    ]
+  },
+
+  "intelligence-artificielle": {
+    title: "Intelligence Artificielle",
+    subtitle: "Solutions IA et Machine Learning",
+    description: "Nous intégrons l'IA dans vos produits.",
+    icon: Code,
+    whatWeOffer: ["Intégration LLMs", "NLP", "Vision par ordinateur"],
+    technologies: [
+      { name: "LLMs", items: ["OpenAI GPT", "Claude", "LangChain"] },
+      { name: "ML", items: ["TensorFlow", "PyTorch"] }
+    ],
+    process: [
+      { title: "Analyse", description: "Cas d'usage", duration: "1-2 semaines" },
+      { title: "Données", description: "Préparation", duration: "2-4 semaines" }
+    ],
+    pricing: {
+      small: { title: "Intégration LLM", price: "5 000€ - 15 000€", features: ["Chatbot intelligent"] },
+      medium: { title: "ML Custom", price: "20 000€ - 60 000€", features: ["Modèle personnalisé"] },
+      large: { title: "Plateforme IA", price: "60 000€+", features: ["Multiple modèles"] }
+    },
+    faqs: [
+      { question: "API vs modèle custom ?", answer: "Cela dépend de vos besoins." }
+    ]
+  },
+
+  "design-maquettes": {
+    title: "Design & Maquettes",
+    subtitle: "Expériences utilisateur mémorables",
+    description: "Nous créons des interfaces intuitives.",
+    icon: Code,
+    whatWeOffer: ["Recherche utilisateur", "Wireframes", "Design UI", "Prototypes"],
+    technologies: [
+      { name: "Design", items: ["Figma", "Adobe XD"] },
+      { name: "Prototype", items: ["Figma Prototype", "Framer"] }
+    ],
+    process: [
+      { title: "Recherche", description: "Personas", duration: "1-2 semaines" },
+      { title: "Wireframes", description: "Structure", duration: "1-2 semaines" }
+    ],
+    pricing: {
+      small: { title: "Design Simple", price: "2 000€ - 5 000€", features: ["5-10 écrans"] },
+      medium: { title: "Design Complet", price: "5 000€ - 15 000€", features: ["20-30 écrans"] },
+      large: { title: "Design System", price: "15 000€+", features: ["Design system complet"] }
+    },
+    faqs: [
+      { question: "UX vs UI ?", answer: "UX = expérience, UI = visuel." }
+    ]
+  }
 } as const
 
 interface ServiceDetailProps {
