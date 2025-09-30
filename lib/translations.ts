@@ -85,31 +85,31 @@ export const translations = {
           name: "Malaury",
           role: "Développeuse Full Stack",
           description: "Ingénieure en informatique avec 6+ ans d'expérience, spécialisée en développement web et mobile. Expertise en React, Angular, Java, Node.js, Flutter et gestion de projet Agile.",
-          image: "/experts/malaury_boudon.jpg"
+          image: "/devdirect-website/experts/malaury_boudon.jpg"
         },
         {
           name: "Alexandre",
           role: "Développeur Full Stack Senior",
           description: "Développeur passionné avec 5+ ans d'expérience, spécialisé en architecture moderne et environnements Linux. Expert en Java, TypeScript, Angular, React, Spring Boot et Kubernetes.",
-          image: "/nobody.jpg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Victor",
           role: "Développeur Mobile iOS & Android",
           description: "Ingénieur INSA Lyon avec 5+ ans d'expérience en développement mobile. Spécialisé en iOS natif (Swift, SwiftUI) et Flutter. Expertise en applications bancaires (+10M utilisateurs), billettique NFC et intégration native/Flutter.",
-          image: "/nobody.jpg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Luc",
           role: "Chercheur en IA & Machine Learning",
           description: "Chercheur spécialisé en intelligence artificielle avec 2+ ans d'expérience. Expert en traitement du langage naturel, LLMs, logique formelle et apprentissage automatique.",
-          image: "/experts/Pommeret_Luc-20250603-0008.jpeg"
+          image: "/devdirect-website/experts/Pommeret_Luc-20250603-0008.jpeg"
         },
         {
           name: "Juliette",
           role: "UX UI Designer",
           description: "Designer UX/UI avec 5+ ans d'expérience et formation en développement. Experte en recherche utilisateur, design system, Figma et méthodes de design thinking.",
-          image: "/juliette_delsaut.jpg"
+          image: "/devdirect-website/juliette_delsaut.jpg"
         }
       ]
     },
@@ -216,31 +216,31 @@ export const translations = {
           name: "Malaury",
           role: "Full Stack Developer",
           description: "Computer engineer with 6+ years of experience, specialized in web and mobile development. Expertise in React, Angular, Java, Node.js, Flutter and Agile project management.",
-          image: "/experts/malaury_boudon.jpg"
+          image: "/devdirect-website/experts/malaury_boudon.jpg"
         },
         {
           name: "Alexandre",
           role: "Senior Full Stack Developer",
           description: "Passionate developer with 5+ years of experience, specialized in modern architecture and Linux environments. Expert in Java, TypeScript, Angular, React, Spring Boot and Kubernetes.",
-          image: "/nobody.jpg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Victor",
           role: "iOS & Android Mobile Developer",
           description: "INSA Lyon engineer with 5+ years of mobile development experience. Specialized in native iOS (Swift, SwiftUI) and Flutter. Expertise in banking apps (+10M users), NFC contactless technology and native/Flutter integration.",
-          image: "/nobody.jpg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Luc",
           role: "AI & Machine Learning Researcher",
           description: "Researcher specialized in artificial intelligence with 2+ years of experience. Expert in natural language processing, LLMs, formal logic and machine learning.",
-          image: "/experts/Pommeret_Luc-20250603-0008.jpeg"
+          image: "/devdirect-website/experts/Pommeret_Luc-20250603-0008.jpeg"
         },
         {
           name: "Juliette",
           role: "UX UI Designer",
           description: "UX/UI Designer with 5+ years of experience and development background. Expert in user research, design systems, Figma and design thinking methodologies.",
-          image: "/juliette_delsaut.jpg"
+          image: "/devdirect-website/juliette_delsaut.jpg"
         }
       ]
     },
