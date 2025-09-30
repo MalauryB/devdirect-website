@@ -4,6 +4,7 @@ import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { LanguageProvider } from "@/contexts/language-context"
+import { ContactProvider } from "@/contexts/contact-context"
 import "./globals.css"
 
 const inter = Inter({
@@ -30,8 +31,10 @@ export default function RootLayout({
     <html lang="fr">
       <body className={`font-sans ${inter.variable}`}>
         <LanguageProvider>
-          <Suspense fallback={null}>{children}</Suspense>
-          {process.env.NODE_ENV === 'production' && <Analytics />}
+          <ContactProvider>
+            <Suspense fallback={null}>{children}</Suspense>
+            {process.env.NODE_ENV === 'production' && <Analytics />}
+          </ContactProvider>
         </LanguageProvider>
       </body>
     </html>

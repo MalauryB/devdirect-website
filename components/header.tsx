@@ -4,11 +4,13 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { useContact } from "@/contexts/contact-context"
 import { LanguageSwitcher } from "@/components/language-switcher"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { t } = useLanguage()
+  const { openDialog } = useContact()
 
   return (
     <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-primary/20 z-50">
@@ -51,12 +53,14 @@ export function Header() {
               variant="outline"
               size="sm"
               className="border-primary/50 hover:border-primary text-foreground hover:text-primary bg-transparent"
+              onClick={openDialog}
             >
               {t('hero.cta')}
             </Button>
             <Button
               size="sm"
               className="bg-action hover:bg-action/90 text-white border-0"
+              onClick={openDialog}
             >
               {t('navigation.contact')}
             </Button>
@@ -92,12 +96,14 @@ export function Header() {
                   variant="outline"
                   size="sm"
                   className="border-primary/50 hover:border-primary text-foreground bg-transparent"
+                  onClick={openDialog}
                 >
                   {t('hero.cta')}
                 </Button>
                 <Button
                   size="sm"
                   className="bg-action hover:bg-action/90 text-white border-0"
+                  onClick={openDialog}
                 >
                   {t('navigation.contact')}
                 </Button>
