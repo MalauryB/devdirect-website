@@ -19,36 +19,44 @@ export interface TeamStat {
 
 export const teamMembersData: TeamMember[] = [
   {
-    id: "ai-researcher",
-    role: "Expert en Intelligence Artificielle",
-    experience: "10+ ans",
-    skills: ["Machine Learning", "Deep Learning", "TensorFlow", "PyTorch"],
-    avatar: "ai-researcher-portrait.png",
-    bio: "Docteur en IA, spécialisé dans les réseaux de neurones et l'apprentissage automatique"
+    id: "malaury-boudon",
+    role: "Développeuse Full Stack",
+    experience: "6+ ans",
+    skills: ["React", "Angular", "Java", "Node.js", "Flutter", "Spring Boot"],
+    avatar: "experts/malaury_boudon.jpg",
+    bio: "Ingénieure en informatique spécialisée en développement web et mobile, avec expertise en gestion de projet Agile"
   },
   {
-    id: "data-scientist",
-    role: "Data Scientist & Mathématicien",
-    experience: "8+ ans",
-    skills: ["Statistiques", "Python", "R", "Optimisation"],
-    avatar: "data-scientist-portrait.jpg",
-    bio: "Expert en analyse de données complexes et modélisation mathématique"
+    id: "alexandre-picavet",
+    role: "Développeur Full Stack Senior",
+    experience: "5+ ans",
+    skills: ["Java", "TypeScript", "Angular", "React", "Spring Boot", "Kubernetes"],
+    avatar: "nobody.jpg",
+    bio: "Développeur passionné spécialisé en architecture moderne et environnements Linux, expert en DevOps"
   },
   {
-    id: "software-architect",
-    role: "Architecte Logiciel Senior",
-    experience: "12+ ans",
-    skills: ["Architecture", "Microservices", "Cloud", "DevOps"],
-    avatar: "software-architect-portrait.jpg",
-    bio: "Spécialisé dans la conception de systèmes distribués et scalables"
+    id: "victor-talbot",
+    role: "Développeur Mobile iOS & Android",
+    experience: "5+ ans",
+    skills: ["Swift", "SwiftUI", "Kotlin", "Flutter", "React Native", "TypeScript"],
+    avatar: "nobody.jpg",
+    bio: "Ingénieur INSA Lyon spécialisé en développement mobile natif iOS et Flutter. Expert en applications bancaires, billettique NFC et architecture mobile"
   },
   {
-    id: "research-engineer",
-    role: "Ingénieur de Recherche",
-    experience: "7+ ans",
-    skills: ["Algorithmes", "Optimisation", "Calcul Scientifique", "HPC"],
-    avatar: "research-engineer-portrait.png",
-    bio: "Expert en algorithmes avancés et calcul haute performance"
+    id: "luc-pommeret",
+    role: "Chercheur en IA & Machine Learning",
+    experience: "2+ ans",
+    skills: ["Machine Learning", "NLP", "LLMs", "Python", "Logique", "Recherche"],
+    avatar: "experts/Pommeret_Luc-20250603-0008.jpeg",
+    bio: "Chercheur spécialisé en intelligence artificielle et traitement du langage naturel, expert en modèles de langage et logique formelle"
+  },
+  {
+    id: "juliette-delsaut",
+    role: "UX UI Designer",
+    experience: "5+ ans",
+    skills: ["Figma", "UX Research", "Design System", "Prototypage", "Design Thinking", "UI Kit"],
+    avatar: "juliette_delsaut.jpg",
+    bio: "Designer UX/UI avec formation en développement, spécialisée en recherche utilisateur et conception d'interfaces"
   },
 ]
 
@@ -56,14 +64,14 @@ export const teamStatsData: TeamStat[] = [
   {
     id: "experts",
     icon: Users,
-    value: "4",
+    value: "5",
     label: "Experts spécialisés",
-    description: "Une équipe pluridisciplinaire en IA, maths et informatique"
+    description: "Une équipe pluridisciplinaire en développement, design et IA"
   },
   {
     id: "experience",
     icon: Award,
-    value: "37+",
+    value: "23+",
     label: "Années d'expérience cumulées",
     description: "Expertise académique et industrielle reconnue"
   },
@@ -72,6 +80,6 @@ export const teamStatsData: TeamStat[] = [
     icon: Clock,
     value: "100%",
     label: "Projets livrés à temps",
-    description: "Respect des délais et de la qualité scientifique"
+    description: "Respect des délais et de la qualité"
   },
 ]

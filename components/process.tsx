@@ -12,13 +12,13 @@ export function Process() {
       icon: MessageCircle,
       title: t('process.analysis.title'),
       description: t('process.analysis.description'),
-      duration: "1h",
+      duration: "2-3 jours",
     },
     {
       icon: FileText,
       title: t('process.development.title'),
       description: t('process.development.description'),
-      duration: "2-3 jours",
+      duration: "Selon le projet",
     },
     {
       icon: Code,
