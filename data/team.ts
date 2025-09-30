@@ -23,7 +23,7 @@ export const teamMembersData: TeamMember[] = [
     role: "Développeuse Full Stack",
     experience: "6+ ans",
     skills: ["React", "Angular", "Java", "Node.js", "Flutter", "Spring Boot"],
-    avatar: "experts/malaury_boudon.jpg",
+    avatar: "nobody.jpg",
     bio: "Ingénieure en informatique spécialisée en développement web et mobile, avec expertise en gestion de projet Agile"
   },
   {
@@ -47,7 +47,7 @@ export const teamMembersData: TeamMember[] = [
     role: "Chercheur en IA & Machine Learning",
     experience: "2+ ans",
     skills: ["Machine Learning", "NLP", "LLMs", "Python", "Logique", "Recherche"],
-    avatar: "experts/Pommeret_Luc-20250603-0008.jpeg",
+    avatar: "nobody.jpg",
     bio: "Chercheur spécialisé en intelligence artificielle et traitement du langage naturel, expert en modèles de langage et logique formelle"
   },
   {

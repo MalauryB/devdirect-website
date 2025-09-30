@@ -85,7 +85,7 @@ export const translations = {
           name: "Malaury",
           role: "Développeuse Full Stack",
           description: "Ingénieure en informatique avec 6+ ans d'expérience, spécialisée en développement web et mobile. Expertise en React, Angular, Java, Node.js, Flutter et gestion de projet Agile.",
-          image: "/devdirect-website/experts/malaury_boudon.jpg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Alexandre",
@@ -103,7 +103,7 @@ export const translations = {
           name: "Luc",
           role: "Chercheur en IA & Machine Learning",
           description: "Chercheur spécialisé en intelligence artificielle avec 2+ ans d'expérience. Expert en traitement du langage naturel, LLMs, logique formelle et apprentissage automatique.",
-          image: "/devdirect-website/experts/Pommeret_Luc-20250603-0008.jpeg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Juliette",
@@ -222,7 +222,7 @@ export const translations = {
           name: "Malaury",
           role: "Full Stack Developer",
           description: "Computer engineer with 6+ years of experience, specialized in web and mobile development. Expertise in React, Angular, Java, Node.js, Flutter and Agile project management.",
-          image: "/devdirect-website/experts/malaury_boudon.jpg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Alexandre",
@@ -240,7 +240,7 @@ export const translations = {
           name: "Luc",
           role: "AI & Machine Learning Researcher",
           description: "Researcher specialized in artificial intelligence with 2+ years of experience. Expert in natural language processing, LLMs, formal logic and machine learning.",
-          image: "/devdirect-website/experts/Pommeret_Luc-20250603-0008.jpeg"
+          image: "/devdirect-website/nobody.jpg"
         },
         {
           name: "Juliette",
