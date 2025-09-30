@@ -12,11 +12,8 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <Code2 className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="text-lg font-bold" style={{ color: "#bda3cc" }}>
+            <div className="mb-4">
+              <span className="text-3xl font-bold logo-cubic text-black">
                 {t('name')}
               </span>
             </div>
@@ -31,10 +28,6 @@ export function Footer() {
               <div className="flex items-center space-x-2">
                 <Phone className="w-4 h-4" />
                 <span>+33 1 23 45 67 89</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4" />
-                <span>Paris, France</span>
               </div>
             </div>
           </div>
@@ -95,7 +88,7 @@ export function Footer() {
           </div>
 
           <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2024 {t('name')}. {t('footer.rights')}</p>
+            <p>&copy; 2025 {t('name')}. {t('footer.rights')}</p>
           </div>
         </div>
       </div>
