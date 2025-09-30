@@ -53,7 +53,7 @@ export function Header() {
               variant="outline"
               size="sm"
               className="border-primary/50 hover:border-primary text-foreground hover:text-primary bg-transparent"
-              onClick={openDialog}
+              onClick={() => window.location.href = '/devis'}
             >
               {t('hero.cta')}
             </Button>
@@ -96,7 +96,7 @@ export function Header() {
                   variant="outline"
                   size="sm"
                   className="border-primary/50 hover:border-primary text-foreground bg-transparent"
-                  onClick={openDialog}
+                  onClick={() => window.location.href = '/devis'}
                 >
                   {t('hero.cta')}
                 </Button>

@@ -54,7 +54,7 @@ export function CTA() {
                   <Phone className="mr-2 w-5 h-5" />
                   {t('navigation.contact')}
                 </Button>
-                <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent" onClick={openDialog}>
+                <Button variant="outline" size="lg" className="text-lg px-8 bg-transparent" onClick={() => window.location.href = '/devis'}>
                   <Mail className="mr-2 w-5 h-5" />
                   {t('cta.button')}
                 </Button>

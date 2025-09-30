@@ -31,7 +31,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12">
-            <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground border border-action">
+            <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground border border-action" onClick={() => window.location.href = '/devis'}>
               {t('hero.cta')}
               <div className="ml-2 w-6 h-6 bg-action rounded-full flex items-center justify-center">
                 <ArrowRight className="w-4 h-4 text-white" />
@@ -41,6 +41,7 @@ export function Hero() {
               variant="outline"
               size="lg"
               className="text-lg px-8 border-primary/50 text-foreground bg-white hover:bg-white/90"
+              onClick={() => document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })}
             >
               {t('hero.moreDetails')}
             </Button>
