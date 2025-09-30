@@ -55,7 +55,7 @@ export const teamMembersData: TeamMember[] = [
     role: "UX UI Designer",
     experience: "5+ ans",
     skills: ["Figma", "UX Research", "Design System", "Prototypage", "Design Thinking", "UI Kit"],
-    avatar: "juliette_delsaut.jpg",
+    avatar: "nobody.jpg",
     bio: "Designer UX/UI avec formation en développement, spécialisée en recherche utilisateur et conception d'interfaces"
   },
 ]

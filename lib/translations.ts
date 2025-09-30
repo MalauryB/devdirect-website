@@ -109,7 +109,7 @@ export const translations = {
           name: "Juliette",
           role: "UX UI Designer",
           description: "Designer UX/UI avec 5+ ans d'expérience et formation en développement. Experte en recherche utilisateur, design system, Figma et méthodes de design thinking.",
-          image: "/devdirect-website/juliette_delsaut.jpg"
+          image: "/devdirect-website/nobody.jpg"
         }
       ]
     },
@@ -240,7 +240,7 @@ export const translations = {
           name: "Juliette",
           role: "UX UI Designer",
           description: "UX/UI Designer with 5+ years of experience and development background. Expert in user research, design systems, Figma and design thinking methodologies.",
-          image: "/devdirect-website/juliette_delsaut.jpg"
+          image: "/devdirect-website/nobody.jpg"
         }
       ]
     },
