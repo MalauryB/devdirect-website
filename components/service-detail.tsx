@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, CheckCircle, Clock, Code, Rocket, Users } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { useContact } from "@/contexts/contact-context"
 import { getPath } from "@/lib/utils-path"
 
 const servicesData = {
@@ -208,6 +209,7 @@ interface ServiceDetailProps {
 export function ServiceDetail({ slug }: ServiceDetailProps) {
   const router = useRouter()
   const { t } = useLanguage()
+  const { openDialog } = useContact()
 
   const service = servicesData[slug as keyof typeof servicesData]
 
@@ -257,7 +259,7 @@ export function ServiceDetail({ slug }: ServiceDetailProps) {
               <Button size="lg" onClick={() => window.location.href = getPath("/devis")}>
                 Obtenir un devis
               </Button>
-              <Button size="lg" variant="outline" onClick={() => window.location.href = getPath("/#contact")}>
+              <Button size="lg" variant="outline" onClick={openDialog}>
                 Nous contacter
               </Button>
             </div>
@@ -294,7 +296,7 @@ export function ServiceDetail({ slug }: ServiceDetailProps) {
                 <Rocket className="mr-2 w-5 h-5" />
                 Demander un devis
               </Button>
-              <Button size="lg" variant="outline" onClick={() => window.location.href = getPath("/#contact")}>
+              <Button size="lg" variant="outline" onClick={openDialog}>
                 <Users className="mr-2 w-5 h-5" />
                 Parler à un expert
               </Button>

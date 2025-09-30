@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { LanguageProvider } from "@/contexts/language-context"
 import { ContactProvider } from "@/contexts/contact-context"
+import { ContactDialog } from "@/components/contact-dialog"
 import "./globals.css"
 
 const inter = Inter({
@@ -33,6 +34,7 @@ export default function RootLayout({
         <LanguageProvider>
           <ContactProvider>
             <Suspense fallback={null}>{children}</Suspense>
+            <ContactDialog />
             {process.env.NODE_ENV === 'production' && <Analytics />}
           </ContactProvider>
         </LanguageProvider>
