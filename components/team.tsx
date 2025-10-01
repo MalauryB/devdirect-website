@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Users, Award, Clock } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { getImagePath } from "@/lib/assets"
 
 export function Team() {
   const { t } = useLanguage()
@@ -55,18 +56,6 @@ export function Team() {
           {teamMembers.map((member: any, index: number) => (
             <Card key={index} className="bg-white border border-primary/20 group">
               <CardHeader className="text-center">
-                <div className="relative mx-auto mb-4">
-                  <div className="w-20 h-20 rounded-full overflow-hidden bg-primary/10 border-2 border-primary/30">
-                    <img
-                      src={member.image || "/placeholder.svg"}
-                      alt={member.role}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-white rounded-full flex items-center justify-center border border-primary/30">
-                    <div className="w-3 h-3 bg-gradient-to-r from-primary to-secondary rounded-full" />
-                  </div>
-                </div>
                 <CardTitle className="text-lg font-semibold leading-tight">{member.name}</CardTitle>
                 <div className="text-sm text-muted-foreground mb-1">{member.role}</div>
                 <div className="text-primary font-semibold text-sm">{member.description}</div>

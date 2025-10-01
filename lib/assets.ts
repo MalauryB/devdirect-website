@@ -10,6 +10,16 @@ const basePath = process.env.NODE_ENV === 'production' ? '/devdirect-website' : 
  * @returns Full path with basePath prefix if needed
  */
 export function getAssetPath(path: string): string {
+  // Si le chemin contient déjà le basePath en production, on le retourne tel quel
+  if (process.env.NODE_ENV === 'production' && path.startsWith('/devdirect-website')) {
+    return path
+  }
+
+  // En local, on enlève le basePath s'il existe dans le chemin
+  if (process.env.NODE_ENV !== 'production' && path.startsWith('/devdirect-website')) {
+    return path.replace('/devdirect-website', '')
+  }
+
   // Remove leading slash if present
   const cleanPath = path.startsWith('/') ? path.slice(1) : path
 

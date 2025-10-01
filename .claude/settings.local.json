@@ -6,7 +6,8 @@
       "Bash(grep:*)",
       "Bash(npm install:*)",
       "Bash(curl:*)",
-      "Read(//mnt/c/**)"
+      "Read(//mnt/c/**)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

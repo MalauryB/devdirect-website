@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Globe, Smartphone, Cpu, Palette, ArrowRight, PenTool } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { getPath } from "@/lib/utils-path"
+import { getImagePath } from "@/lib/assets"
 
 export function Services() {
   const { t } = useLanguage()
@@ -14,19 +15,19 @@ export function Services() {
       icon: Globe,
       title: t('services.webDev.title'),
       description: t('services.webDev.description'),
-      image: "/devdirect-website/modern-web-dev-workspace.png",
+      image: "/devdirect-website/webdev.jpg",
     },
     {
       icon: Smartphone,
       title: t('services.mobileDev.title'),
       description: t('services.mobileDev.description'),
-      image: "/devdirect-website/project-3.png",
+      image: "/devdirect-website/mobile.jpg",
     },
     {
       icon: Cpu,
       title: t('services.iot.title'),
       description: t('services.iot.description'),
-      image: "/devdirect-website/iot-devices-and-sensors-connected.jpg",
+      image: "/devdirect-website/iot.jpg",
     },
     {
       icon: Palette,
@@ -38,7 +39,7 @@ export function Services() {
       icon: PenTool,
       title: t('services.design.title'),
       description: t('services.design.description'),
-      image: "/devdirect-website/maquette_et_design.jpg",
+      image: "/devdirect-website/maquettes.jpg",
     },
   ]
   return (
@@ -62,7 +63,7 @@ export function Services() {
             >
               <div className="aspect-video bg-gray-100 rounded-t-2xl overflow-hidden">
                 <img
-                  src={service.image || "/placeholder.svg"}
+                  src={getImagePath(service.image || "/placeholder.svg")}
                   alt={service.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
