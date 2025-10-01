@@ -7,6 +7,7 @@ import { ArrowLeft, CheckCircle, Clock, Code, Rocket, Users } from "lucide-react
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
 import { getPath } from "@/lib/utils-path"
+import { getImagePath } from "@/lib/assets"
 
 const servicesData = {
   "developpement-web": {
@@ -14,7 +15,7 @@ const servicesData = {
     subtitle: "Applications web modernes et performantes",
     description: "Nous créons des applications web sur mesure, adaptées à vos besoins spécifiques. De la simple vitrine au système complexe, nous maîtrisons les dernières technologies pour vous offrir une solution performante et évolutive.",
     icon: Code,
-    image: "/devdirect-website/modern-web-dev-workspace.png",
+    image: "/devdirect-website/webdev.jpg",
 
     whatWeOffer: [
       "Sites vitrine et portfolios",
@@ -108,6 +109,7 @@ const servicesData = {
     subtitle: "Applications natives et cross-platform",
     description: "Nous développons des applications mobiles performantes pour iOS et Android.",
     icon: Code,
+    image: "/devdirect-website/mobile.jpg",
     whatWeOffer: ["Applications iOS natives", "Applications Android natives", "Applications cross-platform (Flutter, React Native)"],
     technologies: [
       { name: "iOS", items: ["Swift", "SwiftUI", "Xcode"] },
@@ -134,6 +136,7 @@ const servicesData = {
     subtitle: "Solutions connectées",
     description: "Nous développons des solutions IoT sur mesure.",
     icon: Code,
+    image: "/devdirect-website/iot.jpg",
     whatWeOffer: ["Firmware embarqué", "Objets connectés", "Solutions industrielles"],
     technologies: [
       { name: "Hardware", items: ["ESP32", "Arduino", "Raspberry Pi"] },
@@ -158,6 +161,7 @@ const servicesData = {
     subtitle: "Solutions IA et Machine Learning",
     description: "Nous intégrons l'IA dans vos produits.",
     icon: Code,
+    image: "/devdirect-website/IA.jpg",
     whatWeOffer: ["Intégration LLMs", "NLP", "Vision par ordinateur"],
     technologies: [
       { name: "LLMs", items: ["OpenAI GPT", "Claude", "LangChain"] },
@@ -182,6 +186,7 @@ const servicesData = {
     subtitle: "Expériences utilisateur mémorables",
     description: "Nous créons des interfaces intuitives.",
     icon: Code,
+    image: "/devdirect-website/maquettes.jpg",
     whatWeOffer: ["Recherche utilisateur", "Wireframes", "Design UI", "Prototypes"],
     technologies: [
       { name: "Design", items: ["Figma", "Adobe XD"] },
@@ -248,20 +253,31 @@ export function ServiceDetail({ slug }: ServiceDetailProps) {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-primary/5 to-secondary/5 py-20 px-4">
         <div className="container mx-auto">
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
-              <ServiceIcon className="w-8 h-8 text-primary" />
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{service.title}</h1>
-            <p className="text-xl text-muted-foreground mb-8">{service.subtitle}</p>
-            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">{service.description}</p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-              <Button size="lg" onClick={() => window.location.href = getPath("/devis")}>
-                Obtenir un devis
-              </Button>
-              <Button size="lg" variant="outline" onClick={openDialog}>
-                Nous contacter
-              </Button>
+          <div className="max-w-4xl mx-auto">
+            {service.image && (
+              <div className="aspect-video bg-gray-100 rounded-2xl overflow-hidden mb-8">
+                <img
+                  src={getImagePath(service.image)}
+                  alt={service.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+            <div className="text-center">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mb-6">
+                <ServiceIcon className="w-8 h-8 text-primary" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">{service.title}</h1>
+              <p className="text-xl text-muted-foreground mb-8">{service.subtitle}</p>
+              <p className="text-lg text-muted-foreground max-w-3xl mx-auto">{service.description}</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                <Button size="lg" onClick={() => window.location.href = getPath("/devis")}>
+                  Obtenir un devis
+                </Button>
+                <Button size="lg" variant="outline" onClick={openDialog}>
+                  Nous contacter
+                </Button>
+              </div>
             </div>
           </div>
         </div>
