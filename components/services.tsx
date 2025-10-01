@@ -68,7 +68,7 @@ export function Services() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <CardHeader className="pb-4 pt-6">
+              <CardHeader className="pb-4 pt-0">
                 <CardTitle className="text-lg font-semibold text-[#38392c] mb-2">{service.title}</CardTitle>
                 <CardDescription className="text-[#7f7074] leading-relaxed text-sm">
                   {service.description}
