@@ -100,7 +100,7 @@ export default function DevisPage() {
               <ArrowLeft className="w-4 h-4" />
               Retour à l'accueil
             </Button>
-            <h1 className="text-xl md:text-3xl font-bold logo-cubic text-black">{t('name')}</h1>
+            <h1 className="text-base md:text-3xl font-bold logo-cubic text-black">{t('name')}</h1>
           </div>
         </div>
       </header>
