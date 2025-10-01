@@ -59,7 +59,7 @@ export function Services() {
           {services.map((service, index) => (
             <Card
               key={index}
-              className="bg-white border-0 rounded-2xl shadow-lg group hover:shadow-xl transition-all duration-300 overflow-hidden"
+              className="bg-white border-0 rounded-2xl shadow-lg group hover:shadow-xl transition-all duration-300 overflow-hidden p-0"
             >
               <div className="aspect-video bg-gray-100 rounded-t-2xl overflow-hidden">
                 <img
@@ -68,13 +68,13 @@ export function Services() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
               </div>
-              <CardHeader className="pb-4">
+              <CardHeader className="pb-4 pt-6">
                 <CardTitle className="text-lg font-semibold text-[#38392c] mb-2">{service.title}</CardTitle>
                 <CardDescription className="text-[#7f7074] leading-relaxed text-sm">
                   {service.description}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="pt-0">
+              <CardContent className="pt-0 pb-6">
                 <Button
                   variant="ghost"
                   className="text-[#38392c] hover:text-[#ba9fdf] hover:bg-[#ba9fdf]/10 p-0 h-auto font-medium group/btn"
