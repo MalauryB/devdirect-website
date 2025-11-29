@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import { Menu, X, User } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
 import { LanguageSwitcher } from "@/components/language-switcher"
 
@@ -45,8 +46,16 @@ export function Header() {
             </a>
           </nav>
 
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-4">
             <LanguageSwitcher />
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 border-primary/30 hover:bg-primary/5"
+            >
+              <User className="w-4 h-4" />
+              {t('navigation.login')}
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -73,8 +82,16 @@ export function Header() {
               <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
                 {t('navigation.contact')}
               </a>
-              <div className="flex justify-center pt-4">
+              <div className="flex flex-col items-center gap-4 pt-4">
                 <LanguageSwitcher />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2 border-primary/30 hover:bg-primary/5"
+                >
+                  <User className="w-4 h-4" />
+                  {t('navigation.login')}
+                </Button>
               </div>
             </div>
           </nav>

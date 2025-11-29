@@ -6,7 +6,8 @@ export const translations = {
       services: "Services",
       processus: "Processus",
       equipe: "Équipe",
-      contact: "Contact"
+      contact: "Contact",
+      login: "Connexion"
     },
     hero: {
       title: "Développez vos projets avec des experts en informatique, mathématiques et IA.",
@@ -143,7 +144,8 @@ export const translations = {
       services: "Services",
       processus: "Process",
       equipe: "Team",
-      contact: "Contact"
+      contact: "Contact",
+      login: "Login"
     },
     hero: {
       title: "Develop your projects with experts in computer science, mathematics and AI.",

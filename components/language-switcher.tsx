@@ -20,10 +20,10 @@ export function LanguageSwitcher() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 px-3 py-2 rounded-md border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 transition-colors"
+        className="flex items-center gap-1.5 h-8 px-3 rounded-md border border-primary/30 bg-white hover:bg-primary/5 transition-colors text-sm font-medium"
       >
-        <span className="text-lg">{currentLocale.flag}</span>
-        <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <span>{currentLocale.name}</span>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
