@@ -15,7 +15,7 @@ const servicesData = {
     subtitle: "Applications web modernes et performantes",
     description: "Nous créons des applications web sur mesure, adaptées à vos besoins spécifiques. De la simple vitrine au système complexe, nous maîtrisons les dernières technologies pour vous offrir une solution performante et évolutive.",
     icon: Code,
-    image: "/devdirect-website/webdev.jpg",
+    image: "/webdev.jpg",
 
     whatWeOffer: [
       "Sites vitrine et portfolios",
@@ -109,7 +109,7 @@ const servicesData = {
     subtitle: "Applications natives et cross-platform",
     description: "Nous développons des applications mobiles performantes pour iOS et Android.",
     icon: Code,
-    image: "/devdirect-website/mobile.jpg",
+    image: "/mobile.jpg",
     whatWeOffer: ["Applications iOS natives", "Applications Android natives", "Applications cross-platform (Flutter, React Native)"],
     technologies: [
       { name: "iOS", items: ["Swift", "SwiftUI", "Xcode"] },
@@ -136,7 +136,7 @@ const servicesData = {
     subtitle: "Solutions connectées",
     description: "Nous développons des solutions IoT sur mesure.",
     icon: Code,
-    image: "/devdirect-website/iot.jpg",
+    image: "/iot.jpg",
     whatWeOffer: ["Firmware embarqué", "Objets connectés", "Solutions industrielles"],
     technologies: [
       { name: "Hardware", items: ["ESP32", "Arduino", "Raspberry Pi"] },
@@ -161,7 +161,7 @@ const servicesData = {
     subtitle: "Solutions IA et Machine Learning",
     description: "Nous intégrons l'IA dans vos produits.",
     icon: Code,
-    image: "/devdirect-website/IA.jpg",
+    image: "/IA.jpg",
     whatWeOffer: ["Intégration LLMs", "NLP", "Vision par ordinateur"],
     technologies: [
       { name: "LLMs", items: ["OpenAI GPT", "Claude", "LangChain"] },
@@ -186,7 +186,7 @@ const servicesData = {
     subtitle: "Expériences utilisateur mémorables",
     description: "Nous créons des interfaces intuitives.",
     icon: Code,
-    image: "/devdirect-website/maquettes.jpg",
+    image: "/maquettes.jpg",
     whatWeOffer: ["Recherche utilisateur", "Wireframes", "Design UI", "Prototypes"],
     technologies: [
       { name: "Design", items: ["Figma", "Adobe XD"] },

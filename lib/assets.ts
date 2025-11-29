@@ -1,42 +1,27 @@
 /**
- * Utility functions for handling asset paths with basePath support
+ * Utility functions for handling asset paths
  */
-
-const basePath = process.env.NODE_ENV === 'production' ? '/devdirect-website' : ''
 
 /**
- * Get the correct asset path considering the basePath configuration
- * @param path - Asset path relative to public directory or assets directory
- * @returns Full path with basePath prefix if needed
+ * Get the correct asset path
+ * @param path - Asset path relative to public directory
+ * @returns Full path with leading slash
  */
 export function getAssetPath(path: string): string {
-  // Si le chemin contient déjà le basePath en production, on le retourne tel quel
-  if (process.env.NODE_ENV === 'production' && path.startsWith('/devdirect-website')) {
-    return path
+  // Remove /devdirect-website prefix if present
+  if (path.startsWith('/devdirect-website')) {
+    path = path.replace('/devdirect-website', '')
   }
 
-  // En local, on enlève le basePath s'il existe dans le chemin
-  if (process.env.NODE_ENV !== 'production' && path.startsWith('/devdirect-website')) {
-    return path.replace('/devdirect-website', '')
-  }
-
-  // Remove leading slash if present
-  const cleanPath = path.startsWith('/') ? path.slice(1) : path
-
-  // In development, return path with leading slash for public folder
-  // In production, return path with basePath
-  if (basePath) {
-    return `${basePath}/${cleanPath}`
-  } else {
-    return `/${cleanPath}`
-  }
+  // Ensure leading slash
+  return path.startsWith('/') ? path : `/${path}`
 }
 
 /**
  * Get image path with fallback to placeholder
  * @param imagePath - Original image path
  * @param fallback - Fallback image path (default: placeholder.svg)
- * @returns Asset path with basePath
+ * @returns Asset path
  */
 export function getImagePath(imagePath?: string, fallback: string = 'placeholder.svg'): string {
   return getAssetPath(imagePath || fallback)

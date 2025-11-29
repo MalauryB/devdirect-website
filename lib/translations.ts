@@ -85,37 +85,37 @@ export const translations = {
           name: "Malaury",
           role: "Développeuse Full Stack",
           description: "Ingénieure en informatique avec 6+ ans d'expérience, spécialisée en développement web et mobile. Expertise en React, Angular, Java, Node.js, Flutter et gestion de projet Agile.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Alexandre",
           role: "Développeur Full Stack & DevOps",
           description: "Développeur passionné avec 5+ ans d'expérience, spécialisé en architecture moderne et environnements Linux. Expert en développement full stack, gestion de serveurs, DevOps et infrastructure cloud (Kubernetes, Docker, CI/CD).",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Victor",
           role: "Développeur Mobile iOS & Android",
           description: "Ingénieur INSA Lyon avec 5+ ans d'expérience en développement mobile. Spécialisé en iOS natif (Swift, SwiftUI) et Flutter. Expertise en applications bancaires (+10M utilisateurs), billettique NFC et intégration native/Flutter.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Luc",
           role: "Chercheur en IA & Machine Learning",
           description: "Chercheur spécialisé en intelligence artificielle avec 2+ ans d'expérience. Expert en traitement du langage naturel, LLMs, logique formelle et apprentissage automatique.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Juliette",
           role: "UX UI Designer",
           description: "Designer UX/UI avec 5+ ans d'expérience et formation en développement. Experte en recherche utilisateur, design system, Figma et méthodes de design thinking.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Alex",
           role: "Data Scientist & Statisticien",
           description: "Doctorant en statistique avec 3+ ans d'expérience en modélisation des risques. Spécialisé en machine learning, théorie des valeurs extrêmes (EVT) et analyse de données massives. Expert en Python, R, PyTorch et modélisation statistique avancée.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         }
       ]
     },
@@ -222,37 +222,37 @@ export const translations = {
           name: "Malaury",
           role: "Full Stack Developer",
           description: "Computer engineer with 6+ years of experience, specialized in web and mobile development. Expertise in React, Angular, Java, Node.js, Flutter and Agile project management.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Alexandre",
           role: "Full Stack Developer & DevOps",
           description: "Passionate developer with 5+ years of experience, specialized in modern architecture and Linux environments. Expert in full stack development, server management, DevOps and cloud infrastructure (Kubernetes, Docker, CI/CD).",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Victor",
           role: "iOS & Android Mobile Developer",
           description: "INSA Lyon engineer with 5+ years of mobile development experience. Specialized in native iOS (Swift, SwiftUI) and Flutter. Expertise in banking apps (+10M users), NFC contactless technology and native/Flutter integration.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Luc",
           role: "AI & Machine Learning Researcher",
           description: "Researcher specialized in artificial intelligence with 2+ years of experience. Expert in natural language processing, LLMs, formal logic and machine learning.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Juliette",
           role: "UX UI Designer",
           description: "UX/UI Designer with 5+ years of experience and development background. Expert in user research, design systems, Figma and design thinking methodologies.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         },
         {
           name: "Alex",
           role: "Data Scientist & Statistician",
           description: "PhD candidate in statistics with 3+ years of experience in risk modeling. Specialized in machine learning, extreme value theory (EVT) and big data analysis. Expert in Python, R, PyTorch and advanced statistical modeling.",
-          image: "/devdirect-website/nobody.jpg"
+          image: "/nobody.jpg"
         }
       ]
     },
