@@ -1,17 +1,13 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import { Menu, X } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
-import { useContact } from "@/contexts/contact-context"
 import { LanguageSwitcher } from "@/components/language-switcher"
-import { getPath } from "@/lib/utils-path"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { t } = useLanguage()
-  const { openDialog } = useContact()
 
   return (
     <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-primary/20 z-50">
@@ -49,22 +45,7 @@ export function Header() {
             </a>
           </nav>
 
-          <div className="hidden md:flex items-center space-x-4">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-primary/50 hover:border-primary text-foreground hover:text-primary bg-transparent"
-              onClick={() => window.location.href = getPath('/devis')}
-            >
-              {t('hero.cta')}
-            </Button>
-            <Button
-              size="sm"
-              className="bg-action hover:bg-action/90 text-white border-0"
-              onClick={openDialog}
-            >
-              {t('navigation.contact')}
-            </Button>
+          <div className="hidden md:flex items-center">
             <LanguageSwitcher />
           </div>
 
@@ -92,25 +73,8 @@ export function Header() {
               <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
                 {t('navigation.contact')}
               </a>
-              <div className="flex flex-col space-y-2 pt-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-primary/50 hover:border-primary text-foreground bg-transparent"
-                  onClick={() => window.location.href = getPath('/devis')}
-                >
-                  {t('hero.cta')}
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-action hover:bg-action/90 text-white border-0"
-                  onClick={openDialog}
-                >
-                  {t('navigation.contact')}
-                </Button>
-                <div className="flex justify-center pt-2">
-                  <LanguageSwitcher />
-                </div>
+              <div className="flex justify-center pt-4">
+                <LanguageSwitcher />
               </div>
             </div>
           </nav>
