@@ -1,24 +1,50 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, Settings, FileText, MessageSquare, Bell, ChevronLeft, Menu, X, Home, LogOut } from "lucide-react"
+import { User, Settings, FileText, MessageSquare, Bell, ChevronLeft, Menu, X, Home, LogOut, Loader2, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useAuth, UserMetadata } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
 
 export default function DashboardPage() {
-  const { user, loading, signOut } = useAuth()
+  const { user, loading, signOut, updateProfile } = useAuth()
   const { t } = useLanguage()
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [mounted, setMounted] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [activeSection, setActiveSection] = useState("overview")
 
+  // Profile form state
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [phone, setPhone] = useState("")
+  const [saving, setSaving] = useState(false)
+  const [profileSuccess, setProfileSuccess] = useState(false)
+  const [profileError, setProfileError] = useState("")
+
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  useEffect(() => {
+    const section = searchParams.get("section")
+    if (section && ["overview", "profile", "projects", "messages", "notifications", "settings"].includes(section)) {
+      setActiveSection(section)
+    }
+  }, [searchParams])
+
+  useEffect(() => {
+    if (user?.user_metadata) {
+      setFirstName(user.user_metadata.first_name || "")
+      setLastName(user.user_metadata.last_name || "")
+      setPhone(user.user_metadata.phone || "")
+    }
+  }, [user])
 
   useEffect(() => {
     if (mounted && !loading && !user) {
@@ -38,8 +64,6 @@ export default function DashboardPage() {
     return null
   }
 
-  const firstName = user.user_metadata?.first_name || ""
-  const lastName = user.user_metadata?.last_name || ""
   const displayName = firstName || lastName
     ? `${firstName} ${lastName}`.trim()
     : user.email?.split("@")[0]
@@ -54,7 +78,6 @@ export default function DashboardPage() {
       id: "profile",
       icon: User,
       label: t('dashboard.menu.profile'),
-      href: "/profile"
     },
     {
       id: "projects",
@@ -95,6 +118,30 @@ export default function DashboardPage() {
   const handleSignOut = async () => {
     await signOut()
     router.push("/")
+  }
+
+  const handleProfileSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    setProfileError("")
+    setProfileSuccess(false)
+
+    const metadata: UserMetadata = {
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone,
+    }
+
+    const { error: updateError } = await updateProfile(metadata)
+
+    if (updateError) {
+      setProfileError(t('profile.error'))
+    } else {
+      setProfileSuccess(true)
+      setTimeout(() => setProfileSuccess(false), 3000)
+    }
+
+    setSaving(false)
   }
 
   return (
@@ -190,64 +237,129 @@ export default function DashboardPage() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen">
-        {/* Top bar */}
-        <header className="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 lg:px-6">
-          <div className="flex items-center gap-4">
-            <button
-              className="lg:hidden p-2 hover:bg-gray-50 rounded-lg"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <h1 className="text-lg font-semibold text-foreground">
-              {t('dashboard.welcome')}, {displayName}
-            </h1>
-          </div>
-        </header>
+        {/* Mobile menu button */}
+        <div className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3">
+          <button
+            className="p-2 hover:bg-gray-50 rounded-lg"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        </div>
 
         {/* Content area */}
         <main className="flex-1 p-4 lg:p-6">
-          <div className="max-w-4xl">
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
-              <h2 className="text-xl font-bold text-foreground mb-2">
-                {t('dashboard.welcomeCard.title')}
-              </h2>
-              <p className="text-foreground/70">
-                {t('dashboard.welcomeCard.description')}
-              </p>
-            </div>
+          {activeSection === "overview" && (
+            <div className="max-w-4xl">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
+                <h2 className="text-xl font-bold text-foreground mb-2">
+                  {t('dashboard.welcomeCard.title')}
+                </h2>
+                <p className="text-foreground/70">
+                  {t('dashboard.welcomeCard.description')}
+                </p>
+              </div>
 
-            <h3 className="text-lg font-semibold text-foreground mb-4">{t('dashboard.quickAccess')}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {menuItems.filter(item => item.id !== "overview").map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => handleMenuClick(item)}
-                  disabled={item.disabled}
-                  className={`flex items-center gap-4 p-4 rounded-xl border border-gray-200 transition-colors text-left ${
-                    item.disabled
-                      ? "opacity-50 cursor-not-allowed bg-gray-50"
-                      : "hover:bg-gray-50 hover:border-gray-300"
-                  }`}
-                >
-                  <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
-                    <item.icon className="w-6 h-6 text-foreground/70" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-foreground">{item.label}</p>
-                    <p className="text-sm text-foreground/60">
-                      {t(`dashboard.menu.${item.id}Desc`)}
-                    </p>
-                  </div>
-                  {item.disabled && (
-                    <span className="text-xs bg-gray-100 text-foreground/60 px-2 py-1 rounded">
-                      {t('dashboard.comingSoon')}
-                    </span>
-                  )}
-                </button>
-              ))}
+              <h3 className="text-lg font-semibold text-foreground mb-4">{t('dashboard.quickAccess')}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {menuItems.filter(item => item.id !== "overview").map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => handleMenuClick(item)}
+                    disabled={item.disabled}
+                    className={`flex items-center gap-4 p-4 rounded-xl border border-gray-200 transition-colors text-left ${
+                      item.disabled
+                        ? "opacity-50 cursor-not-allowed bg-gray-50"
+                        : "hover:bg-gray-50 hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
+                      <item.icon className="w-6 h-6 text-foreground/70" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-foreground">{item.label}</p>
+                      <p className="text-sm text-foreground/60">
+                        {t(`dashboard.menu.${item.id}Desc`)}
+                      </p>
+                    </div>
+                    {item.disabled && (
+                      <span className="text-xs bg-gray-100 text-foreground/60 px-2 py-1 rounded">
+                        {t('dashboard.comingSoon')}
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+
+          {activeSection === "profile" && (
+            <div className="max-w-md">
+              <h2 className="text-xl font-bold text-foreground mb-4">{t('profile.title')}</h2>
+              <form onSubmit={handleProfileSubmit} className="space-y-4">
+                <div className="space-y-1">
+                  <Label htmlFor="firstName" className="text-sm font-medium text-foreground">{t('profile.firstName')}</Label>
+                  <Input
+                    id="firstName"
+                    type="text"
+                    placeholder={t('profile.firstNamePlaceholder')}
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={saving}
+                    className="border-gray-200 focus:border-gray-400"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="lastName" className="text-sm font-medium text-foreground">{t('profile.lastName')}</Label>
+                  <Input
+                    id="lastName"
+                    type="text"
+                    placeholder={t('profile.lastNamePlaceholder')}
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={saving}
+                    className="border-gray-200 focus:border-gray-400"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <Label htmlFor="phone" className="text-sm font-medium text-foreground">{t('profile.phone')}</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    placeholder={t('profile.phonePlaceholder')}
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    disabled={saving}
+                    className="border-gray-200 focus:border-gray-400"
+                  />
+                </div>
+
+                {profileError && (
+                  <p className="text-sm text-red-600 bg-red-50 p-2 rounded-md">
+                    {profileError}
+                  </p>
+                )}
+
+                {profileSuccess && (
+                  <p className="text-sm text-green-600 bg-green-50 p-2 rounded-md flex items-center gap-2">
+                    <Check className="w-4 h-4" />
+                    {t('profile.success')}
+                  </p>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full bg-gray-900 hover:bg-gray-800 text-white"
+                  disabled={saving}
+                >
+                  {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  {t('profile.save')}
+                </Button>
+              </form>
+            </div>
+          )}
         </main>
       </div>
     </div>
