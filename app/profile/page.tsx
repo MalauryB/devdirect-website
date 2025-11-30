@@ -67,7 +67,7 @@ export default function ProfilePage() {
 
   if (!mounted || loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="animate-pulse text-foreground">{t('profile.loading')}</div>
       </div>
     )
@@ -82,13 +82,13 @@ export default function ProfilePage() {
     : null
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="min-h-screen bg-white flex items-center justify-center">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <Button
             variant="ghost"
             size="sm"
-            className="mb-2 text-foreground hover:bg-primary/5"
+            className="mb-2 text-foreground hover:bg-action/10 hover:text-action"
             asChild
           >
             <Link href="/">
