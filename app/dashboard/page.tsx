@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, Settings, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, LayoutDashboard } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const searchParams = useSearchParams()
   const [mounted, setMounted] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("overview")
+  const [activeSection, setActiveSection] = useState("projects")
 
   // Profile form state
   const [firstName, setFirstName] = useState("")
@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const section = searchParams.get("section")
-    if (section && ["overview", "profile", "projects", "messages", "notifications", "settings"].includes(section)) {
+    if (section && ["profile", "projects", "messages"].includes(section)) {
       setActiveSection(section)
     }
   }, [searchParams])
@@ -99,9 +99,9 @@ export default function DashboardPage() {
 
   const menuItems = [
     {
-      id: "overview",
-      icon: Home,
-      label: t('dashboard.menu.overview'),
+      id: "projects",
+      icon: FileText,
+      label: t('dashboard.menu.projects'),
     },
     {
       id: "profile",
@@ -109,20 +109,9 @@ export default function DashboardPage() {
       label: t('dashboard.menu.profile'),
     },
     {
-      id: "projects",
-      icon: FileText,
-      label: t('dashboard.menu.projects'),
-    },
-    {
       id: "messages",
       icon: MessageSquare,
       label: t('dashboard.menu.messages'),
-      disabled: true
-    },
-    {
-      id: "settings",
-      icon: Settings,
-      label: t('dashboard.menu.settings'),
       disabled: true
     }
   ]
@@ -275,50 +264,6 @@ export default function DashboardPage() {
 
         {/* Content area */}
         <main className="flex-1 p-4 lg:p-6">
-          {activeSection === "overview" && (
-            <div className="max-w-4xl">
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
-                <h2 className="text-xl font-bold text-foreground mb-2">
-                  {t('dashboard.welcomeCard.title')}
-                </h2>
-                <p className="text-foreground/70">
-                  {t('dashboard.welcomeCard.description')}
-                </p>
-              </div>
-
-              <h3 className="text-lg font-semibold text-foreground mb-4">{t('dashboard.quickAccess')}</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {menuItems.filter(item => item.id !== "overview").map((item) => (
-                  <button
-                    key={item.id}
-                    onClick={() => handleMenuClick(item)}
-                    disabled={item.disabled}
-                    className={`flex items-center gap-4 p-4 rounded-xl border border-gray-200 transition-colors text-left ${
-                      item.disabled
-                        ? "opacity-50 cursor-not-allowed bg-gray-50"
-                        : "hover:bg-gray-50 hover:border-gray-300"
-                    }`}
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center">
-                      <item.icon className="w-6 h-6 text-foreground/70" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-medium text-foreground">{item.label}</p>
-                      <p className="text-sm text-foreground/60">
-                        {t(`dashboard.menu.${item.id}Desc`)}
-                      </p>
-                    </div>
-                    {item.disabled && (
-                      <span className="text-xs bg-gray-100 text-foreground/60 px-2 py-1 rounded">
-                        {t('dashboard.comingSoon')}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
           {activeSection === "profile" && (
             <div className="max-w-md">
               <h2 className="text-xl font-bold text-foreground mb-4">{t('profile.title')}</h2>
@@ -388,7 +333,7 @@ export default function DashboardPage() {
           )}
 
           {activeSection === "projects" && (
-            <div className="max-w-4xl">
+            <div className="w-full">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-foreground">{t('projects.title')}</h2>
                 {!showProjectForm && (
