@@ -9,7 +9,7 @@ export const translations = {
       contact: "Contact",
       login: "Connexion",
       logout: "Déconnexion",
-      settings: "Paramètres"
+      profile: "Mon profil"
     },
     hero: {
       title: "Développez vos projets avec des experts en informatique, mathématiques et IA.",
@@ -176,6 +176,16 @@ export const translations = {
         checkEmail: "Vérifiez votre email pour confirmer votre inscription.",
         resetEmail: "Un email de réinitialisation vous a été envoyé."
       }
+    },
+    profile: {
+      title: "Mon profil",
+      subtitle: "Gérez vos informations personnelles",
+      back: "Retour",
+      loading: "Chargement...",
+      personalInfo: "Informations personnelles",
+      email: "Adresse email",
+      userId: "Identifiant utilisateur",
+      createdAt: "Membre depuis"
     }
   },
   en: {
@@ -188,7 +198,7 @@ export const translations = {
       contact: "Contact",
       login: "Login",
       logout: "Logout",
-      settings: "Settings"
+      profile: "My profile"
     },
     hero: {
       title: "Develop your projects with experts in computer science, mathematics and AI.",
@@ -355,6 +365,16 @@ export const translations = {
         checkEmail: "Check your email to confirm your registration.",
         resetEmail: "A password reset email has been sent."
       }
+    },
+    profile: {
+      title: "My profile",
+      subtitle: "Manage your personal information",
+      back: "Back",
+      loading: "Loading...",
+      personalInfo: "Personal information",
+      email: "Email address",
+      userId: "User ID",
+      createdAt: "Member since"
     }
   }
 }

@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, User, LogOut, Settings } from "lucide-react"
+import Link from "next/link"
+import { Menu, X, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -70,9 +71,11 @@ export function Header() {
                   <div className="px-3 py-3 border-b border-primary/10">
                     <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
                   </div>
-                  <DropdownMenuItem className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 flex items-center">
-                    <Settings className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
-                    <span className="text-foreground">{t('navigation.settings')}</span>
+                  <DropdownMenuItem asChild className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 flex items-center">
+                    <Link href="/profile">
+                      <User className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
+                      <span className="text-foreground">{t('navigation.profile')}</span>
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator className="bg-primary/10" />
                   <DropdownMenuItem
@@ -137,9 +140,12 @@ export function Header() {
                       variant="outline"
                       size="sm"
                       className="flex items-center justify-center gap-2 bg-white border-primary/20 hover:bg-primary/5 w-full"
+                      asChild
                     >
-                      <Settings className="w-4 h-4 text-foreground flex-shrink-0" />
-                      <span>{t('navigation.settings')}</span>
+                      <Link href="/profile">
+                        <User className="w-4 h-4 text-foreground flex-shrink-0" />
+                        <span>{t('navigation.profile')}</span>
+                      </Link>
                     </Button>
                     <Button
                       variant="outline"
