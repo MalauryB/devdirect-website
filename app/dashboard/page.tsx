@@ -1,14 +1,24 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, Settings, FileText, MessageSquare, Bell, Menu, X, Home, LogOut, Loader2, Check } from "lucide-react"
+import { User, Settings, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { useAuth, UserMetadata } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
+import { ProjectForm } from "@/components/project-form"
+import { getUserProjects } from "@/lib/projects"
+import { Project, ProjectStatus } from "@/lib/types"
 
 export default function DashboardPage() {
   const { user, loading, signOut, updateProfile } = useAuth()
@@ -26,6 +36,11 @@ export default function DashboardPage() {
   const [saving, setSaving] = useState(false)
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [profileError, setProfileError] = useState("")
+
+  // Projects state
+  const [projects, setProjects] = useState<Project[]>([])
+  const [projectsLoading, setProjectsLoading] = useState(false)
+  const [showProjectForm, setShowProjectForm] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -51,6 +66,20 @@ export default function DashboardPage() {
       router.push("/")
     }
   }, [user, loading, router, mounted])
+
+  const loadProjects = useCallback(async () => {
+    if (!user) return
+    setProjectsLoading(true)
+    const { projects: userProjects } = await getUserProjects()
+    setProjects(userProjects)
+    setProjectsLoading(false)
+  }, [user])
+
+  useEffect(() => {
+    if (user && activeSection === "projects") {
+      loadProjects()
+    }
+  }, [user, activeSection, loadProjects])
 
   if (!mounted || loading) {
     return (
@@ -83,18 +112,11 @@ export default function DashboardPage() {
       id: "projects",
       icon: FileText,
       label: t('dashboard.menu.projects'),
-      disabled: true
     },
     {
       id: "messages",
       icon: MessageSquare,
       label: t('dashboard.menu.messages'),
-      disabled: true
-    },
-    {
-      id: "notifications",
-      icon: Bell,
-      label: t('dashboard.menu.notifications'),
       disabled: true
     },
     {
@@ -107,12 +129,8 @@ export default function DashboardPage() {
 
   const handleMenuClick = (item: typeof menuItems[0]) => {
     if (item.disabled) return
-    if (item.href) {
-      router.push(item.href)
-    } else {
-      setActiveSection(item.id)
-      setSidebarOpen(false)
-    }
+    setActiveSection(item.id)
+    setSidebarOpen(false)
   }
 
   const handleSignOut = async () => {
@@ -176,19 +194,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* User info */}
-          <div className="p-4 border-b border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gray-100 text-foreground flex items-center justify-center text-sm font-bold">
-                {firstName ? firstName.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-medium text-foreground truncate">{displayName}</p>
-                <p className="text-xs text-foreground/60 truncate">{user.email}</p>
-              </div>
-            </div>
-          </div>
-
           {/* Menu items */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
             {menuItems.map((item) => (
@@ -197,7 +202,7 @@ export default function DashboardPage() {
                 onClick={() => handleMenuClick(item)}
                 disabled={item.disabled}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left ${
-                  activeSection === item.id && !item.href
+                  activeSection === item.id
                     ? "bg-gray-100 text-foreground font-medium"
                     : item.disabled
                     ? "opacity-50 cursor-not-allowed text-foreground/60"
@@ -214,30 +219,58 @@ export default function DashboardPage() {
               </button>
             ))}
           </nav>
-
-          {/* Sidebar footer */}
-          <div className="p-4 border-t border-gray-200">
-            <button
-              onClick={handleSignOut}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              <span>{t('navigation.logout')}</span>
-            </button>
-          </div>
         </div>
       </aside>
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen">
-        {/* Mobile menu button */}
-        <div className="lg:hidden sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3">
+        {/* Top header bar */}
+        <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
           <button
-            className="p-2 hover:bg-gray-50 rounded-lg"
+            className="lg:hidden p-2 hover:bg-gray-50 rounded-lg"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="w-5 h-5" />
           </button>
+          <div className="hidden lg:block" />
+
+          {/* User account dropdown */}
+          <DropdownMenu modal={false}>
+            <DropdownMenuTrigger asChild>
+              <button className="w-9 h-9 rounded-full bg-white border-2 border-gray-300 text-foreground flex items-center justify-center hover:bg-gray-50 transition-colors focus:outline-none">
+                <span className="text-sm font-semibold">
+                  {firstName ? firstName.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                </span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
+              <div className="px-3 py-3 border-b border-gray-100">
+                <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
+                <p className="text-xs text-foreground/60 truncate">{user.email}</p>
+              </div>
+              <DropdownMenuItem
+                className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50 py-2.5 flex items-center"
+                onClick={() => setActiveSection("profile")}
+              >
+                <User className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
+                <span className="text-foreground">{t('navigation.profile')}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50 py-2.5 flex items-center">
+                <Link href="/">
+                  <Home className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
+                  <span className="text-foreground">{t('navigation.accueil')}</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator className="bg-gray-100" />
+              <DropdownMenuItem
+                className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50 py-2.5 text-red-600 focus:text-red-600 flex items-center"
+                onClick={handleSignOut}
+              >
+                <LogOut className="w-4 h-4 mr-3 flex-shrink-0" />
+                <span>{t('navigation.logout')}</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Content area */}
@@ -351,6 +384,95 @@ export default function DashboardPage() {
                   {t('profile.save')}
                 </Button>
               </form>
+            </div>
+          )}
+
+          {activeSection === "projects" && (
+            <div className="max-w-4xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-bold text-foreground">{t('projects.title')}</h2>
+                {!showProjectForm && (
+                  <Button
+                    onClick={() => setShowProjectForm(true)}
+                    className="bg-gray-900 hover:bg-gray-800 text-white"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    {t('projects.newProject')}
+                  </Button>
+                )}
+              </div>
+
+              {showProjectForm && (
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
+                  <ProjectForm
+                    onSuccess={() => {
+                      setShowProjectForm(false)
+                      loadProjects()
+                    }}
+                    onCancel={() => setShowProjectForm(false)}
+                  />
+                </div>
+              )}
+
+              {projectsLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                </div>
+              ) : projects.length === 0 ? (
+                <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                  <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                  <p className="text-foreground/70 font-medium">{t('projects.noProjects')}</p>
+                  <p className="text-foreground/50 text-sm mt-1">{t('projects.noProjectsDesc')}</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-semibold text-foreground truncate">{project.title}</h3>
+                          <p className="text-sm text-foreground/60 mt-1 line-clamp-2">{project.description}</p>
+                          <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-foreground/50">
+                            <span className="flex items-center gap-1">
+                              <FileText className="w-4 h-4" />
+                              {t(`services.${project.project_type === 'web' ? 'webDev' : project.project_type === 'mobile' ? 'mobileDev' : project.project_type}.title`)}
+                            </span>
+                            {(project.budget_min || project.budget_max) && (
+                              <span className="flex items-center gap-1">
+                                <Euro className="w-4 h-4" />
+                                {project.budget_min && project.budget_max
+                                  ? `${project.budget_min} - ${project.budget_max} €`
+                                  : project.budget_min
+                                  ? `${project.budget_min} € min`
+                                  : `${project.budget_max} € max`}
+                              </span>
+                            )}
+                            {project.deadline && (
+                              <span className="flex items-center gap-1">
+                                <Calendar className="w-4 h-4" />
+                                {new Date(project.deadline).toLocaleDateString()}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
+                          project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
+                          project.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                          project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
+                          project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {t(`projects.status.${project.status}`)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </main>

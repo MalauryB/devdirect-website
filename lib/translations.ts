@@ -227,6 +227,38 @@ export const translations = {
         settings: "Paramètres",
         settingsDesc: "Configurez votre compte"
       }
+    },
+    projects: {
+      title: "Mes projets",
+      newProject: "Nouveau projet",
+      noProjects: "Vous n'avez pas encore de projet",
+      noProjectsDesc: "Créez votre premier projet pour commencer",
+      form: {
+        title: "Titre du projet",
+        titlePlaceholder: "Ex: Site web e-commerce",
+        type: "Type de projet",
+        description: "Description du projet",
+        descriptionPlaceholder: "Décrivez votre projet en détail : objectifs, fonctionnalités souhaitées, contraintes techniques...",
+        budgetMin: "Budget min (€)",
+        budgetMax: "Budget max (€)",
+        deadline: "Date limite souhaitée",
+        submit: "Soumettre la demande",
+        cancel: "Annuler",
+        success: "Votre demande de devis a été envoyée !"
+      },
+      errors: {
+        titleRequired: "Veuillez entrer un titre pour votre projet",
+        descriptionRequired: "Veuillez décrire votre projet",
+        createFailed: "Une erreur est survenue lors de la création du projet"
+      },
+      status: {
+        pending: "En attente",
+        in_review: "En cours d'étude",
+        accepted: "Accepté",
+        in_progress: "En cours",
+        completed: "Terminé",
+        cancelled: "Annulé"
+      }
     }
   },
   en: {
@@ -456,6 +488,38 @@ export const translations = {
         notificationsDesc: "Manage your alerts and notifications",
         settings: "Settings",
         settingsDesc: "Configure your account"
+      }
+    },
+    projects: {
+      title: "My projects",
+      newProject: "New project",
+      noProjects: "You don't have any projects yet",
+      noProjectsDesc: "Create your first project to get started",
+      form: {
+        title: "Project title",
+        titlePlaceholder: "E.g.: E-commerce website",
+        type: "Project type",
+        description: "Project description",
+        descriptionPlaceholder: "Describe your project in detail: objectives, desired features, technical constraints...",
+        budgetMin: "Min budget (€)",
+        budgetMax: "Max budget (€)",
+        deadline: "Desired deadline",
+        submit: "Submit request",
+        cancel: "Cancel",
+        success: "Your quote request has been sent!"
+      },
+      errors: {
+        titleRequired: "Please enter a title for your project",
+        descriptionRequired: "Please describe your project",
+        createFailed: "An error occurred while creating the project"
+      },
+      status: {
+        pending: "Pending",
+        in_review: "Under review",
+        accepted: "Accepted",
+        in_progress: "In progress",
+        completed: "Completed",
+        cancelled: "Cancelled"
       }
     }
   }
