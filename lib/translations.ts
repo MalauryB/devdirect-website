@@ -148,7 +148,8 @@ export const translations = {
         title: "Connexion",
         button: "Se connecter",
         noAccount: "Pas encore de compte ?",
-        createAccount: "Créer un compte"
+        createAccount: "Créer un compte",
+        forgotPassword: "Mot de passe oublié ?"
       },
       register: {
         title: "Créer un compte",
@@ -156,15 +157,23 @@ export const translations = {
         hasAccount: "Déjà un compte ?",
         login: "Se connecter"
       },
+      forgot: {
+        title: "Mot de passe oublié",
+        button: "Envoyer le lien",
+        rememberPassword: "Vous vous souvenez ?",
+        backToLogin: "Retour à la connexion"
+      },
       errors: {
         fieldsRequired: "Veuillez remplir tous les champs.",
+        emailRequired: "Veuillez entrer votre email.",
         passwordMismatch: "Les mots de passe ne correspondent pas.",
         passwordTooShort: "Le mot de passe doit contenir au moins 6 caractères.",
         invalidCredentials: "Email ou mot de passe incorrect.",
         generic: "Une erreur est survenue. Veuillez réessayer."
       },
       success: {
-        checkEmail: "Vérifiez votre email pour confirmer votre inscription."
+        checkEmail: "Vérifiez votre email pour confirmer votre inscription.",
+        resetEmail: "Un email de réinitialisation vous a été envoyé."
       }
     }
   },
@@ -317,7 +326,8 @@ export const translations = {
         title: "Login",
         button: "Sign in",
         noAccount: "Don't have an account?",
-        createAccount: "Create an account"
+        createAccount: "Create an account",
+        forgotPassword: "Forgot password?"
       },
       register: {
         title: "Create an account",
@@ -325,15 +335,23 @@ export const translations = {
         hasAccount: "Already have an account?",
         login: "Sign in"
       },
+      forgot: {
+        title: "Forgot password",
+        button: "Send reset link",
+        rememberPassword: "Remember your password?",
+        backToLogin: "Back to login"
+      },
       errors: {
         fieldsRequired: "Please fill in all fields.",
+        emailRequired: "Please enter your email.",
         passwordMismatch: "Passwords do not match.",
         passwordTooShort: "Password must be at least 6 characters.",
         invalidCredentials: "Invalid email or password.",
         generic: "An error occurred. Please try again."
       },
       success: {
-        checkEmail: "Check your email to confirm your registration."
+        checkEmail: "Check your email to confirm your registration.",
+        resetEmail: "A password reset email has been sent."
       }
     }
   }

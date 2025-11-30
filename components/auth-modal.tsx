@@ -14,10 +14,10 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 
-type AuthMode = "login" | "register"
+type AuthMode = "login" | "register" | "forgot"
 
 export function AuthModal() {
-  const { isAuthModalOpen, closeAuthModal, signIn, signUp } = useAuth()
+  const { isAuthModalOpen, closeAuthModal, signIn, signUp, resetPassword } = useAuth()
   const { t } = useLanguage()
   const [mode, setMode] = useState<AuthMode>("login")
   const [email, setEmail] = useState("")
@@ -46,7 +46,12 @@ export function AuthModal() {
     setError("")
     setSuccess("")
 
-    if (!email || !password) {
+    if (!email) {
+      setError(t('auth.errors.emailRequired'))
+      return
+    }
+
+    if (mode !== "forgot" && !password) {
       setError(t('auth.errors.fieldsRequired'))
       return
     }
@@ -56,7 +61,7 @@ export function AuthModal() {
       return
     }
 
-    if (password.length < 6) {
+    if (mode !== "forgot" && password.length < 6) {
       setError(t('auth.errors.passwordTooShort'))
       return
     }
@@ -71,12 +76,19 @@ export function AuthModal() {
         } else {
           handleClose()
         }
-      } else {
+      } else if (mode === "register") {
         const { error } = await signUp(email, password)
         if (error) {
           setError(error.message)
         } else {
           setSuccess(t('auth.success.checkEmail'))
+        }
+      } else if (mode === "forgot") {
+        const { error } = await resetPassword(email)
+        if (error) {
+          setError(error.message)
+        } else {
+          setSuccess(t('auth.success.resetEmail'))
         }
       }
     } catch {
@@ -97,7 +109,9 @@ export function AuthModal() {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>
-            {mode === "login" ? t('auth.login.title') : t('auth.register.title')}
+            {mode === "login" && t('auth.login.title')}
+            {mode === "register" && t('auth.register.title')}
+            {mode === "forgot" && t('auth.forgot.title')}
           </DialogTitle>
         </DialogHeader>
 
@@ -114,17 +128,19 @@ export function AuthModal() {
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="password">{t('auth.password')}</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder={t('auth.passwordPlaceholder')}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={loading}
-            />
-          </div>
+          {mode !== "forgot" && (
+            <div className="space-y-2">
+              <Label htmlFor="password">{t('auth.password')}</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder={t('auth.passwordPlaceholder')}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+          )}
 
           {mode === "register" && (
             <div className="space-y-2">
@@ -154,17 +170,42 @@ export function AuthModal() {
 
           <Button type="submit" className="w-full bg-white hover:bg-white/90 text-foreground border-2 border-action" disabled={loading}>
             {loading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {mode === "login" ? t('auth.login.button') : t('auth.register.button')}
+            {mode === "login" && t('auth.login.button')}
+            {mode === "register" && t('auth.register.button')}
+            {mode === "forgot" && t('auth.forgot.button')}
           </Button>
 
-          <p className="text-sm text-center text-muted-foreground">
-            {mode === "login" ? t('auth.login.noAccount') : t('auth.register.hasAccount')}{" "}
+          {mode === "login" && (
             <button
               type="button"
-              onClick={switchMode}
+              onClick={() => { setMode("forgot"); setError(""); setSuccess(""); }}
+              className="text-sm text-muted-foreground hover:text-foreground w-full text-center"
+            >
+              {t('auth.login.forgotPassword')}
+            </button>
+          )}
+
+          <p className="text-sm text-center text-muted-foreground">
+            {mode === "login" && t('auth.login.noAccount')}
+            {mode === "register" && t('auth.register.hasAccount')}
+            {mode === "forgot" && t('auth.forgot.rememberPassword')}
+            {" "}
+            <button
+              type="button"
+              onClick={() => {
+                if (mode === "forgot") {
+                  setMode("login")
+                } else {
+                  setMode(mode === "login" ? "register" : "login")
+                }
+                setError("")
+                setSuccess("")
+              }}
               className="text-action hover:underline font-medium"
             >
-              {mode === "login" ? t('auth.login.createAccount') : t('auth.register.login')}
+              {mode === "login" && t('auth.login.createAccount')}
+              {mode === "register" && t('auth.register.login')}
+              {mode === "forgot" && t('auth.forgot.backToLogin')}
             </button>
           </p>
         </form>

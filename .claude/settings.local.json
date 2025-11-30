@@ -8,7 +8,8 @@
       "Bash(curl:*)",
       "Read(//mnt/c/**)",
       "Bash(ls:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
