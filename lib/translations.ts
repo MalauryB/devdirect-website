@@ -8,7 +8,8 @@ export const translations = {
       equipe: "Équipe",
       contact: "Contact",
       login: "Connexion",
-      logout: "Déconnexion"
+      logout: "Déconnexion",
+      settings: "Paramètres"
     },
     hero: {
       title: "Développez vos projets avec des experts en informatique, mathématiques et IA.",
@@ -186,7 +187,8 @@ export const translations = {
       equipe: "Team",
       contact: "Contact",
       login: "Login",
-      logout: "Logout"
+      logout: "Logout",
+      settings: "Settings"
     },
     hero: {
       title: "Develop your projects with experts in computer science, mathematics and AI.",

@@ -1,8 +1,15 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, User, LogOut } from "lucide-react"
+import { Menu, X, User, LogOut, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { LanguageSwitcher } from "@/components/language-switcher"
@@ -51,15 +58,32 @@ export function Header() {
           <div className="hidden md:flex items-center gap-4">
             <LanguageSwitcher />
             {user ? (
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
-                onClick={() => signOut()}
-              >
-                <LogOut className="w-4 h-4" />
-                {t('navigation.logout')}
-              </Button>
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <button className="w-9 h-9 rounded-full bg-white border-2 border-action text-action flex items-center justify-center hover:bg-action/10 transition-colors focus:outline-none">
+                    <span className="text-sm font-semibold">
+                      {user.email?.charAt(0).toUpperCase()}
+                    </span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56 bg-white border border-primary/20 shadow-lg">
+                  <div className="px-3 py-3 border-b border-primary/10">
+                    <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
+                  </div>
+                  <DropdownMenuItem className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 flex items-center">
+                    <Settings className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
+                    <span className="text-foreground">{t('navigation.settings')}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className="bg-primary/10" />
+                  <DropdownMenuItem
+                    className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 text-foreground focus:text-foreground flex items-center"
+                    onClick={() => signOut()}
+                  >
+                    <LogOut className="w-4 h-4 mr-3 flex-shrink-0" />
+                    <span>{t('navigation.logout')}</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : (
               <Button
                 variant="outline"
@@ -100,15 +124,33 @@ export function Header() {
               <div className="flex flex-col items-center gap-4 pt-4">
                 <LanguageSwitcher />
                 {user ? (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
-                    onClick={() => signOut()}
-                  >
-                    <LogOut className="w-4 h-4" />
-                    {t('navigation.logout')}
-                  </Button>
+                  <div className="flex flex-col items-center gap-3 w-full">
+                    <div className="flex items-center gap-3 pb-3 border-b border-primary/10 w-full justify-center">
+                      <div className="w-9 h-9 rounded-full bg-white border-2 border-action text-action flex items-center justify-center">
+                        <span className="text-sm font-semibold">
+                          {user.email?.charAt(0).toUpperCase()}
+                        </span>
+                      </div>
+                      <p className="text-sm font-medium text-foreground truncate max-w-[150px]">{user.email}</p>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 bg-white border-primary/20 hover:bg-primary/5 w-full"
+                    >
+                      <Settings className="w-4 h-4 text-foreground flex-shrink-0" />
+                      <span>{t('navigation.settings')}</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 bg-white border-primary/20 hover:bg-primary/5 w-full"
+                      onClick={() => signOut()}
+                    >
+                      <LogOut className="w-4 h-4 text-foreground flex-shrink-0" />
+                      <span>{t('navigation.logout')}</span>
+                    </Button>
+                  </div>
                 ) : (
                   <Button
                     variant="outline"
