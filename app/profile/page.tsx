@@ -97,7 +97,7 @@ export default function ProfilePage() {
             </Link>
           </Button>
 
-          <div className="bg-white rounded-xl border border-primary/20 shadow-sm overflow-hidden">
+          <div className="bg-white rounded-xl border-2 border-primary/30 overflow-hidden">
             <div className="bg-gradient-to-r from-primary/10 to-action/10 px-4 py-4">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-full bg-white border-2 border-action text-action flex items-center justify-center text-xl font-bold">
@@ -117,7 +117,7 @@ export default function ProfilePage() {
             <form onSubmit={handleSubmit} className="p-4 space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <Label htmlFor="firstName" className="text-sm">{t('profile.firstName')}</Label>
+                  <Label htmlFor="firstName" className="text-sm font-medium text-foreground">{t('profile.firstName')}</Label>
                   <Input
                     id="firstName"
                     type="text"
@@ -125,12 +125,12 @@ export default function ProfilePage() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     disabled={saving}
-                    className="h-9"
+                    className="h-9 border-primary/30 focus:border-action"
                   />
                 </div>
 
                 <div className="space-y-1">
-                  <Label htmlFor="lastName" className="text-sm">{t('profile.lastName')}</Label>
+                  <Label htmlFor="lastName" className="text-sm font-medium text-foreground">{t('profile.lastName')}</Label>
                   <Input
                     id="lastName"
                     type="text"
@@ -138,13 +138,13 @@ export default function ProfilePage() {
                     value={lastName}
                     onChange={(e) => setLastName(e.target.value)}
                     disabled={saving}
-                    className="h-9"
+                    className="h-9 border-primary/30 focus:border-action"
                   />
                 </div>
               </div>
 
               <div className="space-y-1">
-                <Label htmlFor="phone" className="text-sm">{t('profile.phone')}</Label>
+                <Label htmlFor="phone" className="text-sm font-medium text-foreground">{t('profile.phone')}</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
                   <Input
@@ -154,33 +154,33 @@ export default function ProfilePage() {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     disabled={saving}
-                    className="pl-10 h-9"
+                    className="pl-10 h-9 border-primary/30 focus:border-action"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pt-2">
-                <div className="flex items-center gap-2 p-2 bg-background rounded-lg border border-primary/10">
-                  <Mail className="w-4 h-4 text-primary flex-shrink-0" />
+                <div className="flex items-center gap-2 p-2 bg-primary/5 rounded-lg border border-primary/20">
+                  <Mail className="w-4 h-4 text-action flex-shrink-0" />
                   <div className="min-w-0">
-                    <p className="text-xs text-foreground/60">{t('profile.email')}</p>
-                    <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
+                    <p className="text-xs text-foreground/70 font-medium">{t('profile.email')}</p>
+                    <p className="text-sm font-semibold text-foreground truncate">{user.email}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 p-2 bg-background rounded-lg border border-primary/10">
-                  <Calendar className="w-4 h-4 text-primary flex-shrink-0" />
+                <div className="flex items-center gap-2 p-2 bg-primary/5 rounded-lg border border-primary/20">
+                  <Calendar className="w-4 h-4 text-action flex-shrink-0" />
                   <div>
-                    <p className="text-xs text-foreground/60">{t('profile.createdAt')}</p>
-                    <p className="text-sm font-medium text-foreground">{createdAt}</p>
+                    <p className="text-xs text-foreground/70 font-medium">{t('profile.createdAt')}</p>
+                    <p className="text-sm font-semibold text-foreground">{createdAt}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 p-2 bg-background rounded-lg border border-primary/10">
-                  <div className="w-4 h-4 text-primary flex-shrink-0 text-xs font-bold">ID</div>
+                <div className="flex items-center gap-2 p-2 bg-primary/5 rounded-lg border border-primary/20">
+                  <div className="w-4 h-4 text-action flex-shrink-0 text-xs font-bold">ID</div>
                   <div className="min-w-0">
-                    <p className="text-xs text-foreground/60">{t('profile.userId')}</p>
-                    <p className="text-xs font-medium text-foreground truncate">{user.id.slice(0, 8)}...</p>
+                    <p className="text-xs text-foreground/70 font-medium">{t('profile.userId')}</p>
+                    <p className="text-xs font-semibold text-foreground truncate">{user.id.slice(0, 8)}...</p>
                   </div>
                 </div>
               </div>
