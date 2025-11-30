@@ -204,7 +204,13 @@ export const translations = {
       backHome: "Retour à l'accueil",
       quickAccess: "Accès rapide",
       comingSoon: "Bientôt",
+      welcomeCard: {
+        title: "Bienvenue sur votre espace personnel",
+        description: "Gérez vos projets, consultez vos messages et suivez l'avancement de vos demandes."
+      },
       menu: {
+        overview: "Vue d'ensemble",
+        overviewDesc: "Tableau de bord principal",
         profile: "Mon profil",
         profileDesc: "Gérer vos informations personnelles",
         projects: "Mes projets",
@@ -423,7 +429,13 @@ export const translations = {
       backHome: "Back to home",
       quickAccess: "Quick access",
       comingSoon: "Coming soon",
+      welcomeCard: {
+        title: "Welcome to your personal space",
+        description: "Manage your projects, check your messages and track the progress of your requests."
+      },
       menu: {
+        overview: "Overview",
+        overviewDesc: "Main dashboard",
         profile: "My profile",
         profileDesc: "Manage your personal information",
         projects: "My projects",
