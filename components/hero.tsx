@@ -21,7 +21,7 @@ export function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mb-12 justify-center">
-            <Button size="lg" className="text-base px-8 bg-primary hover:bg-primary/90 text-primary-foreground border border-action" onClick={() => window.location.href = getPath('/devis')}>
+            <Button size="lg" className="text-base px-8 bg-white hover:bg-white/90 text-foreground border-2 border-action" onClick={() => window.location.href = getPath('/devis')}>
               {t('hero.cta')}
               <div className="ml-2 w-6 h-6 bg-action rounded-full flex items-center justify-center">
                 <ArrowRight className="w-4 h-4 text-white" />

@@ -12,92 +12,92 @@
 }
 
 :root {
-  /* Updated to use the new natural color palette */
+  /* Updated to use the new natural color palette - HSL format for Tailwind compatibility */
   /* New palette: 38392c,faf8f2,9c9899,9c984d,7f7074,bda3cc,d3cfc2,6cb1bb,cbc3a3,d0d1d9 */
-  --background: #faf8f2; /* Cream white background */
-  --foreground: #38392c; /* Dark olive green for text */
-  --card: #faf8f2; /* Same as background for cards */
-  --card-foreground: #38392c;
-  --popover: #faf8f2;
-  --popover-foreground: #38392c;
+  --background: 48 50% 97%; /* Cream white background #faf8f2 */
+  --foreground: 64 16% 20%; /* Dark olive green for text #38392c */
+  --card: 48 50% 97%; /* Same as background for cards */
+  --card-foreground: 64 16% 20%;
+  --popover: 48 50% 97%;
+  --popover-foreground: 64 16% 20%;
   /* Updated primary color to user's preferred lavender */
-  --primary: #ba9fdf; /* User's preferred lavender as primary */
-  --primary-foreground: #faf8f2;
-  --secondary: #6cb1bb; /* Moved turquoise to secondary */
-  --secondary-foreground: #38392c;
-  --muted: #d3cfc2; /* Light beige */
-  --muted-foreground: #7f7074; /* Gray-violet for muted text */
-  --accent: #9c984d; /* Olive yellow accent */
-  --accent-foreground: #faf8f2;
+  --primary: 270 52% 75%; /* User's preferred lavender as primary #ba9fdf */
+  --primary-foreground: 48 50% 97%;
+  --secondary: 189 40% 58%; /* Moved turquoise to secondary #6cb1bb */
+  --secondary-foreground: 64 16% 20%;
+  --muted: 43 17% 80%; /* Light beige #d3cfc2 */
+  --muted-foreground: 340 7% 47%; /* Gray-violet for muted text #7f7074 */
+  --accent: 57 35% 46%; /* Olive yellow accent #9c984d */
+  --accent-foreground: 48 50% 97%;
   --action: 332 75% 61%; /* Pink action color #ea4c89 */
-  --action-foreground: #faf8f2;
-  --destructive: #7f7074;
-  --destructive-foreground: #faf8f2;
-  --border: #d0d1d9; /* Very light gray for borders */
-  --input: #faf8f2;
-  /* Updated ring color to match new primary */
-  --ring: #ba9fdf;
+  --action-foreground: 48 50% 97%;
+  --destructive: 340 7% 47%; /* #7f7074 */
+  --destructive-foreground: 48 50% 97%;
+  --border: 233 10% 82%; /* Very light gray for borders #d0d1d9 */
+  --input: 48 50% 97%;
+  /* Updated ring color to match action (pink) */
+  --ring: 332 75% 61%;
   /* Updated chart colors to include new primary */
-  --chart-1: #ba9fdf;
-  --chart-2: #6cb1bb;
-  --chart-3: #9c984d;
-  --chart-4: #7f7074;
-  --chart-5: #cbc3a3;
+  --chart-1: 270 52% 75%;
+  --chart-2: 189 40% 58%;
+  --chart-3: 57 35% 46%;
+  --chart-4: 340 7% 47%;
+  --chart-5: 47 20% 72%;
   --radius: 1rem;
-  --sidebar: #faf8f2;
-  --sidebar-foreground: #38392c;
+  --sidebar: 48 50% 97%;
+  --sidebar-foreground: 64 16% 20%;
   /* Updated sidebar primary to match new primary */
-  --sidebar-primary: #ba9fdf;
-  --sidebar-primary-foreground: #faf8f2;
-  --sidebar-accent: #6cb1bb;
-  --sidebar-accent-foreground: #38392c;
-  --sidebar-border: #d0d1d9;
+  --sidebar-primary: 270 52% 75%;
+  --sidebar-primary-foreground: 48 50% 97%;
+  --sidebar-accent: 189 40% 58%;
+  --sidebar-accent-foreground: 64 16% 20%;
+  --sidebar-border: 233 10% 82%;
   /* Updated sidebar ring to match new primary */
-  --sidebar-ring: #ba9fdf;
+  --sidebar-ring: 270 52% 75%;
   --font-inter: "Inter", sans-serif; /* Added font configuration */
 }
 
 .dark {
-  /* Updated dark mode colors to complement the new palette */
-  --background: #38392c; /* Dark olive as background */
-  --foreground: #faf8f2; /* Cream as text */
-  --card: #38392c;
-  --card-foreground: #faf8f2;
-  --popover: #38392c;
-  --popover-foreground: #faf8f2;
+  /* Updated dark mode colors to complement the new palette - HSL format */
+  --background: 64 16% 20%; /* Dark olive as background #38392c */
+  --foreground: 48 50% 97%; /* Cream as text #faf8f2 */
+  --card: 64 16% 20%;
+  --card-foreground: 48 50% 97%;
+  --popover: 64 16% 20%;
+  --popover-foreground: 48 50% 97%;
   /* Updated dark mode primary color */
-  --primary: #ba9fdf;
-  --primary-foreground: #38392c;
-  --secondary: #6cb1bb;
-  --secondary-foreground: #38392c;
-  --muted: #7f7074;
-  --muted-foreground: #9c9899;
-  --accent: #9c984d;
-  --accent-foreground: #38392c;
+  --primary: 270 52% 75%;
+  --primary-foreground: 64 16% 20%;
+  --secondary: 189 40% 58%;
+  --secondary-foreground: 64 16% 20%;
+  --muted: 340 7% 47%;
+  --muted-foreground: 0 1% 61%;
+  --accent: 57 35% 46%;
+  --accent-foreground: 64 16% 20%;
   --action: 332 75% 61%; /* Pink action color #ea4c89 */
-  --action-foreground: #faf8f2;
-  --destructive: #7f7074;
-  --destructive-foreground: #faf8f2;
-  --border: #7f7074;
-  --input: #7f7074;
-  /* Updated dark mode ring color */
-  --ring: #ba9fdf;
+  --action-foreground: 48 50% 97%;
+  --destructive: 340 7% 47%;
+  --destructive-foreground: 48 50% 97%;
+  --border: 340 7% 47%;
+  --input: 340 7% 47%;
+  /* Updated dark mode ring color to match action (pink) */
+  --ring: 332 75% 61%;
   /* Updated dark mode chart colors */
-  --chart-1: #ba9fdf;
-  --chart-2: #6cb1bb;
-  --chart-3: #9c984d;
-  --chart-4: #9c9899;
-  --chart-5: #cbc3a3;
-  --sidebar: #38392c;
-  --sidebar-foreground: #faf8f2;
+  --chart-1: 270 52% 75%;
+  --chart-2: 189 40% 58%;
+  --chart-3: 57 35% 46%;
+  --chart-4: 0 1% 61%;
+  --chart-5: 47 20% 72%;
+  --sidebar: 64 16% 20%;
+  --sidebar-foreground: 48 50% 97%;
   /* Updated dark mode sidebar primary */
-  --sidebar-primary: #ba9fdf;
-  --sidebar-primary-foreground: #faf8f2;
-  --sidebar-accent: #6cb1bb;
-  --sidebar-accent-foreground: #38392c;
-  --sidebar-border: #7f7074;
+  --sidebar-primary: 270 52% 75%;
+  --sidebar-primary-foreground: 48 50% 97%;
+  --sidebar-accent: 189 40% 58%;
+  --sidebar-accent-foreground: 64 16% 20%;
+  --sidebar-border: 340 7% 47%;
   /* Updated dark mode sidebar ring */
-  --sidebar-ring: #ba9fdf;
+  --sidebar-ring: 270 52% 75%;
 }
 
 

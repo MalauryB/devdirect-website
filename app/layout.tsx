@@ -5,7 +5,9 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { LanguageProvider } from "@/contexts/language-context"
 import { ContactProvider } from "@/contexts/contact-context"
+import { AuthProvider } from "@/contexts/auth-context"
 import { ContactDialog } from "@/components/contact-dialog"
+import { AuthModal } from "@/components/auth-modal"
 import "./globals.css"
 
 const inter = Inter({
@@ -32,11 +34,14 @@ export default function RootLayout({
     <html lang="fr">
       <body className={`font-sans ${inter.variable}`}>
         <LanguageProvider>
-          <ContactProvider>
-            <Suspense fallback={null}>{children}</Suspense>
-            <ContactDialog />
-            {process.env.NODE_ENV === 'production' && <Analytics />}
-          </ContactProvider>
+          <AuthProvider>
+            <ContactProvider>
+              <Suspense fallback={null}>{children}</Suspense>
+              <ContactDialog />
+              <AuthModal />
+              {process.env.NODE_ENV === 'production' && <Analytics />}
+            </ContactProvider>
+          </AuthProvider>
         </LanguageProvider>
       </body>
     </html>

@@ -7,7 +7,8 @@ export const translations = {
       processus: "Processus",
       equipe: "Équipe",
       contact: "Contact",
-      login: "Connexion"
+      login: "Connexion",
+      logout: "Déconnexion"
     },
     hero: {
       title: "Développez vos projets avec des experts en informatique, mathématiques et IA.",
@@ -135,6 +136,36 @@ export const translations = {
       legal: "Mentions légales",
       privacy: "Confidentialité",
       rights: "Tous droits réservés."
+    },
+    auth: {
+      email: "Email",
+      emailPlaceholder: "votre@email.com",
+      password: "Mot de passe",
+      passwordPlaceholder: "••••••••",
+      confirmPassword: "Confirmer le mot de passe",
+      confirmPasswordPlaceholder: "••••••••",
+      login: {
+        title: "Connexion",
+        button: "Se connecter",
+        noAccount: "Pas encore de compte ?",
+        createAccount: "Créer un compte"
+      },
+      register: {
+        title: "Créer un compte",
+        button: "S'inscrire",
+        hasAccount: "Déjà un compte ?",
+        login: "Se connecter"
+      },
+      errors: {
+        fieldsRequired: "Veuillez remplir tous les champs.",
+        passwordMismatch: "Les mots de passe ne correspondent pas.",
+        passwordTooShort: "Le mot de passe doit contenir au moins 6 caractères.",
+        invalidCredentials: "Email ou mot de passe incorrect.",
+        generic: "Une erreur est survenue. Veuillez réessayer."
+      },
+      success: {
+        checkEmail: "Vérifiez votre email pour confirmer votre inscription."
+      }
     }
   },
   en: {
@@ -145,7 +176,8 @@ export const translations = {
       processus: "Process",
       equipe: "Team",
       contact: "Contact",
-      login: "Login"
+      login: "Login",
+      logout: "Logout"
     },
     hero: {
       title: "Develop your projects with experts in computer science, mathematics and AI.",
@@ -273,6 +305,36 @@ export const translations = {
       legal: "Legal",
       privacy: "Privacy",
       rights: "All rights reserved."
+    },
+    auth: {
+      email: "Email",
+      emailPlaceholder: "your@email.com",
+      password: "Password",
+      passwordPlaceholder: "••••••••",
+      confirmPassword: "Confirm password",
+      confirmPasswordPlaceholder: "••••••••",
+      login: {
+        title: "Login",
+        button: "Sign in",
+        noAccount: "Don't have an account?",
+        createAccount: "Create an account"
+      },
+      register: {
+        title: "Create an account",
+        button: "Sign up",
+        hasAccount: "Already have an account?",
+        login: "Sign in"
+      },
+      errors: {
+        fieldsRequired: "Please fill in all fields.",
+        passwordMismatch: "Passwords do not match.",
+        passwordTooShort: "Password must be at least 6 characters.",
+        invalidCredentials: "Invalid email or password.",
+        generic: "An error occurred. Please try again."
+      },
+      success: {
+        checkEmail: "Check your email to confirm your registration."
+      }
     }
   }
 }

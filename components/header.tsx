@@ -1,14 +1,16 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X, User } from "lucide-react"
+import { Menu, X, User, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
+import { useAuth } from "@/contexts/auth-context"
 import { LanguageSwitcher } from "@/components/language-switcher"
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { t } = useLanguage()
+  const { user, openAuthModal, signOut } = useAuth()
 
   return (
     <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-primary/20 z-50">
@@ -48,14 +50,27 @@ export function Header() {
 
           <div className="hidden md:flex items-center gap-4">
             <LanguageSwitcher />
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex items-center gap-2 border-primary/30 hover:bg-primary/5"
-            >
-              <User className="w-4 h-4" />
-              {t('navigation.login')}
-            </Button>
+            {user ? (
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
+                onClick={() => signOut()}
+              >
+                <LogOut className="w-4 h-4" />
+                {t('navigation.logout')}
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
+                onClick={openAuthModal}
+              >
+                <User className="w-4 h-4" />
+                {t('navigation.login')}
+              </Button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -84,14 +99,27 @@ export function Header() {
               </a>
               <div className="flex flex-col items-center gap-4 pt-4">
                 <LanguageSwitcher />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="flex items-center gap-2 border-primary/30 hover:bg-primary/5"
-                >
-                  <User className="w-4 h-4" />
-                  {t('navigation.login')}
-                </Button>
+                {user ? (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
+                    onClick={() => signOut()}
+                  >
+                    <LogOut className="w-4 h-4" />
+                    {t('navigation.logout')}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
+                    onClick={openAuthModal}
+                  >
+                    <User className="w-4 h-4" />
+                    {t('navigation.login')}
+                  </Button>
+                )}
               </div>
             </div>
           </nav>
