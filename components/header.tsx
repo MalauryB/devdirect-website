@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { Menu, X, User, LogOut } from "lucide-react"
+import { Menu, X, User, LogOut, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -72,6 +72,12 @@ export function Header() {
                     <p className="text-sm font-medium text-foreground truncate">{user.email}</p>
                   </div>
                   <DropdownMenuItem asChild className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 flex items-center">
+                    <Link href="/dashboard">
+                      <LayoutDashboard className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
+                      <span className="text-foreground">{t('navigation.dashboard')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 flex items-center">
                     <Link href="/profile">
                       <User className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
                       <span className="text-foreground">{t('navigation.profile')}</span>
@@ -136,6 +142,17 @@ export function Header() {
                       </div>
                       <p className="text-sm font-medium text-foreground truncate max-w-[150px]">{user.email}</p>
                     </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex items-center justify-center gap-2 bg-white border-primary/20 hover:bg-primary/5 w-full"
+                      asChild
+                    >
+                      <Link href="/dashboard">
+                        <LayoutDashboard className="w-4 h-4 text-foreground flex-shrink-0" />
+                        <span>{t('navigation.dashboard')}</span>
+                      </Link>
+                    </Button>
                     <Button
                       variant="outline"
                       size="sm"

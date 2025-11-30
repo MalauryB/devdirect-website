@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { useAuth } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
 import {
@@ -19,6 +20,7 @@ type AuthMode = "login" | "register" | "forgot"
 export function AuthModal() {
   const { isAuthModalOpen, closeAuthModal, signIn, signUp, resetPassword } = useAuth()
   const { t } = useLanguage()
+  const router = useRouter()
   const [mode, setMode] = useState<AuthMode>("login")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -75,6 +77,7 @@ export function AuthModal() {
           setError(t('auth.errors.invalidCredentials'))
         } else {
           handleClose()
+          router.push("/dashboard")
         }
       } else if (mode === "register") {
         const { error } = await signUp(email, password)

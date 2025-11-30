@@ -9,7 +9,8 @@ export const translations = {
       contact: "Contact",
       login: "Connexion",
       logout: "Déconnexion",
-      profile: "Mon profil"
+      profile: "Mon profil",
+      dashboard: "Tableau de bord"
     },
     hero: {
       title: "Développez vos projets avec des experts en informatique, mathématiques et IA.",
@@ -195,6 +196,26 @@ export const translations = {
       save: "Enregistrer les modifications",
       success: "Profil mis à jour avec succès",
       error: "Une erreur est survenue lors de la mise à jour"
+    },
+    dashboard: {
+      loading: "Chargement...",
+      welcome: "Bienvenue",
+      subtitle: "Gérez votre espace personnel",
+      backHome: "Retour à l'accueil",
+      quickAccess: "Accès rapide",
+      comingSoon: "Bientôt",
+      menu: {
+        profile: "Mon profil",
+        profileDesc: "Gérer vos informations personnelles",
+        projects: "Mes projets",
+        projectsDesc: "Suivez l'avancement de vos projets",
+        messages: "Messages",
+        messagesDesc: "Consultez vos échanges avec l'équipe",
+        notifications: "Notifications",
+        notificationsDesc: "Gérez vos alertes et notifications",
+        settings: "Paramètres",
+        settingsDesc: "Configurez votre compte"
+      }
     }
   },
   en: {
@@ -207,7 +228,8 @@ export const translations = {
       contact: "Contact",
       login: "Login",
       logout: "Logout",
-      profile: "My profile"
+      profile: "My profile",
+      dashboard: "Dashboard"
     },
     hero: {
       title: "Develop your projects with experts in computer science, mathematics and AI.",
@@ -393,6 +415,26 @@ export const translations = {
       save: "Save changes",
       success: "Profile updated successfully",
       error: "An error occurred while updating"
+    },
+    dashboard: {
+      loading: "Loading...",
+      welcome: "Welcome",
+      subtitle: "Manage your personal space",
+      backHome: "Back to home",
+      quickAccess: "Quick access",
+      comingSoon: "Coming soon",
+      menu: {
+        profile: "My profile",
+        profileDesc: "Manage your personal information",
+        projects: "My projects",
+        projectsDesc: "Track the progress of your projects",
+        messages: "Messages",
+        messagesDesc: "View your conversations with the team",
+        notifications: "Notifications",
+        notificationsDesc: "Manage your alerts and notifications",
+        settings: "Settings",
+        settingsDesc: "Configure your account"
+      }
     }
   }
 }
