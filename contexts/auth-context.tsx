@@ -4,6 +4,13 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 
+export interface UserMetadata {
+  first_name?: string
+  last_name?: string
+  phone?: string
+  avatar_url?: string
+}
+
 interface AuthContextType {
   user: User | null
   session: Session | null
@@ -12,6 +19,7 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<{ error: Error | null }>
+  updateProfile: (metadata: UserMetadata) => Promise<{ error: Error | null }>
   isAuthModalOpen: boolean
   openAuthModal: () => void
   closeAuthModal: () => void
@@ -68,6 +76,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error }
   }
 
+  const updateProfile = async (metadata: UserMetadata) => {
+    const { data, error } = await supabase.auth.updateUser({
+      data: metadata
+    })
+    if (data?.user) {
+      setUser(data.user)
+    }
+    return { error }
+  }
+
   const openAuthModal = () => setIsAuthModalOpen(true)
   const closeAuthModal = () => setIsAuthModalOpen(false)
 
@@ -80,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn,
       signOut,
       resetPassword,
+      updateProfile,
       isAuthModalOpen,
       openAuthModal,
       closeAuthModal

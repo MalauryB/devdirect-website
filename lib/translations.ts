@@ -185,7 +185,16 @@ export const translations = {
       personalInfo: "Informations personnelles",
       email: "Adresse email",
       userId: "Identifiant utilisateur",
-      createdAt: "Membre depuis"
+      createdAt: "Membre depuis",
+      firstName: "Prénom",
+      firstNamePlaceholder: "Votre prénom",
+      lastName: "Nom",
+      lastNamePlaceholder: "Votre nom",
+      phone: "Téléphone",
+      phonePlaceholder: "+33 6 12 34 56 78",
+      save: "Enregistrer les modifications",
+      success: "Profil mis à jour avec succès",
+      error: "Une erreur est survenue lors de la mise à jour"
     }
   },
   en: {
@@ -374,7 +383,16 @@ export const translations = {
       personalInfo: "Personal information",
       email: "Email address",
       userId: "User ID",
-      createdAt: "Member since"
+      createdAt: "Member since",
+      firstName: "First name",
+      firstNamePlaceholder: "Your first name",
+      lastName: "Last name",
+      lastNamePlaceholder: "Your last name",
+      phone: "Phone",
+      phonePlaceholder: "+1 234 567 8900",
+      save: "Save changes",
+      success: "Profile updated successfully",
+      error: "An error occurred while updating"
     }
   }
 }

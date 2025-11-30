@@ -3,26 +3,67 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, User, Mail, Calendar } from "lucide-react"
+import { ArrowLeft, User, Mail, Calendar, Phone, Loader2, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useAuth } from "@/contexts/auth-context"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useAuth, UserMetadata } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
 
 export default function ProfilePage() {
-  const { user, loading } = useAuth()
+  const { user, loading, updateProfile } = useAuth()
   const { t } = useLanguage()
   const router = useRouter()
   const [mounted, setMounted] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState("")
+
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
+  const [phone, setPhone] = useState("")
 
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
+    if (user?.user_metadata) {
+      setFirstName(user.user_metadata.first_name || "")
+      setLastName(user.user_metadata.last_name || "")
+      setPhone(user.user_metadata.phone || "")
+    }
+  }, [user])
+
+  useEffect(() => {
     if (mounted && !loading && !user) {
       router.push("/")
     }
   }, [user, loading, router, mounted])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setSaving(true)
+    setError("")
+    setSuccess(false)
+
+    const metadata: UserMetadata = {
+      first_name: firstName,
+      last_name: lastName,
+      phone: phone,
+    }
+
+    const { error: updateError } = await updateProfile(metadata)
+
+    if (updateError) {
+      setError(t('profile.error'))
+    } else {
+      setSuccess(true)
+      setTimeout(() => setSuccess(false), 3000)
+    }
+
+    setSaving(false)
+  }
 
   if (!mounted || loading) {
     return (
@@ -60,22 +101,66 @@ export default function ProfilePage() {
             <div className="bg-gradient-to-r from-primary/10 to-action/10 px-6 py-8">
               <div className="flex items-center gap-4">
                 <div className="w-16 h-16 rounded-full bg-white border-2 border-action text-action flex items-center justify-center text-2xl font-bold">
-                  {user.email?.charAt(0).toUpperCase()}
+                  {firstName ? firstName.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
                 </div>
                 <div>
                   <h1 className="text-2xl font-bold text-foreground">
-                    {t('profile.title')}
+                    {firstName || lastName
+                      ? `${firstName} ${lastName}`.trim()
+                      : t('profile.title')}
                   </h1>
                   <p className="text-foreground/60">{t('profile.subtitle')}</p>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="p-6 space-y-6">
               <div className="space-y-4">
                 <h2 className="text-lg font-semibold text-foreground border-b border-primary/10 pb-2">
                   {t('profile.personalInfo')}
                 </h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">{t('profile.firstName')}</Label>
+                    <Input
+                      id="firstName"
+                      type="text"
+                      placeholder={t('profile.firstNamePlaceholder')}
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      disabled={saving}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">{t('profile.lastName')}</Label>
+                    <Input
+                      id="lastName"
+                      type="text"
+                      placeholder={t('profile.lastNamePlaceholder')}
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      disabled={saving}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">{t('profile.phone')}</Label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder={t('profile.phonePlaceholder')}
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      disabled={saving}
+                      className="pl-10"
+                    />
+                  </div>
+                </div>
 
                 <div className="flex items-center gap-3 p-4 bg-background rounded-lg border border-primary/10">
                   <Mail className="w-5 h-5 text-primary flex-shrink-0" />
@@ -103,7 +188,29 @@ export default function ProfilePage() {
                   </div>
                 )}
               </div>
-            </div>
+
+              {error && (
+                <p className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
+                  {error}
+                </p>
+              )}
+
+              {success && (
+                <p className="text-sm text-green-600 bg-green-50 p-3 rounded-md flex items-center gap-2">
+                  <Check className="w-4 h-4" />
+                  {t('profile.success')}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                className="w-full bg-white hover:bg-primary/5 text-foreground border-2 border-action"
+                disabled={saving}
+              >
+                {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {t('profile.save')}
+              </Button>
+            </form>
           </div>
         </div>
       </div>
