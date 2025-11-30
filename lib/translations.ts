@@ -146,6 +146,11 @@ export const translations = {
       passwordPlaceholder: "••••••••",
       confirmPassword: "Confirmer le mot de passe",
       confirmPasswordPlaceholder: "••••••••",
+      role: "Je suis",
+      roles: {
+        client: "Client",
+        engineer: "Ingénieur"
+      },
       login: {
         title: "Connexion",
         button: "Se connecter",
@@ -371,6 +376,11 @@ export const translations = {
       passwordPlaceholder: "••••••••",
       confirmPassword: "Confirm password",
       confirmPasswordPlaceholder: "••••••••",
+      role: "I am a",
+      roles: {
+        client: "Client",
+        engineer: "Engineer"
+      },
       login: {
         title: "Login",
         button: "Sign in",

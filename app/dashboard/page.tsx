@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, Settings, FileText, MessageSquare, Bell, ChevronLeft, Menu, X, Home, LogOut, Loader2, Check } from "lucide-react"
+import { User, Settings, FileText, MessageSquare, Bell, Menu, X, Home, LogOut, Loader2, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -216,14 +216,7 @@ export default function DashboardPage() {
           </nav>
 
           {/* Sidebar footer */}
-          <div className="p-4 border-t border-gray-200 space-y-2">
-            <Link
-              href="/"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-gray-50 text-foreground transition-colors"
-            >
-              <ChevronLeft className="w-5 h-5" />
-              <span>{t('dashboard.backHome')}</span>
-            </Link>
+          <div className="p-4 border-t border-gray-200">
             <button
               onClick={handleSignOut}
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-50 text-red-600 transition-colors"

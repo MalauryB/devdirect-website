@@ -4,11 +4,14 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 import { User, Session } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 
+export type UserRole = 'client' | 'engineer'
+
 export interface UserMetadata {
   first_name?: string
   last_name?: string
   phone?: string
   avatar_url?: string
+  role?: UserRole
 }
 
 interface AuthContextType {
@@ -53,6 +56,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { error } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: {
+          role: 'client'
+        }
+      }
     })
     return { error }
   }
