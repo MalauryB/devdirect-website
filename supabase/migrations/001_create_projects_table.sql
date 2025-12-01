@@ -2,12 +2,36 @@
 CREATE TABLE projects (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  title TEXT NOT NULL,
+
+  -- Type de projet (array de strings)
+  project_types TEXT[] NOT NULL DEFAULT '{}',
+
+  -- Services demandés
+  services TEXT[] NOT NULL DEFAULT '{}',
+
+  -- Plateformes cibles
+  platforms TEXT[] NOT NULL DEFAULT '{}',
+
+  -- Description du projet
   description TEXT NOT NULL,
-  project_type TEXT NOT NULL CHECK (project_type IN ('web', 'mobile', 'iot', 'ai', 'consulting', 'maintenance', 'design')),
-  budget_min INTEGER,
-  budget_max INTEGER,
-  deadline DATE,
+  features TEXT DEFAULT '',
+  target_audience TEXT DEFAULT '',
+
+  -- Projet existant
+  has_existing_project BOOLEAN DEFAULT FALSE,
+  existing_technologies TEXT DEFAULT '',
+
+  -- Design
+  needs_design TEXT DEFAULT '', -- 'yes' | 'partial' | 'no'
+
+  -- Budget et délais
+  budget TEXT DEFAULT '', -- 'small' | 'medium' | 'large' | 'xlarge' | 'flexible'
+  deadline TEXT DEFAULT '', -- 'urgent' | 'short' | 'medium' | 'long' | 'flexible'
+
+  -- Informations additionnelles
+  additional_info TEXT DEFAULT '',
+
+  -- Statut et timestamps
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_review', 'accepted', 'in_progress', 'completed', 'cancelled')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()

@@ -1,25 +1,53 @@
 export type ProjectStatus = 'pending' | 'in_review' | 'accepted' | 'in_progress' | 'completed' | 'cancelled'
-export type ProjectType = 'web' | 'mobile' | 'iot' | 'ai' | 'consulting' | 'maintenance' | 'design'
 
 export interface Project {
   id: string
   user_id: string
-  title: string
+
+  // Type de projet (checkboxes multiples)
+  project_types: string[]
+
+  // Services demandés
+  services: string[]
+
+  // Plateformes cibles
+  platforms: string[]
+
+  // Description du projet
   description: string
-  project_type: ProjectType
-  budget_min?: number
-  budget_max?: number
-  deadline?: string
+  features: string
+  target_audience: string
+
+  // Projet existant
+  has_existing_project: boolean
+  existing_technologies: string
+
+  // Design
+  needs_design: string // 'yes' | 'partial' | 'no'
+
+  // Budget et délais
+  budget: string // 'small' | 'medium' | 'large' | 'xlarge' | 'flexible'
+  deadline: string // 'urgent' | 'short' | 'medium' | 'long' | 'flexible'
+
+  // Informations additionnelles
+  additional_info: string
+
   status: ProjectStatus
   created_at: string
   updated_at: string
 }
 
 export interface ProjectFormData {
-  title: string
+  project_types: string[]
+  services: string[]
+  platforms: string[]
   description: string
-  project_type: ProjectType
-  budget_min?: number
-  budget_max?: number
-  deadline?: string
+  features: string
+  target_audience: string
+  has_existing_project: boolean
+  existing_technologies: string
+  needs_design: string
+  budget: string
+  deadline: string
+  additional_info: string
 }

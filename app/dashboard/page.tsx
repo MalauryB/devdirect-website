@@ -378,27 +378,25 @@ export default function DashboardPage() {
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-foreground truncate">{project.title}</h3>
-                          <p className="text-sm text-foreground/60 mt-1 line-clamp-2">{project.description}</p>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {project.project_types?.map((type) => (
+                              <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                                {t(`projects.types.${type}`)}
+                              </span>
+                            ))}
+                          </div>
+                          <p className="text-sm text-foreground/60 line-clamp-2">{project.description}</p>
                           <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-foreground/50">
-                            <span className="flex items-center gap-1">
-                              <FileText className="w-4 h-4" />
-                              {t(`services.${project.project_type === 'web' ? 'webDev' : project.project_type === 'mobile' ? 'mobileDev' : project.project_type}.title`)}
-                            </span>
-                            {(project.budget_min || project.budget_max) && (
+                            {project.budget && (
                               <span className="flex items-center gap-1">
                                 <Euro className="w-4 h-4" />
-                                {project.budget_min && project.budget_max
-                                  ? `${project.budget_min} - ${project.budget_max} €`
-                                  : project.budget_min
-                                  ? `${project.budget_min} € min`
-                                  : `${project.budget_max} € max`}
+                                {t(`projects.budget.${project.budget}`)}
                               </span>
                             )}
                             {project.deadline && (
                               <span className="flex items-center gap-1">
                                 <Calendar className="w-4 h-4" />
-                                {new Date(project.deadline).toLocaleDateString()}
+                                {t(`projects.deadline.${project.deadline}`)}
                               </span>
                             )}
                           </div>
