@@ -368,13 +368,21 @@ export const translations = {
         additionalDesc: "Tout ce que nous devrions savoir d'autre",
         additionalPlaceholder: "Contraintes spécifiques, questions, informations importantes...",
         submit: "Soumettre la demande",
+        update: "Enregistrer les modifications",
         cancel: "Annuler",
         success: "Votre demande de devis a été envoyée !"
       },
       errors: {
         typeRequired: "Veuillez sélectionner au moins un type de projet",
         descriptionRequired: "Veuillez décrire votre projet",
-        createFailed: "Une erreur est survenue lors de la création du projet"
+        createFailed: "Une erreur est survenue lors de la création du projet",
+        updateFailed: "Une erreur est survenue lors de la modification du projet"
+      },
+      actions: {
+        edit: "Modifier",
+        delete: "Supprimer",
+        confirmDelete: "Supprimer ce projet ?",
+        confirmDeleteDesc: "Cette action est irréversible. Le projet et toutes ses informations seront définitivement supprimés."
       },
       status: {
         pending: "En attente",
@@ -769,13 +777,21 @@ export const translations = {
         additionalDesc: "Anything else we should know",
         additionalPlaceholder: "Specific constraints, questions, important information...",
         submit: "Submit request",
+        update: "Save changes",
         cancel: "Cancel",
         success: "Your quote request has been sent!"
       },
       errors: {
         typeRequired: "Please select at least one project type",
         descriptionRequired: "Please describe your project",
-        createFailed: "An error occurred while creating the project"
+        createFailed: "An error occurred while creating the project",
+        updateFailed: "An error occurred while updating the project"
+      },
+      actions: {
+        edit: "Edit",
+        delete: "Delete",
+        confirmDelete: "Delete this project?",
+        confirmDeleteDesc: "This action cannot be undone. The project and all its information will be permanently deleted."
       },
       status: {
         pending: "Pending",

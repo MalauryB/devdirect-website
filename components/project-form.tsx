@@ -9,34 +9,36 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
-import { createProject } from "@/lib/projects"
-import { ProjectFormData } from "@/lib/types"
+import { createProject, updateProject } from "@/lib/projects"
+import { ProjectFormData, Project } from "@/lib/types"
 import { Loader2, Check, Send } from "lucide-react"
 
 interface ProjectFormProps {
+  project?: Project | null
   onSuccess?: () => void
   onCancel?: () => void
 }
 
-export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
+export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) {
   const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
+  const isEditing = !!project
 
   const [formData, setFormData] = useState<ProjectFormData>({
-    project_types: [],
-    services: [],
-    platforms: [],
-    description: "",
-    features: "",
-    target_audience: "",
-    has_existing_project: false,
-    existing_technologies: "",
-    needs_design: "",
-    budget: "",
-    deadline: "",
-    additional_info: ""
+    project_types: project?.project_types || [],
+    services: project?.services || [],
+    platforms: project?.platforms || [],
+    description: project?.description || "",
+    features: project?.features || "",
+    target_audience: project?.target_audience || "",
+    has_existing_project: project?.has_existing_project || false,
+    existing_technologies: project?.existing_technologies || "",
+    needs_design: project?.needs_design || "",
+    budget: project?.budget || "",
+    deadline: project?.deadline || "",
+    additional_info: project?.additional_info || ""
   })
 
   const handleProjectTypeToggle = (type: string) => {
@@ -83,10 +85,18 @@ export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
 
     setLoading(true)
 
-    const { error: createError } = await createProject(formData)
+    let submitError: Error | null = null
 
-    if (createError) {
-      setError(t('projects.errors.createFailed'))
+    if (isEditing && project) {
+      const { error } = await updateProject(project.id, formData)
+      submitError = error
+    } else {
+      const { error } = await createProject(formData)
+      submitError = error
+    }
+
+    if (submitError) {
+      setError(isEditing ? t('projects.errors.updateFailed') : t('projects.errors.createFailed'))
     } else {
       setSuccess(true)
       setTimeout(() => {
@@ -429,7 +439,7 @@ export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
           ) : (
             <Send className="w-4 h-4 mr-2" />
           )}
-          {t('projects.form.submit')}
+          {isEditing ? t('projects.form.update') : t('projects.form.submit')}
         </Button>
       </div>
     </form>

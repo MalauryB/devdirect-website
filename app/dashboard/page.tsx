@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,7 +18,7 @@ import { useAuth, UserMetadata, ClientType } from "@/contexts/auth-context"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { ProjectForm } from "@/components/project-form"
-import { getUserProjects } from "@/lib/projects"
+import { getUserProjects, updateProject, deleteProject } from "@/lib/projects"
 import { Project, ProjectStatus } from "@/lib/types"
 
 export default function DashboardPage() {
@@ -51,6 +51,9 @@ export default function DashboardPage() {
   const [projectsLoading, setProjectsLoading] = useState(false)
   const [showProjectForm, setShowProjectForm] = useState(false)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const [editingProject, setEditingProject] = useState<Project | null>(null)
+  const [deletingProject, setDeletingProject] = useState<Project | null>(null)
+  const [deleteLoading, setDeleteLoading] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -182,6 +185,25 @@ export default function DashboardPage() {
     setSaving(false)
   }
 
+  const handleDeleteProject = async () => {
+    if (!deletingProject) return
+    setDeleteLoading(true)
+    const { error } = await deleteProject(deletingProject.id)
+    if (!error) {
+      setDeletingProject(null)
+      setSelectedProject(null)
+      loadProjects()
+    }
+    setDeleteLoading(false)
+  }
+
+  const handleEditProject = () => {
+    if (!selectedProject) return
+    setEditingProject(selectedProject)
+    setSelectedProject(null)
+    setShowProjectForm(true)
+  }
+
   return (
     <div className="min-h-screen bg-white flex">
       {/* Mobile overlay */}
@@ -296,7 +318,7 @@ export default function DashboardPage() {
         {/* Content area */}
         <main className="flex-1 p-4 lg:p-6">
           {activeSection === "profile" && (
-            <div className="max-w-2xl">
+            <div className="w-full">
               <h2 className="text-xl font-bold text-foreground mb-6">{t('profile.title')}</h2>
               <form onSubmit={handleProfileSubmit} className="space-y-8">
                 {/* Informations personnelles */}
@@ -496,13 +518,39 @@ export default function DashboardPage() {
               {/* Vue détaillée d'un projet */}
               {selectedProject ? (
                 <div className="w-full">
-                  <button
-                    onClick={() => setSelectedProject(null)}
-                    className="flex items-center gap-2 text-foreground/60 hover:text-foreground mb-6 transition-colors"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    {t('projects.details.back')}
-                  </button>
+                  <div className="flex items-center justify-between mb-6">
+                    <button
+                      onClick={() => setSelectedProject(null)}
+                      className="flex items-center gap-2 text-foreground/60 hover:text-foreground transition-colors"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                      {t('projects.details.back')}
+                    </button>
+
+                    {/* Actions - only show for pending projects */}
+                    {selectedProject.status === 'pending' && (
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={handleEditProject}
+                          className="text-foreground/70 hover:text-foreground"
+                        >
+                          <Pencil className="w-4 h-4 mr-2" />
+                          {t('projects.actions.edit')}
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setDeletingProject(selectedProject)}
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                        >
+                          <Trash2 className="w-4 h-4 mr-2" />
+                          {t('projects.actions.delete')}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
 
                   <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
                     {/* Header */}
@@ -675,11 +723,16 @@ export default function DashboardPage() {
                   {showProjectForm && (
                     <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
                       <ProjectForm
+                        project={editingProject}
                         onSuccess={() => {
                           setShowProjectForm(false)
+                          setEditingProject(null)
                           loadProjects()
                         }}
-                        onCancel={() => setShowProjectForm(false)}
+                        onCancel={() => {
+                          setShowProjectForm(false)
+                          setEditingProject(null)
+                        }}
                       />
                     </div>
                   )}
@@ -826,6 +879,38 @@ export default function DashboardPage() {
           )}
         </main>
       </div>
+
+      {/* Delete confirmation modal */}
+      {deletingProject && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
+              {t('projects.actions.confirmDelete')}
+            </h3>
+            <p className="text-foreground/60 mb-6">
+              {t('projects.actions.confirmDeleteDesc')}
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setDeletingProject(null)}
+                disabled={deleteLoading}
+              >
+                {t('projects.form.cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteProject}
+                disabled={deleteLoading}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                {deleteLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {t('projects.actions.delete')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
