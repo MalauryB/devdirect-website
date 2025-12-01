@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -50,6 +50,7 @@ export default function DashboardPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [projectsLoading, setProjectsLoading] = useState(false)
   const [showProjectForm, setShowProjectForm] = useState(false)
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -492,87 +493,256 @@ export default function DashboardPage() {
 
           {activeSection === "projects" && (
             <div className="w-full">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-xl font-bold text-foreground">{t('projects.title')}</h2>
-                {!showProjectForm && (
-                  <Button
-                    onClick={() => setShowProjectForm(true)}
-                    className="bg-gray-900 hover:bg-gray-800 text-white"
+              {/* Vue détaillée d'un projet */}
+              {selectedProject ? (
+                <div className="w-full">
+                  <button
+                    onClick={() => setSelectedProject(null)}
+                    className="flex items-center gap-2 text-foreground/60 hover:text-foreground mb-6 transition-colors"
                   >
-                    <Plus className="w-4 h-4 mr-2" />
-                    {t('projects.newProject')}
-                  </Button>
-                )}
-              </div>
+                    <ArrowLeft className="w-4 h-4" />
+                    {t('projects.details.back')}
+                  </button>
 
-              {showProjectForm && (
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
-                  <ProjectForm
-                    onSuccess={() => {
-                      setShowProjectForm(false)
-                      loadProjects()
-                    }}
-                    onCancel={() => setShowProjectForm(false)}
-                  />
-                </div>
-              )}
-
-              {projectsLoading ? (
-                <div className="flex items-center justify-center py-12">
-                  <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
-                </div>
-              ) : projects.length === 0 ? (
-                <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
-                  <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
-                  <p className="text-foreground/70 font-medium">{t('projects.noProjects')}</p>
-                  <p className="text-foreground/50 text-sm mt-1">{t('projects.noProjectsDesc')}</p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  {projects.map((project) => (
-                    <div
-                      key={project.id}
-                      className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors"
-                    >
+                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    {/* Header */}
+                    <div className="p-6 border-b border-gray-100">
                       <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex flex-wrap gap-2 mb-2">
-                            {project.project_types?.map((type) => (
-                              <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                        <div>
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {selectedProject.project_types?.map((type) => (
+                              <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
                                 {t(`projects.types.${type}`)}
                               </span>
                             ))}
                           </div>
-                          <p className="text-sm text-foreground/60 line-clamp-2">{project.description}</p>
-                          <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-foreground/50">
-                            {project.budget && (
-                              <span className="flex items-center gap-1">
-                                <Euro className="w-4 h-4" />
-                                {t(`projects.budget.${project.budget}`)}
-                              </span>
-                            )}
-                            {project.deadline && (
-                              <span className="flex items-center gap-1">
-                                <Calendar className="w-4 h-4" />
-                                {t(`projects.deadline.${project.deadline}`)}
-                              </span>
-                            )}
-                          </div>
+                          <p className="text-sm text-foreground/50">
+                            {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                          </p>
                         </div>
-                        <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
-                          project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-                          project.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                          project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
-                          project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${
+                          selectedProject.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          selectedProject.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
+                          selectedProject.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                          selectedProject.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
+                          selectedProject.status === 'completed' ? 'bg-gray-100 text-gray-800' :
                           'bg-red-100 text-red-800'
                         }`}>
-                          {t(`projects.status.${project.status}`)}
+                          {t(`projects.status.${selectedProject.status}`)}
                         </span>
                       </div>
                     </div>
-                  ))}
+
+                    {/* Content */}
+                    <div className="p-6 space-y-8">
+                      {/* Description */}
+                      <div>
+                        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                          <FileText className="w-4 h-4 text-[#6cb1bb]" />
+                          {t('projects.details.description')}
+                        </h3>
+                        <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.description || '-'}</p>
+                      </div>
+
+                      {/* Features */}
+                      {selectedProject.features && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Layers className="w-4 h-4 text-[#ba9fdf]" />
+                            {t('projects.details.features')}
+                          </h3>
+                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.features}</p>
+                        </div>
+                      )}
+
+                      {/* Target Audience */}
+                      {selectedProject.target_audience && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Target className="w-4 h-4 text-[#ea4c89]" />
+                            {t('projects.details.targetAudience')}
+                          </h3>
+                          <p className="text-foreground/70">{selectedProject.target_audience}</p>
+                        </div>
+                      )}
+
+                      {/* Services */}
+                      {selectedProject.services && selectedProject.services.length > 0 && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Wrench className="w-4 h-4 text-[#9c984d]" />
+                            {t('projects.details.services')}
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedProject.services.map((service) => (
+                              <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                {t(`projects.services.${service}`)}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Platforms */}
+                      {selectedProject.platforms && selectedProject.platforms.length > 0 && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Monitor className="w-4 h-4 text-[#6cb1bb]" />
+                            {t('projects.details.platforms')}
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedProject.platforms.map((platform) => (
+                              <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                {platform}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Existing Project */}
+                      {selectedProject.has_existing_project && selectedProject.existing_technologies && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Wrench className="w-4 h-4 text-[#7f7074]" />
+                            {t('projects.details.existingTech')}
+                          </h3>
+                          <p className="text-foreground/70">{selectedProject.existing_technologies}</p>
+                        </div>
+                      )}
+
+                      {/* Budget & Deadline */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {selectedProject.budget && (
+                          <div className="bg-gray-50 rounded-xl p-4">
+                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                              <Euro className="w-4 h-4 text-[#9c984d]" />
+                              {t('projects.details.budget')}
+                            </h3>
+                            <p className="text-foreground/70">{t(`projects.budget.${selectedProject.budget}`)}</p>
+                          </div>
+                        )}
+                        {selectedProject.deadline && (
+                          <div className="bg-gray-50 rounded-xl p-4">
+                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                              <Clock className="w-4 h-4 text-[#ea4c89]" />
+                              {t('projects.details.deadline')}
+                            </h3>
+                            <p className="text-foreground/70">{t(`projects.deadline.${selectedProject.deadline}`)}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Design needs */}
+                      {selectedProject.needs_design && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Palette className="w-4 h-4 text-[#ba9fdf]" />
+                            {t('projects.details.needsDesign')}
+                          </h3>
+                          <p className="text-foreground/70">{t(`projects.form.needsDesign${selectedProject.needs_design.charAt(0).toUpperCase() + selectedProject.needs_design.slice(1)}`)}</p>
+                        </div>
+                      )}
+
+                      {/* Additional Info */}
+                      {selectedProject.additional_info && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <MessageCircle className="w-4 h-4 text-[#7f7074]" />
+                            {t('projects.details.additionalInfo')}
+                          </h3>
+                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.additional_info}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-foreground">{t('projects.title')}</h2>
+                    {!showProjectForm && (
+                      <Button
+                        onClick={() => setShowProjectForm(true)}
+                        className="bg-gray-900 hover:bg-gray-800 text-white"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        {t('projects.newProject')}
+                      </Button>
+                    )}
+                  </div>
+
+                  {showProjectForm && (
+                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
+                      <ProjectForm
+                        onSuccess={() => {
+                          setShowProjectForm(false)
+                          loadProjects()
+                        }}
+                        onCancel={() => setShowProjectForm(false)}
+                      />
+                    </div>
+                  )}
+
+                  {projectsLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                    </div>
+                  ) : projects.length === 0 ? (
+                    <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                      <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                      <p className="text-foreground/70 font-medium">{t('projects.noProjects')}</p>
+                      <p className="text-foreground/50 text-sm mt-1">{t('projects.noProjectsDesc')}</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {projects.map((project) => (
+                        <div
+                          key={project.id}
+                          onClick={() => setSelectedProject(project)}
+                          className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex flex-wrap gap-2 mb-2">
+                                {project.project_types?.map((type) => (
+                                  <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                                    {t(`projects.types.${type}`)}
+                                  </span>
+                                ))}
+                              </div>
+                              <p className="text-sm text-foreground/60 line-clamp-2">{project.description}</p>
+                              <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-foreground/50">
+                                {project.budget && (
+                                  <span className="flex items-center gap-1">
+                                    <Euro className="w-4 h-4" />
+                                    {t(`projects.budget.${project.budget}`)}
+                                  </span>
+                                )}
+                                {project.deadline && (
+                                  <span className="flex items-center gap-1">
+                                    <Calendar className="w-4 h-4" />
+                                    {t(`projects.deadline.${project.deadline}`)}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
+                              project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
+                              project.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                              project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
+                              project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {t(`projects.status.${project.status}`)}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </div>
           )}

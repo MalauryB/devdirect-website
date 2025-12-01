@@ -383,6 +383,20 @@ export const translations = {
         in_progress: "En cours",
         completed: "Terminé",
         cancelled: "Annulé"
+      },
+      details: {
+        back: "Retour aux projets",
+        createdAt: "Créé le",
+        description: "Description du projet",
+        features: "Fonctionnalités principales",
+        targetAudience: "Public cible",
+        services: "Services demandés",
+        platforms: "Plateformes cibles",
+        existingTech: "Technologies existantes",
+        budget: "Budget estimé",
+        deadline: "Délai souhaité",
+        needsDesign: "Besoin de design",
+        additionalInfo: "Informations supplémentaires"
       }
     }
   },
@@ -770,6 +784,20 @@ export const translations = {
         in_progress: "In progress",
         completed: "Completed",
         cancelled: "Cancelled"
+      },
+      details: {
+        back: "Back to projects",
+        createdAt: "Created on",
+        description: "Project description",
+        features: "Main features",
+        targetAudience: "Target audience",
+        services: "Requested services",
+        platforms: "Target platforms",
+        existingTech: "Existing technologies",
+        budget: "Estimated budget",
+        deadline: "Desired deadline",
+        needsDesign: "Design needs",
+        additionalInfo: "Additional information"
       }
     }
   }
