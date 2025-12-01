@@ -412,7 +412,7 @@ export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
           <Button
             type="button"
             variant="outline"
-            className="flex-1 border-gray-200"
+            className="flex-1 border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
             onClick={onCancel}
             disabled={loading}
           >
