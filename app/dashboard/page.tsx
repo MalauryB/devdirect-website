@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -27,7 +27,7 @@ export default function DashboardPage() {
   const searchParams = useSearchParams()
   const [mounted, setMounted] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("projects")
+  const [activeSection, setActiveSection] = useState("about")
 
   // Profile form state
   const [firstName, setFirstName] = useState("")
@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const section = searchParams.get("section")
-    if (section && ["profile", "projects", "messages"].includes(section)) {
+    if (section && ["profile", "projects", "messages", "about"].includes(section)) {
       setActiveSection(section)
     }
   }, [searchParams])
@@ -98,6 +98,11 @@ export default function DashboardPage() {
     : user.email?.split("@")[0]
 
   const menuItems = [
+    {
+      id: "about",
+      icon: Info,
+      label: t('dashboard.menu.about'),
+    },
     {
       id: "projects",
       icon: FileText,
@@ -416,6 +421,84 @@ export default function DashboardPage() {
                   ))}
                 </div>
               )}
+            </div>
+          )}
+
+          {activeSection === "about" && (
+            <div className="w-full">
+              <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.about.title')}</h2>
+              <p className="text-foreground/70 mb-8">{t('dashboard.about.intro')}</p>
+
+              {/* Why choose us */}
+              <div className="mb-10">
+                <h3 className="text-lg font-semibold text-foreground mb-4">{t('dashboard.about.whyUs')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+                    <div className="w-10 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center mb-3">
+                      <Video className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.features.freeMeeting.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.features.freeMeeting.description')}</p>
+                  </div>
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+                    <div className="w-10 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center mb-3">
+                      <FileCheck className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.features.transparentQuote.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.features.transparentQuote.description')}</p>
+                  </div>
+                  <div className="bg-gray-50 border border-gray-200 rounded-xl p-5">
+                    <div className="w-10 h-10 bg-white border border-gray-200 rounded-lg flex items-center justify-center mb-3">
+                      <HeartHandshake className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.features.fullSupport.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.features.fullSupport.description')}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Services */}
+              <div className="mb-10">
+                <h3 className="text-lg font-semibold text-foreground mb-4">{t('dashboard.about.servicesTitle')}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-3">
+                      <Globe className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.services.web.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.services.web.description')}</p>
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-3">
+                      <Smartphone className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.services.mobile.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.services.mobile.description')}</p>
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-3">
+                      <Cpu className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.services.iot.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.services.iot.description')}</p>
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-3">
+                      <Palette className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.services.ai.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.services.ai.description')}</p>
+                  </div>
+                  <div className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center mb-3">
+                      <PenTool className="w-5 h-5 text-foreground" />
+                    </div>
+                    <h4 className="font-medium text-foreground mb-1">{t('dashboard.about.services.design.title')}</h4>
+                    <p className="text-sm text-foreground/60">{t('dashboard.about.services.design.description')}</p>
+                  </div>
+                </div>
+              </div>
+
             </div>
           )}
         </main>

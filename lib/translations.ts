@@ -225,7 +225,52 @@ export const translations = {
         notifications: "Notifications",
         notificationsDesc: "Gérez vos alertes et notifications",
         settings: "Paramètres",
-        settingsDesc: "Configurez votre compte"
+        settingsDesc: "Configurez votre compte",
+        about: "Nos services",
+        aboutDesc: "Découvrez ce que Memo'ry peut faire pour vous"
+      },
+      about: {
+        title: "À propos de Memo'ry",
+        intro: "Experts en informatique, mathématiques et IA, nous vous accompagnons dans tous vos projets numériques.",
+        whyUs: "Pourquoi nous choisir ?",
+        features: {
+          freeMeeting: {
+            title: "Rencontre gratuite",
+            description: "Première consultation gratuite pour analyser vos besoins"
+          },
+          transparentQuote: {
+            title: "Devis transparent",
+            description: "Prix clairs et détaillés sans surprise"
+          },
+          fullSupport: {
+            title: "Support complet",
+            description: "Accompagnement de A à Z jusqu'à la mise en ligne"
+          }
+        },
+        servicesTitle: "Nos domaines d'expertise",
+        services: {
+          web: {
+            title: "Développement Web",
+            description: "Applications web modernes et performantes avec les dernières technologies."
+          },
+          mobile: {
+            title: "Développement Mobile",
+            description: "Applications natives et cross-platform pour iOS et Android."
+          },
+          iot: {
+            title: "IoT & Embarqué",
+            description: "Solutions connectées et systèmes embarqués innovants."
+          },
+          ai: {
+            title: "Intelligence Artificielle",
+            description: "Intégration d'IA et solutions d'apprentissage automatique."
+          },
+          design: {
+            title: "Maquettes & Design",
+            description: "Création de maquettes et prototypes pour visualiser votre projet."
+          }
+        },
+        cta: "Créer un projet"
       }
     },
     projects: {
@@ -548,7 +593,52 @@ export const translations = {
         notifications: "Notifications",
         notificationsDesc: "Manage your alerts and notifications",
         settings: "Settings",
-        settingsDesc: "Configure your account"
+        settingsDesc: "Configure your account",
+        about: "Our services",
+        aboutDesc: "Discover what Memo'ry can do for you"
+      },
+      about: {
+        title: "About Memo'ry",
+        intro: "Experts in computer science, mathematics and AI, we support you in all your digital projects.",
+        whyUs: "Why choose us?",
+        features: {
+          freeMeeting: {
+            title: "Free meeting",
+            description: "Free initial consultation to analyze your needs"
+          },
+          transparentQuote: {
+            title: "Transparent quote",
+            description: "Clear and detailed pricing with no surprises"
+          },
+          fullSupport: {
+            title: "Full support",
+            description: "End-to-end support until deployment"
+          }
+        },
+        servicesTitle: "Our areas of expertise",
+        services: {
+          web: {
+            title: "Web Development",
+            description: "Modern and performant web applications with latest technologies."
+          },
+          mobile: {
+            title: "Mobile Development",
+            description: "Native and cross-platform applications for iOS and Android."
+          },
+          iot: {
+            title: "IoT & Embedded",
+            description: "Connected solutions and innovative embedded systems."
+          },
+          ai: {
+            title: "Artificial Intelligence",
+            description: "AI integration and machine learning solutions."
+          },
+          design: {
+            title: "Mockups & Design",
+            description: "Creation of mockups and prototypes to visualize your project."
+          }
+        },
+        cta: "Create a project"
       }
     },
     projects: {
