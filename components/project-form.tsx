@@ -228,7 +228,7 @@ export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               placeholder={t('projects.form.descriptionPlaceholder')}
-              rows={4}
+              rows={6}
               disabled={loading}
               className="border-gray-200 focus:border-gray-400 resize-none"
             />
@@ -240,7 +240,7 @@ export function ProjectForm({ onSuccess, onCancel }: ProjectFormProps) {
               value={formData.features}
               onChange={(e) => setFormData({ ...formData, features: e.target.value })}
               placeholder={t('projects.form.featuresPlaceholder')}
-              rows={3}
+              rows={5}
               disabled={loading}
               className="border-gray-200 focus:border-gray-400 resize-none"
             />

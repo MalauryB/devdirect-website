@@ -5,6 +5,7 @@ import { User, Session } from '@supabase/supabase-js'
 import { supabase } from '@/lib/supabase'
 
 export type UserRole = 'client' | 'engineer'
+export type ClientType = 'individual' | 'company'
 
 export interface UserMetadata {
   first_name?: string
@@ -12,6 +13,15 @@ export interface UserMetadata {
   phone?: string
   avatar_url?: string
   role?: UserRole
+  // Billing information
+  client_type?: ClientType
+  company_name?: string
+  siret?: string
+  vat_number?: string
+  address?: string
+  postal_code?: string
+  city?: string
+  country?: string
 }
 
 interface AuthContextType {

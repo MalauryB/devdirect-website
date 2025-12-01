@@ -14,7 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useAuth, UserMetadata } from "@/contexts/auth-context"
+import { useAuth, UserMetadata, ClientType } from "@/contexts/auth-context"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { ProjectForm } from "@/components/project-form"
 import { getUserProjects } from "@/lib/projects"
@@ -33,6 +34,14 @@ export default function DashboardPage() {
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
   const [phone, setPhone] = useState("")
+  const [clientType, setClientType] = useState<ClientType>("individual")
+  const [companyName, setCompanyName] = useState("")
+  const [siret, setSiret] = useState("")
+  const [vatNumber, setVatNumber] = useState("")
+  const [address, setAddress] = useState("")
+  const [postalCode, setPostalCode] = useState("")
+  const [city, setCity] = useState("")
+  const [country, setCountry] = useState("France")
   const [saving, setSaving] = useState(false)
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [profileError, setProfileError] = useState("")
@@ -58,6 +67,14 @@ export default function DashboardPage() {
       setFirstName(user.user_metadata.first_name || "")
       setLastName(user.user_metadata.last_name || "")
       setPhone(user.user_metadata.phone || "")
+      setClientType(user.user_metadata.client_type || "individual")
+      setCompanyName(user.user_metadata.company_name || "")
+      setSiret(user.user_metadata.siret || "")
+      setVatNumber(user.user_metadata.vat_number || "")
+      setAddress(user.user_metadata.address || "")
+      setPostalCode(user.user_metadata.postal_code || "")
+      setCity(user.user_metadata.city || "")
+      setCountry(user.user_metadata.country || "France")
     }
   }, [user])
 
@@ -142,6 +159,14 @@ export default function DashboardPage() {
       first_name: firstName,
       last_name: lastName,
       phone: phone,
+      client_type: clientType,
+      company_name: companyName,
+      siret: siret,
+      vat_number: vatNumber,
+      address: address,
+      postal_code: postalCode,
+      city: city,
+      country: country,
     }
 
     const { error: updateError } = await updateProfile(metadata)
@@ -270,46 +295,174 @@ export default function DashboardPage() {
         {/* Content area */}
         <main className="flex-1 p-4 lg:p-6">
           {activeSection === "profile" && (
-            <div className="max-w-md">
-              <h2 className="text-xl font-bold text-foreground mb-4">{t('profile.title')}</h2>
-              <form onSubmit={handleProfileSubmit} className="space-y-4">
-                <div className="space-y-1">
-                  <Label htmlFor="firstName" className="text-sm font-medium text-foreground">{t('profile.firstName')}</Label>
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder={t('profile.firstNamePlaceholder')}
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    disabled={saving}
-                    className="border-gray-200 focus:border-gray-400"
-                  />
+            <div className="max-w-2xl">
+              <h2 className="text-xl font-bold text-foreground mb-6">{t('profile.title')}</h2>
+              <form onSubmit={handleProfileSubmit} className="space-y-8">
+                {/* Informations personnelles */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-medium text-foreground">{t('profile.personalInfo')}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-1">
+                      <Label htmlFor="firstName" className="text-sm text-foreground/70">{t('profile.firstName')}</Label>
+                      <Input
+                        id="firstName"
+                        type="text"
+                        placeholder={t('profile.firstNamePlaceholder')}
+                        value={firstName}
+                        onChange={(e) => setFirstName(e.target.value)}
+                        disabled={saving}
+                        className="border-gray-200 focus:border-gray-400"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="lastName" className="text-sm text-foreground/70">{t('profile.lastName')}</Label>
+                      <Input
+                        id="lastName"
+                        type="text"
+                        placeholder={t('profile.lastNamePlaceholder')}
+                        value={lastName}
+                        onChange={(e) => setLastName(e.target.value)}
+                        disabled={saving}
+                        className="border-gray-200 focus:border-gray-400"
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <Label htmlFor="phone" className="text-sm text-foreground/70">{t('profile.phone')}</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder={t('profile.phonePlaceholder')}
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      disabled={saving}
+                      className="border-gray-200 focus:border-gray-400"
+                    />
+                  </div>
                 </div>
 
-                <div className="space-y-1">
-                  <Label htmlFor="lastName" className="text-sm font-medium text-foreground">{t('profile.lastName')}</Label>
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder={t('profile.lastNamePlaceholder')}
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                {/* Type de client */}
+                <div className="space-y-3">
+                  <h3 className="text-sm font-medium text-foreground">{t('profile.clientType')}</h3>
+                  <RadioGroup
+                    value={clientType}
+                    onValueChange={(value) => setClientType(value as ClientType)}
                     disabled={saving}
-                    className="border-gray-200 focus:border-gray-400"
-                  />
+                    className="flex gap-4"
+                  >
+                    <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
+                      clientType === "individual" ? 'border-gray-900' : 'border-gray-200'
+                    }`}>
+                      <RadioGroupItem value="individual" className="border-gray-300" />
+                      <span className="text-sm">{t('profile.individual')}</span>
+                    </label>
+                    <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
+                      clientType === "company" ? 'border-gray-900' : 'border-gray-200'
+                    }`}>
+                      <RadioGroupItem value="company" className="border-gray-300" />
+                      <span className="text-sm">{t('profile.company')}</span>
+                    </label>
+                  </RadioGroup>
                 </div>
 
-                <div className="space-y-1">
-                  <Label htmlFor="phone" className="text-sm font-medium text-foreground">{t('profile.phone')}</Label>
-                  <Input
-                    id="phone"
-                    type="tel"
-                    placeholder={t('profile.phonePlaceholder')}
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    disabled={saving}
-                    className="border-gray-200 focus:border-gray-400"
-                  />
+                {/* Informations entreprise (conditionnelles) */}
+                {clientType === "company" && (
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-medium text-foreground">{t('profile.companyInfo')}</h3>
+                    <div className="space-y-1">
+                      <Label htmlFor="companyName" className="text-sm text-foreground/70">{t('profile.companyName')}</Label>
+                      <Input
+                        id="companyName"
+                        type="text"
+                        placeholder={t('profile.companyNamePlaceholder')}
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
+                        disabled={saving}
+                        className="border-gray-200 focus:border-gray-400"
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="space-y-1">
+                        <Label htmlFor="siret" className="text-sm text-foreground/70">{t('profile.siret')}</Label>
+                        <Input
+                          id="siret"
+                          type="text"
+                          placeholder={t('profile.siretPlaceholder')}
+                          value={siret}
+                          onChange={(e) => setSiret(e.target.value)}
+                          disabled={saving}
+                          className="border-gray-200 focus:border-gray-400"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label htmlFor="vatNumber" className="text-sm text-foreground/70">{t('profile.vatNumber')}</Label>
+                        <Input
+                          id="vatNumber"
+                          type="text"
+                          placeholder={t('profile.vatNumberPlaceholder')}
+                          value={vatNumber}
+                          onChange={(e) => setVatNumber(e.target.value)}
+                          disabled={saving}
+                          className="border-gray-200 focus:border-gray-400"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Adresse de facturation */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-medium text-foreground">{t('profile.billingAddress')}</h3>
+                  <div className="space-y-1">
+                    <Label htmlFor="address" className="text-sm text-foreground/70">{t('profile.address')}</Label>
+                    <Input
+                      id="address"
+                      type="text"
+                      placeholder={t('profile.addressPlaceholder')}
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      disabled={saving}
+                      className="border-gray-200 focus:border-gray-400"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div className="space-y-1">
+                      <Label htmlFor="postalCode" className="text-sm text-foreground/70">{t('profile.postalCode')}</Label>
+                      <Input
+                        id="postalCode"
+                        type="text"
+                        placeholder={t('profile.postalCodePlaceholder')}
+                        value={postalCode}
+                        onChange={(e) => setPostalCode(e.target.value)}
+                        disabled={saving}
+                        className="border-gray-200 focus:border-gray-400"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label htmlFor="city" className="text-sm text-foreground/70">{t('profile.city')}</Label>
+                      <Input
+                        id="city"
+                        type="text"
+                        placeholder={t('profile.cityPlaceholder')}
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        disabled={saving}
+                        className="border-gray-200 focus:border-gray-400"
+                      />
+                    </div>
+                    <div className="space-y-1 col-span-2 md:col-span-1">
+                      <Label htmlFor="country" className="text-sm text-foreground/70">{t('profile.country')}</Label>
+                      <Input
+                        id="country"
+                        type="text"
+                        placeholder={t('profile.countryPlaceholder')}
+                        value={country}
+                        onChange={(e) => setCountry(e.target.value)}
+                        disabled={saving}
+                        className="border-gray-200 focus:border-gray-400"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 {profileError && (
