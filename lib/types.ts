@@ -1,5 +1,13 @@
 export type ProjectStatus = 'pending' | 'in_review' | 'accepted' | 'in_progress' | 'completed' | 'cancelled'
 
+export interface ProjectFile {
+  name: string
+  url: string
+  path: string
+  size: number
+  type: string
+}
+
 export interface Project {
   id: string
   user_id: string
@@ -32,6 +40,13 @@ export interface Project {
   // Informations additionnelles
   additional_info: string
 
+  // Fichiers joints
+  specifications_file?: ProjectFile | null
+  design_files?: ProjectFile[] | null
+  brand_assets?: ProjectFile[] | null
+  inspiration_images?: ProjectFile[] | null
+  other_documents?: ProjectFile[] | null
+
   status: ProjectStatus
   created_at: string
   updated_at: string
@@ -50,4 +65,10 @@ export interface ProjectFormData {
   budget: string
   deadline: string
   additional_info: string
+  // Fichiers joints
+  specifications_file?: ProjectFile | null
+  design_files?: ProjectFile[] | null
+  brand_assets?: ProjectFile[] | null
+  inspiration_images?: ProjectFile[] | null
+  other_documents?: ProjectFile[] | null
 }

@@ -31,6 +31,13 @@ CREATE TABLE projects (
   -- Informations additionnelles
   additional_info TEXT DEFAULT '',
 
+  -- Fichiers joints (stockés en JSONB)
+  specifications_file JSONB,
+  design_files JSONB,
+  brand_assets JSONB,
+  inspiration_images JSONB,
+  other_documents JSONB,
+
   -- Statut et timestamps
   status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_review', 'accepted', 'in_progress', 'completed', 'cancelled')),
   created_at TIMESTAMPTZ DEFAULT NOW(),

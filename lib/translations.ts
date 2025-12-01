@@ -219,7 +219,10 @@ export const translations = {
       countryPlaceholder: "France",
       save: "Enregistrer les modifications",
       success: "Profil mis à jour avec succès",
-      error: "Une erreur est survenue lors de la mise à jour"
+      error: "Une erreur est survenue lors de la mise à jour",
+      avatar: "Photo de profil",
+      avatarDesc: "Cliquez sur l'icône pour modifier votre photo",
+      avatarError: "Erreur lors de l'upload de la photo"
     },
     dashboard: {
       loading: "Chargement...",
@@ -367,6 +370,18 @@ export const translations = {
         additionalTitle: "Informations additionnelles",
         additionalDesc: "Tout ce que nous devrions savoir d'autre",
         additionalPlaceholder: "Contraintes spécifiques, questions, informations importantes...",
+        filesTitle: "Fichiers joints",
+        filesDesc: "Ajoutez des documents pour nous aider à mieux comprendre votre projet",
+        specificationsFile: "Cahier des charges",
+        specificationsFileDesc: "Document décrivant les spécifications de votre projet (PDF, DOCX)",
+        designFiles: "Maquettes / Design existant",
+        designFilesDesc: "Fichiers de design si vous en avez déjà (images ou PDF)",
+        brandAssets: "Logo et assets de marque",
+        brandAssetsDesc: "Logo actuel, charte graphique (PNG, JPG, SVG)",
+        inspirationImages: "Images d'inspiration",
+        inspirationImagesDesc: "Captures d'écran de sites ou designs que vous appréciez",
+        otherDocuments: "Autres documents",
+        otherDocumentsDesc: "Tout autre document utile pour votre projet",
         submit: "Soumettre la demande",
         update: "Enregistrer les modifications",
         cancel: "Annuler",
@@ -404,7 +419,8 @@ export const translations = {
         budget: "Budget estimé",
         deadline: "Délai souhaité",
         needsDesign: "Besoin de design",
-        additionalInfo: "Informations supplémentaires"
+        additionalInfo: "Informations supplémentaires",
+        attachedFiles: "Fichiers joints"
       }
     }
   },
@@ -628,7 +644,10 @@ export const translations = {
       countryPlaceholder: "United States",
       save: "Save changes",
       success: "Profile updated successfully",
-      error: "An error occurred while updating"
+      error: "An error occurred while updating",
+      avatar: "Profile picture",
+      avatarDesc: "Click on the icon to change your photo",
+      avatarError: "Error uploading photo"
     },
     dashboard: {
       loading: "Loading...",
@@ -776,6 +795,18 @@ export const translations = {
         additionalTitle: "Additional information",
         additionalDesc: "Anything else we should know",
         additionalPlaceholder: "Specific constraints, questions, important information...",
+        filesTitle: "Attached files",
+        filesDesc: "Add documents to help us better understand your project",
+        specificationsFile: "Specifications document",
+        specificationsFileDesc: "Document describing your project specifications (PDF, DOCX)",
+        designFiles: "Mockups / Existing design",
+        designFilesDesc: "Design files if you already have some (images or PDF)",
+        brandAssets: "Logo and brand assets",
+        brandAssetsDesc: "Current logo, brand guidelines (PNG, JPG, SVG)",
+        inspirationImages: "Inspiration images",
+        inspirationImagesDesc: "Screenshots of websites or designs you like",
+        otherDocuments: "Other documents",
+        otherDocumentsDesc: "Any other useful document for your project",
         submit: "Submit request",
         update: "Save changes",
         cancel: "Cancel",
@@ -813,7 +844,8 @@ export const translations = {
         budget: "Estimated budget",
         deadline: "Desired deadline",
         needsDesign: "Design needs",
-        additionalInfo: "Additional information"
+        additionalInfo: "Additional information",
+        attachedFiles: "Attached files"
       }
     }
   }

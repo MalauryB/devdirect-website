@@ -10,7 +10,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { createProject, updateProject } from "@/lib/projects"
-import { ProjectFormData, Project } from "@/lib/types"
+import { ProjectFormData, Project, ProjectFile } from "@/lib/types"
+import { FileUpload } from "@/components/file-upload"
 import { Loader2, Check, Send } from "lucide-react"
 
 interface ProjectFormProps {
@@ -38,7 +39,12 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
     needs_design: project?.needs_design || "",
     budget: project?.budget || "",
     deadline: project?.deadline || "",
-    additional_info: project?.additional_info || ""
+    additional_info: project?.additional_info || "",
+    specifications_file: project?.specifications_file || null,
+    design_files: project?.design_files || null,
+    brand_assets: project?.brand_assets || null,
+    inspiration_images: project?.inspiration_images || null,
+    other_documents: project?.other_documents || null
   })
 
   const handleProjectTypeToggle = (type: string) => {
@@ -385,6 +391,70 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               </SelectContent>
             </Select>
           </div>
+        </div>
+      </div>
+
+      {/* Fichiers joints */}
+      <div className="space-y-3">
+        <div>
+          <h3 className="text-sm font-medium text-foreground">{t('projects.form.filesTitle')}</h3>
+          <p className="text-xs text-foreground/50 mt-0.5">{t('projects.form.filesDesc')}</p>
+        </div>
+        <div className="space-y-6">
+          <FileUpload
+            bucket="projects"
+            folder="specifications"
+            accept="documents"
+            value={formData.specifications_file}
+            onChange={(file) => setFormData({ ...formData, specifications_file: file as ProjectFile | null })}
+            label={t('projects.form.specificationsFile')}
+            description={t('projects.form.specificationsFileDesc')}
+            disabled={loading}
+          />
+          <FileUpload
+            bucket="projects"
+            folder="designs"
+            accept="all"
+            multiple
+            value={formData.design_files}
+            onChange={(files) => setFormData({ ...formData, design_files: files as ProjectFile[] | null })}
+            label={t('projects.form.designFiles')}
+            description={t('projects.form.designFilesDesc')}
+            disabled={loading}
+          />
+          <FileUpload
+            bucket="projects"
+            folder="brand"
+            accept="images"
+            multiple
+            value={formData.brand_assets}
+            onChange={(files) => setFormData({ ...formData, brand_assets: files as ProjectFile[] | null })}
+            label={t('projects.form.brandAssets')}
+            description={t('projects.form.brandAssetsDesc')}
+            disabled={loading}
+          />
+          <FileUpload
+            bucket="projects"
+            folder="inspiration"
+            accept="images"
+            multiple
+            value={formData.inspiration_images}
+            onChange={(files) => setFormData({ ...formData, inspiration_images: files as ProjectFile[] | null })}
+            label={t('projects.form.inspirationImages')}
+            description={t('projects.form.inspirationImagesDesc')}
+            disabled={loading}
+          />
+          <FileUpload
+            bucket="projects"
+            folder="other"
+            accept="all"
+            multiple
+            value={formData.other_documents}
+            onChange={(files) => setFormData({ ...formData, other_documents: files as ProjectFile[] | null })}
+            label={t('projects.form.otherDocuments')}
+            description={t('projects.form.otherDocumentsDesc')}
+            disabled={loading}
+          />
         </div>
       </div>
 

@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2 } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,7 +19,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { ProjectForm } from "@/components/project-form"
 import { getUserProjects, updateProject, deleteProject } from "@/lib/projects"
-import { Project, ProjectStatus } from "@/lib/types"
+import { Project, ProjectStatus, ProjectFile } from "@/lib/types"
+import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
 
 export default function DashboardPage() {
   const { user, loading, signOut, updateProfile } = useAuth()
@@ -42,6 +43,8 @@ export default function DashboardPage() {
   const [postalCode, setPostalCode] = useState("")
   const [city, setCity] = useState("")
   const [country, setCountry] = useState("France")
+  const [avatarUrl, setAvatarUrl] = useState("")
+  const [avatarUploading, setAvatarUploading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [profileError, setProfileError] = useState("")
@@ -79,6 +82,7 @@ export default function DashboardPage() {
       setPostalCode(user.user_metadata.postal_code || "")
       setCity(user.user_metadata.city || "")
       setCountry(user.user_metadata.country || "France")
+      setAvatarUrl(user.user_metadata.avatar_url || "")
     }
   }, [user])
 
@@ -204,6 +208,125 @@ export default function DashboardPage() {
     setShowProjectForm(true)
   }
 
+  // Component to display a file item with download capability
+  const ProjectFileItem = ({ file }: { file: ProjectFile }) => {
+    const [loading, setLoading] = useState(false)
+
+    const handleDownload = async () => {
+      setLoading(true)
+      const { url } = await getSignedUrl('projects', file.path)
+      if (url) {
+        window.open(url, '_blank')
+      }
+      setLoading(false)
+    }
+
+    const formatFileSize = (bytes: number) => {
+      if (bytes < 1024) return `${bytes} B`
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+    }
+
+    return (
+      <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+        <div className="w-10 h-10 rounded bg-gray-100 flex items-center justify-center flex-shrink-0">
+          <FileText className="w-5 h-5 text-foreground/50" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium text-foreground truncate">{file.name}</p>
+          <p className="text-xs text-foreground/50">{formatFileSize(file.size)}</p>
+        </div>
+        <button
+          onClick={handleDownload}
+          disabled={loading}
+          className="p-2 hover:bg-gray-200 rounded transition-colors disabled:opacity-50"
+        >
+          {loading ? (
+            <Loader2 className="w-4 h-4 animate-spin text-foreground/50" />
+          ) : (
+            <Download className="w-4 h-4 text-foreground/50" />
+          )}
+        </button>
+      </div>
+    )
+  }
+
+  // Component to display an image item with preview
+  const ProjectImageItem = ({ file }: { file: ProjectFile }) => {
+    const [imageUrl, setImageUrl] = useState<string | null>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+      const loadImage = async () => {
+        const { url } = await getSignedUrl('projects', file.path)
+        setImageUrl(url)
+        setLoading(false)
+      }
+      loadImage()
+    }, [file.path])
+
+    const handleOpen = () => {
+      if (imageUrl) {
+        window.open(imageUrl, '_blank')
+      }
+    }
+
+    return (
+      <div
+        onClick={handleOpen}
+        className="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors relative"
+      >
+        {loading ? (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Loader2 className="w-5 h-5 animate-spin text-foreground/30" />
+          </div>
+        ) : imageUrl ? (
+          <img
+            src={imageUrl}
+            alt={file.name}
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <ImageIcon className="w-6 h-6 text-foreground/30" />
+          </div>
+        )}
+      </div>
+    )
+  }
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const validation = validateFile(file, 'images')
+    if (!validation.valid) {
+      setProfileError(validation.error || 'Fichier invalide')
+      return
+    }
+
+    setAvatarUploading(true)
+    setProfileError("")
+
+    const { data, error } = await uploadFile(file, 'avatars', 'profile')
+
+    if (error) {
+      console.error('Upload error:', error)
+      setProfileError(`${t('profile.avatarError')}: ${error.message}`)
+    } else if (data) {
+      console.log('Avatar uploaded:', data.url)
+      setAvatarUrl(data.url)
+      // Save avatar URL to profile
+      const { error: updateError } = await updateProfile({ avatar_url: data.url })
+      if (updateError) {
+        setProfileError(t('profile.error'))
+      }
+    }
+
+    setAvatarUploading(false)
+    if (e.target) e.target.value = ''
+  }
+
   return (
     <div className="min-h-screen bg-white flex">
       {/* Mobile overlay */}
@@ -321,6 +444,45 @@ export default function DashboardPage() {
             <div className="w-full">
               <h2 className="text-xl font-bold text-foreground mb-6">{t('profile.title')}</h2>
               <form onSubmit={handleProfileSubmit} className="space-y-8">
+                {/* Avatar */}
+                <div className="space-y-4">
+                  <h3 className="text-sm font-medium text-foreground">{t('profile.avatar')}</h3>
+                  <div className="flex items-center gap-6">
+                    <div className="relative">
+                      <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-gray-200 flex-shrink-0">
+                        {avatarUrl ? (
+                          <img
+                            src={avatarUrl}
+                            alt="Avatar"
+                            className="w-full h-full object-cover min-w-full min-h-full"
+                            style={{ objectPosition: 'center' }}
+                          />
+                        ) : (
+                          <User className="w-10 h-10 text-gray-400" />
+                        )}
+                      </div>
+                      <label className="absolute bottom-0 right-0 w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
+                        {avatarUploading ? (
+                          <Loader2 className="w-4 h-4 text-white animate-spin" />
+                        ) : (
+                          <Camera className="w-4 h-4 text-white" />
+                        )}
+                        <input
+                          type="file"
+                          accept="image/jpeg,image/png,image/gif,image/webp"
+                          onChange={handleAvatarUpload}
+                          disabled={avatarUploading || saving}
+                          className="hidden"
+                        />
+                      </label>
+                    </div>
+                    <div>
+                      <p className="text-sm text-foreground/70">{t('profile.avatarDesc')}</p>
+                      <p className="text-xs text-foreground/50 mt-1">PNG, JPG, GIF (max 2MB)</p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Informations personnelles */}
                 <div className="space-y-4">
                   <h3 className="text-sm font-medium text-foreground">{t('profile.personalInfo')}</h3>
@@ -700,6 +862,77 @@ export default function DashboardPage() {
                             {t('projects.details.additionalInfo')}
                           </h3>
                           <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.additional_info}</p>
+                        </div>
+                      )}
+
+                      {/* Attached Files */}
+                      {(selectedProject.specifications_file ||
+                        (selectedProject.design_files && selectedProject.design_files.length > 0) ||
+                        (selectedProject.brand_assets && selectedProject.brand_assets.length > 0) ||
+                        (selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0) ||
+                        (selectedProject.other_documents && selectedProject.other_documents.length > 0)) && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
+                            <Paperclip className="w-4 h-4 text-[#6cb1bb]" />
+                            {t('projects.details.attachedFiles')}
+                          </h3>
+                          <div className="space-y-4">
+                            {/* Specifications file */}
+                            {selectedProject.specifications_file && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.specificationsFile')}</p>
+                                <ProjectFileItem file={selectedProject.specifications_file} />
+                              </div>
+                            )}
+
+                            {/* Design files */}
+                            {selectedProject.design_files && selectedProject.design_files.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.designFiles')}</p>
+                                <div className="space-y-2">
+                                  {selectedProject.design_files.map((file, index) => (
+                                    <ProjectFileItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Brand assets */}
+                            {selectedProject.brand_assets && selectedProject.brand_assets.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.brandAssets')}</p>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                  {selectedProject.brand_assets.map((file, index) => (
+                                    <ProjectImageItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Inspiration images */}
+                            {selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.inspirationImages')}</p>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                  {selectedProject.inspiration_images.map((file, index) => (
+                                    <ProjectImageItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Other documents */}
+                            {selectedProject.other_documents && selectedProject.other_documents.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.otherDocuments')}</p>
+                                <div className="space-y-2">
+                                  {selectedProject.other_documents.map((file, index) => (
+                                    <ProjectFileItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
