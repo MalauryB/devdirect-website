@@ -1,12 +1,7 @@
 "use client"
 
 import { supabase } from './supabase'
-import { Quote, QuoteFormData, QuoteLineItem } from './types'
-
-// Calculate total amount from line items
-function calculateAmount(lineItems: QuoteLineItem[]): number {
-  return lineItems.reduce((sum, item) => sum + item.total, 0)
-}
+import { Quote, QuoteFormData } from './types'
 
 // Get next version number for a project
 async function getNextVersion(projectId: string): Promise<number> {
@@ -23,7 +18,6 @@ async function getNextVersion(projectId: string): Promise<number> {
 
 export async function createQuote(projectId: string, data: QuoteFormData): Promise<{ quote: Quote | null; error: Error | null }> {
   const version = await getNextVersion(projectId)
-  const amount = calculateAmount(data.line_items)
 
   const { data: quote, error } = await supabase
     .from('quotes')
@@ -37,11 +31,12 @@ export async function createQuote(projectId: string, data: QuoteFormData): Promi
       comment: data.comment,
       profiles: data.profiles,
       // Step 2
-      phases: data.phases,
+      abaques: data.abaques,
       // Step 3
-      line_items: data.line_items,
-      amount,
+      transverse_levels: data.transverse_levels,
       // Step 4
+      costing_categories: data.costing_categories,
+      // Step 5: Récapitulatif
       notes: data.notes,
       payment_terms: data.payment_terms,
       validity_days: data.validity_days,
@@ -85,15 +80,15 @@ export async function updateQuote(id: string, data: Partial<QuoteFormData>): Pro
   if (data.status !== undefined) updateData.status = data.status
 
   // Step 2 fields
-  if (data.phases !== undefined) updateData.phases = data.phases
+  if (data.abaques !== undefined) updateData.abaques = data.abaques
 
   // Step 3 fields
-  if (data.line_items !== undefined) {
-    updateData.line_items = data.line_items
-    updateData.amount = calculateAmount(data.line_items)
-  }
+  if (data.transverse_levels !== undefined) updateData.transverse_levels = data.transverse_levels
 
   // Step 4 fields
+  if (data.costing_categories !== undefined) updateData.costing_categories = data.costing_categories
+
+  // Step 5: Récapitulatif fields
   if (data.notes !== undefined) updateData.notes = data.notes
   if (data.payment_terms !== undefined) updateData.payment_terms = data.payment_terms
   if (data.validity_days !== undefined) updateData.validity_days = data.validity_days

@@ -1710,19 +1710,21 @@ export default function DashboardPage() {
                                   </div>
                                 </div>
 
-                                {/* Line items preview */}
-                                {quote.line_items && quote.line_items.length > 0 && (
+                                {/* Categories preview */}
+                                {quote.costing_categories && quote.costing_categories.length > 0 && (
                                   <div className="mt-3 pt-3 border-t border-gray-100">
                                     <div className="space-y-1">
-                                      {quote.line_items.slice(0, 3).map((item, idx) => (
-                                        <div key={idx} className="flex justify-between text-sm text-foreground/60">
-                                          <span className="truncate flex-1">{item.description}</span>
-                                          <span className="ml-4">{item.total.toFixed(2)} €</span>
+                                      {quote.costing_categories.slice(0, 3).map((category, idx) => (
+                                        <div key={idx} className="text-sm text-foreground/60">
+                                          <span className="truncate">{category.name || t("quotes.form.category")}</span>
+                                          <span className="text-xs text-foreground/40 ml-2">
+                                            ({category.activities.length} {t("quotes.form.costingActivity").toLowerCase()})
+                                          </span>
                                         </div>
                                       ))}
-                                      {quote.line_items.length > 3 && (
+                                      {quote.costing_categories.length > 3 && (
                                         <p className="text-xs text-foreground/40">
-                                          +{quote.line_items.length - 3} {t('quotes.form.addLine').toLowerCase()}...
+                                          +{quote.costing_categories.length - 3} {t("quotes.form.category").toLowerCase()}...
                                         </p>
                                       )}
                                     </div>

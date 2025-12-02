@@ -1,3 +1,6 @@
+-- Drop existing table if exists (development only)
+DROP TABLE IF EXISTS quotes CASCADE;
+
 -- Create quotes table
 CREATE TABLE quotes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -16,15 +19,19 @@ CREATE TABLE quotes (
   -- Structure: [{ name: string, daily_rate: number }]
   profiles JSONB DEFAULT '[]',
 
-  -- Étape 2: Phases du projet (stockées en JSONB)
-  -- Structure: [{ name: string, description: string, duration_days: number, profiles: string[] }]
-  phases JSONB DEFAULT '[]',
+  -- Étape 2: Abaques (grilles de chiffrage par composant)
+  -- Structure: [{ component_name: string, profile_name: string, days_ts: number, days_s: number, days_m: number, days_c: number, days_tc: number }]
+  abaques JSONB DEFAULT '[]',
 
-  -- Étape 3: Lignes du devis (stockées en JSONB)
-  -- Structure: [{ description: string, phase_id: number, profile_name: string, days: number, daily_rate: number, total: number }]
-  line_items JSONB DEFAULT '[]',
+  -- Étape 3: Activités transverses (par niveaux)
+  -- Structure: [{ level: number, activities: [{ name: string, profile_name: string, type: 'fixed'|'rate', value: number }] }]
+  transverse_levels JSONB DEFAULT '[]',
 
-  -- Étape 4: Récapitulatif et conditions
+  -- Étape 4: Éléments de chiffrage (catégories > activités > composants)
+  -- Structure: [{ name: string, activities: [{ name: string, active: boolean, components: [{ coefficient: number, component_name: string, complexity: string, comment: string }] }] }]
+  costing_categories JSONB DEFAULT '[]',
+
+  -- Récapitulatif et conditions
   notes TEXT DEFAULT '',
   payment_terms TEXT DEFAULT '',
   validity_days INTEGER DEFAULT 30,

@@ -8,22 +8,56 @@ export interface QuoteProfile {
   daily_rate: number
 }
 
-// Phase du projet
-export interface QuotePhase {
-  name: string
-  description: string
-  duration_days: number
-  profiles: string[] // noms des profils assignés
+// Abaque (grille de chiffrage par composant)
+export interface QuoteAbaque {
+  component_name: string
+  profile_name: string // profil sélectionné parmi ceux définis en étape 1
+  // Jours par niveau de complexité
+  days_ts: number // Très Simple
+  days_s: number  // Simple
+  days_m: number  // Moyen
+  days_c: number  // Complexe
+  days_tc: number // Très Complexe
 }
 
-// Ligne du devis
-export interface QuoteLineItem {
-  description: string
-  phase_id: number
+// Activité transverse (dans un niveau)
+export type TransverseActivityType = 'fixed' | 'rate'
+
+export interface TransverseActivity {
+  name: string
   profile_name: string
-  days: number
-  daily_rate: number
-  total: number
+  type: TransverseActivityType // 'fixed' = valeur fixe en jours, 'rate' = pourcentage du total
+  value: number // jours si fixed, pourcentage si rate
+}
+
+// Niveau d'activités transverses
+export interface TransverseLevel {
+  level: number // 0, 1, 2, 3...
+  activities: TransverseActivity[]
+}
+
+// Étape 4: Éléments de chiffrage
+export type ComplexityLevel = 'ts' | 's' | 'm' | 'c' | 'tc'
+
+// Composant dans une activité de chiffrage
+export interface CostingComponent {
+  coefficient: number
+  component_name: string // référence à un abaque
+  complexity: ComplexityLevel
+  comment: string
+}
+
+// Activité de chiffrage (dans une catégorie)
+export interface CostingActivity {
+  name: string
+  active: boolean
+  components: CostingComponent[]
+}
+
+// Catégorie d'éléments de chiffrage
+export interface CostingCategory {
+  name: string
+  activities: CostingActivity[]
 }
 
 export interface Quote {
@@ -38,13 +72,16 @@ export interface Quote {
   comment: string
   profiles: QuoteProfile[]
 
-  // Étape 2: Phases
-  phases: QuotePhase[]
+  // Étape 2: Abaques (grilles de chiffrage)
+  abaques: QuoteAbaque[]
 
-  // Étape 3: Lignes du devis
-  line_items: QuoteLineItem[]
+  // Étape 3: Activités transverses (par niveaux)
+  transverse_levels: TransverseLevel[]
 
-  // Étape 4: Récapitulatif
+  // Étape 4: Éléments de chiffrage
+  costing_categories: CostingCategory[]
+
+  // Récapitulatif
   notes: string
   payment_terms: string
   validity_days: number
@@ -69,14 +106,18 @@ export interface QuoteFormDataStep1 {
 }
 
 export interface QuoteFormDataStep2 {
-  phases: QuotePhase[]
+  abaques: QuoteAbaque[]
 }
 
 export interface QuoteFormDataStep3 {
-  line_items: QuoteLineItem[]
+  transverse_levels: TransverseLevel[]
 }
 
 export interface QuoteFormDataStep4 {
+  costing_categories: CostingCategory[]
+}
+
+export interface QuoteFormDataStep5 {
   notes: string
   payment_terms: string
   validity_days: number
@@ -91,10 +132,12 @@ export interface QuoteFormData {
   comment: string
   profiles: QuoteProfile[]
   // Step 2
-  phases: QuotePhase[]
+  abaques: QuoteAbaque[]
   // Step 3
-  line_items: QuoteLineItem[]
-  // Step 4
+  transverse_levels: TransverseLevel[]
+  // Step 4: Éléments de chiffrage
+  costing_categories: CostingCategory[]
+  // Step 5: Récapitulatif
   notes: string
   payment_terms: string
   validity_days: number
