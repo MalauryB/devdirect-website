@@ -70,3 +70,22 @@ CREATE POLICY "Users can delete their own projects" ON projects
 -- ALTER TABLE projects ADD COLUMN IF NOT EXISTS brand_assets JSONB;
 -- ALTER TABLE projects ADD COLUMN IF NOT EXISTS inspiration_images JSONB;
 -- ALTER TABLE projects ADD COLUMN IF NOT EXISTS other_documents JSONB;
+
+-- Migration: Politiques RLS pour les ingénieurs
+-- Les ingénieurs peuvent voir tous les projets
+-- DROP POLICY IF EXISTS "Users can view their own projects" ON projects;
+-- CREATE POLICY "Users and engineers can view projects" ON projects
+--   FOR SELECT USING (
+--     auth.uid() = user_id
+--     OR
+--     (auth.jwt() -> 'user_metadata' ->> 'role') = 'engineer'
+--   );
+
+-- Les ingénieurs peuvent modifier tous les projets
+-- DROP POLICY IF EXISTS "Users can update their own projects" ON projects;
+-- CREATE POLICY "Users and engineers can update projects" ON projects
+--   FOR UPDATE USING (
+--     auth.uid() = user_id
+--     OR
+--     (auth.jwt() -> 'user_metadata' ->> 'role') = 'engineer'
+--   );

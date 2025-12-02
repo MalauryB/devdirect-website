@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -14,11 +14,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useAuth, UserMetadata, ClientType } from "@/contexts/auth-context"
+import { useAuth, UserMetadata, ClientType, UserRole } from "@/contexts/auth-context"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { ProjectForm } from "@/components/project-form"
-import { getUserProjects, updateProject, deleteProject } from "@/lib/projects"
+import { getUserProjects, updateProject, deleteProject, getAllProjects } from "@/lib/projects"
 import { Project, ProjectStatus, ProjectFile } from "@/lib/types"
 import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
 
@@ -29,7 +29,7 @@ export default function DashboardPage() {
   const searchParams = useSearchParams()
   const [mounted, setMounted] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [activeSection, setActiveSection] = useState("about")
+  const [activeSection, setActiveSection] = useState("")
 
   // Profile form state
   const [firstName, setFirstName] = useState("")
@@ -58,16 +58,31 @@ export default function DashboardPage() {
   const [deletingProject, setDeletingProject] = useState<Project | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
 
+  // Engineer-specific state
+  const [allProjects, setAllProjects] = useState<Project[]>([])
+  const [statusFilter, setStatusFilter] = useState<string>('all')
+
+  // Get user role
+  const userRole: UserRole = user?.user_metadata?.role || 'client'
+  const isEngineer = userRole === 'engineer'
+
   useEffect(() => {
     setMounted(true)
   }, [])
 
   useEffect(() => {
     const section = searchParams.get("section")
-    if (section && ["profile", "projects", "messages", "about"].includes(section)) {
+    const validSections = isEngineer
+      ? ["overview", "allProjects", "clients", "profile"]
+      : ["about", "projects", "profile", "messages"]
+
+    if (section && validSections.includes(section)) {
       setActiveSection(section)
+    } else if (!activeSection) {
+      // Set default section based on role
+      setActiveSection(isEngineer ? "overview" : "about")
     }
-  }, [searchParams])
+  }, [searchParams, isEngineer, activeSection])
 
   useEffect(() => {
     if (user?.user_metadata) {
@@ -100,11 +115,25 @@ export default function DashboardPage() {
     setProjectsLoading(false)
   }, [user])
 
+  const loadAllProjects = useCallback(async () => {
+    if (!user) return
+    setProjectsLoading(true)
+    const { projects: fetchedProjects } = await getAllProjects(statusFilter)
+    setAllProjects(fetchedProjects)
+    setProjectsLoading(false)
+  }, [user, statusFilter])
+
   useEffect(() => {
     if (user && activeSection === "projects") {
       loadProjects()
     }
   }, [user, activeSection, loadProjects])
+
+  useEffect(() => {
+    if (user && (activeSection === "allProjects" || activeSection === "overview")) {
+      loadAllProjects()
+    }
+  }, [user, activeSection, loadAllProjects])
 
   if (!mounted || loading) {
     return (
@@ -122,7 +151,8 @@ export default function DashboardPage() {
     ? `${firstName} ${lastName}`.trim()
     : user.email?.split("@")[0]
 
-  const menuItems = [
+  // Menu items vary based on user role
+  const clientMenuItems = [
     {
       id: "about",
       icon: Info,
@@ -146,8 +176,33 @@ export default function DashboardPage() {
     }
   ]
 
+  const engineerMenuItems = [
+    {
+      id: "overview",
+      icon: BarChart3,
+      label: t('dashboard.menu.overview'),
+    },
+    {
+      id: "allProjects",
+      icon: FileText,
+      label: t('dashboard.menu.allProjects'),
+    },
+    {
+      id: "clients",
+      icon: Users,
+      label: t('dashboard.menu.clients'),
+    },
+    {
+      id: "profile",
+      icon: User,
+      label: t('dashboard.menu.profile'),
+    }
+  ]
+
+  const menuItems = isEngineer ? engineerMenuItems : clientMenuItems
+
   const handleMenuClick = (item: typeof menuItems[0]) => {
-    if (item.disabled) return
+    if ('disabled' in item && item.disabled) return
     setActiveSection(item.id)
     setSidebarOpen(false)
   }
@@ -361,28 +416,31 @@ export default function DashboardPage() {
 
           {/* Menu items */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {menuItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleMenuClick(item)}
-                disabled={item.disabled}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left ${
-                  activeSection === item.id
-                    ? "bg-gray-100 text-foreground font-medium"
-                    : item.disabled
-                    ? "opacity-50 cursor-not-allowed text-foreground/60"
-                    : "hover:bg-gray-50 text-foreground"
-                }`}
-              >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                <span className="flex-1">{item.label}</span>
-                {item.disabled && (
-                  <span className="text-xs bg-gray-100 text-foreground/60 px-1.5 py-0.5 rounded">
-                    {t('dashboard.comingSoon')}
-                  </span>
-                )}
-              </button>
-            ))}
+            {menuItems.map((item) => {
+              const isDisabled = 'disabled' in item ? Boolean(item.disabled) : false
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => handleMenuClick(item)}
+                  disabled={isDisabled}
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left ${
+                    activeSection === item.id
+                      ? "bg-gray-100 text-foreground font-medium"
+                      : isDisabled
+                      ? "opacity-50 cursor-not-allowed text-foreground/60"
+                      : "hover:bg-gray-50 text-foreground"
+                  }`}
+                >
+                  <item.icon className="w-5 h-5 flex-shrink-0" />
+                  <span className="flex-1">{item.label}</span>
+                  {isDisabled && (
+                    <span className="text-xs bg-gray-100 text-foreground/60 px-1.5 py-0.5 rounded">
+                      {t('dashboard.comingSoon')}
+                    </span>
+                  )}
+                </button>
+              )
+            })}
           </nav>
         </div>
       </aside>
@@ -1114,6 +1172,493 @@ export default function DashboardPage() {
                 </div>
               </div>
 
+            </div>
+          )}
+
+          {/* Engineer Overview Section */}
+          {activeSection === "overview" && isEngineer && (
+            <div className="w-full">
+              <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.engineer.title')}</h2>
+              <p className="text-foreground/60 mb-6">{t('dashboard.engineer.subtitle')}</p>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+                      <FileText className="w-5 h-5 text-blue-600" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{allProjects.length}</p>
+                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.totalProjects')}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
+                      <Clock className="w-5 h-5 text-yellow-600" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'pending').length}</p>
+                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.pendingProjects')}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                      <Loader2 className="w-5 h-5 text-purple-600" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'in_progress').length}</p>
+                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.inProgressProjects')}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                      <Check className="w-5 h-5 text-green-600" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'completed').length}</p>
+                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.completedProjects')}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recent Projects */}
+              <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                  <h3 className="font-semibold text-foreground">{t('dashboard.engineer.recentProjects')}</h3>
+                  <button
+                    onClick={() => setActiveSection('allProjects')}
+                    className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  >
+                    {t('dashboard.engineer.viewAll')}
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+                {projectsLoading ? (
+                  <div className="flex items-center justify-center py-12">
+                    <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                  </div>
+                ) : allProjects.length === 0 ? (
+                  <div className="text-center py-12">
+                    <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                    <p className="text-foreground/50">{t('dashboard.engineer.noProjects')}</p>
+                  </div>
+                ) : (
+                  <div className="divide-y divide-gray-100">
+                    {allProjects.slice(0, 5).map((project) => (
+                      <div
+                        key={project.id}
+                        onClick={() => {
+                          setSelectedProject(project)
+                          setActiveSection('allProjects')
+                        }}
+                        className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
+                      >
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-foreground truncate">
+                              {project.title || t('projects.untitled')}
+                            </h4>
+                            <p className="text-sm text-foreground/50 truncate">{project.description}</p>
+                          </div>
+                          <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
+                            project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                            project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
+                            project.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                            project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
+                            project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {t(`projects.status.${project.status}`)}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Engineer All Projects Section */}
+          {activeSection === "allProjects" && isEngineer && (
+            <div className="w-full">
+              {selectedProject ? (
+                // Use the same project detail view
+                <div className="w-full">
+                  <div className="flex items-center justify-between mb-6">
+                    <button
+                      onClick={() => setSelectedProject(null)}
+                      className="flex items-center gap-2 text-foreground/60 hover:text-foreground transition-colors"
+                    >
+                      <ArrowLeft className="w-4 h-4" />
+                      {t('projects.details.back')}
+                    </button>
+                  </div>
+
+                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                    {/* Header */}
+                    <div className="p-6 border-b border-gray-100">
+                      <div className="flex items-start justify-between gap-4">
+                        <div>
+                          <h2 className="text-xl font-bold text-foreground mb-2">
+                            {selectedProject.title || t('projects.untitled')}
+                          </h2>
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {selectedProject.project_types?.map((type) => (
+                              <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
+                                {t(`projects.types.${type}`)}
+                              </span>
+                            ))}
+                          </div>
+                          <p className="text-sm text-foreground/50">
+                            {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                          </p>
+                        </div>
+                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${
+                          selectedProject.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                          selectedProject.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
+                          selectedProject.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                          selectedProject.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
+                          selectedProject.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {t(`projects.status.${selectedProject.status}`)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6 space-y-8">
+                      {/* Description */}
+                      <div>
+                        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                          <FileText className="w-4 h-4 text-[#6cb1bb]" />
+                          {t('projects.details.description')}
+                        </h3>
+                        <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.description || '-'}</p>
+                      </div>
+
+                      {/* Features */}
+                      {selectedProject.features && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Layers className="w-4 h-4 text-[#ba9fdf]" />
+                            {t('projects.details.features')}
+                          </h3>
+                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.features}</p>
+                        </div>
+                      )}
+
+                      {/* Target Audience */}
+                      {selectedProject.target_audience && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Target className="w-4 h-4 text-[#ea4c89]" />
+                            {t('projects.details.targetAudience')}
+                          </h3>
+                          <p className="text-foreground/70">{selectedProject.target_audience}</p>
+                        </div>
+                      )}
+
+                      {/* Services */}
+                      {selectedProject.services && selectedProject.services.length > 0 && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Wrench className="w-4 h-4 text-[#9c984d]" />
+                            {t('projects.details.services')}
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedProject.services.map((service) => (
+                              <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                {t(`projects.services.${service}`)}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Platforms */}
+                      {selectedProject.platforms && selectedProject.platforms.length > 0 && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <Monitor className="w-4 h-4 text-[#6cb1bb]" />
+                            {t('projects.details.platforms')}
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {selectedProject.platforms.map((platform) => (
+                              <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                {platform}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Budget & Deadline */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {selectedProject.budget && (
+                          <div className="bg-gray-50 rounded-xl p-4">
+                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                              <Euro className="w-4 h-4 text-[#9c984d]" />
+                              {t('projects.details.budget')}
+                            </h3>
+                            <p className="text-foreground/70">{t(`projects.budget.${selectedProject.budget}`)}</p>
+                          </div>
+                        )}
+                        {selectedProject.deadline && (
+                          <div className="bg-gray-50 rounded-xl p-4">
+                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                              <Clock className="w-4 h-4 text-[#ea4c89]" />
+                              {t('projects.details.deadline')}
+                            </h3>
+                            <p className="text-foreground/70">{t(`projects.deadline.${selectedProject.deadline}`)}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Additional Info */}
+                      {selectedProject.additional_info && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                            <MessageCircle className="w-4 h-4 text-[#7f7074]" />
+                            {t('projects.details.additionalInfo')}
+                          </h3>
+                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.additional_info}</p>
+                        </div>
+                      )}
+
+                      {/* Attached Files */}
+                      {(selectedProject.specifications_file ||
+                        (selectedProject.design_files && selectedProject.design_files.length > 0) ||
+                        (selectedProject.brand_assets && selectedProject.brand_assets.length > 0) ||
+                        (selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0) ||
+                        (selectedProject.other_documents && selectedProject.other_documents.length > 0)) && (
+                        <div>
+                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
+                            <Paperclip className="w-4 h-4 text-[#6cb1bb]" />
+                            {t('projects.details.attachedFiles')}
+                          </h3>
+                          <div className="space-y-4">
+                            {selectedProject.specifications_file && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.specificationsFile')}</p>
+                                <ProjectFileItem file={selectedProject.specifications_file} />
+                              </div>
+                            )}
+                            {selectedProject.design_files && selectedProject.design_files.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.designFiles')}</p>
+                                <div className="space-y-2">
+                                  {selectedProject.design_files.map((file, index) => (
+                                    <ProjectFileItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {selectedProject.brand_assets && selectedProject.brand_assets.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.brandAssets')}</p>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                  {selectedProject.brand_assets.map((file, index) => (
+                                    <ProjectImageItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.inspirationImages')}</p>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                  {selectedProject.inspiration_images.map((file, index) => (
+                                    <ProjectImageItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            {selectedProject.other_documents && selectedProject.other_documents.length > 0 && (
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.otherDocuments')}</p>
+                                <div className="space-y-2">
+                                  {selectedProject.other_documents.map((file, index) => (
+                                    <ProjectFileItem key={file.path || index} file={file} />
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h2 className="text-xl font-bold text-foreground">{t('dashboard.allProjects.title')}</h2>
+                      <p className="text-foreground/60 text-sm">{t('dashboard.allProjects.subtitle')}</p>
+                    </div>
+
+                    {/* Status Filter */}
+                    <div className="flex items-center gap-2">
+                      <Filter className="w-4 h-4 text-foreground/50" />
+                      <select
+                        value={statusFilter}
+                        onChange={(e) => setStatusFilter(e.target.value)}
+                        className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+                      >
+                        <option value="all">{t('dashboard.allProjects.allStatuses')}</option>
+                        <option value="pending">{t('projects.status.pending')}</option>
+                        <option value="in_review">{t('projects.status.in_review')}</option>
+                        <option value="accepted">{t('projects.status.accepted')}</option>
+                        <option value="in_progress">{t('projects.status.in_progress')}</option>
+                        <option value="completed">{t('projects.status.completed')}</option>
+                        <option value="cancelled">{t('projects.status.cancelled')}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {projectsLoading ? (
+                    <div className="flex items-center justify-center py-12">
+                      <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                    </div>
+                  ) : allProjects.length === 0 ? (
+                    <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                      <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                      <p className="text-foreground/70 font-medium">{t('dashboard.engineer.noProjects')}</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {allProjects.map((project) => (
+                        <div
+                          key={project.id}
+                          onClick={() => setSelectedProject(project)}
+                          className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                        >
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-foreground mb-1">
+                                {project.title || t('projects.untitled')}
+                              </h3>
+                              <div className="flex flex-wrap gap-2 mb-2">
+                                {project.project_types?.map((type) => (
+                                  <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                                    {t(`projects.types.${type}`)}
+                                  </span>
+                                ))}
+                              </div>
+                              <p className="text-sm text-foreground/60 line-clamp-2">{project.description}</p>
+                              <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-foreground/50">
+                                {project.budget && (
+                                  <span className="flex items-center gap-1">
+                                    <Euro className="w-4 h-4" />
+                                    {t(`projects.budget.${project.budget}`)}
+                                  </span>
+                                )}
+                                {project.deadline && (
+                                  <span className="flex items-center gap-1">
+                                    <Calendar className="w-4 h-4" />
+                                    {t(`projects.deadline.${project.deadline}`)}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                            <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
+                              project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
+                              project.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                              project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
+                              project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {t(`projects.status.${project.status}`)}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Engineer Clients Section */}
+          {activeSection === "clients" && isEngineer && (
+            <div className="w-full">
+              <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.clients.title')}</h2>
+              <p className="text-foreground/60 mb-6">{t('dashboard.clients.subtitle')}</p>
+
+              {(() => {
+                // Calculate unique clients from allProjects
+                const clientMap = new Map<string, { user_id: string; project_count: number; projects: Project[] }>()
+                allProjects.forEach(project => {
+                  const existing = clientMap.get(project.user_id)
+                  if (existing) {
+                    existing.project_count++
+                    existing.projects.push(project)
+                  } else {
+                    clientMap.set(project.user_id, {
+                      user_id: project.user_id,
+                      project_count: 1,
+                      projects: [project]
+                    })
+                  }
+                })
+                const clients = Array.from(clientMap.values())
+
+                if (clients.length === 0) {
+                  return (
+                    <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                      <Users className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                      <p className="text-foreground/70 font-medium">{t('dashboard.clients.noClients')}</p>
+                    </div>
+                  )
+                }
+
+                return (
+                  <div className="space-y-4">
+                    {clients.map((client) => (
+                      <div
+                        key={client.user_id}
+                        className="bg-white border border-gray-200 rounded-xl p-5"
+                      >
+                        <div className="flex items-center justify-between gap-4">
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                              <User className="w-6 h-6 text-gray-400" />
+                            </div>
+                            <div>
+                              <p className="font-medium text-foreground">{client.user_id.substring(0, 8)}...</p>
+                              <p className="text-sm text-foreground/50">
+                                {client.project_count} {t('dashboard.clients.projectCount')}
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setStatusFilter('all')
+                              setActiveSection('allProjects')
+                            }}
+                          >
+                            {t('dashboard.clients.viewProjects')}
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )
+              })()}
             </div>
           )}
         </main>

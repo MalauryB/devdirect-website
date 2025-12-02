@@ -242,6 +242,10 @@ export const translations = {
         profileDesc: "Gérer vos informations personnelles",
         projects: "Mes projets",
         projectsDesc: "Suivez l'avancement de vos projets",
+        allProjects: "Tous les projets",
+        allProjectsDesc: "Gérez tous les projets clients",
+        clients: "Clients",
+        clientsDesc: "Consultez la liste des clients",
         messages: "Messages",
         messagesDesc: "Consultez vos échanges avec l'équipe",
         notifications: "Notifications",
@@ -293,6 +297,33 @@ export const translations = {
           }
         },
         cta: "Créer un projet"
+      },
+      engineer: {
+        title: "Tableau de bord",
+        subtitle: "Gérez les projets et les clients",
+        stats: {
+          totalProjects: "Projets totaux",
+          pendingProjects: "En attente",
+          inProgressProjects: "En cours",
+          completedProjects: "Terminés"
+        },
+        recentProjects: "Projets récents",
+        viewAll: "Voir tout",
+        noProjects: "Aucun projet pour le moment"
+      },
+      clients: {
+        title: "Clients",
+        subtitle: "Liste de tous les clients",
+        noClients: "Aucun client pour le moment",
+        projectCount: "projet(s)",
+        viewProjects: "Voir les projets"
+      },
+      allProjects: {
+        title: "Tous les projets",
+        subtitle: "Gérez tous les projets clients",
+        filterByStatus: "Filtrer par statut",
+        allStatuses: "Tous les statuts",
+        clientLabel: "Client"
       }
     },
     projects: {
@@ -672,6 +703,10 @@ export const translations = {
         profileDesc: "Manage your personal information",
         projects: "My projects",
         projectsDesc: "Track the progress of your projects",
+        allProjects: "All projects",
+        allProjectsDesc: "Manage all client projects",
+        clients: "Clients",
+        clientsDesc: "View the list of clients",
         messages: "Messages",
         messagesDesc: "View your conversations with the team",
         notifications: "Notifications",
@@ -723,6 +758,33 @@ export const translations = {
           }
         },
         cta: "Create a project"
+      },
+      engineer: {
+        title: "Dashboard",
+        subtitle: "Manage projects and clients",
+        stats: {
+          totalProjects: "Total projects",
+          pendingProjects: "Pending",
+          inProgressProjects: "In progress",
+          completedProjects: "Completed"
+        },
+        recentProjects: "Recent projects",
+        viewAll: "View all",
+        noProjects: "No projects yet"
+      },
+      clients: {
+        title: "Clients",
+        subtitle: "List of all clients",
+        noClients: "No clients yet",
+        projectCount: "project(s)",
+        viewProjects: "View projects"
+      },
+      allProjects: {
+        title: "All projects",
+        subtitle: "Manage all client projects",
+        filterByStatus: "Filter by status",
+        allStatuses: "All statuses",
+        clientLabel: "Client"
       }
     },
     projects: {
