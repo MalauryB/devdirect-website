@@ -42,7 +42,7 @@ CREATE TABLE projects (
   other_documents JSONB,
 
   -- Statut et timestamps
-  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_review', 'accepted', 'in_progress', 'completed', 'cancelled')),
+  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'in_review', 'active', 'won', 'lost', 'cancelled', 'closed')),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -96,3 +96,4 @@ CREATE POLICY "Users can delete their own projects" ON projects
 --     OR
 --     (auth.jwt() -> 'user_metadata' ->> 'role') = 'engineer'
 --   );
+

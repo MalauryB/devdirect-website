@@ -303,9 +303,9 @@ export const translations = {
         subtitle: "Gérez les projets et les clients",
         stats: {
           totalProjects: "Projets totaux",
-          pendingProjects: "En attente",
-          inProgressProjects: "En cours",
-          completedProjects: "Terminés"
+          activeProjects: "Actifs",
+          wonProjects: "Remportés",
+          closedProjects: "Clos"
         },
         recentProjects: "Projets récents",
         viewAll: "Voir tout",
@@ -445,10 +445,11 @@ export const translations = {
       status: {
         pending: "En attente",
         in_review: "En cours d'étude",
-        accepted: "Accepté",
-        in_progress: "En cours",
-        completed: "Terminé",
-        cancelled: "Annulé"
+        active: "Actif",
+        won: "Remporté",
+        lost: "Perdu",
+        cancelled: "Annulé",
+        closed: "Clos"
       },
       details: {
         back: "Retour aux projets",
@@ -771,9 +772,9 @@ export const translations = {
         subtitle: "Manage projects and clients",
         stats: {
           totalProjects: "Total projects",
-          pendingProjects: "Pending",
-          inProgressProjects: "In progress",
-          completedProjects: "Completed"
+          activeProjects: "Active",
+          wonProjects: "Won",
+          closedProjects: "Closed"
         },
         recentProjects: "Recent projects",
         viewAll: "View all",
@@ -913,10 +914,11 @@ export const translations = {
       status: {
         pending: "Pending",
         in_review: "Under review",
-        accepted: "Accepted",
-        in_progress: "In progress",
-        completed: "Completed",
-        cancelled: "Cancelled"
+        active: "Active",
+        won: "Won",
+        lost: "Lost",
+        cancelled: "Cancelled",
+        closed: "Closed"
       },
       details: {
         back: "Back to projects",

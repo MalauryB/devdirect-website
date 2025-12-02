@@ -1,4 +1,4 @@
-export type ProjectStatus = 'pending' | 'in_review' | 'accepted' | 'in_progress' | 'completed' | 'cancelled'
+export type ProjectStatus = 'pending' | 'in_review' | 'active' | 'won' | 'lost' | 'cancelled' | 'closed'
 
 export interface ProjectFile {
   name: string

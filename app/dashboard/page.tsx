@@ -152,6 +152,20 @@ export default function DashboardPage() {
     ? `${firstName} ${lastName}`.trim()
     : user.email?.split("@")[0]
 
+  // Status badge styling helper
+  const getStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-100 text-yellow-800'
+      case 'in_review': return 'bg-blue-100 text-blue-800'
+      case 'active': return 'bg-purple-100 text-purple-800'
+      case 'won': return 'bg-green-100 text-green-800'
+      case 'lost': return 'bg-red-100 text-red-800'
+      case 'cancelled': return 'bg-orange-100 text-orange-800'
+      case 'closed': return 'bg-gray-100 text-gray-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
   // Menu items vary based on user role
   const clientMenuItems = [
     {
@@ -792,14 +806,7 @@ export default function DashboardPage() {
                             {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </p>
                         </div>
-                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${
-                          selectedProject.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          selectedProject.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-                          selectedProject.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                          selectedProject.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
-                          selectedProject.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
+                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
                           {t(`projects.status.${selectedProject.status}`)}
                         </span>
                       </div>
@@ -1078,14 +1085,7 @@ export default function DashboardPage() {
                                 )}
                               </div>
                             </div>
-                            <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
-                              project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-                              project.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                              project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
-                              project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
+                            <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
                               {t(`projects.status.${project.status}`)}
                             </span>
                           </div>
@@ -1197,23 +1197,12 @@ export default function DashboardPage() {
                 </div>
                 <div className="bg-white border border-gray-200 rounded-xl p-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center">
-                      <Clock className="w-5 h-5 text-yellow-600" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'pending').length}</p>
-                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.pendingProjects')}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white border border-gray-200 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
                       <Loader2 className="w-5 h-5 text-purple-600" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'in_progress').length}</p>
-                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.inProgressProjects')}</p>
+                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'active').length}</p>
+                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.activeProjects')}</p>
                     </div>
                   </div>
                 </div>
@@ -1223,8 +1212,19 @@ export default function DashboardPage() {
                       <Check className="w-5 h-5 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'completed').length}</p>
-                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.completedProjects')}</p>
+                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'won').length}</p>
+                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.wonProjects')}</p>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-white border border-gray-200 rounded-xl p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+                      <X className="w-5 h-5 text-gray-600" />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'closed').length}</p>
+                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.closedProjects')}</p>
                     </div>
                   </div>
                 </div>
@@ -1269,14 +1269,7 @@ export default function DashboardPage() {
                             </h4>
                             <p className="text-sm text-foreground/50 truncate">{project.description}</p>
                           </div>
-                          <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
-                            project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                            project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-                            project.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                            project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
-                            project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                          <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
                             {t(`projects.status.${project.status}`)}
                           </span>
                         </div>
@@ -1323,14 +1316,7 @@ export default function DashboardPage() {
                             {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </p>
                         </div>
-                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${
-                          selectedProject.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                          selectedProject.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-                          selectedProject.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                          selectedProject.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
-                          selectedProject.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
+                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
                           {t(`projects.status.${selectedProject.status}`)}
                         </span>
                       </div>
@@ -1519,10 +1505,11 @@ export default function DashboardPage() {
                         <option value="all">{t('dashboard.allProjects.allStatuses')}</option>
                         <option value="pending">{t('projects.status.pending')}</option>
                         <option value="in_review">{t('projects.status.in_review')}</option>
-                        <option value="accepted">{t('projects.status.accepted')}</option>
-                        <option value="in_progress">{t('projects.status.in_progress')}</option>
-                        <option value="completed">{t('projects.status.completed')}</option>
+                        <option value="active">{t('projects.status.active')}</option>
+                        <option value="won">{t('projects.status.won')}</option>
+                        <option value="lost">{t('projects.status.lost')}</option>
                         <option value="cancelled">{t('projects.status.cancelled')}</option>
+                        <option value="closed">{t('projects.status.closed')}</option>
                       </select>
                     </div>
                   </div>
@@ -1572,14 +1559,7 @@ export default function DashboardPage() {
                                 )}
                               </div>
                             </div>
-                            <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
-                              project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-                              project.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                              project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
-                              project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
+                            <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
                               {t(`projects.status.${project.status}`)}
                             </span>
                           </div>
@@ -1730,14 +1710,7 @@ export default function DashboardPage() {
                                 </div>
                                 <p className="text-sm text-foreground/60 line-clamp-2">{project.description}</p>
                               </div>
-                              <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
-                                project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                                project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
-                                project.status === 'accepted' ? 'bg-green-100 text-green-800' :
-                                project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
-                                project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
-                                'bg-red-100 text-red-800'
-                              }`}>
+                              <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
                                 {t(`projects.status.${project.status}`)}
                               </span>
                             </div>
