@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, Mail, Phone, Building2 } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, Mail, Phone, Building2, Receipt, Send } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -19,7 +19,9 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { ProjectForm } from "@/components/project-form"
 import { getUserProjects, updateProject, deleteProject, getAllProjects } from "@/lib/projects"
-import { Project, ProjectStatus, ProjectFile } from "@/lib/types"
+import { Project, ProjectStatus, ProjectFile, Quote } from "@/lib/types"
+import { getQuotesByProject, deleteQuote, sendQuote } from "@/lib/quotes"
+import { QuoteForm } from "@/components/quote-form"
 import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
 
 export default function DashboardPage() {
@@ -62,6 +64,16 @@ export default function DashboardPage() {
   const [allProjects, setAllProjects] = useState<Project[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
+
+  // Quotes state (for engineers)
+  const [quotes, setQuotes] = useState<Quote[]>([])
+  const [quotesLoading, setQuotesLoading] = useState(false)
+  const [showQuoteForm, setShowQuoteForm] = useState(false)
+  const [editingQuote, setEditingQuote] = useState<Quote | null>(null)
+  const [deletingQuote, setDeletingQuote] = useState<Quote | null>(null)
+  const [deleteQuoteLoading, setDeleteQuoteLoading] = useState(false)
+  const [sendingQuote, setSendingQuote] = useState<Quote | null>(null)
+  const [sendQuoteLoading, setSendQuoteLoading] = useState(false)
 
   // Get user role
   const userRole: UserRole = user?.user_metadata?.role || 'client'
@@ -124,6 +136,13 @@ export default function DashboardPage() {
     setProjectsLoading(false)
   }, [user, statusFilter])
 
+  const loadQuotes = useCallback(async (projectId: string) => {
+    setQuotesLoading(true)
+    const { quotes: fetchedQuotes } = await getQuotesByProject(projectId)
+    setQuotes(fetchedQuotes)
+    setQuotesLoading(false)
+  }, [])
+
   useEffect(() => {
     if (user && activeSection === "projects") {
       loadProjects()
@@ -135,6 +154,17 @@ export default function DashboardPage() {
       loadAllProjects()
     }
   }, [user, activeSection, loadAllProjects])
+
+  // Load quotes when a project is selected in allProjects section (engineer view)
+  useEffect(() => {
+    if (selectedProject && isEngineer && activeSection === "allProjects") {
+      loadQuotes(selectedProject.id)
+    } else {
+      setQuotes([])
+      setShowQuoteForm(false)
+      setEditingQuote(null)
+    }
+  }, [selectedProject, isEngineer, activeSection, loadQuotes])
 
   if (!mounted || loading) {
     return (
@@ -276,6 +306,39 @@ export default function DashboardPage() {
     setEditingProject(selectedProject)
     setSelectedProject(null)
     setShowProjectForm(true)
+  }
+
+  const handleDeleteQuote = async () => {
+    if (!deletingQuote || !selectedProject) return
+    setDeleteQuoteLoading(true)
+    const { error } = await deleteQuote(deletingQuote.id)
+    if (!error) {
+      setDeletingQuote(null)
+      loadQuotes(selectedProject.id)
+    }
+    setDeleteQuoteLoading(false)
+  }
+
+  const handleSendQuote = async () => {
+    if (!sendingQuote || !selectedProject) return
+    setSendQuoteLoading(true)
+    const { error } = await sendQuote(sendingQuote.id)
+    if (!error) {
+      setSendingQuote(null)
+      loadQuotes(selectedProject.id)
+    }
+    setSendQuoteLoading(false)
+  }
+
+  const getQuoteStatusBadgeClass = (status: string) => {
+    switch (status) {
+      case 'draft': return 'bg-gray-100 text-gray-800'
+      case 'sent': return 'bg-blue-100 text-blue-800'
+      case 'accepted': return 'bg-green-100 text-green-800'
+      case 'rejected': return 'bg-red-100 text-red-800'
+      case 'expired': return 'bg-orange-100 text-orange-800'
+      default: return 'bg-gray-100 text-gray-800'
+    }
   }
 
   // Component to display a file item with download capability
@@ -1485,6 +1548,148 @@ export default function DashboardPage() {
                       )}
                     </div>
                   </div>
+
+                  {/* Quotes Section - Only for engineers */}
+                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mt-6">
+                    <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                      <h3 className="flex items-center gap-2 font-semibold text-foreground">
+                        <Receipt className="w-5 h-5 text-[#9c984d]" />
+                        {t('quotes.title')}
+                      </h3>
+                      {!showQuoteForm && (
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            setEditingQuote(null)
+                            setShowQuoteForm(true)
+                          }}
+                          className="bg-gray-900 hover:bg-gray-800 text-white"
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          {t('quotes.newQuote')}
+                        </Button>
+                      )}
+                    </div>
+
+                    {showQuoteForm && (
+                      <div className="p-4 border-b border-gray-100 bg-gray-50">
+                        <QuoteForm
+                          projectId={selectedProject.id}
+                          quote={editingQuote}
+                          onSuccess={() => {
+                            setShowQuoteForm(false)
+                            setEditingQuote(null)
+                            loadQuotes(selectedProject.id)
+                          }}
+                          onCancel={() => {
+                            setShowQuoteForm(false)
+                            setEditingQuote(null)
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {quotesLoading ? (
+                      <div className="flex items-center justify-center py-12">
+                        <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                      </div>
+                    ) : quotes.length === 0 ? (
+                      <div className="text-center py-12">
+                        <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                        <p className="text-foreground/50">{t('quotes.noQuotes')}</p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-gray-100">
+                        {quotes.map((quote) => (
+                          <div key={quote.id} className="p-4 hover:bg-gray-50 transition-colors">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-3 mb-2">
+                                  <span className="font-semibold text-foreground">
+                                    {t('quotes.version')} {quote.version}
+                                  </span>
+                                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getQuoteStatusBadgeClass(quote.status)}`}>
+                                    {t(`quotes.status.${quote.status}`)}
+                                  </span>
+                                </div>
+                                <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/60">
+                                  <span className="flex items-center gap-1">
+                                    <Euro className="w-4 h-4" />
+                                    {quote.amount.toFixed(2)} €
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <Calendar className="w-4 h-4" />
+                                    {t('quotes.createdAt')}: {new Date(quote.created_at).toLocaleDateString('fr-FR')}
+                                  </span>
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="w-4 h-4" />
+                                    {quote.validity_days} {t('quotes.days')}
+                                  </span>
+                                </div>
+                                {quote.sent_at && (
+                                  <p className="text-xs text-foreground/50 mt-1">
+                                    {t('quotes.sentAt')}: {new Date(quote.sent_at).toLocaleDateString('fr-FR')}
+                                  </p>
+                                )}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {quote.status === 'draft' && (
+                                  <>
+                                    <Button
+                                      size="sm"
+                                      variant="outline"
+                                      onClick={() => setSendingQuote(quote)}
+                                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
+                                    >
+                                      <Send className="w-4 h-4 mr-1" />
+                                      {t('quotes.actions.send')}
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => {
+                                        setEditingQuote(quote)
+                                        setShowQuoteForm(true)
+                                      }}
+                                    >
+                                      <Pencil className="w-4 h-4" />
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => setDeletingQuote(quote)}
+                                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                    >
+                                      <Trash2 className="w-4 h-4" />
+                                    </Button>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* Line items preview */}
+                            {quote.line_items && quote.line_items.length > 0 && (
+                              <div className="mt-3 pt-3 border-t border-gray-100">
+                                <div className="space-y-1">
+                                  {quote.line_items.slice(0, 3).map((item, idx) => (
+                                    <div key={idx} className="flex justify-between text-sm text-foreground/60">
+                                      <span className="truncate flex-1">{item.description}</span>
+                                      <span className="ml-4">{item.total.toFixed(2)} €</span>
+                                    </div>
+                                  ))}
+                                  {quote.line_items.length > 3 && (
+                                    <p className="text-xs text-foreground/40">
+                                      +{quote.line_items.length - 3} {t('quotes.form.addLine').toLowerCase()}...
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <>
@@ -1797,6 +2002,70 @@ export default function DashboardPage() {
               >
                 {deleteLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 {t('projects.actions.delete')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete quote confirmation modal */}
+      {deletingQuote && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
+              {t('quotes.actions.confirmDelete')}
+            </h3>
+            <p className="text-foreground/60 mb-6">
+              {t('quotes.actions.confirmDeleteDesc')}
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setDeletingQuote(null)}
+                disabled={deleteQuoteLoading}
+              >
+                {t('quotes.form.cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteQuote}
+                disabled={deleteQuoteLoading}
+                className="bg-red-600 hover:bg-red-700"
+              >
+                {deleteQuoteLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {t('quotes.actions.delete')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Send quote confirmation modal */}
+      {sendingQuote && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
+              {t('quotes.actions.confirmSend')}
+            </h3>
+            <p className="text-foreground/60 mb-6">
+              {t('quotes.actions.confirmSendDesc')}
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                onClick={() => setSendingQuote(null)}
+                disabled={sendQuoteLoading}
+              >
+                {t('quotes.form.cancel')}
+              </Button>
+              <Button
+                onClick={handleSendQuote}
+                disabled={sendQuoteLoading}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {sendQuoteLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                <Send className="w-4 h-4 mr-2" />
+                {t('quotes.actions.send')}
               </Button>
             </div>
           </div>

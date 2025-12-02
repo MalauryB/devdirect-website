@@ -466,6 +466,59 @@ export const translations = {
         additionalInfo: "Informations supplémentaires",
         attachedFiles: "Fichiers joints"
       }
+    },
+    quotes: {
+      title: "Devis",
+      newQuote: "Nouveau devis",
+      noQuotes: "Aucun devis pour ce projet",
+      version: "Version",
+      amount: "Montant",
+      validityDays: "Validité",
+      days: "jours",
+      createdAt: "Créé le",
+      sentAt: "Envoyé le",
+      acceptedAt: "Accepté le",
+      status: {
+        draft: "Brouillon",
+        sent: "Envoyé",
+        accepted: "Accepté",
+        rejected: "Refusé",
+        expired: "Expiré"
+      },
+      actions: {
+        view: "Voir",
+        edit: "Modifier",
+        delete: "Supprimer",
+        send: "Envoyer au client",
+        duplicate: "Dupliquer",
+        confirmDelete: "Supprimer ce devis ?",
+        confirmDeleteDesc: "Cette action est irréversible.",
+        confirmSend: "Envoyer ce devis ?",
+        confirmSendDesc: "Le client sera notifié et pourra consulter ce devis."
+      },
+      form: {
+        lineItems: "Lignes du devis",
+        lineItemsDesc: "Ajoutez les prestations et leur tarification",
+        description: "Description",
+        descriptionPlaceholder: "Ex: Développement page d'accueil...",
+        quantity: "Quantité",
+        unitPrice: "Prix unitaire",
+        lineTotal: "Total",
+        addLine: "Ajouter une ligne",
+        total: "Total HT",
+        validityDays: "Validité (jours)",
+        notes: "Notes et conditions",
+        notesPlaceholder: "Conditions de paiement, remarques...",
+        create: "Créer le devis",
+        update: "Enregistrer",
+        cancel: "Annuler",
+        success: "Devis enregistré avec succès"
+      },
+      errors: {
+        itemRequired: "Ajoutez au moins une ligne au devis",
+        createFailed: "Erreur lors de la création du devis",
+        updateFailed: "Erreur lors de la modification du devis"
+      }
     }
   },
   en: {
@@ -934,6 +987,59 @@ export const translations = {
         needsDesign: "Design needs",
         additionalInfo: "Additional information",
         attachedFiles: "Attached files"
+      }
+    },
+    quotes: {
+      title: "Quotes",
+      newQuote: "New quote",
+      noQuotes: "No quotes for this project",
+      version: "Version",
+      amount: "Amount",
+      validityDays: "Validity",
+      days: "days",
+      createdAt: "Created on",
+      sentAt: "Sent on",
+      acceptedAt: "Accepted on",
+      status: {
+        draft: "Draft",
+        sent: "Sent",
+        accepted: "Accepted",
+        rejected: "Rejected",
+        expired: "Expired"
+      },
+      actions: {
+        view: "View",
+        edit: "Edit",
+        delete: "Delete",
+        send: "Send to client",
+        duplicate: "Duplicate",
+        confirmDelete: "Delete this quote?",
+        confirmDeleteDesc: "This action cannot be undone.",
+        confirmSend: "Send this quote?",
+        confirmSendDesc: "The client will be notified and will be able to view this quote."
+      },
+      form: {
+        lineItems: "Quote lines",
+        lineItemsDesc: "Add services and their pricing",
+        description: "Description",
+        descriptionPlaceholder: "E.g.: Homepage development...",
+        quantity: "Quantity",
+        unitPrice: "Unit price",
+        lineTotal: "Total",
+        addLine: "Add a line",
+        total: "Total (excl. tax)",
+        validityDays: "Validity (days)",
+        notes: "Notes and conditions",
+        notesPlaceholder: "Payment terms, remarks...",
+        create: "Create quote",
+        update: "Save",
+        cancel: "Cancel",
+        success: "Quote saved successfully"
+      },
+      errors: {
+        itemRequired: "Add at least one line to the quote",
+        createFailed: "Error creating the quote",
+        updateFailed: "Error updating the quote"
       }
     }
   }

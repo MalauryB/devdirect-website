@@ -1,5 +1,35 @@
 export type ProjectStatus = 'pending' | 'in_review' | 'active' | 'won' | 'lost' | 'cancelled' | 'closed'
 
+export type QuoteStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired'
+
+export interface QuoteLineItem {
+  description: string
+  quantity: number
+  unit_price: number
+  total: number
+}
+
+export interface Quote {
+  id: string
+  project_id: string
+  version: number
+  amount: number
+  line_items: QuoteLineItem[]
+  notes: string
+  validity_days: number
+  status: QuoteStatus
+  created_at: string
+  updated_at: string
+  sent_at: string | null
+  accepted_at: string | null
+}
+
+export interface QuoteFormData {
+  line_items: QuoteLineItem[]
+  notes: string
+  validity_days: number
+}
+
 export interface ProjectFile {
   name: string
   url: string
