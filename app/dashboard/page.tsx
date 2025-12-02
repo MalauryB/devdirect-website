@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, Mail, Phone, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -61,6 +61,7 @@ export default function DashboardPage() {
   // Engineer-specific state
   const [allProjects, setAllProjects] = useState<Project[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
 
   // Get user role
   const userRole: UserRole = user?.user_metadata?.role || 'client'
@@ -130,7 +131,7 @@ export default function DashboardPage() {
   }, [user, activeSection, loadProjects])
 
   useEffect(() => {
-    if (user && (activeSection === "allProjects" || activeSection === "overview")) {
+    if (user && (activeSection === "allProjects" || activeSection === "overview" || activeSection === "clients")) {
       loadAllProjects()
     }
   }, [user, activeSection, loadAllProjects])
@@ -1594,20 +1595,33 @@ export default function DashboardPage() {
           {/* Engineer Clients Section */}
           {activeSection === "clients" && isEngineer && (
             <div className="w-full">
-              <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.clients.title')}</h2>
-              <p className="text-foreground/60 mb-6">{t('dashboard.clients.subtitle')}</p>
-
               {(() => {
-                // Calculate unique clients from allProjects
-                const clientMap = new Map<string, { user_id: string; project_count: number; projects: Project[] }>()
+                // Calculate unique clients from allProjects with their profile info
+                const clientMap = new Map<string, {
+                  user_id: string
+                  email: string
+                  first_name: string
+                  last_name: string
+                  company_name: string
+                  phone: string
+                  project_count: number
+                  projects: Project[]
+                }>()
+
                 allProjects.forEach(project => {
                   const existing = clientMap.get(project.user_id)
                   if (existing) {
                     existing.project_count++
                     existing.projects.push(project)
                   } else {
+                    const profile = project.profiles
                     clientMap.set(project.user_id, {
                       user_id: project.user_id,
+                      email: profile?.email || '',
+                      first_name: profile?.first_name || '',
+                      last_name: profile?.last_name || '',
+                      company_name: profile?.company_name || '',
+                      phone: profile?.phone || '',
                       project_count: 1,
                       projects: [project]
                     })
@@ -1615,48 +1629,168 @@ export default function DashboardPage() {
                 })
                 const clients = Array.from(clientMap.values())
 
-                if (clients.length === 0) {
+                // Get client display name
+                const getClientDisplayName = (client: typeof clients[0]) => {
+                  if (client.company_name) return client.company_name
+                  if (client.first_name || client.last_name) {
+                    return `${client.first_name} ${client.last_name}`.trim()
+                  }
+                  if (client.email) return client.email.split('@')[0]
+                  return t('dashboard.clients.unknownClient')
+                }
+
+                // If a client is selected, show their detail view
+                if (selectedClientId) {
+                  const selectedClient = clients.find(c => c.user_id === selectedClientId)
+                  if (!selectedClient) {
+                    setSelectedClientId(null)
+                    return null
+                  }
+
                   return (
-                    <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
-                      <Users className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
-                      <p className="text-foreground/70 font-medium">{t('dashboard.clients.noClients')}</p>
+                    <div className="w-full">
+                      <button
+                        onClick={() => setSelectedClientId(null)}
+                        className="flex items-center gap-2 text-foreground/60 hover:text-foreground transition-colors mb-6"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        {t('dashboard.clients.backToList')}
+                      </button>
+
+                      {/* Client Info Card */}
+                      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                        <div className="flex items-start gap-4">
+                          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
+                            <User className="w-8 h-8 text-gray-400" />
+                          </div>
+                          <div className="flex-1">
+                            <h2 className="text-xl font-bold text-foreground mb-1">
+                              {getClientDisplayName(selectedClient)}
+                            </h2>
+                            {selectedClient.company_name && (selectedClient.first_name || selectedClient.last_name) && (
+                              <p className="text-foreground/60 mb-3">
+                                {`${selectedClient.first_name} ${selectedClient.last_name}`.trim()}
+                              </p>
+                            )}
+
+                            <div className="mt-4 space-y-2">
+                              <h3 className="text-sm font-semibold text-foreground mb-2">{t('dashboard.clients.contactInfo')}</h3>
+                              {selectedClient.email && (
+                                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                                  <Mail className="w-4 h-4 text-foreground/50" />
+                                  <a href={`mailto:${selectedClient.email}`} className="hover:text-foreground">
+                                    {selectedClient.email}
+                                  </a>
+                                </div>
+                              )}
+                              {selectedClient.phone && (
+                                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                                  <Phone className="w-4 h-4 text-foreground/50" />
+                                  <a href={`tel:${selectedClient.phone}`} className="hover:text-foreground">
+                                    {selectedClient.phone}
+                                  </a>
+                                </div>
+                              )}
+                              {selectedClient.company_name && (
+                                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                                  <Building2 className="w-4 h-4 text-foreground/50" />
+                                  {selectedClient.company_name}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Client Projects */}
+                      <h3 className="text-lg font-semibold text-foreground mb-4">
+                        {t('dashboard.clients.clientProjects')} ({selectedClient.project_count})
+                      </h3>
+                      <div className="space-y-4">
+                        {selectedClient.projects.map((project) => (
+                          <div
+                            key={project.id}
+                            onClick={() => {
+                              setSelectedProject(project)
+                              setActiveSection('allProjects')
+                            }}
+                            className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                          >
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-semibold text-foreground mb-1">
+                                  {project.title || t('projects.untitled')}
+                                </h4>
+                                <div className="flex flex-wrap gap-2 mb-2">
+                                  {project.project_types?.map((type) => (
+                                    <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                                      {t(`projects.types.${type}`)}
+                                    </span>
+                                  ))}
+                                </div>
+                                <p className="text-sm text-foreground/60 line-clamp-2">{project.description}</p>
+                              </div>
+                              <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${
+                                project.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                                project.status === 'in_review' ? 'bg-blue-100 text-blue-800' :
+                                project.status === 'accepted' ? 'bg-green-100 text-green-800' :
+                                project.status === 'in_progress' ? 'bg-purple-100 text-purple-800' :
+                                project.status === 'completed' ? 'bg-gray-100 text-gray-800' :
+                                'bg-red-100 text-red-800'
+                              }`}>
+                                {t(`projects.status.${project.status}`)}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   )
                 }
 
+                // Show client list
                 return (
-                  <div className="space-y-4">
-                    {clients.map((client) => (
-                      <div
-                        key={client.user_id}
-                        className="bg-white border border-gray-200 rounded-xl p-5"
-                      >
-                        <div className="flex items-center justify-between gap-4">
-                          <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
-                              <User className="w-6 h-6 text-gray-400" />
-                            </div>
-                            <div>
-                              <p className="font-medium text-foreground">{client.user_id.substring(0, 8)}...</p>
-                              <p className="text-sm text-foreground/50">
-                                {client.project_count} {t('dashboard.clients.projectCount')}
-                              </p>
+                  <>
+                    <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.clients.title')}</h2>
+                    <p className="text-foreground/60 mb-6">{t('dashboard.clients.subtitle')}</p>
+
+                    {clients.length === 0 ? (
+                      <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                        <Users className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                        <p className="text-foreground/70 font-medium">{t('dashboard.clients.noClients')}</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {clients.map((client) => (
+                          <div
+                            key={client.user_id}
+                            onClick={() => setSelectedClientId(client.user_id)}
+                            className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                          >
+                            <div className="flex items-center justify-between gap-4">
+                              <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                                  <User className="w-6 h-6 text-gray-400" />
+                                </div>
+                                <div>
+                                  <p className="font-medium text-foreground">{getClientDisplayName(client)}</p>
+                                  {client.company_name && (client.first_name || client.last_name) && (
+                                    <p className="text-sm text-foreground/50">
+                                      {`${client.first_name} ${client.last_name}`.trim()}
+                                    </p>
+                                  )}
+                                  <p className="text-sm text-foreground/50">
+                                    {client.project_count} {t('dashboard.clients.projectCount')}
+                                  </p>
+                                </div>
+                              </div>
+                              <ChevronRight className="w-5 h-5 text-foreground/30" />
                             </div>
                           </div>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => {
-                              setStatusFilter('all')
-                              setActiveSection('allProjects')
-                            }}
-                          >
-                            {t('dashboard.clients.viewProjects')}
-                          </Button>
-                        </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
+                    )}
+                  </>
                 )
               })()}
             </div>

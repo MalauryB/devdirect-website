@@ -71,6 +71,13 @@ CREATE POLICY "Users can delete their own projects" ON projects
 -- ALTER TABLE projects ADD COLUMN IF NOT EXISTS inspiration_images JSONB;
 -- ALTER TABLE projects ADD COLUMN IF NOT EXISTS other_documents JSONB;
 
+-- Migration: ajouter les informations client dénormalisées
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS client_email TEXT DEFAULT '';
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS client_first_name TEXT DEFAULT '';
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS client_last_name TEXT DEFAULT '';
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS client_company_name TEXT DEFAULT '';
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS client_phone TEXT DEFAULT '';
+
 -- Migration: Politiques RLS pour les ingénieurs
 -- Les ingénieurs peuvent voir tous les projets
 -- DROP POLICY IF EXISTS "Users can view their own projects" ON projects;

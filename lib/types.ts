@@ -8,9 +8,27 @@ export interface ProjectFile {
   type: string
 }
 
+export interface Profile {
+  id: string
+  email: string
+  first_name: string
+  last_name: string
+  company_name: string
+  phone: string
+  client_type: string
+  siret: string
+  avatar_url: string
+  role: string
+  created_at: string
+  updated_at: string
+}
+
 export interface Project {
   id: string
   user_id: string
+
+  // Profile relation (joined from profiles table)
+  profiles?: Profile
 
   // Titre du projet
   title: string

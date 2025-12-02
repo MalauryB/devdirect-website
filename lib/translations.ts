@@ -316,7 +316,14 @@ export const translations = {
         subtitle: "Liste de tous les clients",
         noClients: "Aucun client pour le moment",
         projectCount: "projet(s)",
-        viewProjects: "Voir les projets"
+        viewProjects: "Voir les projets",
+        backToList: "Retour à la liste",
+        contactInfo: "Informations de contact",
+        email: "Email",
+        phone: "Téléphone",
+        company: "Entreprise",
+        clientProjects: "Projets du client",
+        unknownClient: "Client inconnu"
       },
       allProjects: {
         title: "Tous les projets",
@@ -777,7 +784,14 @@ export const translations = {
         subtitle: "List of all clients",
         noClients: "No clients yet",
         projectCount: "project(s)",
-        viewProjects: "View projects"
+        viewProjects: "View projects",
+        backToList: "Back to list",
+        contactInfo: "Contact information",
+        email: "Email",
+        phone: "Phone",
+        company: "Company",
+        clientProjects: "Client projects",
+        unknownClient: "Unknown client"
       },
       allProjects: {
         title: "All projects",
