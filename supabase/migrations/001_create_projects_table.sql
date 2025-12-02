@@ -62,3 +62,11 @@ CREATE POLICY "Users can update their own projects" ON projects
 
 CREATE POLICY "Users can delete their own projects" ON projects
   FOR DELETE USING (auth.uid() = user_id);
+
+-- Migration: ajouter les colonnes manquantes sur une table existante
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS title TEXT NOT NULL DEFAULT '';
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS specifications_file JSONB;
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS design_files JSONB;
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS brand_assets JSONB;
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS inspiration_images JSONB;
+-- ALTER TABLE projects ADD COLUMN IF NOT EXISTS other_documents JSONB;
