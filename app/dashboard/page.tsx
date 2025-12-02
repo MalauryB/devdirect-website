@@ -1411,31 +1411,33 @@ export default function DashboardPage() {
 
                   {/* Main content area */}
                   <div className="flex-1 p-4 lg:p-6 overflow-auto">
-                    {/* Project Header - always visible */}
-                    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
-                      <div className="p-6">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <h2 className="text-xl font-bold text-foreground mb-2">
-                              {selectedProject.title || t('projects.untitled')}
-                            </h2>
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              {selectedProject.project_types?.map((type) => (
-                                <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
-                                  {t(`projects.types.${type}`)}
-                                </span>
-                              ))}
+                    {/* Project Header - visible only in details section */}
+                    {projectSubSection === 'details' && (
+                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+                        <div className="p-6">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <h2 className="text-xl font-bold text-foreground mb-2">
+                                {selectedProject.title || t('projects.untitled')}
+                              </h2>
+                              <div className="flex flex-wrap gap-2 mb-3">
+                                {selectedProject.project_types?.map((type) => (
+                                  <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
+                                    {t(`projects.types.${type}`)}
+                                  </span>
+                                ))}
+                              </div>
+                              <p className="text-sm text-foreground/50">
+                                {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                              </p>
                             </div>
-                            <p className="text-sm text-foreground/50">
-                              {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                            </p>
+                            <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
+                              {t(`projects.status.${selectedProject.status}`)}
+                            </span>
                           </div>
-                          <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
-                            {t(`projects.status.${selectedProject.status}`)}
-                          </span>
                         </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Details Sub-Section */}
                     {projectSubSection === 'details' && (
@@ -1691,15 +1693,6 @@ export default function DashboardPage() {
                                   <div className="flex items-center gap-2">
                                     {quote.status === 'draft' && (
                                       <>
-                                        <Button
-                                          size="sm"
-                                          variant="outline"
-                                          onClick={() => setSendingQuote(quote)}
-                                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
-                                        >
-                                          <Send className="w-4 h-4 mr-1" />
-                                          {t('quotes.actions.send')}
-                                        </Button>
                                         <Button
                                           size="sm"
                                           variant="ghost"

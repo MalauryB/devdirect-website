@@ -27,8 +27,8 @@
   --secondary-foreground: 64 16% 20%;
   --muted: 43 17% 80%; /* Light beige #d3cfc2 */
   --muted-foreground: 340 7% 47%; /* Gray-violet for muted text #7f7074 */
-  --accent: 57 35% 46%; /* Olive yellow accent #9c984d */
-  --accent-foreground: 48 50% 97%;
+  --accent: 332 75% 95%; /* Light pink accent for hover states */
+  --accent-foreground: 332 75% 45%;
   --action: 332 75% 61%; /* Pink action color #ea4c89 */
   --action-foreground: 48 50% 97%;
   --destructive: 340 7% 47%; /* #7f7074 */
@@ -72,8 +72,8 @@
   --secondary-foreground: 64 16% 20%;
   --muted: 340 7% 47%;
   --muted-foreground: 0 1% 61%;
-  --accent: 57 35% 46%;
-  --accent-foreground: 64 16% 20%;
+  --accent: 332 75% 30%; /* Dark pink accent for hover states */
+  --accent-foreground: 332 75% 90%;
   --action: 332 75% 61%; /* Pink action color #ea4c89 */
   --action-foreground: 48 50% 97%;
   --destructive: 340 7% 47%;

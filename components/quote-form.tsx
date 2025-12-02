@@ -388,12 +388,9 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap ${
               step === currentStep
                 ? "text-gray-900 border-b-2 border-gray-900 -mb-px"
-                : step < currentStep
-                ? "text-green-600 hover:text-green-700"
                 : "text-gray-400 hover:text-gray-600"
             }`}
           >
-            {step < currentStep && <Check className="w-4 h-4" />}
             <span>{t(`quotes.form.${key}`)}</span>
           </button>
         ))}
@@ -419,7 +416,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                 step === currentStep
                   ? "bg-gray-900"
                   : step < currentStep
-                  ? "bg-green-500"
+                  ? "bg-gray-400"
                   : "bg-gray-200"
               }`}
             />
@@ -445,7 +442,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder={t("quotes.form.namePlaceholder")}
           disabled={loading}
-          className="border-gray-200 focus:border-gray-400"
+          className="bg-white border-gray-200 focus:border-gray-400"
         />
       </div>
 
@@ -458,7 +455,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             value={formData.start_date}
             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
             disabled={loading}
-            className="border-gray-200 focus:border-gray-400"
+            className="bg-white border-gray-200 focus:border-gray-400"
           />
         </div>
         <div className="space-y-2">
@@ -468,7 +465,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             value={formData.end_date}
             onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
             disabled={loading}
-            className="border-gray-200 focus:border-gray-400"
+            className="bg-white border-gray-200 focus:border-gray-400"
           />
         </div>
       </div>
@@ -480,7 +477,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value as QuoteStatus })}
           disabled={loading}
-          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+          className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
         >
           <option value="draft">{t("quotes.status.draft")}</option>
           <option value="sent">{t("quotes.status.sent")}</option>
@@ -499,7 +496,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
           placeholder={t("quotes.form.commentPlaceholder")}
           rows={3}
           disabled={loading}
-          className="border-gray-200 focus:border-gray-400 resize-none"
+          className="bg-white border-gray-200 focus:border-gray-400 resize-none"
         />
       </div>
 
@@ -520,7 +517,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                   onChange={(e) => updateProfile(index, "name", e.target.value)}
                   placeholder={t("quotes.form.profileNamePlaceholder")}
                   disabled={loading}
-                  className="border-gray-200 focus:border-gray-400"
+                  className="bg-white border-gray-200 focus:border-gray-400"
                 />
               </div>
               <div className="w-32">
@@ -531,7 +528,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                   value={profile.daily_rate}
                   onChange={(e) => updateProfile(index, "daily_rate", e.target.value)}
                   disabled={loading}
-                  className="border-gray-200 focus:border-gray-400"
+                  className="bg-white border-gray-200 focus:border-gray-400"
                 />
               </div>
               {formData.profiles.length > 1 && (
@@ -554,7 +551,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             variant="outline"
             onClick={addProfile}
             disabled={loading}
-            className="w-full border-dashed border-gray-300 hover:border-gray-400"
+            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addProfile")}
@@ -604,7 +601,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                   onChange={(e) => updateAbaque(index, "component_name", e.target.value)}
                   placeholder={t("quotes.form.componentNamePlaceholder")}
                   disabled={loading}
-                  className="border-gray-200 focus:border-gray-400"
+                  className="bg-white border-gray-200 focus:border-gray-400"
                 />
               </div>
 
@@ -615,7 +612,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                   value={abaque.profile_name}
                   onChange={(e) => updateAbaque(index, "profile_name", e.target.value)}
                   disabled={loading}
-                  className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                  className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
                 >
                   <option value="">{t("quotes.form.selectProfile")}</option>
                   {validProfiles.map((profile, pIndex) => (
@@ -640,7 +637,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                       value={abaque[field]}
                       onChange={(e) => updateAbaque(index, field, e.target.value)}
                       disabled={loading}
-                      className="border-gray-200 focus:border-gray-400 text-center px-1"
+                      className="bg-white border-gray-200 focus:border-gray-400 text-center px-1"
                     />
                   </div>
                 ))}
@@ -668,7 +665,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             variant="outline"
             onClick={addAbaque}
             disabled={loading}
-            className="w-full border-dashed border-gray-300 hover:border-gray-400"
+            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addAbaque")}
@@ -745,7 +742,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "name", e.target.value)}
                             placeholder={t("quotes.form.activityNamePlaceholder")}
                             disabled={loading}
-                            className="border-gray-200 focus:border-gray-400"
+                            className="bg-white border-gray-200 focus:border-gray-400"
                           />
                         </div>
 
@@ -756,7 +753,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                             value={activity.profile_name}
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "profile_name", e.target.value)}
                             disabled={loading}
-                            className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                            className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
                           >
                             <option value="">{t("quotes.form.selectProfile")}</option>
                             {validProfiles.map((profile, pIndex) => (
@@ -774,7 +771,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                             value={activity.type}
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "type", e.target.value)}
                             disabled={loading}
-                            className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                            className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
                           >
                             <option value="fixed">{t("quotes.form.typeFixed")}</option>
                             <option value="rate">{t("quotes.form.typeRate")}</option>
@@ -791,7 +788,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                             value={activity.value}
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "value", e.target.value)}
                             disabled={loading}
-                            className="border-gray-200 focus:border-gray-400 text-center"
+                            className="bg-white border-gray-200 focus:border-gray-400 text-center"
                           />
                           <span className="text-xs text-foreground/50 whitespace-nowrap">
                             {activity.type === "rate" ? t("quotes.form.valuePercent") : t("quotes.form.valueDays")}
@@ -823,7 +820,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                   size="sm"
                   onClick={() => addActivity(levelIndex)}
                   disabled={loading}
-                  className="w-full border-dashed border-gray-300 hover:border-gray-400"
+                  className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {t("quotes.form.addActivity")}
@@ -838,7 +835,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             variant="outline"
             onClick={addLevel}
             disabled={loading}
-            className="w-full border-dashed border-gray-300 hover:border-gray-400"
+            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addLevel")}
@@ -942,7 +939,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                               value={component.coefficient}
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "coefficient", e.target.value)}
                               disabled={loading}
-                              className="border-gray-200 focus:border-gray-400 text-center text-sm"
+                              className="bg-white border-gray-200 focus:border-gray-400 text-center text-sm"
                             />
                           </div>
 
@@ -953,7 +950,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                               value={component.component_name}
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "component_name", e.target.value)}
                               disabled={loading}
-                              className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                              className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
                             >
                               <option value="">{t("quotes.form.selectComponent")}</option>
                               {formData.abaques.map((abaque, aIndex) => (
@@ -971,7 +968,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                               value={component.complexity}
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "complexity", e.target.value)}
                               disabled={loading}
-                              className="w-full border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                              className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
                             >
                               <option value="ts">{t("quotes.form.complexity_ts_short")} - {t("quotes.form.complexity_ts_full")}</option>
                               <option value="s">{t("quotes.form.complexity_s_short")} - {t("quotes.form.complexity_s_full")}</option>
@@ -989,7 +986,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "comment", e.target.value)}
                               placeholder={t("quotes.form.componentCommentPlaceholder")}
                               disabled={loading}
-                              className="border-gray-200 focus:border-gray-400 text-sm"
+                              className="bg-white border-gray-200 focus:border-gray-400 text-sm"
                             />
                           </div>
 
@@ -1016,7 +1013,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                         size="sm"
                         onClick={() => addCostingComponent(categoryIndex, activityIndex)}
                         disabled={loading}
-                        className="w-full border-dashed border-gray-200 hover:border-gray-300 text-xs"
+                        className="w-full bg-white border-dashed border-gray-200 hover:border-gray-300 hover:bg-pink-50 text-xs"
                       >
                         <Plus className="w-3 h-3 mr-1" />
                         {t("quotes.form.addComponent")}
@@ -1032,7 +1029,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
                   size="sm"
                   onClick={() => addCostingActivity(categoryIndex)}
                   disabled={loading}
-                  className="w-full border-dashed border-gray-300 hover:border-gray-400"
+                  className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {t("quotes.form.addCostingActivity")}
@@ -1047,7 +1044,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             variant="outline"
             onClick={addCategory}
             disabled={loading}
-            className="w-full border-dashed border-gray-300 hover:border-gray-400"
+            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addCategory")}
@@ -1074,7 +1071,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
           value={formData.validity_days}
           onChange={(e) => setFormData({ ...formData, validity_days: Number(e.target.value) || 30 })}
           disabled={loading}
-          className="w-32 border-gray-200 focus:border-gray-400"
+          className="w-32 bg-white border-gray-200 focus:border-gray-400"
         />
       </div>
 
@@ -1086,7 +1083,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
           onChange={(e) => setFormData({ ...formData, payment_terms: e.target.value })}
           placeholder={t("quotes.form.paymentTermsPlaceholder")}
           disabled={loading}
-          className="border-gray-200 focus:border-gray-400"
+          className="bg-white border-gray-200 focus:border-gray-400"
         />
       </div>
 
@@ -1099,7 +1096,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
           placeholder={t("quotes.form.notesPlaceholder")}
           rows={4}
           disabled={loading}
-          className="border-gray-200 focus:border-gray-400 resize-none"
+          className="bg-white border-gray-200 focus:border-gray-400 resize-none"
         />
       </div>
     </div>
@@ -1135,7 +1132,7 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
       )}
 
       {success && (
-        <p className="text-sm text-green-600 bg-green-50 p-3 rounded-lg flex items-center gap-2">
+        <p className="text-sm text-pink-600 bg-pink-50 p-3 rounded-lg flex items-center gap-2">
           <Check className="w-4 h-4" />
           {t("quotes.form.success")}
         </p>
