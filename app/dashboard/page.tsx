@@ -31,6 +31,7 @@ export default function DashboardPage() {
   const searchParams = useSearchParams()
   const [mounted, setMounted] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarExpanded, setSidebarExpanded] = useState(false)
   const [activeSection, setActiveSection] = useState("")
 
   // Profile form state
@@ -474,19 +475,25 @@ export default function DashboardPage() {
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Collapsible drawer */}
       <aside
-        className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-200 ease-in-out ${
-          sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
-        }`}
+        onMouseEnter={() => setSidebarExpanded(true)}
+        onMouseLeave={() => setSidebarExpanded(false)}
+        className={`fixed lg:fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-200 ease-in-out ${
+          sidebarOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0"
+        } ${sidebarExpanded ? "lg:w-64" : "lg:w-16"}`}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar header */}
-          <div className="p-4 border-b border-gray-200">
+          <div className={`p-4 border-b border-gray-200 ${!sidebarExpanded && !sidebarOpen ? "lg:px-3" : ""}`}>
             <div className="flex items-center justify-between">
-              <Link href="/" className="text-xl font-bold logo-cubic text-black">
+              <Link href="/" className={`text-xl font-bold logo-cubic text-black transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : ""}`}>
                 {t('name')}
               </Link>
+              {/* Logo icon when collapsed */}
+              <div className={`hidden ${!sidebarExpanded && !sidebarOpen ? "lg:flex" : "lg:hidden"} items-center justify-center w-10 h-10`}>
+                <span className="text-xl font-bold logo-cubic text-black">M</span>
+              </div>
               <button
                 className="lg:hidden p-2 hover:bg-gray-50 rounded-lg"
                 onClick={() => setSidebarOpen(false)}
@@ -497,7 +504,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Menu items */}
-          <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+          <nav className={`flex-1 p-4 space-y-1 overflow-y-auto ${!sidebarExpanded && !sidebarOpen ? "lg:p-2" : ""}`}>
             {menuItems.map((item) => {
               const isDisabled = 'disabled' in item ? Boolean(item.disabled) : false
               return (
@@ -505,7 +512,10 @@ export default function DashboardPage() {
                   key={item.id}
                   onClick={() => handleMenuClick(item)}
                   disabled={isDisabled}
+                  title={!sidebarExpanded && !sidebarOpen ? item.label : undefined}
                   className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-left ${
+                    !sidebarExpanded && !sidebarOpen ? "lg:justify-center lg:px-0" : ""
+                  } ${
                     activeSection === item.id
                       ? "bg-gray-100 text-foreground font-medium"
                       : isDisabled
@@ -514,8 +524,8 @@ export default function DashboardPage() {
                   }`}
                 >
                   <item.icon className="w-5 h-5 flex-shrink-0" />
-                  <span className="flex-1">{item.label}</span>
-                  {isDisabled && (
+                  <span className={`flex-1 transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:hidden" : ""}`}>{item.label}</span>
+                  {isDisabled && (sidebarExpanded || sidebarOpen) && (
                     <span className="text-xs bg-gray-100 text-foreground/60 px-1.5 py-0.5 rounded">
                       {t('dashboard.comingSoon')}
                     </span>
@@ -526,6 +536,9 @@ export default function DashboardPage() {
           </nav>
         </div>
       </aside>
+
+      {/* Spacer for fixed sidebar on desktop */}
+      <div className={`hidden lg:block flex-shrink-0 transition-all duration-200 ${sidebarExpanded ? "w-64" : "w-16"}`} />
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen">

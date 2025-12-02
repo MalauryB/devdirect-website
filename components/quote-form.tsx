@@ -361,36 +361,71 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
     setLoading(false)
   }
 
+  // Step names for navigation
+  const stepNames = [
+    { step: 1, key: "step1Title" },
+    { step: 2, key: "step2Title" },
+    { step: 3, key: "step3Title" },
+    { step: 4, key: "step4Title" },
+    { step: 5, key: "step5Title" }
+  ]
+
+  const goToStep = (step: number) => {
+    // Allow navigation to any step (no validation required for navigation)
+    setCurrentStep(step)
+  }
+
   // Step indicator
   const renderStepIndicator = () => (
-    <div className="flex items-center justify-between mb-6">
-      <div className="flex items-center gap-2">
-        {[1, 2, 3, 4, 5].map((step) => (
-          <div key={step} className="flex items-center">
-            <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                step === currentStep
-                  ? "bg-gray-900 text-white"
-                  : step < currentStep
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              {step < currentStep ? <Check className="w-4 h-4" /> : step}
-            </div>
-            {step < 5 && (
-              <div
-                className={`w-8 h-0.5 ${
-                  step < currentStep ? "bg-green-500" : "bg-gray-200"
-                }`}
-              />
-            )}
-          </div>
+    <div className="mb-6">
+      {/* Desktop: horizontal tabs */}
+      <div className="hidden md:flex items-center border-b border-gray-200">
+        {stepNames.map(({ step, key }, index) => (
+          <button
+            key={step}
+            type="button"
+            onClick={() => goToStep(step)}
+            className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap ${
+              step === currentStep
+                ? "text-gray-900 border-b-2 border-gray-900 -mb-px"
+                : step < currentStep
+                ? "text-green-600 hover:text-green-700"
+                : "text-gray-400 hover:text-gray-600"
+            }`}
+          >
+            {step < currentStep && <Check className="w-4 h-4" />}
+            <span>{t(`quotes.form.${key}`)}</span>
+          </button>
         ))}
       </div>
-      <span className="text-sm text-foreground/50">
-        {t("quotes.form.steps").replace("{current}", String(currentStep)).replace("{total}", String(TOTAL_STEPS))}
-      </span>
+
+      {/* Mobile: compact dropdown-style or scrollable */}
+      <div className="md:hidden">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm font-medium text-foreground">
+            {t(`quotes.form.${stepNames[currentStep - 1].key}`)}
+          </span>
+          <span className="text-sm text-foreground/50">
+            {currentStep} / {TOTAL_STEPS}
+          </span>
+        </div>
+        <div className="flex gap-1">
+          {stepNames.map(({ step }) => (
+            <button
+              key={step}
+              type="button"
+              onClick={() => goToStep(step)}
+              className={`flex-1 h-1.5 rounded-full transition-colors ${
+                step === currentStep
+                  ? "bg-gray-900"
+                  : step < currentStep
+                  ? "bg-green-500"
+                  : "bg-gray-200"
+              }`}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   )
 
