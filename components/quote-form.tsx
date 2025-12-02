@@ -7,8 +7,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/contexts/language-context"
 import { createQuote, updateQuote } from "@/lib/quotes"
-import { QuoteFormData, Quote, QuoteLineItem } from "@/lib/types"
-import { Loader2, Check, Plus, Trash2 } from "lucide-react"
+import { QuoteFormData, Quote, QuoteProfile, QuoteStatus } from "@/lib/types"
+import { Loader2, Check, Plus, Trash2, ChevronRight, ChevronLeft } from "lucide-react"
 
 interface QuoteFormProps {
   projectId: string
@@ -17,92 +17,118 @@ interface QuoteFormProps {
   onCancel?: () => void
 }
 
+const TOTAL_STEPS = 4
+
 export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormProps) {
   const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
+  const [currentStep, setCurrentStep] = useState(1)
   const isEditing = !!quote
 
   const [formData, setFormData] = useState<QuoteFormData>({
-    line_items: quote?.line_items || [{ description: "", quantity: 1, unit_price: 0, total: 0 }],
+    // Step 1
+    name: quote?.name || "",
+    start_date: quote?.start_date || "",
+    end_date: quote?.end_date || "",
+    status: quote?.status || "draft",
+    comment: quote?.comment || "",
+    profiles: quote?.profiles || [{ name: "", daily_rate: 0 }],
+    // Step 2
+    phases: quote?.phases || [],
+    // Step 3
+    line_items: quote?.line_items || [],
+    // Step 4
     notes: quote?.notes || "",
+    payment_terms: quote?.payment_terms || "",
     validity_days: quote?.validity_days || 30
   })
 
-  const calculateLineTotal = (quantity: number, unitPrice: number): number => {
-    return quantity * unitPrice
+  // Profile management
+  const addProfile = () => {
+    setFormData(prev => ({
+      ...prev,
+      profiles: [...prev.profiles, { name: "", daily_rate: 0 }]
+    }))
   }
 
-  const calculateTotal = (items: QuoteLineItem[]): number => {
-    return items.reduce((sum, item) => sum + item.total, 0)
-  }
-
-  const updateLineItem = (index: number, field: keyof QuoteLineItem, value: string | number) => {
+  const updateProfile = (index: number, field: keyof QuoteProfile, value: string | number) => {
     setFormData(prev => {
-      const newItems = [...prev.line_items]
-      const item = { ...newItems[index] }
-
-      if (field === 'description') {
-        item.description = value as string
-      } else if (field === 'quantity') {
-        item.quantity = Number(value) || 0
-        item.total = calculateLineTotal(item.quantity, item.unit_price)
-      } else if (field === 'unit_price') {
-        item.unit_price = Number(value) || 0
-        item.total = calculateLineTotal(item.quantity, item.unit_price)
+      const newProfiles = [...prev.profiles]
+      if (field === "name") {
+        newProfiles[index] = { ...newProfiles[index], name: value as string }
+      } else {
+        newProfiles[index] = { ...newProfiles[index], daily_rate: Number(value) || 0 }
       }
-
-      newItems[index] = item
-      return { ...prev, line_items: newItems }
+      return { ...prev, profiles: newProfiles }
     })
   }
 
-  const addLineItem = () => {
+  const removeProfile = (index: number) => {
+    if (formData.profiles.length <= 1) return
     setFormData(prev => ({
       ...prev,
-      line_items: [...prev.line_items, { description: "", quantity: 1, unit_price: 0, total: 0 }]
+      profiles: prev.profiles.filter((_, i) => i !== index)
     }))
   }
 
-  const removeLineItem = (index: number) => {
-    if (formData.line_items.length <= 1) return
-    setFormData(prev => ({
-      ...prev,
-      line_items: prev.line_items.filter((_, i) => i !== index)
-    }))
+  // Step validation
+  const validateStep = (step: number): boolean => {
+    setError("")
+
+    if (step === 1) {
+      if (!formData.name.trim()) {
+        setError(t("quotes.errors.nameRequired"))
+        return false
+      }
+      const validProfiles = formData.profiles.filter(p => p.name.trim() !== "")
+      if (validProfiles.length === 0) {
+        setError(t("quotes.errors.profileRequired"))
+        return false
+      }
+    }
+
+    return true
+  }
+
+  const goToNextStep = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep(prev => Math.min(prev + 1, TOTAL_STEPS))
+    }
+  }
+
+  const goToPreviousStep = () => {
+    setCurrentStep(prev => Math.max(prev - 1, 1))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    if (!validateStep(currentStep)) return
+
     setError("")
     setSuccess(false)
-
-    const validItems = formData.line_items.filter(item => item.description.trim() !== "")
-    if (validItems.length === 0) {
-      setError(t('quotes.errors.itemRequired'))
-      return
-    }
-
     setLoading(true)
 
-    const dataToSubmit = {
+    // Clean up profiles (remove empty ones)
+    const cleanedData = {
       ...formData,
-      line_items: validItems
+      profiles: formData.profiles.filter(p => p.name.trim() !== "")
     }
 
     let submitError: Error | null = null
 
     if (isEditing && quote) {
-      const { error } = await updateQuote(quote.id, dataToSubmit)
+      const { error } = await updateQuote(quote.id, cleanedData)
       submitError = error
     } else {
-      const { error } = await createQuote(projectId, dataToSubmit)
+      const { error } = await createQuote(projectId, cleanedData)
       submitError = error
     }
 
     if (submitError) {
-      setError(isEditing ? t('quotes.errors.updateFailed') : t('quotes.errors.createFailed'))
+      setError(isEditing ? t("quotes.errors.updateFailed") : t("quotes.errors.createFailed"))
     } else {
       setSuccess(true)
       setTimeout(() => {
@@ -114,103 +140,211 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
     setLoading(false)
   }
 
-  const total = calculateTotal(formData.line_items)
+  // Step indicator
+  const renderStepIndicator = () => (
+    <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center gap-2">
+        {[1, 2, 3, 4].map((step) => (
+          <div key={step} className="flex items-center">
+            <div
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
+                step === currentStep
+                  ? "bg-gray-900 text-white"
+                  : step < currentStep
+                  ? "bg-green-500 text-white"
+                  : "bg-gray-200 text-gray-500"
+              }`}
+            >
+              {step < currentStep ? <Check className="w-4 h-4" /> : step}
+            </div>
+            {step < 4 && (
+              <div
+                className={`w-8 h-0.5 ${
+                  step < currentStep ? "bg-green-500" : "bg-gray-200"
+                }`}
+              />
+            )}
+          </div>
+        ))}
+      </div>
+      <span className="text-sm text-foreground/50">
+        {t("quotes.form.steps").replace("{current}", String(currentStep)).replace("{total}", String(TOTAL_STEPS))}
+      </span>
+    </div>
+  )
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Lignes du devis */}
-      <div className="space-y-3">
+  // Step 1: General Information
+  const renderStep1 = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-foreground">{t("quotes.form.step1Title")}</h3>
+        <p className="text-sm text-foreground/50">{t("quotes.form.step1Desc")}</p>
+      </div>
+
+      {/* Quote Name */}
+      <div className="space-y-2">
+        <Label className="text-sm text-foreground/70">{t("quotes.form.name")} *</Label>
+        <Input
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          placeholder={t("quotes.form.namePlaceholder")}
+          disabled={loading}
+          className="border-gray-200 focus:border-gray-400"
+        />
+      </div>
+
+      {/* Dates */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label className="text-sm text-foreground/70">{t("quotes.form.startDate")}</Label>
+          <Input
+            type="date"
+            value={formData.start_date}
+            onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
+            disabled={loading}
+            className="border-gray-200 focus:border-gray-400"
+          />
+        </div>
+        <div className="space-y-2">
+          <Label className="text-sm text-foreground/70">{t("quotes.form.endDate")}</Label>
+          <Input
+            type="date"
+            value={formData.end_date}
+            onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
+            disabled={loading}
+            className="border-gray-200 focus:border-gray-400"
+          />
+        </div>
+      </div>
+
+      {/* Status */}
+      <div className="space-y-2">
+        <Label className="text-sm text-foreground/70">{t("quotes.status.draft")}</Label>
+        <select
+          value={formData.status}
+          onChange={(e) => setFormData({ ...formData, status: e.target.value as QuoteStatus })}
+          disabled={loading}
+          className="w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+        >
+          <option value="draft">{t("quotes.status.draft")}</option>
+          <option value="sent">{t("quotes.status.sent")}</option>
+          <option value="accepted">{t("quotes.status.accepted")}</option>
+          <option value="rejected">{t("quotes.status.rejected")}</option>
+          <option value="expired">{t("quotes.status.expired")}</option>
+        </select>
+      </div>
+
+      {/* Comment */}
+      <div className="space-y-2">
+        <Label className="text-sm text-foreground/70">{t("quotes.form.comment")}</Label>
+        <Textarea
+          value={formData.comment}
+          onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+          placeholder={t("quotes.form.commentPlaceholder")}
+          rows={3}
+          disabled={loading}
+          className="border-gray-200 focus:border-gray-400 resize-none"
+        />
+      </div>
+
+      {/* Profiles Section */}
+      <div className="space-y-3 pt-4 border-t border-gray-100">
         <div>
-          <h3 className="text-sm font-medium text-foreground">{t('quotes.form.lineItems')} *</h3>
-          <p className="text-xs text-foreground/50 mt-0.5">{t('quotes.form.lineItemsDesc')}</p>
+          <h4 className="text-sm font-medium text-foreground">{t("quotes.form.profiles")} *</h4>
+          <p className="text-xs text-foreground/50">{t("quotes.form.profilesDesc")}</p>
         </div>
 
         <div className="space-y-3">
-          {formData.line_items.map((item, index) => (
-            <div key={index} className="p-4 border border-gray-200 rounded-lg bg-white space-y-3">
-              <div className="flex items-start gap-2">
-                <div className="flex-1">
-                  <Label className="text-xs text-foreground/70">{t('quotes.form.description')}</Label>
-                  <Input
-                    value={item.description}
-                    onChange={(e) => updateLineItem(index, 'description', e.target.value)}
-                    placeholder={t('quotes.form.descriptionPlaceholder')}
-                    disabled={loading}
-                    className="border-gray-200 focus:border-gray-400"
-                  />
-                </div>
-                {formData.line_items.length > 1 && (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => removeLineItem(index)}
-                    disabled={loading}
-                    className="text-red-500 hover:text-red-700 hover:bg-red-50 mt-5"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                )}
+          {formData.profiles.map((profile, index) => (
+            <div key={index} className="flex items-end gap-3 p-3 bg-gray-50 rounded-lg">
+              <div className="flex-1">
+                <Label className="text-xs text-foreground/70">{t("quotes.form.profileName")}</Label>
+                <Input
+                  value={profile.name}
+                  onChange={(e) => updateProfile(index, "name", e.target.value)}
+                  placeholder={t("quotes.form.profileNamePlaceholder")}
+                  disabled={loading}
+                  className="border-gray-200 focus:border-gray-400"
+                />
               </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <div>
-                  <Label className="text-xs text-foreground/70">{t('quotes.form.quantity')}</Label>
-                  <Input
-                    type="number"
-                    min="1"
-                    value={item.quantity}
-                    onChange={(e) => updateLineItem(index, 'quantity', e.target.value)}
-                    disabled={loading}
-                    className="border-gray-200 focus:border-gray-400"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-foreground/70">{t('quotes.form.unitPrice')} (€)</Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={item.unit_price}
-                    onChange={(e) => updateLineItem(index, 'unit_price', e.target.value)}
-                    disabled={loading}
-                    className="border-gray-200 focus:border-gray-400"
-                  />
-                </div>
-                <div>
-                  <Label className="text-xs text-foreground/70">{t('quotes.form.lineTotal')}</Label>
-                  <Input
-                    value={`${item.total.toFixed(2)} €`}
-                    disabled
-                    className="border-gray-200 bg-gray-50"
-                  />
-                </div>
+              <div className="w-32">
+                <Label className="text-xs text-foreground/70">{t("quotes.form.dailyRate")}</Label>
+                <Input
+                  type="number"
+                  min="0"
+                  value={profile.daily_rate}
+                  onChange={(e) => updateProfile(index, "daily_rate", e.target.value)}
+                  disabled={loading}
+                  className="border-gray-200 focus:border-gray-400"
+                />
               </div>
+              {formData.profiles.length > 1 && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => removeProfile(index)}
+                  disabled={loading}
+                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              )}
             </div>
           ))}
 
           <Button
             type="button"
             variant="outline"
-            onClick={addLineItem}
+            onClick={addProfile}
             disabled={loading}
             className="w-full border-dashed border-gray-300 hover:border-gray-400"
           >
             <Plus className="w-4 h-4 mr-2" />
-            {t('quotes.form.addLine')}
+            {t("quotes.form.addProfile")}
           </Button>
         </div>
       </div>
+    </div>
+  )
 
-      {/* Total */}
-      <div className="p-4 bg-gray-50 rounded-lg flex justify-between items-center">
-        <span className="font-medium text-foreground">{t('quotes.form.total')}</span>
-        <span className="text-xl font-bold text-foreground">{total.toFixed(2)} €</span>
+  // Step 2: Phases (placeholder for now)
+  const renderStep2 = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-foreground">{t("quotes.form.step2Title")}</h3>
+        <p className="text-sm text-foreground/50">{t("quotes.form.step2Desc")}</p>
+      </div>
+      <div className="text-center py-12 text-foreground/50">
+        Étape 2 - Phases (à implémenter)
+      </div>
+    </div>
+  )
+
+  // Step 3: Line Items (placeholder for now)
+  const renderStep3 = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-foreground">{t("quotes.form.step3Title")}</h3>
+        <p className="text-sm text-foreground/50">{t("quotes.form.step3Desc")}</p>
+      </div>
+      <div className="text-center py-12 text-foreground/50">
+        Étape 3 - Lignes du devis (à implémenter)
+      </div>
+    </div>
+  )
+
+  // Step 4: Summary (placeholder for now)
+  const renderStep4 = () => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold text-foreground">{t("quotes.form.step4Title")}</h3>
+        <p className="text-sm text-foreground/50">{t("quotes.form.step4Desc")}</p>
       </div>
 
-      {/* Validité */}
+      {/* Validity */}
       <div className="space-y-2">
-        <Label className="text-sm text-foreground/70">{t('quotes.form.validityDays')}</Label>
+        <Label className="text-sm text-foreground/70">{t("quotes.form.validityDays")}</Label>
         <Input
           type="number"
           min="1"
@@ -221,18 +355,53 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
         />
       </div>
 
+      {/* Payment Terms */}
+      <div className="space-y-2">
+        <Label className="text-sm text-foreground/70">{t("quotes.form.paymentTerms")}</Label>
+        <Input
+          value={formData.payment_terms}
+          onChange={(e) => setFormData({ ...formData, payment_terms: e.target.value })}
+          placeholder={t("quotes.form.paymentTermsPlaceholder")}
+          disabled={loading}
+          className="border-gray-200 focus:border-gray-400"
+        />
+      </div>
+
       {/* Notes */}
       <div className="space-y-2">
-        <Label className="text-sm text-foreground/70">{t('quotes.form.notes')}</Label>
+        <Label className="text-sm text-foreground/70">{t("quotes.form.notes")}</Label>
         <Textarea
           value={formData.notes}
           onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          placeholder={t('quotes.form.notesPlaceholder')}
-          rows={3}
+          placeholder={t("quotes.form.notesPlaceholder")}
+          rows={4}
           disabled={loading}
           className="border-gray-200 focus:border-gray-400 resize-none"
         />
       </div>
+    </div>
+  )
+
+  const renderCurrentStep = () => {
+    switch (currentStep) {
+      case 1:
+        return renderStep1()
+      case 2:
+        return renderStep2()
+      case 3:
+        return renderStep3()
+      case 4:
+        return renderStep4()
+      default:
+        return null
+    }
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {renderStepIndicator()}
+
+      {renderCurrentStep()}
 
       {error && (
         <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">
@@ -243,12 +412,13 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
       {success && (
         <p className="text-sm text-green-600 bg-green-50 p-3 rounded-lg flex items-center gap-2">
           <Check className="w-4 h-4" />
-          {t('quotes.form.success')}
+          {t("quotes.form.success")}
         </p>
       )}
 
-      <div className="flex gap-3 pt-2">
-        {onCancel && (
+      {/* Navigation Buttons */}
+      <div className="flex gap-3 pt-4 border-t border-gray-100">
+        {onCancel && currentStep === 1 && (
           <Button
             type="button"
             variant="outline"
@@ -256,21 +426,47 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
             onClick={onCancel}
             disabled={loading}
           >
-            {t('quotes.form.cancel')}
+            {t("quotes.form.cancel")}
           </Button>
         )}
-        <Button
-          type="submit"
-          className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
-          disabled={loading}
-        >
-          {loading ? (
-            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-          ) : (
-            <Check className="w-4 h-4 mr-2" />
-          )}
-          {isEditing ? t('quotes.form.update') : t('quotes.form.create')}
-        </Button>
+
+        {currentStep > 1 && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={goToPreviousStep}
+            disabled={loading}
+            className="flex-1 border-gray-200"
+          >
+            <ChevronLeft className="w-4 h-4 mr-2" />
+            {t("quotes.form.previous")}
+          </Button>
+        )}
+
+        {currentStep < TOTAL_STEPS ? (
+          <Button
+            type="button"
+            onClick={goToNextStep}
+            disabled={loading}
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+          >
+            {t("quotes.form.next")}
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
+        ) : (
+          <Button
+            type="submit"
+            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+            disabled={loading}
+          >
+            {loading ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <Check className="w-4 h-4 mr-2" />
+            )}
+            {isEditing ? t("quotes.form.update") : t("quotes.form.create")}
+          </Button>
+        )}
       </div>
     </form>
   )

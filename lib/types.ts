@@ -2,10 +2,27 @@ export type ProjectStatus = 'pending' | 'in_review' | 'active' | 'won' | 'lost' 
 
 export type QuoteStatus = 'draft' | 'sent' | 'accepted' | 'rejected' | 'expired'
 
+// Profil assigné au devis (nom + TJM)
+export interface QuoteProfile {
+  name: string
+  daily_rate: number
+}
+
+// Phase du projet
+export interface QuotePhase {
+  name: string
+  description: string
+  duration_days: number
+  profiles: string[] // noms des profils assignés
+}
+
+// Ligne du devis
 export interface QuoteLineItem {
   description: string
-  quantity: number
-  unit_price: number
+  phase_id: number
+  profile_name: string
+  days: number
+  daily_rate: number
   total: number
 }
 
@@ -13,10 +30,27 @@ export interface Quote {
   id: string
   project_id: string
   version: number
-  amount: number
+
+  // Étape 1: Informations générales
+  name: string
+  start_date: string | null
+  end_date: string | null
+  comment: string
+  profiles: QuoteProfile[]
+
+  // Étape 2: Phases
+  phases: QuotePhase[]
+
+  // Étape 3: Lignes du devis
   line_items: QuoteLineItem[]
+
+  // Étape 4: Récapitulatif
   notes: string
+  payment_terms: string
   validity_days: number
+
+  // Montant et statut
+  amount: number
   status: QuoteStatus
   created_at: string
   updated_at: string
@@ -24,9 +58,45 @@ export interface Quote {
   accepted_at: string | null
 }
 
-export interface QuoteFormData {
+// Données du formulaire étape par étape
+export interface QuoteFormDataStep1 {
+  name: string
+  start_date: string
+  end_date: string
+  status: QuoteStatus
+  comment: string
+  profiles: QuoteProfile[]
+}
+
+export interface QuoteFormDataStep2 {
+  phases: QuotePhase[]
+}
+
+export interface QuoteFormDataStep3 {
   line_items: QuoteLineItem[]
+}
+
+export interface QuoteFormDataStep4 {
   notes: string
+  payment_terms: string
+  validity_days: number
+}
+
+export interface QuoteFormData {
+  // Step 1
+  name: string
+  start_date: string
+  end_date: string
+  status: QuoteStatus
+  comment: string
+  profiles: QuoteProfile[]
+  // Step 2
+  phases: QuotePhase[]
+  // Step 3
+  line_items: QuoteLineItem[]
+  // Step 4
+  notes: string
+  payment_terms: string
   validity_days: number
 }
 

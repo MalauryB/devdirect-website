@@ -501,24 +501,71 @@ export const translations = {
         confirmSendDesc: "Le client sera notifié et pourra consulter ce devis."
       },
       form: {
+        // Navigation
+        steps: "Étape {current} sur {total}",
+        next: "Suivant",
+        previous: "Précédent",
+        create: "Créer le devis",
+        update: "Enregistrer",
+        cancel: "Annuler",
+        success: "Devis enregistré avec succès",
+
+        // Step 1: Informations générales
+        step1Title: "Informations générales",
+        step1Desc: "Configurez les informations de base du devis",
+        name: "Nom du devis",
+        namePlaceholder: "Ex: Développement site vitrine",
+        startDate: "Date de début",
+        endDate: "Date de fin",
+        comment: "Commentaire",
+        commentPlaceholder: "Notes internes sur ce devis...",
+
+        // Profils
+        profiles: "Profils",
+        profilesDesc: "Définissez les profils et leurs tarifs journaliers",
+        profileName: "Nom du profil",
+        profileNamePlaceholder: "Ex: Développeur Senior",
+        dailyRate: "TJM (€)",
+        addProfile: "Ajouter un profil",
+
+        // Step 2: Phases
+        step2Title: "Phases du projet",
+        step2Desc: "Découpez le projet en phases",
+        phaseName: "Nom de la phase",
+        phaseNamePlaceholder: "Ex: Conception",
+        phaseDescription: "Description",
+        phaseDescriptionPlaceholder: "Description de la phase...",
+        phaseDuration: "Durée (jours)",
+        phaseProfiles: "Profils assignés",
+        addPhase: "Ajouter une phase",
+
+        // Step 3: Lignes du devis
+        step3Title: "Lignes du devis",
+        step3Desc: "Ajoutez les prestations et leur tarification",
         lineItems: "Lignes du devis",
         lineItemsDesc: "Ajoutez les prestations et leur tarification",
         description: "Description",
         descriptionPlaceholder: "Ex: Développement page d'accueil...",
-        quantity: "Quantité",
-        unitPrice: "Prix unitaire",
+        phase: "Phase",
+        profile: "Profil",
+        days: "Jours",
         lineTotal: "Total",
         addLine: "Ajouter une ligne",
         total: "Total HT",
+
+        // Step 4: Récapitulatif
+        step4Title: "Récapitulatif et conditions",
+        step4Desc: "Vérifiez et finalisez le devis",
         validityDays: "Validité (jours)",
         notes: "Notes et conditions",
         notesPlaceholder: "Conditions de paiement, remarques...",
-        create: "Créer le devis",
-        update: "Enregistrer",
-        cancel: "Annuler",
-        success: "Devis enregistré avec succès"
+        paymentTerms: "Conditions de paiement",
+        paymentTermsPlaceholder: "Ex: 30% à la commande, 70% à la livraison"
       },
       errors: {
+        nameRequired: "Le nom du devis est requis",
+        profileRequired: "Ajoutez au moins un profil",
+        phaseRequired: "Ajoutez au moins une phase",
         itemRequired: "Ajoutez au moins une ligne au devis",
         createFailed: "Erreur lors de la création du devis",
         updateFailed: "Erreur lors de la modification du devis"
@@ -1027,24 +1074,71 @@ export const translations = {
         confirmSendDesc: "The client will be notified and will be able to view this quote."
       },
       form: {
+        // Navigation
+        steps: "Step {current} of {total}",
+        next: "Next",
+        previous: "Previous",
+        create: "Create quote",
+        update: "Save",
+        cancel: "Cancel",
+        success: "Quote saved successfully",
+
+        // Step 1: General information
+        step1Title: "General information",
+        step1Desc: "Configure basic quote information",
+        name: "Quote name",
+        namePlaceholder: "E.g.: Website development",
+        startDate: "Start date",
+        endDate: "End date",
+        comment: "Comment",
+        commentPlaceholder: "Internal notes about this quote...",
+
+        // Profiles
+        profiles: "Profiles",
+        profilesDesc: "Define profiles and their daily rates",
+        profileName: "Profile name",
+        profileNamePlaceholder: "E.g.: Senior Developer",
+        dailyRate: "Daily rate (€)",
+        addProfile: "Add a profile",
+
+        // Step 2: Phases
+        step2Title: "Project phases",
+        step2Desc: "Break down the project into phases",
+        phaseName: "Phase name",
+        phaseNamePlaceholder: "E.g.: Design",
+        phaseDescription: "Description",
+        phaseDescriptionPlaceholder: "Phase description...",
+        phaseDuration: "Duration (days)",
+        phaseProfiles: "Assigned profiles",
+        addPhase: "Add a phase",
+
+        // Step 3: Line items
+        step3Title: "Quote lines",
+        step3Desc: "Add services and their pricing",
         lineItems: "Quote lines",
         lineItemsDesc: "Add services and their pricing",
         description: "Description",
         descriptionPlaceholder: "E.g.: Homepage development...",
-        quantity: "Quantity",
-        unitPrice: "Unit price",
+        phase: "Phase",
+        profile: "Profile",
+        days: "Days",
         lineTotal: "Total",
         addLine: "Add a line",
         total: "Total (excl. tax)",
+
+        // Step 4: Summary
+        step4Title: "Summary and conditions",
+        step4Desc: "Review and finalize the quote",
         validityDays: "Validity (days)",
         notes: "Notes and conditions",
         notesPlaceholder: "Payment terms, remarks...",
-        create: "Create quote",
-        update: "Save",
-        cancel: "Cancel",
-        success: "Quote saved successfully"
+        paymentTerms: "Payment terms",
+        paymentTermsPlaceholder: "E.g.: 30% upfront, 70% on delivery"
       },
       errors: {
+        nameRequired: "Quote name is required",
+        profileRequired: "Add at least one profile",
+        phaseRequired: "Add at least one phase",
         itemRequired: "Add at least one line to the quote",
         createFailed: "Error creating the quote",
         updateFailed: "Error updating the quote"

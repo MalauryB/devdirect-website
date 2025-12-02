@@ -6,16 +6,31 @@ CREATE TABLE quotes (
   -- Version du devis (auto-incrémentée par projet)
   version INTEGER NOT NULL DEFAULT 1,
 
-  -- Montant total calculé
-  amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
+  -- Étape 1: Informations générales
+  name TEXT NOT NULL DEFAULT '',
+  start_date DATE,
+  end_date DATE,
+  comment TEXT DEFAULT '',
 
-  -- Détails des lignes du devis (stockés en JSONB)
-  -- Structure: [{ description: string, quantity: number, unit_price: number, total: number }]
+  -- Profils assignés au devis (stockés en JSONB)
+  -- Structure: [{ name: string, daily_rate: number }]
+  profiles JSONB DEFAULT '[]',
+
+  -- Étape 2: Phases du projet (stockées en JSONB)
+  -- Structure: [{ name: string, description: string, duration_days: number, profiles: string[] }]
+  phases JSONB DEFAULT '[]',
+
+  -- Étape 3: Lignes du devis (stockées en JSONB)
+  -- Structure: [{ description: string, phase_id: number, profile_name: string, days: number, daily_rate: number, total: number }]
   line_items JSONB DEFAULT '[]',
 
-  -- Notes et conditions
+  -- Étape 4: Récapitulatif et conditions
   notes TEXT DEFAULT '',
+  payment_terms TEXT DEFAULT '',
   validity_days INTEGER DEFAULT 30,
+
+  -- Montant total calculé
+  amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
 
   -- Statut du devis
   status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'sent', 'accepted', 'rejected', 'expired')),

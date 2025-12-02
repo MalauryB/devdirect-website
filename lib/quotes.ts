@@ -30,11 +30,22 @@ export async function createQuote(projectId: string, data: QuoteFormData): Promi
     .insert({
       project_id: projectId,
       version,
-      amount,
+      // Step 1
+      name: data.name,
+      start_date: data.start_date || null,
+      end_date: data.end_date || null,
+      comment: data.comment,
+      profiles: data.profiles,
+      // Step 2
+      phases: data.phases,
+      // Step 3
       line_items: data.line_items,
+      amount,
+      // Step 4
       notes: data.notes,
+      payment_terms: data.payment_terms,
       validity_days: data.validity_days,
-      status: 'draft'
+      status: data.status || 'draft'
     })
     .select()
     .single()
@@ -65,16 +76,27 @@ export async function getQuote(id: string): Promise<{ quote: Quote | null; error
 export async function updateQuote(id: string, data: Partial<QuoteFormData>): Promise<{ quote: Quote | null; error: Error | null }> {
   const updateData: Record<string, unknown> = {}
 
+  // Step 1 fields
+  if (data.name !== undefined) updateData.name = data.name
+  if (data.start_date !== undefined) updateData.start_date = data.start_date || null
+  if (data.end_date !== undefined) updateData.end_date = data.end_date || null
+  if (data.comment !== undefined) updateData.comment = data.comment
+  if (data.profiles !== undefined) updateData.profiles = data.profiles
+  if (data.status !== undefined) updateData.status = data.status
+
+  // Step 2 fields
+  if (data.phases !== undefined) updateData.phases = data.phases
+
+  // Step 3 fields
   if (data.line_items !== undefined) {
     updateData.line_items = data.line_items
     updateData.amount = calculateAmount(data.line_items)
   }
-  if (data.notes !== undefined) {
-    updateData.notes = data.notes
-  }
-  if (data.validity_days !== undefined) {
-    updateData.validity_days = data.validity_days
-  }
+
+  // Step 4 fields
+  if (data.notes !== undefined) updateData.notes = data.notes
+  if (data.payment_terms !== undefined) updateData.payment_terms = data.payment_terms
+  if (data.validity_days !== undefined) updateData.validity_days = data.validity_days
 
   const { data: quote, error } = await supabase
     .from('quotes')
