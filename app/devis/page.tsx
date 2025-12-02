@@ -38,6 +38,7 @@ export default function DevisPage() {
 
   // Project form state
   const [formData, setFormData] = useState<ProjectFormData>({
+    title: "",
     project_types: [],
     services: [],
     platforms: [],
@@ -124,6 +125,11 @@ export default function DevisPage() {
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+
+    if (!formData.title.trim()) {
+      setError(t('projects.errors.titleRequired'))
+      return
+    }
 
     if (formData.project_types.length === 0) {
       setError(t('projects.errors.typeRequired'))
@@ -291,6 +297,20 @@ export default function DevisPage() {
               </div>
 
               <form onSubmit={handleStep1Submit} className="space-y-10">
+                {/* Titre du projet */}
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-medium text-foreground">{t('projects.form.title')} *</h3>
+                    <p className="text-xs text-foreground/50 mt-0.5">{t('projects.form.titleDesc')}</p>
+                  </div>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    placeholder={t('projects.form.titlePlaceholder')}
+                    className="border-gray-200 focus:border-gray-400"
+                  />
+                </div>
+
                 {/* Type de projet */}
                 <div className="space-y-3">
                   <div>

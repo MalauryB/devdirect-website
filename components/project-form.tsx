@@ -28,6 +28,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
   const isEditing = !!project
 
   const [formData, setFormData] = useState<ProjectFormData>({
+    title: project?.title || "",
     project_types: project?.project_types || [],
     services: project?.services || [],
     platforms: project?.platforms || [],
@@ -78,6 +79,11 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
     e.preventDefault()
     setError("")
     setSuccess(false)
+
+    if (!formData.title.trim()) {
+      setError(t('projects.errors.titleRequired'))
+      return
+    }
 
     if (formData.project_types.length === 0) {
       setError(t('projects.errors.typeRequired'))
@@ -146,6 +152,21 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
+      {/* Titre du projet */}
+      <div className="space-y-3">
+        <div>
+          <h3 className="text-sm font-medium text-foreground">{t('projects.form.title')} *</h3>
+          <p className="text-xs text-foreground/50 mt-0.5">{t('projects.form.titleDesc')}</p>
+        </div>
+        <Input
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          placeholder={t('projects.form.titlePlaceholder')}
+          disabled={loading}
+          className="border-gray-200 focus:border-gray-400"
+        />
+      </div>
+
       {/* Type de projet */}
       <div className="space-y-3">
         <div>

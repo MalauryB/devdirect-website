@@ -3,6 +3,9 @@ CREATE TABLE projects (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
 
+  -- Titre du projet
+  title TEXT NOT NULL DEFAULT '',
+
   -- Type de projet (array de strings)
   project_types TEXT[] NOT NULL DEFAULT '{}',
 

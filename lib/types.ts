@@ -12,6 +12,9 @@ export interface Project {
   id: string
   user_id: string
 
+  // Titre du projet
+  title: string
+
   // Type de projet (checkboxes multiples)
   project_types: string[]
 
@@ -53,6 +56,7 @@ export interface Project {
 }
 
 export interface ProjectFormData {
+  title: string
   project_types: string[]
   services: string[]
   platforms: string[]

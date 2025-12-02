@@ -300,6 +300,7 @@ export const translations = {
       newProject: "Nouveau projet",
       noProjects: "Vous n'avez pas encore de projet",
       noProjectsDesc: "Créez votre premier projet pour commencer",
+      untitled: "Projet sans titre",
       types: {
         web: "Application Web",
         mobile: "Application Mobile",
@@ -336,6 +337,9 @@ export const translations = {
         flexible: "Flexible"
       },
       form: {
+        title: "Titre du projet",
+        titleDesc: "Donnez un nom à votre projet",
+        titlePlaceholder: "Ex: Site e-commerce, Application mobile...",
         projectType: "Type de projet",
         projectTypeDesc: "Sélectionnez tous les types de projets concernés",
         services: "Services demandés",
@@ -388,6 +392,7 @@ export const translations = {
         success: "Votre demande de devis a été envoyée !"
       },
       errors: {
+        titleRequired: "Veuillez donner un titre à votre projet",
         typeRequired: "Veuillez sélectionner au moins un type de projet",
         descriptionRequired: "Veuillez décrire votre projet",
         createFailed: "Une erreur est survenue lors de la création du projet",
@@ -725,6 +730,7 @@ export const translations = {
       newProject: "New project",
       noProjects: "You don't have any projects yet",
       noProjectsDesc: "Create your first project to get started",
+      untitled: "Untitled project",
       types: {
         web: "Web Application",
         mobile: "Mobile Application",
@@ -761,6 +767,9 @@ export const translations = {
         flexible: "Flexible"
       },
       form: {
+        title: "Project title",
+        titleDesc: "Give your project a name",
+        titlePlaceholder: "E.g.: E-commerce website, Mobile app...",
         projectType: "Project type",
         projectTypeDesc: "Select all applicable project types",
         services: "Required services",
@@ -813,6 +822,7 @@ export const translations = {
         success: "Your quote request has been sent!"
       },
       errors: {
+        titleRequired: "Please give your project a title",
         typeRequired: "Please select at least one project type",
         descriptionRequired: "Please describe your project",
         createFailed: "An error occurred while creating the project",

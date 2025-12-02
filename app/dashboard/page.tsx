@@ -719,6 +719,9 @@ export default function DashboardPage() {
                     <div className="p-6 border-b border-gray-100">
                       <div className="flex items-start justify-between gap-4">
                         <div>
+                          <h2 className="text-xl font-bold text-foreground mb-2">
+                            {selectedProject.title || t('projects.untitled')}
+                          </h2>
                           <div className="flex flex-wrap gap-2 mb-3">
                             {selectedProject.project_types?.map((type) => (
                               <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
@@ -990,6 +993,9 @@ export default function DashboardPage() {
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-foreground mb-1">
+                                {project.title || t('projects.untitled')}
+                              </h3>
                               <div className="flex flex-wrap gap-2 mb-2">
                                 {project.project_types?.map((type) => (
                                   <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
