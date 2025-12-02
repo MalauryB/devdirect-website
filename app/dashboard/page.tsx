@@ -75,6 +75,9 @@ export default function DashboardPage() {
   const [sendingQuote, setSendingQuote] = useState<Quote | null>(null)
   const [sendQuoteLoading, setSendQuoteLoading] = useState(false)
 
+  // Project sub-section state (for cascading navigation)
+  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes'>('details')
+
   // Get user role
   const userRole: UserRole = user?.user_metadata?.role || 'client'
   const isEngineer = userRole === 'engineer'
@@ -159,6 +162,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (selectedProject && isEngineer && activeSection === "allProjects") {
       loadQuotes(selectedProject.id)
+      setProjectSubSection('details') // Reset to details when selecting a new project
     } else {
       setQuotes([])
       setShowQuoteForm(false)
@@ -1348,345 +1352,386 @@ export default function DashboardPage() {
           {activeSection === "allProjects" && isEngineer && (
             <div className="w-full">
               {selectedProject ? (
-                // Use the same project detail view
-                <div className="w-full">
-                  <div className="flex items-center justify-between mb-6">
-                    <button
-                      onClick={() => setSelectedProject(null)}
-                      className="flex items-center gap-2 text-foreground/60 hover:text-foreground transition-colors"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                      {t('projects.details.back')}
-                    </button>
+                // Project detail view with cascading navigation
+                <div className="flex gap-0 -mx-4 lg:-mx-6 -mt-4 lg:-mt-6 min-h-[calc(100vh-65px)]">
+                  {/* Secondary sidebar for project sub-sections */}
+                  <div className="w-48 bg-gray-50 border-r border-gray-200 flex-shrink-0">
+                    <div className="p-4 border-b border-gray-200">
+                      <button
+                        onClick={() => setSelectedProject(null)}
+                        className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        {t('projects.details.back')}
+                      </button>
+                    </div>
+                    <nav className="p-2">
+                      <button
+                        onClick={() => setProjectSubSection('details')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
+                          projectSubSection === 'details'
+                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <FileText className="w-4 h-4" />
+                        {t('projects.subSections.details')}
+                      </button>
+                      <button
+                        onClick={() => setProjectSubSection('quotes')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'quotes'
+                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <Receipt className="w-4 h-4" />
+                        {t('projects.subSections.quotes')}
+                        {quotes.length > 0 && (
+                          <span className="ml-auto text-xs bg-gray-200 text-foreground/70 px-1.5 py-0.5 rounded">
+                            {quotes.length}
+                          </span>
+                        )}
+                      </button>
+                    </nav>
                   </div>
 
-                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                    {/* Header */}
-                    <div className="p-6 border-b border-gray-100">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <h2 className="text-xl font-bold text-foreground mb-2">
-                            {selectedProject.title || t('projects.untitled')}
-                          </h2>
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {selectedProject.project_types?.map((type) => (
-                              <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
-                                {t(`projects.types.${type}`)}
-                              </span>
-                            ))}
+                  {/* Main content area */}
+                  <div className="flex-1 p-4 lg:p-6 overflow-auto">
+                    {/* Project Header - always visible */}
+                    <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+                      <div className="p-6">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <h2 className="text-xl font-bold text-foreground mb-2">
+                              {selectedProject.title || t('projects.untitled')}
+                            </h2>
+                            <div className="flex flex-wrap gap-2 mb-3">
+                              {selectedProject.project_types?.map((type) => (
+                                <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
+                                  {t(`projects.types.${type}`)}
+                                </span>
+                              ))}
+                            </div>
+                            <p className="text-sm text-foreground/50">
+                              {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                            </p>
                           </div>
-                          <p className="text-sm text-foreground/50">
-                            {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                          </p>
+                          <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
+                            {t(`projects.status.${selectedProject.status}`)}
+                          </span>
                         </div>
-                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
-                          {t(`projects.status.${selectedProject.status}`)}
-                        </span>
                       </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="p-6 space-y-8">
-                      {/* Description */}
-                      <div>
-                        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                          <FileText className="w-4 h-4 text-[#6cb1bb]" />
-                          {t('projects.details.description')}
-                        </h3>
-                        <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.description || '-'}</p>
-                      </div>
-
-                      {/* Features */}
-                      {selectedProject.features && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Layers className="w-4 h-4 text-[#ba9fdf]" />
-                            {t('projects.details.features')}
-                          </h3>
-                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.features}</p>
-                        </div>
-                      )}
-
-                      {/* Target Audience */}
-                      {selectedProject.target_audience && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Target className="w-4 h-4 text-[#ea4c89]" />
-                            {t('projects.details.targetAudience')}
-                          </h3>
-                          <p className="text-foreground/70">{selectedProject.target_audience}</p>
-                        </div>
-                      )}
-
-                      {/* Services */}
-                      {selectedProject.services && selectedProject.services.length > 0 && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Wrench className="w-4 h-4 text-[#9c984d]" />
-                            {t('projects.details.services')}
-                          </h3>
-                          <div className="flex flex-wrap gap-2">
-                            {selectedProject.services.map((service) => (
-                              <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
-                                {t(`projects.services.${service}`)}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Platforms */}
-                      {selectedProject.platforms && selectedProject.platforms.length > 0 && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Monitor className="w-4 h-4 text-[#6cb1bb]" />
-                            {t('projects.details.platforms')}
-                          </h3>
-                          <div className="flex flex-wrap gap-2">
-                            {selectedProject.platforms.map((platform) => (
-                              <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
-                                {platform}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Budget & Deadline */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {selectedProject.budget && (
-                          <div className="bg-gray-50 rounded-xl p-4">
-                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
-                              <Euro className="w-4 h-4 text-[#9c984d]" />
-                              {t('projects.details.budget')}
+                    {/* Details Sub-Section */}
+                    {projectSubSection === 'details' && (
+                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                        <div className="p-6 space-y-8">
+                          {/* Description */}
+                          <div>
+                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                              <FileText className="w-4 h-4 text-[#6cb1bb]" />
+                              {t('projects.details.description')}
                             </h3>
-                            <p className="text-foreground/70">{t(`projects.budget.${selectedProject.budget}`)}</p>
+                            <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.description || '-'}</p>
                           </div>
-                        )}
-                        {selectedProject.deadline && (
-                          <div className="bg-gray-50 rounded-xl p-4">
-                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
-                              <Clock className="w-4 h-4 text-[#ea4c89]" />
-                              {t('projects.details.deadline')}
-                            </h3>
-                            <p className="text-foreground/70">{t(`projects.deadline.${selectedProject.deadline}`)}</p>
-                          </div>
-                        )}
-                      </div>
 
-                      {/* Additional Info */}
-                      {selectedProject.additional_info && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <MessageCircle className="w-4 h-4 text-[#7f7074]" />
-                            {t('projects.details.additionalInfo')}
-                          </h3>
-                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.additional_info}</p>
-                        </div>
-                      )}
+                          {/* Features */}
+                          {selectedProject.features && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Layers className="w-4 h-4 text-[#ba9fdf]" />
+                                {t('projects.details.features')}
+                              </h3>
+                              <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.features}</p>
+                            </div>
+                          )}
 
-                      {/* Attached Files */}
-                      {(selectedProject.specifications_file ||
-                        (selectedProject.design_files && selectedProject.design_files.length > 0) ||
-                        (selectedProject.brand_assets && selectedProject.brand_assets.length > 0) ||
-                        (selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0) ||
-                        (selectedProject.other_documents && selectedProject.other_documents.length > 0)) && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
-                            <Paperclip className="w-4 h-4 text-[#6cb1bb]" />
-                            {t('projects.details.attachedFiles')}
-                          </h3>
-                          <div className="space-y-4">
-                            {selectedProject.specifications_file && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.specificationsFile')}</p>
-                                <ProjectFileItem file={selectedProject.specifications_file} />
+                          {/* Target Audience */}
+                          {selectedProject.target_audience && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Target className="w-4 h-4 text-[#ea4c89]" />
+                                {t('projects.details.targetAudience')}
+                              </h3>
+                              <p className="text-foreground/70">{selectedProject.target_audience}</p>
+                            </div>
+                          )}
+
+                          {/* Services */}
+                          {selectedProject.services && selectedProject.services.length > 0 && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Wrench className="w-4 h-4 text-[#9c984d]" />
+                                {t('projects.details.services')}
+                              </h3>
+                              <div className="flex flex-wrap gap-2">
+                                {selectedProject.services.map((service) => (
+                                  <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                    {t(`projects.services.${service}`)}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Platforms */}
+                          {selectedProject.platforms && selectedProject.platforms.length > 0 && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Monitor className="w-4 h-4 text-[#6cb1bb]" />
+                                {t('projects.details.platforms')}
+                              </h3>
+                              <div className="flex flex-wrap gap-2">
+                                {selectedProject.platforms.map((platform) => (
+                                  <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                    {platform}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Budget & Deadline */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {selectedProject.budget && (
+                              <div className="bg-gray-50 rounded-xl p-4">
+                                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                                  <Euro className="w-4 h-4 text-[#9c984d]" />
+                                  {t('projects.details.budget')}
+                                </h3>
+                                <p className="text-foreground/70">{t(`projects.budget.${selectedProject.budget}`)}</p>
                               </div>
                             )}
-                            {selectedProject.design_files && selectedProject.design_files.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.designFiles')}</p>
-                                <div className="space-y-2">
-                                  {selectedProject.design_files.map((file, index) => (
-                                    <ProjectFileItem key={file.path || index} file={file} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {selectedProject.brand_assets && selectedProject.brand_assets.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.brandAssets')}</p>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                  {selectedProject.brand_assets.map((file, index) => (
-                                    <ProjectImageItem key={file.path || index} file={file} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.inspirationImages')}</p>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                  {selectedProject.inspiration_images.map((file, index) => (
-                                    <ProjectImageItem key={file.path || index} file={file} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                            {selectedProject.other_documents && selectedProject.other_documents.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.otherDocuments')}</p>
-                                <div className="space-y-2">
-                                  {selectedProject.other_documents.map((file, index) => (
-                                    <ProjectFileItem key={file.path || index} file={file} />
-                                  ))}
-                                </div>
+                            {selectedProject.deadline && (
+                              <div className="bg-gray-50 rounded-xl p-4">
+                                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                                  <Clock className="w-4 h-4 text-[#ea4c89]" />
+                                  {t('projects.details.deadline')}
+                                </h3>
+                                <p className="text-foreground/70">{t(`projects.deadline.${selectedProject.deadline}`)}</p>
                               </div>
                             )}
                           </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
 
-                  {/* Quotes Section - Only for engineers */}
-                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mt-6">
-                    <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                      <h3 className="flex items-center gap-2 font-semibold text-foreground">
-                        <Receipt className="w-5 h-5 text-[#9c984d]" />
-                        {t('quotes.title')}
-                      </h3>
-                      {!showQuoteForm && (
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            setEditingQuote(null)
-                            setShowQuoteForm(true)
-                          }}
-                          className="bg-gray-900 hover:bg-gray-800 text-white"
-                        >
-                          <Plus className="w-4 h-4 mr-2" />
-                          {t('quotes.newQuote')}
-                        </Button>
-                      )}
-                    </div>
+                          {/* Additional Info */}
+                          {selectedProject.additional_info && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <MessageCircle className="w-4 h-4 text-[#7f7074]" />
+                                {t('projects.details.additionalInfo')}
+                              </h3>
+                              <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.additional_info}</p>
+                            </div>
+                          )}
 
-                    {showQuoteForm && (
-                      <div className="p-4 border-b border-gray-100 bg-gray-50">
-                        <QuoteForm
-                          projectId={selectedProject.id}
-                          quote={editingQuote}
-                          onSuccess={() => {
-                            setShowQuoteForm(false)
-                            setEditingQuote(null)
-                            loadQuotes(selectedProject.id)
-                          }}
-                          onCancel={() => {
-                            setShowQuoteForm(false)
-                            setEditingQuote(null)
-                          }}
-                        />
-                      </div>
-                    )}
-
-                    {quotesLoading ? (
-                      <div className="flex items-center justify-center py-12">
-                        <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
-                      </div>
-                    ) : quotes.length === 0 ? (
-                      <div className="text-center py-12">
-                        <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
-                        <p className="text-foreground/50">{t('quotes.noQuotes')}</p>
-                      </div>
-                    ) : (
-                      <div className="divide-y divide-gray-100">
-                        {quotes.map((quote) => (
-                          <div key={quote.id} className="p-4 hover:bg-gray-50 transition-colors">
-                            <div className="flex items-start justify-between gap-4">
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-3 mb-2">
-                                  <span className="font-semibold text-foreground">
-                                    {t('quotes.version')} {quote.version}
-                                  </span>
-                                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getQuoteStatusBadgeClass(quote.status)}`}>
-                                    {t(`quotes.status.${quote.status}`)}
-                                  </span>
-                                </div>
-                                <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/60">
-                                  <span className="flex items-center gap-1">
-                                    <Euro className="w-4 h-4" />
-                                    {quote.amount.toFixed(2)} €
-                                  </span>
-                                  <span className="flex items-center gap-1">
-                                    <Calendar className="w-4 h-4" />
-                                    {t('quotes.createdAt')}: {new Date(quote.created_at).toLocaleDateString('fr-FR')}
-                                  </span>
-                                  <span className="flex items-center gap-1">
-                                    <Clock className="w-4 h-4" />
-                                    {quote.validity_days} {t('quotes.days')}
-                                  </span>
-                                </div>
-                                {quote.sent_at && (
-                                  <p className="text-xs text-foreground/50 mt-1">
-                                    {t('quotes.sentAt')}: {new Date(quote.sent_at).toLocaleDateString('fr-FR')}
-                                  </p>
+                          {/* Attached Files */}
+                          {(selectedProject.specifications_file ||
+                            (selectedProject.design_files && selectedProject.design_files.length > 0) ||
+                            (selectedProject.brand_assets && selectedProject.brand_assets.length > 0) ||
+                            (selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0) ||
+                            (selectedProject.other_documents && selectedProject.other_documents.length > 0)) && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
+                                <Paperclip className="w-4 h-4 text-[#6cb1bb]" />
+                                {t('projects.details.attachedFiles')}
+                              </h3>
+                              <div className="space-y-4">
+                                {selectedProject.specifications_file && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.specificationsFile')}</p>
+                                    <ProjectFileItem file={selectedProject.specifications_file} />
+                                  </div>
                                 )}
-                              </div>
-                              <div className="flex items-center gap-2">
-                                {quote.status === 'draft' && (
-                                  <>
-                                    <Button
-                                      size="sm"
-                                      variant="outline"
-                                      onClick={() => setSendingQuote(quote)}
-                                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
-                                    >
-                                      <Send className="w-4 h-4 mr-1" />
-                                      {t('quotes.actions.send')}
-                                    </Button>
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      onClick={() => {
-                                        setEditingQuote(quote)
-                                        setShowQuoteForm(true)
-                                      }}
-                                    >
-                                      <Pencil className="w-4 h-4" />
-                                    </Button>
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      onClick={() => setDeletingQuote(quote)}
-                                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                    >
-                                      <Trash2 className="w-4 h-4" />
-                                    </Button>
-                                  </>
+                                {selectedProject.design_files && selectedProject.design_files.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.designFiles')}</p>
+                                    <div className="space-y-2">
+                                      {selectedProject.design_files.map((file, index) => (
+                                        <ProjectFileItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {selectedProject.brand_assets && selectedProject.brand_assets.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.brandAssets')}</p>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                      {selectedProject.brand_assets.map((file, index) => (
+                                        <ProjectImageItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.inspirationImages')}</p>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                      {selectedProject.inspiration_images.map((file, index) => (
+                                        <ProjectImageItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                                {selectedProject.other_documents && selectedProject.other_documents.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.otherDocuments')}</p>
+                                    <div className="space-y-2">
+                                      {selectedProject.other_documents.map((file, index) => (
+                                        <ProjectFileItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
                                 )}
                               </div>
                             </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
 
-                            {/* Line items preview */}
-                            {quote.line_items && quote.line_items.length > 0 && (
-                              <div className="mt-3 pt-3 border-t border-gray-100">
-                                <div className="space-y-1">
-                                  {quote.line_items.slice(0, 3).map((item, idx) => (
-                                    <div key={idx} className="flex justify-between text-sm text-foreground/60">
-                                      <span className="truncate flex-1">{item.description}</span>
-                                      <span className="ml-4">{item.total.toFixed(2)} €</span>
-                                    </div>
-                                  ))}
-                                  {quote.line_items.length > 3 && (
-                                    <p className="text-xs text-foreground/40">
-                                      +{quote.line_items.length - 3} {t('quotes.form.addLine').toLowerCase()}...
-                                    </p>
-                                  )}
-                                </div>
-                              </div>
-                            )}
+                    {/* Quotes Sub-Section */}
+                    {projectSubSection === 'quotes' && (
+                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                          <h3 className="flex items-center gap-2 font-semibold text-foreground">
+                            <Receipt className="w-5 h-5 text-[#9c984d]" />
+                            {t('quotes.title')}
+                          </h3>
+                          {!showQuoteForm && (
+                            <Button
+                              size="sm"
+                              onClick={() => {
+                                setEditingQuote(null)
+                                setShowQuoteForm(true)
+                              }}
+                              className="bg-gray-900 hover:bg-gray-800 text-white"
+                            >
+                              <Plus className="w-4 h-4 mr-2" />
+                              {t('quotes.newQuote')}
+                            </Button>
+                          )}
+                        </div>
+
+                        {showQuoteForm && (
+                          <div className="p-4 border-b border-gray-100 bg-gray-50">
+                            <QuoteForm
+                              projectId={selectedProject.id}
+                              quote={editingQuote}
+                              onSuccess={() => {
+                                setShowQuoteForm(false)
+                                setEditingQuote(null)
+                                loadQuotes(selectedProject.id)
+                              }}
+                              onCancel={() => {
+                                setShowQuoteForm(false)
+                                setEditingQuote(null)
+                              }}
+                            />
                           </div>
-                        ))}
+                        )}
+
+                        {quotesLoading ? (
+                          <div className="flex items-center justify-center py-12">
+                            <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                          </div>
+                        ) : quotes.length === 0 ? (
+                          <div className="text-center py-12">
+                            <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                            <p className="text-foreground/50">{t('quotes.noQuotes')}</p>
+                          </div>
+                        ) : (
+                          <div className="divide-y divide-gray-100">
+                            {quotes.map((quote) => (
+                              <div key={quote.id} className="p-4 hover:bg-gray-50 transition-colors">
+                                <div className="flex items-start justify-between gap-4">
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-3 mb-2">
+                                      <span className="font-semibold text-foreground">
+                                        {t('quotes.version')} {quote.version}
+                                      </span>
+                                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getQuoteStatusBadgeClass(quote.status)}`}>
+                                        {t(`quotes.status.${quote.status}`)}
+                                      </span>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/60">
+                                      <span className="flex items-center gap-1">
+                                        <Euro className="w-4 h-4" />
+                                        {quote.amount.toFixed(2)} €
+                                      </span>
+                                      <span className="flex items-center gap-1">
+                                        <Calendar className="w-4 h-4" />
+                                        {t('quotes.createdAt')}: {new Date(quote.created_at).toLocaleDateString('fr-FR')}
+                                      </span>
+                                      <span className="flex items-center gap-1">
+                                        <Clock className="w-4 h-4" />
+                                        {quote.validity_days} {t('quotes.days')}
+                                      </span>
+                                    </div>
+                                    {quote.sent_at && (
+                                      <p className="text-xs text-foreground/50 mt-1">
+                                        {t('quotes.sentAt')}: {new Date(quote.sent_at).toLocaleDateString('fr-FR')}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    {quote.status === 'draft' && (
+                                      <>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          onClick={() => setSendingQuote(quote)}
+                                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 border-blue-200"
+                                        >
+                                          <Send className="w-4 h-4 mr-1" />
+                                          {t('quotes.actions.send')}
+                                        </Button>
+                                        <Button
+                                          size="sm"
+                                          variant="ghost"
+                                          onClick={() => {
+                                            setEditingQuote(quote)
+                                            setShowQuoteForm(true)
+                                          }}
+                                        >
+                                          <Pencil className="w-4 h-4" />
+                                        </Button>
+                                        <Button
+                                          size="sm"
+                                          variant="ghost"
+                                          onClick={() => setDeletingQuote(quote)}
+                                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                        >
+                                          <Trash2 className="w-4 h-4" />
+                                        </Button>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Line items preview */}
+                                {quote.line_items && quote.line_items.length > 0 && (
+                                  <div className="mt-3 pt-3 border-t border-gray-100">
+                                    <div className="space-y-1">
+                                      {quote.line_items.slice(0, 3).map((item, idx) => (
+                                        <div key={idx} className="flex justify-between text-sm text-foreground/60">
+                                          <span className="truncate flex-1">{item.description}</span>
+                                          <span className="ml-4">{item.total.toFixed(2)} €</span>
+                                        </div>
+                                      ))}
+                                      {quote.line_items.length > 3 && (
+                                        <p className="text-xs text-foreground/40">
+                                          +{quote.line_items.length - 3} {t('quotes.form.addLine').toLowerCase()}...
+                                        </p>
+                                      )}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>

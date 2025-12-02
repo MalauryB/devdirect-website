@@ -465,6 +465,10 @@ export const translations = {
         needsDesign: "Besoin de design",
         additionalInfo: "Informations supplémentaires",
         attachedFiles: "Fichiers joints"
+      },
+      subSections: {
+        details: "Détails",
+        quotes: "Devis"
       }
     },
     quotes: {
@@ -987,6 +991,10 @@ export const translations = {
         needsDesign: "Design needs",
         additionalInfo: "Additional information",
         attachedFiles: "Attached files"
+      },
+      subSections: {
+        details: "Details",
+        quotes: "Quotes"
       }
     },
     quotes: {
