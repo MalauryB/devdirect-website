@@ -7,6 +7,7 @@ import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, P
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -51,6 +52,11 @@ export default function DashboardPage() {
   const [saving, setSaving] = useState(false)
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [profileError, setProfileError] = useState("")
+  // Engineer-specific profile fields
+  const [jobTitle, setJobTitle] = useState("")
+  const [bio, setBio] = useState("")
+  const [skills, setSkills] = useState<string[]>([])
+  const [newSkill, setNewSkill] = useState("")
 
   // Projects state
   const [projects, setProjects] = useState<Project[]>([])
@@ -115,6 +121,10 @@ export default function DashboardPage() {
       setCity(user.user_metadata.city || "")
       setCountry(user.user_metadata.country || "France")
       setAvatarUrl(user.user_metadata.avatar_url || "")
+      // Engineer-specific fields
+      setJobTitle(user.user_metadata.job_title || "")
+      setBio(user.user_metadata.bio || "")
+      setSkills(user.user_metadata.skills || [])
     }
   }, [user])
 
@@ -280,6 +290,10 @@ export default function DashboardPage() {
       postal_code: postalCode,
       city: city,
       country: country,
+      // Engineer-specific fields
+      job_title: jobTitle,
+      bio: bio,
+      skills: skills,
     }
 
     const { error: updateError } = await updateProfile(metadata)
@@ -679,129 +693,223 @@ export default function DashboardPage() {
                   </div>
                 </div>
 
-                {/* Type de client */}
-                <div className="space-y-3">
-                  <h3 className="text-sm font-medium text-foreground">{t('profile.clientType')}</h3>
-                  <RadioGroup
-                    value={clientType}
-                    onValueChange={(value) => setClientType(value as ClientType)}
-                    disabled={saving}
-                    className="flex gap-4"
-                  >
-                    <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-                      clientType === "individual" ? 'border-gray-900' : 'border-gray-200'
-                    }`}>
-                      <RadioGroupItem value="individual" className="border-gray-300" />
-                      <span className="text-sm">{t('profile.individual')}</span>
-                    </label>
-                    <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-                      clientType === "company" ? 'border-gray-900' : 'border-gray-200'
-                    }`}>
-                      <RadioGroupItem value="company" className="border-gray-300" />
-                      <span className="text-sm">{t('profile.company')}</span>
-                    </label>
-                  </RadioGroup>
-                </div>
-
-                {/* Informations entreprise (conditionnelles) */}
-                {clientType === "company" && (
-                  <div className="space-y-4">
-                    <h3 className="text-sm font-medium text-foreground">{t('profile.companyInfo')}</h3>
-                    <div className="space-y-1">
-                      <Label htmlFor="companyName" className="text-sm text-foreground/70">{t('profile.companyName')}</Label>
+                {/* Champs spécifiques selon le rôle */}
+                {isEngineer ? (
+                  <>
+                    {/* Poste */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium text-foreground">{t('profile.jobTitle')}</h3>
                       <Input
-                        id="companyName"
+                        id="jobTitle"
                         type="text"
-                        placeholder={t('profile.companyNamePlaceholder')}
-                        value={companyName}
-                        onChange={(e) => setCompanyName(e.target.value)}
+                        placeholder={t('profile.jobTitlePlaceholder')}
+                        value={jobTitle}
+                        onChange={(e) => setJobTitle(e.target.value)}
                         disabled={saving}
                         className="border-gray-200 focus:border-gray-400"
                       />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <Label htmlFor="siret" className="text-sm text-foreground/70">{t('profile.siret')}</Label>
+
+                    {/* Bio */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium text-foreground">{t('profile.bio')}</h3>
+                      <Textarea
+                        id="bio"
+                        placeholder={t('profile.bioPlaceholder')}
+                        value={bio}
+                        onChange={(e) => setBio(e.target.value)}
+                        disabled={saving}
+                        rows={4}
+                        className="border-gray-200 focus:border-gray-400 resize-none bg-white"
+                      />
+                    </div>
+
+                    {/* Compétences */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium text-foreground">{t('profile.skills')}</h3>
+                      <div className="flex gap-2">
                         <Input
-                          id="siret"
                           type="text"
-                          placeholder={t('profile.siretPlaceholder')}
-                          value={siret}
-                          onChange={(e) => setSiret(e.target.value)}
+                          placeholder={t('profile.skillsPlaceholder')}
+                          value={newSkill}
+                          onChange={(e) => setNewSkill(e.target.value)}
+                          disabled={saving}
+                          className="flex-1 border-gray-200 focus:border-gray-400"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault()
+                              if (newSkill.trim() && !skills.includes(newSkill.trim())) {
+                                setSkills([...skills, newSkill.trim()])
+                                setNewSkill("")
+                              }
+                            }
+                          }}
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => {
+                            if (newSkill.trim() && !skills.includes(newSkill.trim())) {
+                              setSkills([...skills, newSkill.trim()])
+                              setNewSkill("")
+                            }
+                          }}
+                          disabled={saving || !newSkill.trim()}
+                        >
+                          {t('profile.addSkill')}
+                        </Button>
+                      </div>
+                      {skills.length === 0 ? (
+                        <p className="text-sm text-foreground/50">{t('profile.noSkills')}</p>
+                      ) : (
+                        <div className="flex flex-wrap gap-2">
+                          {skills.map((skill, index) => (
+                            <span
+                              key={index}
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-foreground rounded-full text-sm"
+                            >
+                              {skill}
+                              <button
+                                type="button"
+                                onClick={() => setSkills(skills.filter((_, i) => i !== index))}
+                                disabled={saving}
+                                className="text-foreground/50 hover:text-foreground ml-1"
+                              >
+                                ×
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    {/* Type de client */}
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-medium text-foreground">{t('profile.clientType')}</h3>
+                      <RadioGroup
+                        value={clientType}
+                        onValueChange={(value) => setClientType(value as ClientType)}
+                        disabled={saving}
+                        className="flex gap-4"
+                      >
+                        <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
+                          clientType === "individual" ? 'border-gray-900' : 'border-gray-200'
+                        }`}>
+                          <RadioGroupItem value="individual" className="border-gray-300" />
+                          <span className="text-sm">{t('profile.individual')}</span>
+                        </label>
+                        <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
+                          clientType === "company" ? 'border-gray-900' : 'border-gray-200'
+                        }`}>
+                          <RadioGroupItem value="company" className="border-gray-300" />
+                          <span className="text-sm">{t('profile.company')}</span>
+                        </label>
+                      </RadioGroup>
+                    </div>
+
+                    {/* Informations entreprise (conditionnelles) */}
+                    {clientType === "company" && (
+                      <div className="space-y-4">
+                        <h3 className="text-sm font-medium text-foreground">{t('profile.companyInfo')}</h3>
+                        <div className="space-y-1">
+                          <Label htmlFor="companyName" className="text-sm text-foreground/70">{t('profile.companyName')}</Label>
+                          <Input
+                            id="companyName"
+                            type="text"
+                            placeholder={t('profile.companyNamePlaceholder')}
+                            value={companyName}
+                            onChange={(e) => setCompanyName(e.target.value)}
+                            disabled={saving}
+                            className="border-gray-200 focus:border-gray-400"
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <Label htmlFor="siret" className="text-sm text-foreground/70">{t('profile.siret')}</Label>
+                            <Input
+                              id="siret"
+                              type="text"
+                              placeholder={t('profile.siretPlaceholder')}
+                              value={siret}
+                              onChange={(e) => setSiret(e.target.value)}
+                              disabled={saving}
+                              className="border-gray-200 focus:border-gray-400"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="vatNumber" className="text-sm text-foreground/70">{t('profile.vatNumber')}</Label>
+                            <Input
+                              id="vatNumber"
+                              type="text"
+                              placeholder={t('profile.vatNumberPlaceholder')}
+                              value={vatNumber}
+                              onChange={(e) => setVatNumber(e.target.value)}
+                              disabled={saving}
+                              className="border-gray-200 focus:border-gray-400"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Adresse de facturation */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-medium text-foreground">{t('profile.billingAddress')}</h3>
+                      <div className="space-y-1">
+                        <Label htmlFor="address" className="text-sm text-foreground/70">{t('profile.address')}</Label>
+                        <Input
+                          id="address"
+                          type="text"
+                          placeholder={t('profile.addressPlaceholder')}
+                          value={address}
+                          onChange={(e) => setAddress(e.target.value)}
                           disabled={saving}
                           className="border-gray-200 focus:border-gray-400"
                         />
                       </div>
-                      <div className="space-y-1">
-                        <Label htmlFor="vatNumber" className="text-sm text-foreground/70">{t('profile.vatNumber')}</Label>
-                        <Input
-                          id="vatNumber"
-                          type="text"
-                          placeholder={t('profile.vatNumberPlaceholder')}
-                          value={vatNumber}
-                          onChange={(e) => setVatNumber(e.target.value)}
-                          disabled={saving}
-                          className="border-gray-200 focus:border-gray-400"
-                        />
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        <div className="space-y-1">
+                          <Label htmlFor="postalCode" className="text-sm text-foreground/70">{t('profile.postalCode')}</Label>
+                          <Input
+                            id="postalCode"
+                            type="text"
+                            placeholder={t('profile.postalCodePlaceholder')}
+                            value={postalCode}
+                            onChange={(e) => setPostalCode(e.target.value)}
+                            disabled={saving}
+                            className="border-gray-200 focus:border-gray-400"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor="city" className="text-sm text-foreground/70">{t('profile.city')}</Label>
+                          <Input
+                            id="city"
+                            type="text"
+                            placeholder={t('profile.cityPlaceholder')}
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            disabled={saving}
+                            className="border-gray-200 focus:border-gray-400"
+                          />
+                        </div>
+                        <div className="space-y-1 col-span-2 md:col-span-1">
+                          <Label htmlFor="country" className="text-sm text-foreground/70">{t('profile.country')}</Label>
+                          <Input
+                            id="country"
+                            type="text"
+                            placeholder={t('profile.countryPlaceholder')}
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                            disabled={saving}
+                            className="border-gray-200 focus:border-gray-400"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
-
-                {/* Adresse de facturation */}
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium text-foreground">{t('profile.billingAddress')}</h3>
-                  <div className="space-y-1">
-                    <Label htmlFor="address" className="text-sm text-foreground/70">{t('profile.address')}</Label>
-                    <Input
-                      id="address"
-                      type="text"
-                      placeholder={t('profile.addressPlaceholder')}
-                      value={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                      disabled={saving}
-                      className="border-gray-200 focus:border-gray-400"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    <div className="space-y-1">
-                      <Label htmlFor="postalCode" className="text-sm text-foreground/70">{t('profile.postalCode')}</Label>
-                      <Input
-                        id="postalCode"
-                        type="text"
-                        placeholder={t('profile.postalCodePlaceholder')}
-                        value={postalCode}
-                        onChange={(e) => setPostalCode(e.target.value)}
-                        disabled={saving}
-                        className="border-gray-200 focus:border-gray-400"
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <Label htmlFor="city" className="text-sm text-foreground/70">{t('profile.city')}</Label>
-                      <Input
-                        id="city"
-                        type="text"
-                        placeholder={t('profile.cityPlaceholder')}
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        disabled={saving}
-                        className="border-gray-200 focus:border-gray-400"
-                      />
-                    </div>
-                    <div className="space-y-1 col-span-2 md:col-span-1">
-                      <Label htmlFor="country" className="text-sm text-foreground/70">{t('profile.country')}</Label>
-                      <Input
-                        id="country"
-                        type="text"
-                        placeholder={t('profile.countryPlaceholder')}
-                        value={country}
-                        onChange={(e) => setCountry(e.target.value)}
-                        disabled={saving}
-                        className="border-gray-200 focus:border-gray-400"
-                      />
-                    </div>
-                  </div>
-                </div>
 
                 {profileError && (
                   <p className="text-sm text-red-600 bg-red-50 p-2 rounded-md">
@@ -1612,9 +1720,24 @@ export default function DashboardPage() {
                         <div className="flex items-center justify-between p-4 border-b border-gray-100">
                           <h3 className="flex items-center gap-2 font-semibold text-foreground">
                             <Receipt className="w-5 h-5 text-[#9c984d]" />
-                            {t('quotes.title')}
+                            {showQuoteForm
+                              ? (editingQuote?.name || t('quotes.newQuote'))
+                              : t('quotes.title')
+                            }
                           </h3>
-                          {!showQuoteForm && (
+                          {showQuoteForm ? (
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => {
+                                setShowQuoteForm(false)
+                                setEditingQuote(null)
+                              }}
+                              className="text-foreground/50 hover:text-foreground"
+                            >
+                              <X className="w-5 h-5" />
+                            </Button>
+                          ) : (
                             <Button
                               size="sm"
                               onClick={() => {
@@ -1647,98 +1770,58 @@ export default function DashboardPage() {
                           </div>
                         )}
 
-                        {quotesLoading ? (
-                          <div className="flex items-center justify-center py-12">
-                            <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
-                          </div>
-                        ) : quotes.length === 0 ? (
-                          <div className="text-center py-12">
-                            <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
-                            <p className="text-foreground/50">{t('quotes.noQuotes')}</p>
-                          </div>
-                        ) : (
-                          <div className="divide-y divide-gray-100">
-                            {quotes.map((quote) => (
-                              <div key={quote.id} className="p-4 hover:bg-gray-50 transition-colors">
-                                <div className="flex items-start justify-between gap-4">
-                                  <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-3 mb-2">
-                                      <span className="font-semibold text-foreground">
-                                        {t('quotes.version')} {quote.version}
+                        {!showQuoteForm && (
+                          quotesLoading ? (
+                            <div className="flex items-center justify-center py-12">
+                              <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                            </div>
+                          ) : quotes.length === 0 ? (
+                            <div className="text-center py-12">
+                              <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                              <p className="text-foreground/50">{t('quotes.noQuotes')}</p>
+                            </div>
+                          ) : (
+                            <div className="divide-y divide-gray-100">
+                              {quotes.map((quote) => (
+                                <div key={quote.id} className="p-4 hover:bg-gray-50 transition-colors">
+                                  <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3">
+                                      <span className="font-medium text-foreground">
+                                        {quote.name || `${t('quotes.version')} ${quote.version}`}
                                       </span>
                                       <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getQuoteStatusBadgeClass(quote.status)}`}>
                                         {t(`quotes.status.${quote.status}`)}
                                       </span>
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-4 text-sm text-foreground/60">
-                                      <span className="flex items-center gap-1">
-                                        <Euro className="w-4 h-4" />
-                                        {quote.amount.toFixed(2)} €
-                                      </span>
-                                      <span className="flex items-center gap-1">
-                                        <Calendar className="w-4 h-4" />
-                                        {t('quotes.createdAt')}: {new Date(quote.created_at).toLocaleDateString('fr-FR')}
-                                      </span>
-                                      <span className="flex items-center gap-1">
-                                        <Clock className="w-4 h-4" />
-                                        {quote.validity_days} {t('quotes.days')}
-                                      </span>
-                                    </div>
-                                    {quote.sent_at && (
-                                      <p className="text-xs text-foreground/50 mt-1">
-                                        {t('quotes.sentAt')}: {new Date(quote.sent_at).toLocaleDateString('fr-FR')}
-                                      </p>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center gap-2">
-                                    {quote.status === 'draft' && (
-                                      <>
-                                        <Button
-                                          size="sm"
-                                          variant="ghost"
-                                          onClick={() => {
-                                            setEditingQuote(quote)
-                                            setShowQuoteForm(true)
-                                          }}
-                                        >
-                                          <Pencil className="w-4 h-4" />
-                                        </Button>
-                                        <Button
-                                          size="sm"
-                                          variant="ghost"
-                                          onClick={() => setDeletingQuote(quote)}
-                                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                                        >
-                                          <Trash2 className="w-4 h-4" />
-                                        </Button>
-                                      </>
-                                    )}
-                                  </div>
-                                </div>
-
-                                {/* Categories preview */}
-                                {quote.costing_categories && quote.costing_categories.length > 0 && (
-                                  <div className="mt-3 pt-3 border-t border-gray-100">
-                                    <div className="space-y-1">
-                                      {quote.costing_categories.slice(0, 3).map((category, idx) => (
-                                        <div key={idx} className="text-sm text-foreground/60">
-                                          <span className="truncate">{category.name || t("quotes.form.category")}</span>
-                                          <span className="text-xs text-foreground/40 ml-2">
-                                            ({category.activities.length} {t("quotes.form.costingActivity").toLowerCase()})
-                                          </span>
-                                        </div>
-                                      ))}
-                                      {quote.costing_categories.length > 3 && (
-                                        <p className="text-xs text-foreground/40">
-                                          +{quote.costing_categories.length - 3} {t("quotes.form.category").toLowerCase()}...
-                                        </p>
+                                    <div className="flex items-center gap-2">
+                                      {quote.status === 'draft' && (
+                                        <>
+                                          <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => {
+                                              setEditingQuote(quote)
+                                              setShowQuoteForm(true)
+                                            }}
+                                          >
+                                            <Pencil className="w-4 h-4" />
+                                          </Button>
+                                          <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => setDeletingQuote(quote)}
+                                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                          >
+                                            <Trash2 className="w-4 h-4" />
+                                          </Button>
+                                        </>
                                       )}
                                     </div>
                                   </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
+                                </div>
+                              ))}
+                            </div>
+                          )
                         )}
                       </div>
                     )}

@@ -162,6 +162,10 @@ export interface Profile {
   siret: string
   avatar_url: string
   role: string
+  // Engineer-specific fields
+  job_title: string
+  bio: string
+  skills: string[]
   created_at: string
   updated_at: string
 }

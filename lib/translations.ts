@@ -222,7 +222,16 @@ export const translations = {
       error: "Une erreur est survenue lors de la mise à jour",
       avatar: "Photo de profil",
       avatarDesc: "Cliquez sur l'icône pour modifier votre photo",
-      avatarError: "Erreur lors de l'upload de la photo"
+      avatarError: "Erreur lors de l'upload de la photo",
+      // Engineer-specific fields
+      jobTitle: "Poste",
+      jobTitlePlaceholder: "Ex: Développeur Senior",
+      bio: "Bio",
+      bioPlaceholder: "Décrivez-vous en quelques mots...",
+      skills: "Compétences",
+      skillsPlaceholder: "Ex: React, Node.js, TypeScript",
+      addSkill: "Ajouter",
+      noSkills: "Aucune compétence ajoutée"
     },
     dashboard: {
       loading: "Chargement...",
@@ -848,7 +857,16 @@ export const translations = {
       error: "An error occurred while updating",
       avatar: "Profile picture",
       avatarDesc: "Click on the icon to change your photo",
-      avatarError: "Error uploading photo"
+      avatarError: "Error uploading photo",
+      // Engineer-specific fields
+      jobTitle: "Job title",
+      jobTitlePlaceholder: "E.g.: Senior Developer",
+      bio: "Bio",
+      bioPlaceholder: "Describe yourself in a few words...",
+      skills: "Skills",
+      skillsPlaceholder: "E.g.: React, Node.js, TypeScript",
+      addSkill: "Add",
+      noSkills: "No skills added"
     },
     dashboard: {
       loading: "Loading...",
