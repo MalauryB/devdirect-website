@@ -24,7 +24,17 @@ import { Project, ProjectStatus, ProjectFile, Quote } from "@/lib/types"
 import { getQuotesByProject, deleteQuote, sendQuote } from "@/lib/quotes"
 import { QuoteForm } from "@/components/quote-form"
 import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
-import { exportQuoteToExcel } from "@/lib/quote-export"
+import { exportQuoteToExcel, calculateQuoteData } from "@/lib/quote-export"
+
+// Format currency helper
+const formatCurrency = (amount: number): string => {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount)
+}
 
 export default function DashboardPage() {
   const { user, loading, signOut, updateProfile } = useAuth()
@@ -1784,7 +1794,9 @@ export default function DashboardPage() {
                             </div>
                           ) : (
                             <div className="divide-y divide-gray-100">
-                              {quotes.map((quote) => (
+                              {quotes.map((quote) => {
+                                const quoteData = calculateQuoteData(quote)
+                                return (
                                 <div key={quote.id} className="p-4 hover:bg-gray-50 transition-colors">
                                   <div className="flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-3">
@@ -1793,6 +1805,9 @@ export default function DashboardPage() {
                                       </span>
                                       <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getQuoteStatusBadgeClass(quote.status)}`}>
                                         {t(`quotes.status.${quote.status}`)}
+                                      </span>
+                                      <span className="text-sm font-semibold text-[#d4a5a5]">
+                                        {formatCurrency(quoteData.totalTTC)}
                                       </span>
                                     </div>
                                     <div className="flex items-center gap-2">
@@ -1830,7 +1845,7 @@ export default function DashboardPage() {
                                     </div>
                                   </div>
                                 </div>
-                              ))}
+                              )})}
                             </div>
                           )
                         )}
