@@ -7,11 +7,12 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/contexts/language-context"
 import { createQuote, updateQuote } from "@/lib/quotes"
-import { QuoteFormData, Quote, QuoteProfile, QuoteAbaque, QuoteStatus, TransverseLevel, TransverseActivity, TransverseActivityType, CostingCategory, CostingActivity, CostingComponent, ComplexityLevel } from "@/lib/types"
-import { Loader2, Check, Plus, Trash2, ChevronRight, ChevronLeft } from "lucide-react"
+import { QuoteFormData, Quote, QuoteProfile, QuoteAbaque, QuoteStatus, TransverseLevel, TransverseActivity, TransverseActivityType, CostingCategory, CostingActivity, CostingComponent, ComplexityLevel, Project } from "@/lib/types"
+import { Loader2, Check, Plus, Trash2, ChevronRight, ChevronLeft, Sparkles } from "lucide-react"
 
 interface QuoteFormProps {
   projectId: string
+  project?: Project | null
   quote?: Quote | null
   onSuccess?: () => void
   onCancel?: () => void
@@ -19,9 +20,10 @@ interface QuoteFormProps {
 
 const TOTAL_STEPS = 5
 
-export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormProps) {
+export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: QuoteFormProps) {
   const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
+  const [generating, setGenerating] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
@@ -323,6 +325,51 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
     setCurrentStep(prev => Math.max(prev - 1, 1))
   }
 
+  // AI Quote Generation
+  const handleGenerateWithAI = async () => {
+    if (!project) {
+      setError(t("quotes.errors.noProject"))
+      return
+    }
+
+    setGenerating(true)
+    setError("")
+
+    try {
+      const response = await fetch('/api/generate-quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ project })
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        throw new Error(data.error || 'Failed to generate quote')
+      }
+
+      const { quote: generatedQuote } = await response.json()
+
+      // Update form data with generated quote
+      setFormData(prev => ({
+        ...prev,
+        name: generatedQuote.name || prev.name,
+        comment: generatedQuote.comment || prev.comment,
+        profiles: generatedQuote.profiles || prev.profiles,
+        abaques: generatedQuote.abaques || prev.abaques,
+        transverse_levels: generatedQuote.transverse_levels || prev.transverse_levels,
+        costing_categories: generatedQuote.costing_categories || prev.costing_categories,
+        notes: generatedQuote.notes || prev.notes,
+        payment_terms: generatedQuote.payment_terms || prev.payment_terms,
+        validity_days: generatedQuote.validity_days || prev.validity_days
+      }))
+
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("quotes.errors.generateFailed"))
+    } finally {
+      setGenerating(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -429,9 +476,27 @@ export function QuoteForm({ projectId, quote, onSuccess, onCancel }: QuoteFormPr
   // Step 1: General Information
   const renderStep1 = () => (
     <div className="space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold text-foreground">{t("quotes.form.step1Title")}</h3>
-        <p className="text-sm text-foreground/50">{t("quotes.form.step1Desc")}</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h3 className="text-lg font-semibold text-foreground">{t("quotes.form.step1Title")}</h3>
+          <p className="text-sm text-foreground/50">{t("quotes.form.step1Desc")}</p>
+        </div>
+        {!isEditing && project && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={handleGenerateWithAI}
+            disabled={generating || loading}
+            className="shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600"
+          >
+            {generating ? (
+              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            ) : (
+              <Sparkles className="w-4 h-4 mr-2" />
+            )}
+            {generating ? t("quotes.form.generating") : t("quotes.form.generateWithAI")}
+          </Button>
+        )}
       </div>
 
       {/* Quote Name */}

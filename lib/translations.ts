@@ -519,6 +519,8 @@ export const translations = {
         update: "Enregistrer",
         cancel: "Annuler",
         success: "Devis enregistré avec succès",
+        generateWithAI: "Générer avec l'IA",
+        generating: "Génération en cours...",
 
         // Step 1: Informations générales
         step1Title: "Informations générales",
@@ -631,7 +633,9 @@ export const translations = {
         phaseRequired: "Ajoutez au moins une phase",
         itemRequired: "Ajoutez au moins une ligne au devis",
         createFailed: "Erreur lors de la création du devis",
-        updateFailed: "Erreur lors de la modification du devis"
+        updateFailed: "Erreur lors de la modification du devis",
+        generateFailed: "Erreur lors de la génération du devis",
+        noProject: "Aucun projet sélectionné"
       }
     }
   },
@@ -1155,6 +1159,8 @@ export const translations = {
         update: "Save",
         cancel: "Cancel",
         success: "Quote saved successfully",
+        generateWithAI: "Generate with AI",
+        generating: "Generating...",
 
         // Step 1: General information
         step1Title: "General information",
@@ -1267,7 +1273,9 @@ export const translations = {
         phaseRequired: "Add at least one phase",
         itemRequired: "Add at least one line to the quote",
         createFailed: "Error creating the quote",
-        updateFailed: "Error updating the quote"
+        updateFailed: "Error updating the quote",
+        generateFailed: "Error generating the quote",
+        noProject: "No project selected"
       }
     }
   }

@@ -1757,6 +1757,7 @@ export default function DashboardPage() {
                           <div className="p-4 border-b border-gray-100 bg-gray-50">
                             <QuoteForm
                               projectId={selectedProject.id}
+                              project={selectedProject}
                               quote={editingQuote}
                               onSuccess={() => {
                                 setShowQuoteForm(false)
