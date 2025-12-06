@@ -22,6 +22,10 @@ export interface UserMetadata {
   postal_code?: string
   city?: string
   country?: string
+  // Engineer-specific fields
+  job_title?: string
+  bio?: string
+  skills?: string[]
 }
 
 interface AuthContextType {

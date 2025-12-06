@@ -24,6 +24,7 @@ import { Project, ProjectStatus, ProjectFile, Quote } from "@/lib/types"
 import { getQuotesByProject, deleteQuote, sendQuote } from "@/lib/quotes"
 import { QuoteForm } from "@/components/quote-form"
 import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
+import { exportQuoteToExcel } from "@/lib/quote-export"
 
 export default function DashboardPage() {
   const { user, loading, signOut, updateProfile } = useAuth()
@@ -1794,6 +1795,15 @@ export default function DashboardPage() {
                                       </span>
                                     </div>
                                     <div className="flex items-center gap-2">
+                                      {/* Export Excel button - always visible */}
+                                      <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => exportQuoteToExcel(quote, selectedProject?.title)}
+                                        title={t('quotes.exportExcel')}
+                                      >
+                                        <Download className="w-4 h-4" />
+                                      </Button>
                                       {quote.status === 'draft' && (
                                         <>
                                           <Button
