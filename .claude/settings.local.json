@@ -9,7 +9,10 @@
       "Read(//mnt/c/**)",
       "Bash(ls:*)",
       "Bash(npx tsc:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nSimplify Excel export to 2 sheets: detailed report and summary\n\n- Sheet 1 \"Rapport détaillé\": Full breakdown by category with activities,\n  components, complexity, coefficients, days and amounts (without abaques/profiles)\n- Sheet 2 \"Résumé\": Synthesis by category + transverse activities + totals HT/TVA/TTC\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git push)"
     ],
     "deny": [],
     "ask": []

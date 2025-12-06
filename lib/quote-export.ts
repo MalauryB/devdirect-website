@@ -34,6 +34,12 @@ interface CalculatedQuoteData {
     dailyRate: number
     amount: number
   }[]
+  // Aggregated by category
+  categorySummary: {
+    category: string
+    totalDays: number
+    totalAmount: number
+  }[]
 }
 
 // Get days from abaque based on complexity
@@ -65,6 +71,7 @@ export function calculateQuoteData(quote: Quote): CalculatedQuoteData {
   const costingDetails: CalculatedQuoteData['costingDetails'] = []
   const transverseDetails: CalculatedQuoteData['transverseDetails'] = []
   const profileTotals: Record<string, { days: number; rate: number }> = {}
+  const categoryTotals: Record<string, { days: number; amount: number }> = {}
 
   // Initialize profile totals
   quote.profiles.forEach(profile => {
@@ -75,6 +82,10 @@ export function calculateQuoteData(quote: Quote): CalculatedQuoteData {
   let costingTotalDays = 0
 
   quote.costing_categories.forEach(category => {
+    if (!categoryTotals[category.name]) {
+      categoryTotals[category.name] = { days: 0, amount: 0 }
+    }
+
     category.activities.forEach(activity => {
       if (!activity.active) return
 
@@ -100,6 +111,8 @@ export function calculateQuoteData(quote: Quote): CalculatedQuoteData {
         })
 
         costingTotalDays += days
+        categoryTotals[category.name].days += days
+        categoryTotals[category.name].amount += amount
 
         if (abaque.profile_name && profileTotals[abaque.profile_name]) {
           profileTotals[abaque.profile_name].days += days
@@ -149,6 +162,13 @@ export function calculateQuoteData(quote: Quote): CalculatedQuoteData {
     amount: data.days * data.rate
   }))
 
+  // Build category summary
+  const categorySummary = Object.entries(categoryTotals).map(([category, data]) => ({
+    category,
+    totalDays: data.days,
+    totalAmount: data.amount
+  }))
+
   // Calculate totals
   const totalDays = profileSummary.reduce((sum, p) => sum + p.totalDays, 0)
   const totalHT = profileSummary.reduce((sum, p) => sum + p.amount, 0)
@@ -162,7 +182,8 @@ export function calculateQuoteData(quote: Quote): CalculatedQuoteData {
     totalTTC,
     costingDetails,
     transverseDetails,
-    profileSummary
+    profileSummary,
+    categorySummary
   }
 }
 
@@ -171,151 +192,167 @@ export function exportQuoteToExcel(quote: Quote, projectTitle?: string): void {
   const data = calculateQuoteData(quote)
   const wb = XLSX.utils.book_new()
 
-  // Sheet 1: Summary
-  const summaryData = [
-    ['RÉCAPITULATIF DU DEVIS'],
-    [],
-    ['Nom du devis', quote.name],
-    ['Projet', projectTitle || '-'],
-    ['Date de début', quote.start_date || '-'],
-    ['Date de fin', quote.end_date || '-'],
-    ['Statut', quote.status],
-    ['Validité', `${quote.validity_days} jours`],
-    [],
-    ['TOTAUX'],
-    ['Total jours', data.totalDays.toFixed(2)],
-    ['Total HT', formatCurrency(data.totalHT)],
-    ['TVA (20%)', formatCurrency(data.totalTVA)],
-    ['Total TTC', formatCurrency(data.totalTTC)],
-    [],
-    ['CONDITIONS DE PAIEMENT'],
-    [quote.payment_terms || '-'],
-    [],
-    ['NOTES'],
-    [quote.notes || '-']
-  ]
+  // =============================================
+  // SHEET 1: RAPPORT DÉTAILLÉ
+  // =============================================
+  const detailRows: (string | number)[][] = []
 
-  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData)
+  // Header
+  detailRows.push(['RAPPORT DÉTAILLÉ DU DEVIS'])
+  detailRows.push([])
+  detailRows.push(['Devis:', quote.name])
+  detailRows.push(['Projet:', projectTitle || '-'])
+  detailRows.push(['Date de début:', quote.start_date || '-'])
+  detailRows.push(['Date de fin:', quote.end_date || '-'])
+  detailRows.push([])
+  detailRows.push([])
 
-  // Set column widths
-  wsSummary['!cols'] = [{ wch: 20 }, { wch: 40 }]
-
-  XLSX.utils.book_append_sheet(wb, wsSummary, 'Récapitulatif')
-
-  // Sheet 2: Profiles
-  const profilesHeader = ['Profil', 'TJM (€)', 'Total Jours', 'Montant HT (€)']
-  const profilesRows = data.profileSummary.map(p => [
-    p.profile,
-    p.dailyRate,
-    p.totalDays.toFixed(2),
-    p.amount.toFixed(2)
-  ])
-  profilesRows.push([])
-  profilesRows.push(['TOTAL', '', data.totalDays.toFixed(2), data.totalHT.toFixed(2)])
-
-  const wsProfiles = XLSX.utils.aoa_to_sheet([profilesHeader, ...profilesRows])
-  wsProfiles['!cols'] = [{ wch: 25 }, { wch: 12 }, { wch: 12 }, { wch: 15 }]
-  XLSX.utils.book_append_sheet(wb, wsProfiles, 'Profils')
-
-  // Sheet 3: Abaques (pricing grid)
-  const abaquesHeader = ['Composant', 'Profil', 'TJM', 'TS', 'S', 'M', 'C', 'TC']
-  const abaquesRows = quote.abaques.map(a => {
-    const profile = quote.profiles.find(p => p.name === a.profile_name)
-    return [
-      a.component_name,
-      a.profile_name,
-      profile?.daily_rate || 0,
-      a.days_ts,
-      a.days_s,
-      a.days_m,
-      a.days_c,
-      a.days_tc
-    ]
-  })
-
-  const wsAbaques = XLSX.utils.aoa_to_sheet([abaquesHeader, ...abaquesRows])
-  wsAbaques['!cols'] = [
-    { wch: 25 }, { wch: 20 }, { wch: 10 },
-    { wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }
-  ]
-  XLSX.utils.book_append_sheet(wb, wsAbaques, 'Abaques')
-
-  // Sheet 4: Costing Details
+  // Costing details by category
   if (data.costingDetails.length > 0) {
-    const costingHeader = ['Catégorie', 'Activité', 'Composant', 'Complexité', 'Coeff.', 'Jours', 'TJM (€)', 'Montant (€)']
-    const costingRows = data.costingDetails.map(c => [
-      c.category,
-      c.activity,
-      c.component,
-      c.complexity,
-      c.coefficient,
-      c.days.toFixed(2),
-      c.dailyRate,
-      c.amount.toFixed(2)
-    ])
+    detailRows.push(['ÉLÉMENTS DE CHIFFRAGE'])
+    detailRows.push([])
 
-    const costingTotal = data.costingDetails.reduce((sum, c) => sum + c.amount, 0)
-    const costingDays = data.costingDetails.reduce((sum, c) => sum + c.days, 0)
-    costingRows.push([])
-    costingRows.push(['TOTAL', '', '', '', '', costingDays.toFixed(2), '', costingTotal.toFixed(2)])
+    // Group by category
+    const categories = [...new Set(data.costingDetails.map(c => c.category))]
 
-    const wsCosting = XLSX.utils.aoa_to_sheet([costingHeader, ...costingRows])
-    wsCosting['!cols'] = [
-      { wch: 20 }, { wch: 25 }, { wch: 20 }, { wch: 12 },
-      { wch: 8 }, { wch: 8 }, { wch: 10 }, { wch: 12 }
-    ]
-    XLSX.utils.book_append_sheet(wb, wsCosting, 'Éléments de chiffrage')
+    categories.forEach(categoryName => {
+      const categoryItems = data.costingDetails.filter(c => c.category === categoryName)
+      const categoryTotal = categoryItems.reduce((sum, c) => sum + c.amount, 0)
+      const categoryDays = categoryItems.reduce((sum, c) => sum + c.days, 0)
+
+      detailRows.push([`▸ ${categoryName}`])
+      detailRows.push(['', 'Activité', 'Composant', 'Complexité', 'Coeff.', 'Jours', 'Montant HT'])
+
+      categoryItems.forEach(item => {
+        detailRows.push([
+          '',
+          item.activity,
+          item.component,
+          item.complexity,
+          item.coefficient,
+          Number(item.days.toFixed(2)),
+          Number(item.amount.toFixed(2))
+        ])
+      })
+
+      detailRows.push(['', '', '', '', 'Sous-total:', Number(categoryDays.toFixed(2)), Number(categoryTotal.toFixed(2))])
+      detailRows.push([])
+    })
+
+    // Total costing
+    const totalCostingDays = data.costingDetails.reduce((sum, c) => sum + c.days, 0)
+    const totalCostingAmount = data.costingDetails.reduce((sum, c) => sum + c.amount, 0)
+    detailRows.push(['TOTAL ÉLÉMENTS DE CHIFFRAGE', '', '', '', '', Number(totalCostingDays.toFixed(2)), Number(totalCostingAmount.toFixed(2))])
+    detailRows.push([])
+    detailRows.push([])
   }
 
-  // Sheet 5: Transverse Activities
+  // Transverse activities
   if (data.transverseDetails.length > 0) {
-    const transverseHeader = ['Niveau', 'Activité', 'Profil', 'Type', 'Valeur', 'Jours', 'TJM (€)', 'Montant (€)']
-    const transverseRows = data.transverseDetails.map(t => [
-      `Niveau ${t.level}`,
-      t.activity,
-      t.profile,
-      t.type,
-      t.type === 'Pourcentage' ? `${t.value}%` : t.value,
-      t.days.toFixed(2),
-      t.dailyRate,
-      t.amount.toFixed(2)
-    ])
+    detailRows.push(['ACTIVITÉS TRANSVERSES'])
+    detailRows.push([])
+    detailRows.push(['Niveau', 'Activité', 'Type', 'Valeur', '', 'Jours', 'Montant HT'])
 
-    const transverseTotal = data.transverseDetails.reduce((sum, t) => sum + t.amount, 0)
-    const transverseDays = data.transverseDetails.reduce((sum, t) => sum + t.days, 0)
-    transverseRows.push([])
-    transverseRows.push(['TOTAL', '', '', '', '', transverseDays.toFixed(2), '', transverseTotal.toFixed(2)])
+    data.transverseDetails.forEach(t => {
+      detailRows.push([
+        `Niveau ${t.level}`,
+        t.activity,
+        t.type,
+        t.type === 'Pourcentage' ? `${t.value}%` : t.value,
+        '',
+        Number(t.days.toFixed(2)),
+        Number(t.amount.toFixed(2))
+      ])
+    })
 
-    const wsTransverse = XLSX.utils.aoa_to_sheet([transverseHeader, ...transverseRows])
-    wsTransverse['!cols'] = [
-      { wch: 10 }, { wch: 25 }, { wch: 20 }, { wch: 12 },
-      { wch: 10 }, { wch: 8 }, { wch: 10 }, { wch: 12 }
-    ]
-    XLSX.utils.book_append_sheet(wb, wsTransverse, 'Activités transverses')
+    const totalTransverseDays = data.transverseDetails.reduce((sum, t) => sum + t.days, 0)
+    const totalTransverseAmount = data.transverseDetails.reduce((sum, t) => sum + t.amount, 0)
+    detailRows.push([])
+    detailRows.push(['TOTAL ACTIVITÉS TRANSVERSES', '', '', '', '', Number(totalTransverseDays.toFixed(2)), Number(totalTransverseAmount.toFixed(2))])
+    detailRows.push([])
+    detailRows.push([])
   }
 
-  // Sheet 6: Price Summary (HT/TVA/TTC)
-  const priceData = [
-    ['RÉCAPITULATIF DES PRIX'],
-    [],
-    ['Description', 'Montant'],
-    ['Total HT', formatCurrency(data.totalHT)],
-    ['TVA (20%)', formatCurrency(data.totalTVA)],
-    ['Total TTC', formatCurrency(data.totalTTC)],
-    [],
-    ['DÉTAIL PAR PROFIL'],
-    ['Profil', 'Jours', 'TJM', 'Montant HT'],
-    ...data.profileSummary.map(p => [
-      p.profile,
-      p.totalDays.toFixed(2),
-      formatCurrency(p.dailyRate),
-      formatCurrency(p.amount)
-    ])
-  ]
+  // Final totals
+  detailRows.push(['RÉCAPITULATIF FINANCIER'])
+  detailRows.push([])
+  detailRows.push(['Total jours', '', '', '', '', Number(data.totalDays.toFixed(2))])
+  detailRows.push(['Total HT', '', '', '', '', '', formatCurrency(data.totalHT)])
+  detailRows.push(['TVA (20%)', '', '', '', '', '', formatCurrency(data.totalTVA)])
+  detailRows.push(['Total TTC', '', '', '', '', '', formatCurrency(data.totalTTC)])
 
-  const wsPrice = XLSX.utils.aoa_to_sheet(priceData)
-  wsPrice['!cols'] = [{ wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 }]
-  XLSX.utils.book_append_sheet(wb, wsPrice, 'Prix')
+  // Notes and payment terms
+  if (quote.payment_terms || quote.notes) {
+    detailRows.push([])
+    detailRows.push([])
+    if (quote.payment_terms) {
+      detailRows.push(['Conditions de paiement:', quote.payment_terms])
+    }
+    if (quote.notes) {
+      detailRows.push(['Notes:', quote.notes])
+    }
+  }
+
+  const wsDetail = XLSX.utils.aoa_to_sheet(detailRows)
+  wsDetail['!cols'] = [
+    { wch: 30 }, { wch: 25 }, { wch: 20 }, { wch: 15 },
+    { wch: 10 }, { wch: 12 }, { wch: 15 }
+  ]
+  XLSX.utils.book_append_sheet(wb, wsDetail, 'Rapport détaillé')
+
+  // =============================================
+  // SHEET 2: RÉSUMÉ
+  // =============================================
+  const summaryRows: (string | number)[][] = []
+
+  // Header
+  summaryRows.push(['RÉSUMÉ DU DEVIS'])
+  summaryRows.push([])
+  summaryRows.push(['Devis:', quote.name])
+  summaryRows.push(['Projet:', projectTitle || '-'])
+  summaryRows.push(['Statut:', getStatusLabel(quote.status)])
+  summaryRows.push(['Validité:', `${quote.validity_days} jours`])
+  summaryRows.push([])
+  summaryRows.push([])
+
+  // Summary by category
+  if (data.categorySummary.length > 0) {
+    summaryRows.push(['SYNTHÈSE PAR CATÉGORIE'])
+    summaryRows.push([])
+    summaryRows.push(['Catégorie', 'Jours', 'Montant HT'])
+
+    data.categorySummary.forEach(cat => {
+      summaryRows.push([cat.category, Number(cat.totalDays.toFixed(2)), Number(cat.totalAmount.toFixed(2))])
+    })
+
+    const totalCostingDays = data.categorySummary.reduce((sum, c) => sum + c.totalDays, 0)
+    const totalCostingAmount = data.categorySummary.reduce((sum, c) => sum + c.totalAmount, 0)
+    summaryRows.push([])
+    summaryRows.push(['Sous-total éléments de chiffrage', Number(totalCostingDays.toFixed(2)), Number(totalCostingAmount.toFixed(2))])
+  }
+
+  // Transverse summary
+  if (data.transverseDetails.length > 0) {
+    const totalTransverseDays = data.transverseDetails.reduce((sum, t) => sum + t.days, 0)
+    const totalTransverseAmount = data.transverseDetails.reduce((sum, t) => sum + t.amount, 0)
+    summaryRows.push(['Activités transverses', Number(totalTransverseDays.toFixed(2)), Number(totalTransverseAmount.toFixed(2))])
+  }
+
+  summaryRows.push([])
+  summaryRows.push([])
+
+  // Financial summary
+  summaryRows.push(['TOTAL'])
+  summaryRows.push([])
+  summaryRows.push(['Description', '', 'Montant'])
+  summaryRows.push(['Total jours', Number(data.totalDays.toFixed(2)), ''])
+  summaryRows.push(['Total HT', '', formatCurrency(data.totalHT)])
+  summaryRows.push(['TVA (20%)', '', formatCurrency(data.totalTVA)])
+  summaryRows.push(['Total TTC', '', formatCurrency(data.totalTTC)])
+
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows)
+  wsSummary['!cols'] = [{ wch: 35 }, { wch: 15 }, { wch: 20 }]
+  XLSX.utils.book_append_sheet(wb, wsSummary, 'Résumé')
 
   // Generate filename
   const sanitizedName = (quote.name || 'devis').replace(/[^a-zA-Z0-9À-ÿ\s-]/g, '').replace(/\s+/g, '_')
@@ -331,4 +368,15 @@ function formatCurrency(amount: number): string {
     style: 'currency',
     currency: 'EUR'
   }).format(amount)
+}
+
+function getStatusLabel(status: string): string {
+  const labels: Record<string, string> = {
+    draft: 'Brouillon',
+    sent: 'Envoyé',
+    accepted: 'Accepté',
+    rejected: 'Refusé',
+    expired: 'Expiré'
+  }
+  return labels[status] || status
 }
