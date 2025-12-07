@@ -1409,7 +1409,7 @@ export default function DashboardPage() {
 
           {/* Client Messages Section */}
           {activeSection === "messages" && !isEngineer && (
-            <div className="flex gap-0 -mx-4 lg:-mx-6 -mt-4 lg:-mt-6 min-h-[calc(100vh-65px)]">
+            <div className="flex gap-0 -m-4 lg:-m-6 h-[calc(100vh-65px)]">
               {/* Secondary sidebar for projects */}
               <div className="w-56 bg-gray-50 border-r border-gray-200 flex-shrink-0 flex flex-col">
                 <div className="p-4 border-b border-gray-200">
@@ -1489,7 +1489,7 @@ export default function DashboardPage() {
                       </Button>
                     </div>
                     {/* Message thread */}
-                    <div className="flex-1 bg-gray-50">
+                    <div className="flex-1 bg-gray-50 overflow-hidden">
                       <MessageThread
                         projectId={selectedProject.id}
                         currentUser={{
