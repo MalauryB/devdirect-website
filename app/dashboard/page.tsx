@@ -1552,20 +1552,36 @@ export default function DashboardPage() {
                       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
                         <div className="p-6">
                           <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <h2 className="text-xl font-bold text-foreground mb-2">
-                                {selectedProject.title || t('projects.untitled')}
-                              </h2>
-                              <div className="flex flex-wrap gap-2 mb-3">
-                                {selectedProject.project_types?.map((type) => (
-                                  <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
-                                    {t(`projects.types.${type}`)}
+                            <div className="flex items-start gap-4">
+                              {/* Client avatar or initials */}
+                              <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden">
+                                {selectedProject.profiles?.avatar_url ? (
+                                  <img
+                                    src={selectedProject.profiles.avatar_url}
+                                    alt={selectedProject.profiles.company_name || selectedProject.profiles.first_name || 'Client'}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <span className="text-xl font-bold text-white">
+                                    {(selectedProject.profiles?.company_name?.[0] || selectedProject.profiles?.first_name?.[0] || 'C').toUpperCase()}
                                   </span>
-                                ))}
+                                )}
                               </div>
-                              <p className="text-sm text-foreground/50">
-                                {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                              </p>
+                              <div>
+                                <h2 className="text-xl font-bold text-foreground mb-2">
+                                  {selectedProject.title || t('projects.untitled')}
+                                </h2>
+                                <div className="flex flex-wrap gap-2 mb-3">
+                                  {selectedProject.project_types?.map((type) => (
+                                    <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
+                                      {t(`projects.types.${type}`)}
+                                    </span>
+                                  ))}
+                                </div>
+                                <p className="text-sm text-foreground/50">
+                                  {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                </p>
+                              </div>
                             </div>
                             <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
                               {t(`projects.status.${selectedProject.status}`)}
