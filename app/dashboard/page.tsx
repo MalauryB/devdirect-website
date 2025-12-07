@@ -27,6 +27,7 @@ import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storag
 import { exportQuoteToExcel, calculateQuoteData } from "@/lib/quote-export"
 import { exportQuoteToPdf } from "@/lib/quote-pdf-export"
 import { updateProfileAvatarUrl } from "@/lib/supabase"
+import { MessageThread } from "@/components/message-thread"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -96,7 +97,7 @@ export default function DashboardPage() {
   const [sendQuoteLoading, setSendQuoteLoading] = useState(false)
 
   // Project sub-section state (for cascading navigation)
-  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes'>('details')
+  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages'>('details')
 
   // Get user role
   const userRole: UserRole = user?.user_metadata?.role || 'client'
@@ -1234,6 +1235,27 @@ export default function DashboardPage() {
                           </div>
                         </div>
                       )}
+
+                      {/* Messages Section */}
+                      <div className="mt-8">
+                        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
+                          <MessageCircle className="w-4 h-4 text-[#6cb1bb]" />
+                          {t('messages.title')}
+                        </h3>
+                        <div className="bg-gray-50 border border-gray-200 rounded-xl overflow-hidden">
+                          <MessageThread
+                            projectId={selectedProject.id}
+                            currentUser={{
+                              id: user?.id || '',
+                              first_name: user?.user_metadata?.first_name,
+                              last_name: user?.user_metadata?.last_name,
+                              avatar_url: user?.user_metadata?.avatar_url,
+                              role: userRole
+                            }}
+                            otherParty={null}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1555,6 +1577,17 @@ export default function DashboardPage() {
                             {quotes.length}
                           </span>
                         )}
+                      </button>
+                      <button
+                        onClick={() => setProjectSubSection('messages')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'messages'
+                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        {t('messages.title')}
                       </button>
                     </nav>
                   </div>
@@ -1906,6 +1939,29 @@ export default function DashboardPage() {
                             </div>
                           )
                         )}
+                      </div>
+                    )}
+
+                    {/* Messages Section */}
+                    {projectSubSection === 'messages' && (
+                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                        <div className="border-b border-gray-100 px-6 py-4">
+                          <h3 className="font-semibold text-foreground flex items-center gap-2">
+                            <MessageCircle className="w-5 h-5" />
+                            {t('messages.title')}
+                          </h3>
+                        </div>
+                        <MessageThread
+                          projectId={selectedProject.id}
+                          currentUser={{
+                            id: user?.id || '',
+                            first_name: user?.user_metadata?.first_name,
+                            last_name: user?.user_metadata?.last_name,
+                            avatar_url: user?.user_metadata?.avatar_url,
+                            role: userRole
+                          }}
+                          otherParty={isEngineer ? selectedProject.profiles : null}
+                        />
                       </div>
                     )}
                   </div>

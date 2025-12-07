@@ -638,6 +638,16 @@ export const translations = {
         generateFailed: "Erreur lors de la génération du devis",
         noProject: "Aucun projet sélectionné"
       }
+    },
+    messages: {
+      title: "Messages",
+      noMessages: "Aucun message",
+      startConversation: "Démarrez la conversation",
+      placeholder: "Écrivez votre message...",
+      sendError: "Erreur lors de l'envoi du message",
+      uploadError: "Erreur lors de l'upload du fichier",
+      today: "Aujourd'hui",
+      yesterday: "Hier"
     }
   },
   en: {
@@ -1279,6 +1289,16 @@ export const translations = {
         generateFailed: "Error generating the quote",
         noProject: "No project selected"
       }
+    },
+    messages: {
+      title: "Messages",
+      noMessages: "No messages",
+      startConversation: "Start the conversation",
+      placeholder: "Write your message...",
+      sendError: "Error sending message",
+      uploadError: "Error uploading file",
+      today: "Today",
+      yesterday: "Yesterday"
     }
   }
 }
