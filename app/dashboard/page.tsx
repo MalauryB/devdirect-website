@@ -991,10 +991,20 @@ export default function DashboardPage() {
                     {/* Header */}
                     <div className="p-6 border-b border-gray-100">
                       <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <h2 className="text-xl font-bold text-foreground mb-2">
-                            {selectedProject.title || t('projects.untitled')}
-                          </h2>
+                        <div className="flex items-start gap-4">
+                          {/* Logo cube */}
+                          <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm">
+                            <svg viewBox="0 0 100 100" className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M50 10L90 30V70L50 90L10 70V30L50 10Z" fill="#d4a5a5"/>
+                              <path d="M50 10L90 30L50 50L10 30L50 10Z" fill="#f5e6e6"/>
+                              <path d="M50 50V90L10 70V30L50 50Z" fill="#c48b8b"/>
+                              <path d="M50 50V90L90 70V30L50 50Z" fill="#d4a5a5"/>
+                            </svg>
+                          </div>
+                          <div>
+                            <h2 className="text-xl font-bold text-foreground mb-2">
+                              {selectedProject.title || t('projects.untitled')}
+                            </h2>
                           <div className="flex flex-wrap gap-2 mb-3">
                             {selectedProject.project_types?.map((type) => (
                               <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
@@ -1005,6 +1015,7 @@ export default function DashboardPage() {
                           <p className="text-sm text-foreground/50">
                             {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                           </p>
+                          </div>
                         </div>
                         <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
                           {t(`projects.status.${selectedProject.status}`)}
