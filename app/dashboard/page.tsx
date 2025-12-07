@@ -2002,6 +2002,7 @@ export default function DashboardPage() {
                   last_name: string
                   company_name: string
                   phone: string
+                  avatar_url: string
                   project_count: number
                   projects: Project[]
                 }>()
@@ -2020,6 +2021,7 @@ export default function DashboardPage() {
                       last_name: profile?.last_name || '',
                       company_name: profile?.company_name || '',
                       phone: profile?.phone || '',
+                      avatar_url: profile?.avatar_url || '',
                       project_count: 1,
                       projects: [project]
                     })
@@ -2058,8 +2060,18 @@ export default function DashboardPage() {
                       {/* Client Info Card */}
                       <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
                         <div className="flex items-start gap-4">
-                          <div className="w-16 h-16 rounded-full bg-gray-100 flex items-center justify-center shrink-0">
-                            <User className="w-8 h-8 text-gray-400" />
+                          <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shrink-0 overflow-hidden">
+                            {selectedClient.avatar_url ? (
+                              <img
+                                src={selectedClient.avatar_url}
+                                alt={getClientDisplayName(selectedClient)}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <span className="text-2xl font-bold text-white">
+                                {(selectedClient.company_name?.[0] || selectedClient.first_name?.[0] || selectedClient.email?.[0] || 'C').toUpperCase()}
+                              </span>
+                            )}
                           </div>
                           <div className="flex-1">
                             <h2 className="text-xl font-bold text-foreground mb-1">
@@ -2160,8 +2172,18 @@ export default function DashboardPage() {
                           >
                             <div className="flex items-center justify-between gap-4">
                               <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
-                                  <User className="w-6 h-6 text-gray-400" />
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden">
+                                  {client.avatar_url ? (
+                                    <img
+                                      src={client.avatar_url}
+                                      alt={getClientDisplayName(client)}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <span className="text-lg font-bold text-white">
+                                      {(client.company_name?.[0] || client.first_name?.[0] || client.email?.[0] || 'C').toUpperCase()}
+                                    </span>
+                                  )}
                                 </div>
                                 <div>
                                   <p className="font-medium text-foreground">{getClientDisplayName(client)}</p>
