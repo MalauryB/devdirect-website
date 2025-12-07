@@ -320,11 +320,25 @@ export const translations = {
           totalProjects: "Projets totaux",
           activeProjects: "Actifs",
           wonProjects: "Remportés",
-          closedProjects: "Clos"
+          closedProjects: "Clos",
+          sentQuotes: "Devis envoyés"
         },
         recentProjects: "Projets récents",
         viewAll: "Voir tout",
-        noProjects: "Aucun projet pour le moment"
+        noProjects: "Aucun projet pour le moment",
+        actions: {
+          title: "Actions à mener",
+          unreadMessages: "Messages non lus",
+          quotesToCreate: "Devis à créer",
+          quotesToSend: "Devis à envoyer",
+          replyTo: "Répondre à",
+          client: "un client",
+          newMessage: "nouveau(x)",
+          createQuoteFor: "Créer un devis",
+          sendQuote: "Envoyer le devis",
+          allDone: "Tout est à jour !",
+          noActions: "Vous n'avez aucune action en attente."
+        }
       },
       clients: {
         title: "Clients",
@@ -983,11 +997,25 @@ export const translations = {
           totalProjects: "Total projects",
           activeProjects: "Active",
           wonProjects: "Won",
-          closedProjects: "Closed"
+          closedProjects: "Closed",
+          sentQuotes: "Quotes sent"
         },
         recentProjects: "Recent projects",
         viewAll: "View all",
-        noProjects: "No projects yet"
+        noProjects: "No projects yet",
+        actions: {
+          title: "Actions required",
+          unreadMessages: "Unread messages",
+          quotesToCreate: "Quotes to create",
+          quotesToSend: "Quotes to send",
+          replyTo: "Reply to",
+          client: "a client",
+          newMessage: "new",
+          createQuoteFor: "Create a quote",
+          sendQuote: "Send quote",
+          allDone: "All caught up!",
+          noActions: "You have no pending actions."
+        }
       },
       clients: {
         title: "Clients",

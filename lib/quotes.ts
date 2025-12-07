@@ -58,6 +58,15 @@ export async function getQuotesByProject(projectId: string): Promise<{ quotes: Q
   return { quotes: quotes || [], error }
 }
 
+export async function getAllQuotes(): Promise<{ quotes: Quote[]; error: Error | null }> {
+  const { data: quotes, error } = await supabase
+    .from('quotes')
+    .select('*')
+    .order('created_at', { ascending: false })
+
+  return { quotes: quotes || [], error }
+}
+
 export async function getQuote(id: string): Promise<{ quote: Quote | null; error: Error | null }> {
   const { data: quote, error } = await supabase
     .from('quotes')

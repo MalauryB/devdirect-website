@@ -21,13 +21,14 @@ import { useLanguage } from "@/contexts/language-context"
 import { ProjectForm } from "@/components/project-form"
 import { getUserProjects, updateProject, deleteProject, getAllProjects } from "@/lib/projects"
 import { Project, ProjectStatus, ProjectFile, Quote, Profile } from "@/lib/types"
-import { getQuotesByProject, deleteQuote, sendQuote } from "@/lib/quotes"
+import { getQuotesByProject, deleteQuote, sendQuote, getAllQuotes } from "@/lib/quotes"
 import { QuoteForm } from "@/components/quote-form"
 import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
 import { exportQuoteToExcel, calculateQuoteData } from "@/lib/quote-export"
 import { exportQuoteToPdf } from "@/lib/quote-pdf-export"
 import { updateProfileAvatarUrl } from "@/lib/supabase"
 import { MessageThread } from "@/components/message-thread"
+import { getAllUnreadCounts } from "@/lib/messages"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -98,6 +99,10 @@ export default function DashboardPage() {
 
   // Project sub-section state (for cascading navigation)
   const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages'>('details')
+
+  // Engineer action tracking state
+  const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({})
+  const [allQuotes, setAllQuotes] = useState<Quote[]>([])
 
   // Get user role
   const userRole: UserRole = user?.user_metadata?.role || 'client'
@@ -171,6 +176,17 @@ export default function DashboardPage() {
     setQuotesLoading(false)
   }, [])
 
+  // Load engineer overview data (unread messages and all quotes)
+  const loadEngineerOverviewData = useCallback(async () => {
+    if (!user) return
+    // Load unread message counts
+    const { counts } = await getAllUnreadCounts(user.id)
+    setUnreadCounts(counts)
+    // Load all quotes
+    const { quotes: fetchedQuotes } = await getAllQuotes()
+    setAllQuotes(fetchedQuotes)
+  }, [user])
+
   useEffect(() => {
     if (user && (activeSection === "projects" || activeSection === "messages")) {
       loadProjects()
@@ -182,6 +198,13 @@ export default function DashboardPage() {
       loadAllProjects()
     }
   }, [user, activeSection, loadAllProjects])
+
+  // Load engineer overview data when on overview section
+  useEffect(() => {
+    if (user && isEngineer && activeSection === "overview") {
+      loadEngineerOverviewData()
+    }
+  }, [user, isEngineer, activeSection, loadEngineerOverviewData])
 
   // Load quotes when a project is selected in allProjects section (engineer view)
   useEffect(() => {
@@ -1521,102 +1544,242 @@ export default function DashboardPage() {
               <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.engineer.title')}</h2>
               <p className="text-foreground/60 mb-6">{t('dashboard.engineer.subtitle')}</p>
 
-              {/* Stats Cards */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <div className="bg-white border border-gray-200 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <FileText className="w-5 h-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{allProjects.length}</p>
-                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.totalProjects')}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white border border-gray-200 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
-                      <Loader2 className="w-5 h-5 text-purple-600" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'active').length}</p>
-                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.activeProjects')}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white border border-gray-200 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
-                      <Check className="w-5 h-5 text-green-600" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'won').length}</p>
-                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.wonProjects')}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-white border border-gray-200 rounded-xl p-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
-                      <X className="w-5 h-5 text-gray-600" />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'closed').length}</p>
-                      <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.closedProjects')}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Actions to take */}
+              {(() => {
+                // Calculate projects with unread messages
+                const projectsWithUnread = allProjects.filter(p => unreadCounts[p.id] > 0)
+                const totalUnreadMessages = Object.values(unreadCounts).reduce((sum, count) => sum + count, 0)
 
-              {/* Recent Projects */}
-              <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                  <h3 className="font-semibold text-foreground">{t('dashboard.engineer.recentProjects')}</h3>
-                  <button
-                    onClick={() => setActiveSection('allProjects')}
-                    className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
-                  >
-                    {t('dashboard.engineer.viewAll')}
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                </div>
-                {projectsLoading ? (
-                  <div className="flex items-center justify-center py-12">
-                    <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
-                  </div>
-                ) : allProjects.length === 0 ? (
-                  <div className="text-center py-12">
-                    <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
-                    <p className="text-foreground/50">{t('dashboard.engineer.noProjects')}</p>
-                  </div>
-                ) : (
-                  <div className="divide-y divide-gray-100">
-                    {allProjects.slice(0, 5).map((project) => (
+                // Calculate projects needing quotes (pending/in_review without any quote)
+                const projectsNeedingQuotes = allProjects.filter(p =>
+                  (p.status === 'pending' || p.status === 'in_review') &&
+                  !allQuotes.some(q => q.project_id === p.id)
+                )
+
+                // Calculate draft quotes that need to be sent
+                const draftQuotes = allQuotes.filter(q => q.status === 'draft')
+                const draftQuotesWithProjects = draftQuotes.map(q => ({
+                  quote: q,
+                  project: allProjects.find(p => p.id === q.project_id)
+                })).filter(item => item.project)
+
+                const hasActions = projectsWithUnread.length > 0 || projectsNeedingQuotes.length > 0 || draftQuotesWithProjects.length > 0
+
+                return (
+                  <div className="space-y-6">
+                    {/* Summary cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div
-                        key={project.id}
+                        className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
+                          totalUnreadMessages > 0 ? 'border-blue-200 bg-blue-50/50' : 'border-gray-200'
+                        }`}
                         onClick={() => {
-                          setSelectedProject(project)
-                          setActiveSection('allProjects')
+                          if (projectsWithUnread.length > 0) {
+                            setSelectedProject(projectsWithUnread[0])
+                            setActiveSection('allProjects')
+                            setProjectSubSection('messages')
+                          }
                         }}
-                        className="p-4 hover:bg-gray-50 cursor-pointer transition-colors"
                       >
-                        <div className="flex items-center justify-between gap-4">
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-foreground truncate max-w-full">
-                              {project.title || t('projects.untitled')}
-                            </h4>
-                            <p className="text-sm text-foreground/50 line-clamp-1">{project.description}</p>
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            totalUnreadMessages > 0 ? 'bg-blue-100' : 'bg-gray-100'
+                          }`}>
+                            <MessageCircle className={`w-5 h-5 ${totalUnreadMessages > 0 ? 'text-blue-600' : 'text-gray-400'}`} />
                           </div>
-                          <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
-                            {t(`projects.status.${project.status}`)}
-                          </span>
+                          <div>
+                            <p className={`text-2xl font-bold ${totalUnreadMessages > 0 ? 'text-blue-600' : 'text-foreground/30'}`}>
+                              {totalUnreadMessages}
+                            </p>
+                            <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.unreadMessages')}</p>
+                          </div>
                         </div>
                       </div>
-                    ))}
+
+                      <div
+                        className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
+                          projectsNeedingQuotes.length > 0 ? 'border-amber-200 bg-amber-50/50' : 'border-gray-200'
+                        }`}
+                        onClick={() => {
+                          if (projectsNeedingQuotes.length > 0) {
+                            setSelectedProject(projectsNeedingQuotes[0])
+                            setActiveSection('allProjects')
+                            setProjectSubSection('quotes')
+                          }
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            projectsNeedingQuotes.length > 0 ? 'bg-amber-100' : 'bg-gray-100'
+                          }`}>
+                            <Receipt className={`w-5 h-5 ${projectsNeedingQuotes.length > 0 ? 'text-amber-600' : 'text-gray-400'}`} />
+                          </div>
+                          <div>
+                            <p className={`text-2xl font-bold ${projectsNeedingQuotes.length > 0 ? 'text-amber-600' : 'text-foreground/30'}`}>
+                              {projectsNeedingQuotes.length}
+                            </p>
+                            <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.quotesToCreate')}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div
+                        className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
+                          draftQuotesWithProjects.length > 0 ? 'border-purple-200 bg-purple-50/50' : 'border-gray-200'
+                        }`}
+                        onClick={() => {
+                          if (draftQuotesWithProjects.length > 0 && draftQuotesWithProjects[0].project) {
+                            setSelectedProject(draftQuotesWithProjects[0].project)
+                            setActiveSection('allProjects')
+                            setProjectSubSection('quotes')
+                          }
+                        }}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                            draftQuotesWithProjects.length > 0 ? 'bg-purple-100' : 'bg-gray-100'
+                          }`}>
+                            <Send className={`w-5 h-5 ${draftQuotesWithProjects.length > 0 ? 'text-purple-600' : 'text-gray-400'}`} />
+                          </div>
+                          <div>
+                            <p className={`text-2xl font-bold ${draftQuotesWithProjects.length > 0 ? 'text-purple-600' : 'text-foreground/30'}`}>
+                              {draftQuotesWithProjects.length}
+                            </p>
+                            <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.quotesToSend')}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Detailed actions list */}
+                    {hasActions ? (
+                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                        <div className="p-4 border-b border-gray-100">
+                          <h3 className="font-semibold text-foreground">{t('dashboard.engineer.actions.title')}</h3>
+                        </div>
+                        <div className="divide-y divide-gray-100">
+                          {/* Unread messages */}
+                          {projectsWithUnread.map((project) => (
+                            <div
+                              key={`msg-${project.id}`}
+                              onClick={() => {
+                                setSelectedProject(project)
+                                setActiveSection('allProjects')
+                                setProjectSubSection('messages')
+                              }}
+                              className="p-4 hover:bg-blue-50 cursor-pointer transition-colors flex items-center gap-4"
+                            >
+                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <MessageCircle className="w-4 h-4 text-blue-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-foreground">
+                                  {t('dashboard.engineer.actions.replyTo')} {project.profiles?.first_name || project.profiles?.company_name || t('dashboard.engineer.actions.client')}
+                                </p>
+                                <p className="text-sm text-foreground/50 truncate">{project.title || t('projects.untitled')}</p>
+                              </div>
+                              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
+                                {unreadCounts[project.id]} {t('dashboard.engineer.actions.newMessage')}
+                              </span>
+                              <ChevronRight className="w-4 h-4 text-foreground/30" />
+                            </div>
+                          ))}
+
+                          {/* Projects needing quotes */}
+                          {projectsNeedingQuotes.map((project) => (
+                            <div
+                              key={`quote-${project.id}`}
+                              onClick={() => {
+                                setSelectedProject(project)
+                                setActiveSection('allProjects')
+                                setProjectSubSection('quotes')
+                              }}
+                              className="p-4 hover:bg-amber-50 cursor-pointer transition-colors flex items-center gap-4"
+                            >
+                              <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <Receipt className="w-4 h-4 text-amber-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-foreground">{t('dashboard.engineer.actions.createQuoteFor')}</p>
+                                <p className="text-sm text-foreground/50 truncate">{project.title || t('projects.untitled')}</p>
+                              </div>
+                              <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
+                                {t(`projects.status.${project.status}`)}
+                              </span>
+                              <ChevronRight className="w-4 h-4 text-foreground/30" />
+                            </div>
+                          ))}
+
+                          {/* Draft quotes to send */}
+                          {draftQuotesWithProjects.map(({ quote, project }) => (
+                            <div
+                              key={`draft-${quote.id}`}
+                              onClick={() => {
+                                if (project) {
+                                  setSelectedProject(project)
+                                  setActiveSection('allProjects')
+                                  setProjectSubSection('quotes')
+                                }
+                              }}
+                              className="p-4 hover:bg-purple-50 cursor-pointer transition-colors flex items-center gap-4"
+                            >
+                              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                                <Send className="w-4 h-4 text-purple-600" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-foreground">{t('dashboard.engineer.actions.sendQuote')}</p>
+                                <p className="text-sm text-foreground/50 truncate">
+                                  {quote.name || `${t('quotes.version')} ${quote.version}`} - {project?.title || t('projects.untitled')}
+                                </p>
+                              </div>
+                              <span className="text-xs bg-gray-100 text-foreground/70 px-2 py-1 rounded-full font-medium">
+                                {t('quotes.status.draft')}
+                              </span>
+                              <ChevronRight className="w-4 h-4 text-foreground/30" />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
+                        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <Check className="w-8 h-8 text-green-600" />
+                        </div>
+                        <h3 className="font-semibold text-foreground mb-2">{t('dashboard.engineer.actions.allDone')}</h3>
+                        <p className="text-foreground/50 text-sm">{t('dashboard.engineer.actions.noActions')}</p>
+                        <Button
+                          onClick={() => setActiveSection('allProjects')}
+                          variant="outline"
+                          className="mt-4"
+                        >
+                          {t('dashboard.engineer.viewAll')}
+                          <ChevronRight className="w-4 h-4 ml-1" />
+                        </Button>
+                      </div>
+                    )}
+
+                    {/* Quick stats at the bottom */}
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                        <p className="text-2xl font-bold text-foreground">{allProjects.length}</p>
+                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.totalProjects')}</p>
+                      </div>
+                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                        <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'active').length}</p>
+                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.activeProjects')}</p>
+                      </div>
+                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                        <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'won').length}</p>
+                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.wonProjects')}</p>
+                      </div>
+                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
+                        <p className="text-2xl font-bold text-foreground">{allQuotes.filter(q => q.status === 'sent').length}</p>
+                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.sentQuotes')}</p>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
+                )
+              })()}
             </div>
           )}
 
