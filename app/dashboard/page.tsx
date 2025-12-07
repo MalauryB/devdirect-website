@@ -1757,26 +1757,6 @@ export default function DashboardPage() {
                         </Button>
                       </div>
                     )}
-
-                    {/* Quick stats at the bottom */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
-                        <p className="text-2xl font-bold text-foreground">{allProjects.length}</p>
-                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.totalProjects')}</p>
-                      </div>
-                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
-                        <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'active').length}</p>
-                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.activeProjects')}</p>
-                      </div>
-                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
-                        <p className="text-2xl font-bold text-foreground">{allProjects.filter(p => p.status === 'won').length}</p>
-                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.wonProjects')}</p>
-                      </div>
-                      <div className="bg-gray-50 border border-gray-100 rounded-xl p-4">
-                        <p className="text-2xl font-bold text-foreground">{allQuotes.filter(q => q.status === 'sent').length}</p>
-                        <p className="text-xs text-foreground/50">{t('dashboard.engineer.stats.sentQuotes')}</p>
-                      </div>
-                    </div>
                   </div>
                 )
               })()}
