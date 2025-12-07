@@ -581,10 +581,18 @@ export default function DashboardPage() {
           {/* User account dropdown */}
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <button className="w-9 h-9 rounded-full bg-white border-2 border-gray-300 text-foreground flex items-center justify-center hover:bg-gray-50 transition-colors focus:outline-none">
-                <span className="text-sm font-semibold">
-                  {firstName ? firstName.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
-                </span>
+              <button className="w-9 h-9 rounded-full bg-white border-2 border-gray-300 text-foreground flex items-center justify-center hover:bg-gray-50 transition-colors focus:outline-none overflow-hidden">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt={firstName || user.email || 'Avatar'}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-sm font-semibold">
+                    {firstName ? firstName.charAt(0).toUpperCase() : user.email?.charAt(0).toUpperCase()}
+                  </span>
+                )}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
