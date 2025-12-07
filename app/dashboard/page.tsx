@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, Mail, Phone, Building2, Receipt, Send } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -1818,8 +1818,9 @@ export default function DashboardPage() {
                                         variant="ghost"
                                         onClick={() => exportQuoteToExcel(quote, selectedProject?.title)}
                                         title={t('quotes.exportExcel')}
+                                        className="text-green-600 hover:text-green-700 hover:bg-green-50"
                                       >
-                                        <Download className="w-4 h-4" />
+                                        <FileSpreadsheet className="w-4 h-4" />
                                       </Button>
                                       <Button
                                         size="sm"
