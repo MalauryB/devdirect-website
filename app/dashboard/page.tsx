@@ -992,14 +992,19 @@ export default function DashboardPage() {
                     <div className="p-6 border-b border-gray-100">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex items-start gap-4">
-                          {/* Logo cube */}
-                          <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm">
-                            <svg viewBox="0 0 100 100" className="w-8 h-8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M50 10L90 30V70L50 90L10 70V30L50 10Z" fill="#d4a5a5"/>
-                              <path d="M50 10L90 30L50 50L10 30L50 10Z" fill="#f5e6e6"/>
-                              <path d="M50 50V90L10 70V30L50 50Z" fill="#c48b8b"/>
-                              <path d="M50 50V90L90 70V30L50 50Z" fill="#d4a5a5"/>
-                            </svg>
+                          {/* Client avatar or initials */}
+                          <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden">
+                            {selectedProject.profiles?.avatar_url ? (
+                              <img
+                                src={selectedProject.profiles.avatar_url}
+                                alt={selectedProject.profiles.company_name || selectedProject.profiles.first_name || 'Client'}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <span className="text-xl font-bold text-white">
+                                {(selectedProject.profiles?.company_name?.[0] || selectedProject.profiles?.first_name?.[0] || 'C').toUpperCase()}
+                              </span>
+                            )}
                           </div>
                           <div>
                             <h2 className="text-xl font-bold text-foreground mb-2">
