@@ -11,7 +11,7 @@ import {
   markMessagesAsRead,
   subscribeToProjectMessages
 } from "@/lib/messages"
-import { uploadFile, validateFile } from "@/lib/storage"
+import { uploadFile, validateFile, getSignedUrl } from "@/lib/storage"
 import { Loader2, Send, Paperclip, X, FileText, Image as ImageIcon, Download } from "lucide-react"
 
 interface MessageThreadProps {
@@ -38,12 +38,29 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
-  // Load messages
+  // Load messages and refresh signed URLs for attachments
   useEffect(() => {
     const loadMessages = async () => {
       setLoading(true)
       const { messages: loadedMessages } = await getProjectMessages(projectId)
-      setMessages(loadedMessages)
+
+      // Refresh signed URLs for messages with attachments
+      const messagesWithRefreshedUrls = await Promise.all(
+        loadedMessages.map(async (msg) => {
+          if (msg.attachment?.path) {
+            const { url } = await getSignedUrl('messages', msg.attachment.path)
+            if (url) {
+              return {
+                ...msg,
+                attachment: { ...msg.attachment, url }
+              }
+            }
+          }
+          return msg
+        })
+      )
+
+      setMessages(messagesWithRefreshedUrls)
       setLoading(false)
 
       // Mark messages as read
@@ -55,11 +72,23 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
 
   // Subscribe to new messages
   useEffect(() => {
-    const subscription = subscribeToProjectMessages(projectId, (newMsg) => {
+    const subscription = subscribeToProjectMessages(projectId, async (newMsg) => {
+      // Refresh signed URL if message has attachment
+      let messageToAdd = newMsg
+      if (newMsg.attachment?.path) {
+        const { url } = await getSignedUrl('messages', newMsg.attachment.path)
+        if (url) {
+          messageToAdd = {
+            ...newMsg,
+            attachment: { ...newMsg.attachment, url }
+          }
+        }
+      }
+
       setMessages(prev => {
         // Avoid duplicates
-        if (prev.find(m => m.id === newMsg.id)) return prev
-        return [...prev, newMsg]
+        if (prev.find(m => m.id === messageToAdd.id)) return prev
+        return [...prev, messageToAdd]
       })
 
       // Mark as read if not from current user
