@@ -1444,7 +1444,7 @@ export default function DashboardPage() {
                         onClick={() => setSelectedProject(project)}
                         className={`w-full flex items-start gap-2 px-3 py-2.5 rounded-lg text-left text-sm transition-colors mb-1 ${
                           selectedProject?.id === project.id
-                            ? 'bg-white border border-gray-200 text-foreground shadow-sm'
+                            ? 'bg-white border border-gray-200 text-foreground'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
