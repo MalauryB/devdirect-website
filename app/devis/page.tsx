@@ -548,6 +548,19 @@ export default function DevisPage() {
                   </div>
                 </div>
 
+                {/* Fichiers joints - Info */}
+                <div className="space-y-3">
+                  <div>
+                    <h3 className="text-sm font-medium text-foreground">{t('projects.form.filesTitle')}</h3>
+                    <p className="text-xs text-foreground/50 mt-0.5">{t('projects.form.filesDesc')}</p>
+                  </div>
+                  <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+                    <p className="text-sm text-foreground/70">
+                      📎 Vous pourrez joindre des fichiers (cahier des charges, maquettes, logos, etc.) après avoir créé votre compte et soumis votre demande.
+                    </p>
+                  </div>
+                </div>
+
                 {/* Informations additionnelles */}
                 <div className="space-y-3">
                   <div>
