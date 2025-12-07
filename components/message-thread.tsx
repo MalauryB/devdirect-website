@@ -273,7 +273,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
                       <div
                         className={`rounded-2xl px-4 py-2 ${
                           isOwn
-                            ? 'bg-gray-900 text-white rounded-tr-sm'
+                            ? 'bg-[rgb(239,239,239)] text-foreground rounded-tr-sm'
                             : 'bg-gray-100 text-foreground rounded-tl-sm'
                         }`}
                       >
@@ -283,7 +283,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
 
                         {/* Attachment */}
                         {message.attachment && (
-                          <div className={`mt-2 ${message.content ? 'pt-2 border-t border-white/10' : ''}`}>
+                          <div className={`mt-2 ${message.content ? 'pt-2 border-t border-gray-300' : ''}`}>
                             {isImage(message.attachment.type) ? (
                               <a
                                 href={message.attachment.url}
@@ -303,7 +303,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={`flex items-center gap-2 p-2 rounded-lg ${
-                                  isOwn ? 'bg-white/10 hover:bg-white/20' : 'bg-gray-200 hover:bg-gray-300'
+                                  isOwn ? 'bg-gray-300 hover:bg-gray-400' : 'bg-gray-200 hover:bg-gray-300'
                                 } transition-colors`}
                               >
                                 <FileText className="w-4 h-4" />

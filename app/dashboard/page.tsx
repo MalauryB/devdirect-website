@@ -632,7 +632,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Content area */}
-        <main className="flex-1 p-4 lg:p-6">
+        <main className="flex-1 p-4 lg:p-6 overflow-x-hidden">
           {activeSection === "profile" && (
             <div className="w-full">
               <h2 className="text-xl font-bold text-foreground mb-6">{t('profile.title')}</h2>
@@ -1517,7 +1517,7 @@ export default function DashboardPage() {
 
           {/* Engineer Overview Section */}
           {activeSection === "overview" && isEngineer && (
-            <div className="w-full">
+            <div className="w-full overflow-hidden">
               <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.engineer.title')}</h2>
               <p className="text-foreground/60 mb-6">{t('dashboard.engineer.subtitle')}</p>
 
@@ -1603,10 +1603,10 @@ export default function DashboardPage() {
                       >
                         <div className="flex items-center justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-foreground truncate">
+                            <h4 className="font-medium text-foreground truncate max-w-full">
                               {project.title || t('projects.untitled')}
                             </h4>
-                            <p className="text-sm text-foreground/50 truncate">{project.description}</p>
+                            <p className="text-sm text-foreground/50 line-clamp-1">{project.description}</p>
                           </div>
                           <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
                             {t(`projects.status.${project.status}`)}
@@ -1625,9 +1625,9 @@ export default function DashboardPage() {
             <div className="w-full">
               {selectedProject ? (
                 // Project detail view with cascading navigation
-                <div className="flex gap-0 -mx-4 lg:-mx-6 -mt-4 lg:-mt-6 min-h-[calc(100vh-65px)]">
+                <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
                   {/* Secondary sidebar for project sub-sections */}
-                  <div className="w-48 bg-gray-50 border-r border-gray-200 flex-shrink-0">
+                  <div className="w-48 bg-gray-50 border-r border-gray-200 flex-shrink-0 flex flex-col">
                     <div className="p-4 border-b border-gray-200">
                       <button
                         onClick={() => setSelectedProject(null)}
@@ -1680,7 +1680,7 @@ export default function DashboardPage() {
                   </div>
 
                   {/* Main content area */}
-                  <div className="flex-1 p-4 lg:p-6 overflow-auto">
+                  <div className={`flex-1 flex flex-col ${projectSubSection === 'messages' ? 'overflow-hidden' : 'p-4 lg:p-6 overflow-auto'}`}>
                     {/* Project Header - visible only in details section */}
                     {projectSubSection === 'details' && (
                       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
@@ -2031,25 +2031,29 @@ export default function DashboardPage() {
 
                     {/* Messages Section */}
                     {projectSubSection === 'messages' && (
-                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                        <div className="border-b border-gray-100 px-6 py-4">
-                          <h3 className="font-semibold text-foreground flex items-center gap-2">
-                            <MessageCircle className="w-5 h-5" />
-                            {t('messages.title')}
-                          </h3>
+                      <>
+                        {/* Header */}
+                        <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between flex-shrink-0">
+                          <div>
+                            <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
+                            <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
+                          </div>
                         </div>
-                        <MessageThread
-                          projectId={selectedProject.id}
-                          currentUser={{
-                            id: user?.id || '',
-                            first_name: user?.user_metadata?.first_name,
-                            last_name: user?.user_metadata?.last_name,
-                            avatar_url: user?.user_metadata?.avatar_url,
-                            role: userRole
-                          }}
-                          otherParty={isEngineer ? selectedProject.profiles : null}
-                        />
-                      </div>
+                        {/* Message thread */}
+                        <div className="flex-1 bg-gray-50 overflow-hidden">
+                          <MessageThread
+                            projectId={selectedProject.id}
+                            currentUser={{
+                              id: user?.id || '',
+                              first_name: user?.user_metadata?.first_name,
+                              last_name: user?.user_metadata?.last_name,
+                              avatar_url: user?.user_metadata?.avatar_url,
+                              role: userRole
+                            }}
+                            otherParty={selectedProject.profiles}
+                          />
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
