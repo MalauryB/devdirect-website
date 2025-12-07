@@ -1,7 +1,151 @@
-import * as XLSX from 'xlsx'
+import XLSX from 'xlsx-js-style'
 import { Quote, QuoteAbaque, ComplexityLevel } from './types'
 
 const VAT_RATE = 0.20 // 20% TVA
+
+// Style definitions
+const styles = {
+  title: {
+    font: { bold: true, sz: 16, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "4A5568" } },
+    alignment: { horizontal: "center", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "2D3748" } },
+      bottom: { style: "thin", color: { rgb: "2D3748" } },
+      left: { style: "thin", color: { rgb: "2D3748" } },
+      right: { style: "thin", color: { rgb: "2D3748" } }
+    }
+  },
+  sectionHeader: {
+    font: { bold: true, sz: 12, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "718096" } },
+    alignment: { horizontal: "left", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "4A5568" } },
+      bottom: { style: "thin", color: { rgb: "4A5568" } },
+      left: { style: "thin", color: { rgb: "4A5568" } },
+      right: { style: "thin", color: { rgb: "4A5568" } }
+    }
+  },
+  categoryHeader: {
+    font: { bold: true, sz: 11, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "D4A5A5" } },
+    alignment: { horizontal: "left", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "C48B8B" } },
+      bottom: { style: "thin", color: { rgb: "C48B8B" } },
+      left: { style: "thin", color: { rgb: "C48B8B" } },
+      right: { style: "thin", color: { rgb: "C48B8B" } }
+    }
+  },
+  tableHeader: {
+    font: { bold: true, sz: 10, color: { rgb: "374151" } },
+    fill: { fgColor: { rgb: "E5E7EB" } },
+    alignment: { horizontal: "center", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "D1D5DB" } },
+      bottom: { style: "thin", color: { rgb: "D1D5DB" } },
+      left: { style: "thin", color: { rgb: "D1D5DB" } },
+      right: { style: "thin", color: { rgb: "D1D5DB" } }
+    }
+  },
+  tableCell: {
+    font: { sz: 10, color: { rgb: "374151" } },
+    fill: { fgColor: { rgb: "FFFFFF" } },
+    alignment: { horizontal: "left", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "E5E7EB" } },
+      bottom: { style: "thin", color: { rgb: "E5E7EB" } },
+      left: { style: "thin", color: { rgb: "E5E7EB" } },
+      right: { style: "thin", color: { rgb: "E5E7EB" } }
+    }
+  },
+  tableCellAlt: {
+    font: { sz: 10, color: { rgb: "374151" } },
+    fill: { fgColor: { rgb: "F9FAFB" } },
+    alignment: { horizontal: "left", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "E5E7EB" } },
+      bottom: { style: "thin", color: { rgb: "E5E7EB" } },
+      left: { style: "thin", color: { rgb: "E5E7EB" } },
+      right: { style: "thin", color: { rgb: "E5E7EB" } }
+    }
+  },
+  tableCellNumber: {
+    font: { sz: 10, color: { rgb: "374151" } },
+    fill: { fgColor: { rgb: "FFFFFF" } },
+    alignment: { horizontal: "right", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "E5E7EB" } },
+      bottom: { style: "thin", color: { rgb: "E5E7EB" } },
+      left: { style: "thin", color: { rgb: "E5E7EB" } },
+      right: { style: "thin", color: { rgb: "E5E7EB" } }
+    }
+  },
+  subtotal: {
+    font: { bold: true, sz: 10, color: { rgb: "374151" } },
+    fill: { fgColor: { rgb: "FEF3C7" } },
+    alignment: { horizontal: "right", vertical: "center" },
+    border: {
+      top: { style: "thin", color: { rgb: "FCD34D" } },
+      bottom: { style: "thin", color: { rgb: "FCD34D" } },
+      left: { style: "thin", color: { rgb: "FCD34D" } },
+      right: { style: "thin", color: { rgb: "FCD34D" } }
+    }
+  },
+  total: {
+    font: { bold: true, sz: 11, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "059669" } },
+    alignment: { horizontal: "right", vertical: "center" },
+    border: {
+      top: { style: "medium", color: { rgb: "047857" } },
+      bottom: { style: "medium", color: { rgb: "047857" } },
+      left: { style: "medium", color: { rgb: "047857" } },
+      right: { style: "medium", color: { rgb: "047857" } }
+    }
+  },
+  totalLabel: {
+    font: { bold: true, sz: 11, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "059669" } },
+    alignment: { horizontal: "left", vertical: "center" },
+    border: {
+      top: { style: "medium", color: { rgb: "047857" } },
+      bottom: { style: "medium", color: { rgb: "047857" } },
+      left: { style: "medium", color: { rgb: "047857" } },
+      right: { style: "medium", color: { rgb: "047857" } }
+    }
+  },
+  grandTotal: {
+    font: { bold: true, sz: 14, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "7C3AED" } },
+    alignment: { horizontal: "right", vertical: "center" },
+    border: {
+      top: { style: "medium", color: { rgb: "6D28D9" } },
+      bottom: { style: "medium", color: { rgb: "6D28D9" } },
+      left: { style: "medium", color: { rgb: "6D28D9" } },
+      right: { style: "medium", color: { rgb: "6D28D9" } }
+    }
+  },
+  grandTotalLabel: {
+    font: { bold: true, sz: 14, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "7C3AED" } },
+    alignment: { horizontal: "left", vertical: "center" },
+    border: {
+      top: { style: "medium", color: { rgb: "6D28D9" } },
+      bottom: { style: "medium", color: { rgb: "6D28D9" } },
+      left: { style: "medium", color: { rgb: "6D28D9" } },
+      right: { style: "medium", color: { rgb: "6D28D9" } }
+    }
+  },
+  infoLabel: {
+    font: { bold: true, sz: 10, color: { rgb: "6B7280" } },
+    alignment: { horizontal: "left", vertical: "center" }
+  },
+  infoValue: {
+    font: { sz: 10, color: { rgb: "111827" } },
+    alignment: { horizontal: "left", vertical: "center" }
+  }
+}
 
 interface CalculatedQuoteData {
   totalDays: number
@@ -41,7 +185,6 @@ interface CalculatedQuoteData {
   }[]
 }
 
-// Get days from abaque based on complexity
 function getDaysFromAbaque(abaque: QuoteAbaque, complexity: ComplexityLevel): number {
   switch (complexity) {
     case 'ts': return abaque.days_ts
@@ -53,7 +196,6 @@ function getDaysFromAbaque(abaque: QuoteAbaque, complexity: ComplexityLevel): nu
   }
 }
 
-// Get complexity label
 function getComplexityLabel(complexity: ComplexityLevel): string {
   const labels: Record<ComplexityLevel, string> = {
     ts: 'Très Simple',
@@ -65,7 +207,6 @@ function getComplexityLabel(complexity: ComplexityLevel): string {
   return labels[complexity] || complexity
 }
 
-// Calculate all quote data
 export function calculateQuoteData(quote: Quote): CalculatedQuoteData {
   const costingDetails: CalculatedQuoteData['costingDetails'] = []
   const transverseDetails: CalculatedQuoteData['transverseDetails'] = []
@@ -179,14 +320,14 @@ export function calculateQuoteData(quote: Quote): CalculatedQuoteData {
   }
 }
 
-// Style helpers
-function applyStyles(ws: XLSX.WorkSheet, styles: Record<string, { fill?: string; font?: { bold?: boolean; color?: string; sz?: number }; border?: boolean; align?: string }>) {
-  // Note: xlsx library community version has limited styling support
-  // For full styling, xlsx-style or exceljs would be needed
-  // We'll use what's available and structure data for clarity
+// Helper to create styled cell
+function cell(value: string | number | null, style: object) {
+  return { v: value, s: style }
 }
 
-// Export quote to Excel with styling
+// Type for cell data
+type CellValue = { v: string | number | null; s: object } | null
+
 export function exportQuoteToExcel(quote: Quote, projectTitle?: string): void {
   const data = calculateQuoteData(quote)
   const wb = XLSX.utils.book_new()
@@ -194,37 +335,69 @@ export function exportQuoteToExcel(quote: Quote, projectTitle?: string): void {
   // =============================================
   // SHEET 1: RAPPORT DÉTAILLÉ
   // =============================================
-  const detailRows: (string | number | null)[][] = []
+  const detailData: CellValue[][] = []
   const detailMerges: XLSX.Range[] = []
-  let rowIndex = 0
+  let row = 0
 
-  // Title
-  detailRows.push(['RAPPORT DÉTAILLÉ DU DEVIS', null, null, null, null, null, null])
-  detailMerges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 6 } })
-  rowIndex++
+  // Title row
+  detailData.push([
+    cell('RAPPORT DÉTAILLÉ DU DEVIS', styles.title),
+    cell(null, styles.title),
+    cell(null, styles.title),
+    cell(null, styles.title),
+    cell(null, styles.title),
+    cell(null, styles.title),
+    cell(null, styles.title)
+  ])
+  detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 6 } })
+  row++
 
-  detailRows.push([null, null, null, null, null, null, null])
-  rowIndex++
+  // Empty row
+  detailData.push([null, null, null, null, null, null, null])
+  row++
 
-  // Header info
-  detailRows.push(['Devis :', quote.name, null, null, 'Date début :', quote.start_date || '-', null])
-  rowIndex++
-  detailRows.push(['Projet :', projectTitle || '-', null, null, 'Date fin :', quote.end_date || '-', null])
-  rowIndex++
+  // Info rows
+  detailData.push([
+    cell('Devis :', styles.infoLabel),
+    cell(quote.name, styles.infoValue),
+    null,
+    null,
+    cell('Date début :', styles.infoLabel),
+    cell(quote.start_date || '-', styles.infoValue),
+    null
+  ])
+  row++
 
-  detailRows.push([null, null, null, null, null, null, null])
-  rowIndex++
-  detailRows.push([null, null, null, null, null, null, null])
-  rowIndex++
+  detailData.push([
+    cell('Projet :', styles.infoLabel),
+    cell(projectTitle || '-', styles.infoValue),
+    null,
+    null,
+    cell('Date fin :', styles.infoLabel),
+    cell(quote.end_date || '-', styles.infoValue),
+    null
+  ])
+  row++
 
-  // Costing details by category
+  detailData.push([null, null, null, null, null, null, null])
+  row++
+
+  // Costing details
   if (data.costingDetails.length > 0) {
-    detailRows.push(['ÉLÉMENTS DE CHIFFRAGE', null, null, null, null, null, null])
-    detailMerges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 6 } })
-    rowIndex++
+    detailData.push([
+      cell('ÉLÉMENTS DE CHIFFRAGE', styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader)
+    ])
+    detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 6 } })
+    row++
 
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
+    detailData.push([null, null, null, null, null, null, null])
+    row++
 
     const categories = [...new Set(data.costingDetails.map(c => c.category))]
 
@@ -234,232 +407,355 @@ export function exportQuoteToExcel(quote: Quote, projectTitle?: string): void {
       const categoryDays = categoryItems.reduce((sum, c) => sum + c.days, 0)
 
       // Category header
-      detailRows.push([`📁 ${categoryName}`, null, null, null, null, null, null])
-      detailMerges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 6 } })
-      rowIndex++
+      detailData.push([
+        cell(`📁 ${categoryName}`, styles.categoryHeader),
+        cell(null, styles.categoryHeader),
+        cell(null, styles.categoryHeader),
+        cell(null, styles.categoryHeader),
+        cell(null, styles.categoryHeader),
+        cell(null, styles.categoryHeader),
+        cell(null, styles.categoryHeader)
+      ])
+      detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 6 } })
+      row++
 
       // Column headers
-      detailRows.push(['', 'Activité', 'Composant', 'Complexité', 'Coeff.', 'Jours', 'Montant HT (€)'])
-      rowIndex++
+      detailData.push([
+        cell('', styles.tableHeader),
+        cell('Activité', styles.tableHeader),
+        cell('Composant', styles.tableHeader),
+        cell('Complexité', styles.tableHeader),
+        cell('Coeff.', styles.tableHeader),
+        cell('Jours', styles.tableHeader),
+        cell('Montant HT (€)', styles.tableHeader)
+      ])
+      row++
 
       // Items
-      categoryItems.forEach(item => {
-        detailRows.push([
-          '',
-          item.activity,
-          item.component,
-          item.complexity,
-          item.coefficient,
-          Number(item.days.toFixed(2)),
-          Number(item.amount.toFixed(2))
+      categoryItems.forEach((item, idx) => {
+        const cellStyle = idx % 2 === 0 ? styles.tableCell : styles.tableCellAlt
+        const numStyle = { ...cellStyle, alignment: { horizontal: "right", vertical: "center" } }
+        detailData.push([
+          cell('', cellStyle),
+          cell(item.activity, cellStyle),
+          cell(item.component, cellStyle),
+          cell(item.complexity, cellStyle),
+          cell(item.coefficient, numStyle),
+          cell(Number(item.days.toFixed(2)), numStyle),
+          cell(Number(item.amount.toFixed(2)), numStyle)
         ])
-        rowIndex++
+        row++
       })
 
       // Subtotal
-      detailRows.push(['', '', '', '', '→ Sous-total', Number(categoryDays.toFixed(2)), Number(categoryTotal.toFixed(2))])
-      rowIndex++
+      detailData.push([
+        cell('', styles.subtotal),
+        cell('', styles.subtotal),
+        cell('', styles.subtotal),
+        cell('', styles.subtotal),
+        cell('Sous-total :', styles.subtotal),
+        cell(Number(categoryDays.toFixed(2)), styles.subtotal),
+        cell(Number(categoryTotal.toFixed(2)), styles.subtotal)
+      ])
+      row++
 
-      detailRows.push([null, null, null, null, null, null, null])
-      rowIndex++
+      detailData.push([null, null, null, null, null, null, null])
+      row++
     })
 
     // Total costing
     const totalCostingDays = data.costingDetails.reduce((sum, c) => sum + c.days, 0)
     const totalCostingAmount = data.costingDetails.reduce((sum, c) => sum + c.amount, 0)
-    detailRows.push(['✅ TOTAL ÉLÉMENTS DE CHIFFRAGE', null, null, null, null, Number(totalCostingDays.toFixed(2)), Number(totalCostingAmount.toFixed(2))])
-    detailMerges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 4 } })
-    rowIndex++
+    detailData.push([
+      cell('✅ TOTAL ÉLÉMENTS DE CHIFFRAGE', styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(Number(totalCostingDays.toFixed(2)), styles.total),
+      cell(Number(totalCostingAmount.toFixed(2)), styles.total)
+    ])
+    detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 4 } })
+    row++
 
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
+    detailData.push([null, null, null, null, null, null, null])
+    row++
   }
 
   // Transverse activities
   if (data.transverseDetails.length > 0) {
-    detailRows.push(['ACTIVITÉS TRANSVERSES', null, null, null, null, null, null])
-    detailMerges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 6 } })
-    rowIndex++
+    detailData.push([
+      cell('ACTIVITÉS TRANSVERSES', styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader)
+    ])
+    detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 6 } })
+    row++
 
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
+    detailData.push([null, null, null, null, null, null, null])
+    row++
 
     // Headers
-    detailRows.push(['Niveau', 'Activité', 'Type', 'Valeur', '', 'Jours', 'Montant HT (€)'])
-    rowIndex++
+    detailData.push([
+      cell('Niveau', styles.tableHeader),
+      cell('Activité', styles.tableHeader),
+      cell('Type', styles.tableHeader),
+      cell('Valeur', styles.tableHeader),
+      cell('', styles.tableHeader),
+      cell('Jours', styles.tableHeader),
+      cell('Montant HT (€)', styles.tableHeader)
+    ])
+    row++
 
-    data.transverseDetails.forEach(t => {
-      detailRows.push([
-        `Niveau ${t.level}`,
-        t.activity,
-        t.type,
-        t.type === 'Pourcentage' ? `${t.value}%` : t.value,
-        '',
-        Number(t.days.toFixed(2)),
-        Number(t.amount.toFixed(2))
+    data.transverseDetails.forEach((t, idx) => {
+      const cellStyle = idx % 2 === 0 ? styles.tableCell : styles.tableCellAlt
+      const numStyle = { ...cellStyle, alignment: { horizontal: "right", vertical: "center" } }
+      detailData.push([
+        cell(`Niveau ${t.level}`, cellStyle),
+        cell(t.activity, cellStyle),
+        cell(t.type, cellStyle),
+        cell(t.type === 'Pourcentage' ? `${t.value}%` : t.value, numStyle),
+        cell('', cellStyle),
+        cell(Number(t.days.toFixed(2)), numStyle),
+        cell(Number(t.amount.toFixed(2)), numStyle)
       ])
-      rowIndex++
+      row++
     })
 
     const totalTransverseDays = data.transverseDetails.reduce((sum, t) => sum + t.days, 0)
     const totalTransverseAmount = data.transverseDetails.reduce((sum, t) => sum + t.amount, 0)
 
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
-    detailRows.push(['✅ TOTAL ACTIVITÉS TRANSVERSES', null, null, null, null, Number(totalTransverseDays.toFixed(2)), Number(totalTransverseAmount.toFixed(2))])
-    detailMerges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 4 } })
-    rowIndex++
+    detailData.push([null, null, null, null, null, null, null])
+    row++
 
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
+    detailData.push([
+      cell('✅ TOTAL ACTIVITÉS TRANSVERSES', styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(null, styles.totalLabel),
+      cell(Number(totalTransverseDays.toFixed(2)), styles.total),
+      cell(Number(totalTransverseAmount.toFixed(2)), styles.total)
+    ])
+    detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 4 } })
+    row++
+
+    detailData.push([null, null, null, null, null, null, null])
+    row++
   }
 
   // Financial summary
-  detailRows.push(['💰 RÉCAPITULATIF FINANCIER', null, null, null, null, null, null])
-  detailMerges.push({ s: { r: rowIndex, c: 0 }, e: { r: rowIndex, c: 6 } })
-  rowIndex++
+  detailData.push([null, null, null, null, null, null, null])
+  row++
 
-  detailRows.push([null, null, null, null, null, null, null])
-  rowIndex++
+  detailData.push([
+    cell('💰 RÉCAPITULATIF FINANCIER', styles.sectionHeader),
+    cell(null, styles.sectionHeader),
+    cell(null, styles.sectionHeader),
+    cell(null, styles.sectionHeader),
+    cell(null, styles.sectionHeader),
+    cell(null, styles.sectionHeader),
+    cell(null, styles.sectionHeader)
+  ])
+  detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 6 } })
+  row++
 
-  detailRows.push(['Total jours', null, null, null, null, Number(data.totalDays.toFixed(2)), null])
-  rowIndex++
-  detailRows.push(['Total HT', null, null, null, null, null, `${formatNumber(data.totalHT)} €`])
-  rowIndex++
-  detailRows.push(['TVA (20%)', null, null, null, null, null, `${formatNumber(data.totalTVA)} €`])
-  rowIndex++
-  detailRows.push(['TOTAL TTC', null, null, null, null, null, `${formatNumber(data.totalTTC)} €`])
-  rowIndex++
+  detailData.push([null, null, null, null, null, null, null])
+  row++
 
-  // Notes
-  if (quote.payment_terms || quote.notes) {
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
-    detailRows.push([null, null, null, null, null, null, null])
-    rowIndex++
+  detailData.push([
+    cell('Total jours', styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(Number(data.totalDays.toFixed(2)), { ...styles.tableCellNumber, font: { bold: true, sz: 10, color: { rgb: "374151" } } }),
+    cell(null, styles.tableCell)
+  ])
+  row++
 
-    if (quote.payment_terms) {
-      detailRows.push(['📋 Conditions de paiement :', quote.payment_terms, null, null, null, null, null])
-      detailMerges.push({ s: { r: rowIndex, c: 1 }, e: { r: rowIndex, c: 6 } })
-      rowIndex++
-    }
-    if (quote.notes) {
-      detailRows.push(['📝 Notes :', quote.notes, null, null, null, null, null])
-      detailMerges.push({ s: { r: rowIndex, c: 1 }, e: { r: rowIndex, c: 6 } })
-      rowIndex++
-    }
-  }
+  detailData.push([
+    cell('Total HT', styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(`${formatNumber(data.totalHT)} €`, { ...styles.tableCellNumber, font: { bold: true, sz: 10, color: { rgb: "374151" } } })
+  ])
+  row++
 
-  const wsDetail = XLSX.utils.aoa_to_sheet(detailRows)
+  detailData.push([
+    cell('TVA (20%)', styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(`${formatNumber(data.totalTVA)} €`, styles.tableCellNumber)
+  ])
+  row++
+
+  detailData.push([
+    cell('TOTAL TTC', styles.grandTotalLabel),
+    cell(null, styles.grandTotalLabel),
+    cell(null, styles.grandTotalLabel),
+    cell(null, styles.grandTotalLabel),
+    cell(null, styles.grandTotalLabel),
+    cell(null, styles.grandTotalLabel),
+    cell(`${formatNumber(data.totalTTC)} €`, styles.grandTotal)
+  ])
+  detailMerges.push({ s: { r: row, c: 0 }, e: { r: row, c: 5 } })
+  row++
+
+  const wsDetail = XLSX.utils.aoa_to_sheet(detailData)
   wsDetail['!cols'] = [
     { wch: 35 }, { wch: 25 }, { wch: 20 }, { wch: 15 },
     { wch: 12 }, { wch: 12 }, { wch: 18 }
   ]
   wsDetail['!merges'] = detailMerges
-
-  // Set row heights for better readability
-  wsDetail['!rows'] = [
-    { hpt: 30 }, // Title row
-  ]
+  wsDetail['!rows'] = [{ hpt: 28 }]
 
   XLSX.utils.book_append_sheet(wb, wsDetail, 'Rapport détaillé')
 
   // =============================================
   // SHEET 2: RÉSUMÉ
   // =============================================
-  const summaryRows: (string | number | null)[][] = []
+  const summaryData: CellValue[][] = []
   const summaryMerges: XLSX.Range[] = []
-  let sRowIndex = 0
+  let sRow = 0
 
   // Title
-  summaryRows.push(['RÉSUMÉ DU DEVIS', null, null])
-  summaryMerges.push({ s: { r: sRowIndex, c: 0 }, e: { r: sRowIndex, c: 2 } })
-  sRowIndex++
+  summaryData.push([
+    cell('RÉSUMÉ DU DEVIS', styles.title),
+    cell(null, styles.title),
+    cell(null, styles.title)
+  ])
+  summaryMerges.push({ s: { r: sRow, c: 0 }, e: { r: sRow, c: 2 } })
+  sRow++
 
-  summaryRows.push([null, null, null])
-  sRowIndex++
+  summaryData.push([null, null, null])
+  sRow++
 
   // Info
-  summaryRows.push(['📄 Devis :', quote.name, null])
-  sRowIndex++
-  summaryRows.push(['📁 Projet :', projectTitle || '-', null])
-  sRowIndex++
-  summaryRows.push(['📊 Statut :', getStatusLabel(quote.status), null])
-  sRowIndex++
-  summaryRows.push(['⏱️ Validité :', `${quote.validity_days} jours`, null])
-  sRowIndex++
+  summaryData.push([cell('Devis :', styles.infoLabel), cell(quote.name, styles.infoValue), null])
+  sRow++
+  summaryData.push([cell('Projet :', styles.infoLabel), cell(projectTitle || '-', styles.infoValue), null])
+  sRow++
+  summaryData.push([cell('Statut :', styles.infoLabel), cell(getStatusLabel(quote.status), styles.infoValue), null])
+  sRow++
+  summaryData.push([cell('Validité :', styles.infoLabel), cell(`${quote.validity_days} jours`, styles.infoValue), null])
+  sRow++
 
-  summaryRows.push([null, null, null])
-  sRowIndex++
-  summaryRows.push([null, null, null])
-  sRowIndex++
+  summaryData.push([null, null, null])
+  sRow++
 
   // Summary by category
   if (data.categorySummary.length > 0) {
-    summaryRows.push(['SYNTHÈSE PAR CATÉGORIE', null, null])
-    summaryMerges.push({ s: { r: sRowIndex, c: 0 }, e: { r: sRowIndex, c: 2 } })
-    sRowIndex++
+    summaryData.push([
+      cell('SYNTHÈSE PAR CATÉGORIE', styles.sectionHeader),
+      cell(null, styles.sectionHeader),
+      cell(null, styles.sectionHeader)
+    ])
+    summaryMerges.push({ s: { r: sRow, c: 0 }, e: { r: sRow, c: 2 } })
+    sRow++
 
-    summaryRows.push([null, null, null])
-    sRowIndex++
+    summaryData.push([null, null, null])
+    sRow++
 
-    summaryRows.push(['Catégorie', 'Jours', 'Montant HT (€)'])
-    sRowIndex++
+    summaryData.push([
+      cell('Catégorie', styles.tableHeader),
+      cell('Jours', styles.tableHeader),
+      cell('Montant HT (€)', styles.tableHeader)
+    ])
+    sRow++
 
-    data.categorySummary.forEach(cat => {
-      summaryRows.push([cat.category, Number(cat.totalDays.toFixed(2)), Number(cat.totalAmount.toFixed(2))])
-      sRowIndex++
+    data.categorySummary.forEach((cat, idx) => {
+      const cellStyle = idx % 2 === 0 ? styles.tableCell : styles.tableCellAlt
+      const numStyle = { ...cellStyle, alignment: { horizontal: "right", vertical: "center" } }
+      summaryData.push([
+        cell(cat.category, cellStyle),
+        cell(Number(cat.totalDays.toFixed(2)), numStyle),
+        cell(Number(cat.totalAmount.toFixed(2)), numStyle)
+      ])
+      sRow++
     })
-
-    summaryRows.push([null, null, null])
-    sRowIndex++
 
     const totalCostingDays = data.categorySummary.reduce((sum, c) => sum + c.totalDays, 0)
     const totalCostingAmount = data.categorySummary.reduce((sum, c) => sum + c.totalAmount, 0)
-    summaryRows.push(['→ Sous-total chiffrage', Number(totalCostingDays.toFixed(2)), Number(totalCostingAmount.toFixed(2))])
-    sRowIndex++
+
+    summaryData.push([
+      cell('Sous-total chiffrage', styles.subtotal),
+      cell(Number(totalCostingDays.toFixed(2)), styles.subtotal),
+      cell(Number(totalCostingAmount.toFixed(2)), styles.subtotal)
+    ])
+    sRow++
   }
 
   // Transverse summary
   if (data.transverseDetails.length > 0) {
     const totalTransverseDays = data.transverseDetails.reduce((sum, t) => sum + t.days, 0)
     const totalTransverseAmount = data.transverseDetails.reduce((sum, t) => sum + t.amount, 0)
-    summaryRows.push(['→ Activités transverses', Number(totalTransverseDays.toFixed(2)), Number(totalTransverseAmount.toFixed(2))])
-    sRowIndex++
+    summaryData.push([
+      cell('Activités transverses', styles.tableCell),
+      cell(Number(totalTransverseDays.toFixed(2)), styles.tableCellNumber),
+      cell(Number(totalTransverseAmount.toFixed(2)), styles.tableCellNumber)
+    ])
+    sRow++
   }
 
-  summaryRows.push([null, null, null])
-  sRowIndex++
-  summaryRows.push([null, null, null])
-  sRowIndex++
+  summaryData.push([null, null, null])
+  sRow++
 
-  // Financial summary
-  summaryRows.push(['💰 TOTAUX', null, null])
-  summaryMerges.push({ s: { r: sRowIndex, c: 0 }, e: { r: sRowIndex, c: 2 } })
-  sRowIndex++
+  // Totals
+  summaryData.push([
+    cell('💰 TOTAUX', styles.sectionHeader),
+    cell(null, styles.sectionHeader),
+    cell(null, styles.sectionHeader)
+  ])
+  summaryMerges.push({ s: { r: sRow, c: 0 }, e: { r: sRow, c: 2 } })
+  sRow++
 
-  summaryRows.push([null, null, null])
-  sRowIndex++
+  summaryData.push([null, null, null])
+  sRow++
 
-  summaryRows.push(['Description', 'Jours', 'Montant'])
-  sRowIndex++
-  summaryRows.push(['Total jours', Number(data.totalDays.toFixed(2)), ''])
-  sRowIndex++
-  summaryRows.push(['Total HT', '', `${formatNumber(data.totalHT)} €`])
-  sRowIndex++
-  summaryRows.push(['TVA (20%)', '', `${formatNumber(data.totalTVA)} €`])
-  sRowIndex++
-  summaryRows.push(['TOTAL TTC', '', `${formatNumber(data.totalTTC)} €`])
-  sRowIndex++
+  summaryData.push([
+    cell('Total jours', styles.tableCell),
+    cell(Number(data.totalDays.toFixed(2)), { ...styles.tableCellNumber, font: { bold: true, sz: 10, color: { rgb: "374151" } } }),
+    cell(null, styles.tableCell)
+  ])
+  sRow++
 
-  const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows)
+  summaryData.push([
+    cell('Total HT', styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(`${formatNumber(data.totalHT)} €`, { ...styles.tableCellNumber, font: { bold: true, sz: 10, color: { rgb: "374151" } } })
+  ])
+  sRow++
+
+  summaryData.push([
+    cell('TVA (20%)', styles.tableCell),
+    cell(null, styles.tableCell),
+    cell(`${formatNumber(data.totalTVA)} €`, styles.tableCellNumber)
+  ])
+  sRow++
+
+  summaryData.push([
+    cell('TOTAL TTC', styles.grandTotalLabel),
+    cell(null, styles.grandTotalLabel),
+    cell(`${formatNumber(data.totalTTC)} €`, styles.grandTotal)
+  ])
+  summaryMerges.push({ s: { r: sRow, c: 0 }, e: { r: sRow, c: 1 } })
+  sRow++
+
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData)
   wsSummary['!cols'] = [{ wch: 35 }, { wch: 15 }, { wch: 20 }]
   wsSummary['!merges'] = summaryMerges
-  wsSummary['!rows'] = [{ hpt: 30 }]
+  wsSummary['!rows'] = [{ hpt: 28 }]
 
   XLSX.utils.book_append_sheet(wb, wsSummary, 'Résumé')
 
@@ -468,15 +764,7 @@ export function exportQuoteToExcel(quote: Quote, projectTitle?: string): void {
   const date = new Date().toISOString().split('T')[0]
   const filename = `${sanitizedName}_${date}.xlsx`
 
-  // Download file
   XLSX.writeFile(wb, filename)
-}
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR'
-  }).format(amount)
 }
 
 function formatNumber(amount: number): string {
