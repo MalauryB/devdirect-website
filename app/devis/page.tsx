@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { ArrowLeft, ArrowRight, Send, Loader2, Check } from "lucide-react"
+import { ArrowLeft, ArrowRight, Send, Loader2, Check, Eye, EyeOff } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -35,6 +35,8 @@ export default function DevisPage() {
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [authSuccess, setAuthSuccess] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   // Project form state
   const [formData, setFormData] = useState<ProjectFormData>({
@@ -637,30 +639,48 @@ export default function DevisPage() {
                     {authMode !== "forgot" && (
                       <div className="space-y-1.5">
                         <Label htmlFor="password" className="text-sm text-foreground/70">{t('auth.password')}</Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          placeholder={t('auth.passwordPlaceholder')}
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          disabled={loading}
-                          className="border-gray-200 focus:border-gray-400"
-                        />
+                        <div className="relative">
+                          <Input
+                            id="password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder={t('auth.passwordPlaceholder')}
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            disabled={loading}
+                            className="border-gray-200 focus:border-gray-400 pr-10"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/50 hover:text-foreground transition-colors"
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                       </div>
                     )}
 
                     {authMode === "register" && (
                       <div className="space-y-1.5">
                         <Label htmlFor="confirmPassword" className="text-sm text-foreground/70">{t('auth.confirmPassword')}</Label>
-                        <Input
-                          id="confirmPassword"
-                          type="password"
-                          placeholder={t('auth.confirmPasswordPlaceholder')}
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          disabled={loading}
-                          className="border-gray-200 focus:border-gray-400"
-                        />
+                        <div className="relative">
+                          <Input
+                            id="confirmPassword"
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder={t('auth.confirmPasswordPlaceholder')}
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            disabled={loading}
+                            className="border-gray-200 focus:border-gray-400 pr-10"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/50 hover:text-foreground transition-colors"
+                          >
+                            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
                       </div>
                     )}
 
