@@ -20,11 +20,12 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { ProjectForm } from "@/components/project-form"
 import { getUserProjects, updateProject, deleteProject, getAllProjects } from "@/lib/projects"
-import { Project, ProjectStatus, ProjectFile, Quote } from "@/lib/types"
+import { Project, ProjectStatus, ProjectFile, Quote, Profile } from "@/lib/types"
 import { getQuotesByProject, deleteQuote, sendQuote } from "@/lib/quotes"
 import { QuoteForm } from "@/components/quote-form"
 import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
 import { exportQuoteToExcel, calculateQuoteData } from "@/lib/quote-export"
+import { exportQuoteToPdf } from "@/lib/quote-pdf-export"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -1811,7 +1812,7 @@ export default function DashboardPage() {
                                       </span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                      {/* Export Excel button - always visible */}
+                                      {/* Export buttons - always visible */}
                                       <Button
                                         size="sm"
                                         variant="ghost"
@@ -1819,6 +1820,15 @@ export default function DashboardPage() {
                                         title={t('quotes.exportExcel')}
                                       >
                                         <Download className="w-4 h-4" />
+                                      </Button>
+                                      <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => exportQuoteToPdf(quote, selectedProject, user?.user_metadata as Profile | undefined)}
+                                        title={t('quotes.exportPdf')}
+                                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                                      >
+                                        <FileText className="w-4 h-4" />
                                       </Button>
                                       {quote.status === 'draft' && (
                                         <>
