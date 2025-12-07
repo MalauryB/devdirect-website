@@ -98,7 +98,7 @@ export const translations = {
           image: "/nobody.jpg"
         },
         {
-          name: "Victor",
+          name: "Thomas",
           role: "Développeur Mobile iOS & Android",
           description: "Ingénieur INSA Lyon avec 5+ ans d'expérience en développement mobile. Spécialisé en iOS natif (Swift, SwiftUI) et Flutter. Expertise en applications bancaires (+10M utilisateurs), billettique NFC et intégration native/Flutter.",
           image: "/nobody.jpg"
@@ -119,6 +119,12 @@ export const translations = {
           name: "Alex",
           role: "Data Scientist & Statisticien",
           description: "Doctorant en statistique avec 3+ ans d'expérience en modélisation des risques. Spécialisé en machine learning, théorie des valeurs extrêmes (EVT) et analyse de données massives. Expert en Python, R, PyTorch et modélisation statistique avancée.",
+          image: "/nobody.jpg"
+        },
+        {
+          name: "Victor",
+          role: "Technical Leader .NET/Java",
+          description: "Technical Leader avec 12+ ans d'expérience en développement full-stack (.NET/Java, Angular, Android/Kotlin). Expert en architecture logicielle, modernisation de systèmes d'information et pilotage technique d'équipes projets complexes.",
           image: "/nobody.jpg"
         }
       ]
@@ -749,7 +755,7 @@ export const translations = {
           image: "/nobody.jpg"
         },
         {
-          name: "Victor",
+          name: "Thomas",
           role: "iOS & Android Mobile Developer",
           description: "INSA Lyon engineer with 5+ years of mobile development experience. Specialized in native iOS (Swift, SwiftUI) and Flutter. Expertise in banking apps (+10M users), NFC contactless technology and native/Flutter integration.",
           image: "/nobody.jpg"
@@ -770,6 +776,12 @@ export const translations = {
           name: "Alex",
           role: "Data Scientist & Statistician",
           description: "PhD candidate in statistics with 3+ years of experience in risk modeling. Specialized in machine learning, extreme value theory (EVT) and big data analysis. Expert in Python, R, PyTorch and advanced statistical modeling.",
+          image: "/nobody.jpg"
+        },
+        {
+          name: "Victor",
+          role: "Technical Leader .NET/Java",
+          description: "Technical Leader with 12+ years of full-stack development experience (.NET/Java, Angular, Android/Kotlin). Expert in software architecture, information systems modernization and technical leadership of complex project teams.",
           image: "/nobody.jpg"
         }
       ]

@@ -35,7 +35,7 @@ export const teamMembersData: TeamMember[] = [
     bio: "Développeur passionné spécialisé en architecture moderne et environnements Linux, expert en DevOps et gestion de serveurs"
   },
   {
-    id: "victor-talbot",
+    id: "thomas-buresi",
     role: "Développeur Mobile iOS & Android",
     experience: "5+ ans",
     skills: ["Swift", "SwiftUI", "Kotlin", "Flutter", "React Native", "TypeScript"],
@@ -66,20 +66,28 @@ export const teamMembersData: TeamMember[] = [
     avatar: "nobody.jpg",
     bio: "Doctorant en statistique spécialisé en modélisation des risques extrêmes, machine learning et analyse de données massives. Expert en théorie des valeurs extrêmes (EVT)"
   },
+  {
+    id: "victor-talbot",
+    role: "Technical Leader .NET/Java",
+    experience: "12+ ans",
+    skills: [".NET Core", "Java", "Angular", "C#", "ASP.NET", "Kotlin"],
+    avatar: "nobody.jpg",
+    bio: "Technical Leader full-stack avec 12 ans d'expérience. Expert en architecture logicielle, modernisation de SI et pilotage technique d'équipes projets complexes"
+  },
 ]
 
 export const teamStatsData: TeamStat[] = [
   {
     id: "experts",
     icon: Users,
-    value: "6",
+    value: "7",
     label: "Experts spécialisés",
     description: "Une équipe pluridisciplinaire en développement, design et IA"
   },
   {
     id: "experience",
     icon: Award,
-    value: "26+",
+    value: "38+",
     label: "Années d'expérience cumulées",
     description: "Expertise académique et industrielle reconnue"
   },
