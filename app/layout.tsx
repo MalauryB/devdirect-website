@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   description: "Services informatiques de qualité à prix justes. Applications web, mobiles, IoT. Équipe de développeurs expérimentés.",
   generator: "Memo'ry",
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧊</text></svg>",
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5L95 27.5V72.5L50 95L5 72.5V27.5L50 5Z' fill='%23d4a5a5'/><path d='M50 5L95 27.5L50 50L5 27.5L50 5Z' fill='%23e8c4c4'/><path d='M50 50V95L5 72.5V27.5L50 50Z' fill='%23c48b8b'/><path d='M50 50V95L95 72.5V27.5L50 50Z' fill='%23d4a5a5'/></svg>",
   },
 }
 
