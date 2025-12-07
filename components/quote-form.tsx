@@ -487,7 +487,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             variant="outline"
             onClick={handleGenerateWithAI}
             disabled={generating || loading}
-            className="shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600"
+            className="shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600 hover:text-white"
           >
             {generating ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
