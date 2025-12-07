@@ -26,6 +26,7 @@ import { QuoteForm } from "@/components/quote-form"
 import { uploadFile, deleteFile, validateFile, getSignedUrl } from "@/lib/storage"
 import { exportQuoteToExcel, calculateQuoteData } from "@/lib/quote-export"
 import { exportQuoteToPdf } from "@/lib/quote-pdf-export"
+import { updateProfileAvatarUrl } from "@/lib/supabase"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -477,13 +478,18 @@ export default function DashboardPage() {
     if (error) {
       console.error('Upload error:', error)
       setProfileError(`${t('profile.avatarError')}: ${error.message}`)
-    } else if (data) {
+    } else if (data && user) {
       console.log('Avatar uploaded:', data.url)
       setAvatarUrl(data.url)
-      // Save avatar URL to profile
+      // Save avatar URL to auth.users metadata
       const { error: updateError } = await updateProfile({ avatar_url: data.url })
       if (updateError) {
         setProfileError(t('profile.error'))
+      }
+      // Also update the profiles table for other users to see
+      const { error: profileError } = await updateProfileAvatarUrl(user.id, data.url)
+      if (profileError) {
+        console.error('Failed to update profiles table:', profileError)
       }
     }
 
