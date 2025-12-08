@@ -9,6 +9,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { createQuote, updateQuote } from "@/lib/quotes"
 import { QuoteFormData, Quote, QuoteProfile, QuoteAbaque, QuoteStatus, TransverseLevel, TransverseActivity, TransverseActivityType, CostingCategory, CostingActivity, CostingComponent, ComplexityLevel, Project } from "@/lib/types"
 import { Loader2, Check, Plus, Trash2, ChevronRight, ChevronLeft, Sparkles } from "lucide-react"
+import { QuoteAIAssistant } from "@/components/quote-ai-assistant"
 
 interface QuoteFormProps {
   projectId: string
@@ -1255,6 +1256,18 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           </Button>
         )}
       </div>
+
+      {/* AI Assistant */}
+      <QuoteAIAssistant
+        quoteData={formData}
+        onQuoteUpdate={(modifications) => {
+          setFormData(prev => ({
+            ...prev,
+            ...modifications
+          }))
+        }}
+        projectDescription={project?.description}
+      />
     </form>
   )
 }

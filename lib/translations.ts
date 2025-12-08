@@ -761,6 +761,20 @@ export const translations = {
         title: "Récapitulatif",
         subtitle: "Vérifiez les informations avant d'envoyer votre demande"
       }
+    },
+    quoteAI: {
+      title: "Assistant IA",
+      subtitle: "Modifiez votre devis par la conversation",
+      welcome: "Bonjour ! Je suis votre assistant pour modifier le devis. Dites-moi ce que vous souhaitez changer : ajuster les temps, modifier les complexités, ajouter des activités...",
+      placeholder: "Décrivez la modification souhaitée...",
+      error: "Désolé, une erreur s'est produite. Veuillez réessayer.",
+      trySaying: "Essayez par exemple :",
+      suggestions: {
+        reduceDays: "Réduis le temps de 20%",
+        addTesting: "Ajoute une phase de tests",
+        increaseComplexity: "Augmente la complexité du module principal",
+        addMaintenance: "Ajoute 3 mois de maintenance"
+      }
     }
   },
   en: {
@@ -1524,6 +1538,20 @@ export const translations = {
       summary: {
         title: "Summary",
         subtitle: "Check the information before submitting your request"
+      }
+    },
+    quoteAI: {
+      title: "AI Assistant",
+      subtitle: "Modify your quote through conversation",
+      welcome: "Hello! I'm your assistant to modify the quote. Tell me what you'd like to change: adjust time estimates, modify complexities, add activities...",
+      placeholder: "Describe the change you want...",
+      error: "Sorry, an error occurred. Please try again.",
+      trySaying: "Try saying:",
+      suggestions: {
+        reduceDays: "Reduce time by 20%",
+        addTesting: "Add a testing phase",
+        increaseComplexity: "Increase complexity of main module",
+        addMaintenance: "Add 3 months of maintenance"
       }
     }
   }
