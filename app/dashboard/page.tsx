@@ -18,7 +18,7 @@ import {
 import { useAuth, UserMetadata, ClientType, UserRole } from "@/contexts/auth-context"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
-import { ProjectForm } from "@/components/project-form"
+import { ProjectFormWizard } from "@/components/project-form-wizard"
 import { getUserProjects, updateProject, deleteProject, getAllProjects } from "@/lib/projects"
 import { Project, ProjectStatus, ProjectFile, Quote, Profile } from "@/lib/types"
 import { getQuotesByProject, deleteQuote, sendQuote, getAllQuotes } from "@/lib/quotes"
@@ -1277,8 +1277,8 @@ export default function DashboardPage() {
                   </div>
 
                   {showProjectForm && (
-                    <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
-                      <ProjectForm
+                    <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 min-h-[600px]">
+                      <ProjectFormWizard
                         project={editingProject}
                         onSuccess={() => {
                           setShowProjectForm(false)

@@ -674,6 +674,93 @@ export const translations = {
       uploadError: "Erreur lors de l'upload du fichier",
       today: "Aujourd'hui",
       yesterday: "Hier"
+    },
+    projectWizard: {
+      stepOf: "Étape {current} sur {total}",
+      previous: "Précédent",
+      next: "Suivant",
+      submit: "Envoyer ma demande",
+      success: "Projet créé !",
+      steps: {
+        techLevel: "Votre profil",
+        projectType: "Type de projet",
+        description: "Description",
+        design: "Design",
+        budget: "Budget",
+        files: "Documents",
+        summary: "Récapitulatif"
+      },
+      techLevel: {
+        title: "Bienvenue ! Parlons de votre projet",
+        subtitle: "Quel est votre niveau de familiarité avec les projets informatiques ?",
+        beginner: {
+          title: "Je découvre",
+          description: "C'est mon premier projet informatique ou j'ai peu d'expérience dans ce domaine. Je souhaite être guidé pas à pas."
+        },
+        intermediate: {
+          title: "J'ai quelques notions",
+          description: "J'ai déjà travaillé sur des projets similaires ou je comprends les bases du développement."
+        },
+        advanced: {
+          title: "Je suis à l'aise",
+          description: "Je connais bien le domaine technique et je sais précisément ce dont j'ai besoin."
+        }
+      },
+      projectType: {
+        title: "Quel type de projet souhaitez-vous réaliser ?",
+        subtitle: "Sélectionnez un ou plusieurs types de projet",
+        titleHint: "Donnez un nom court et descriptif à votre projet (ex: \"Mon site e-commerce\", \"Application de livraison\")",
+        whatType: "Type de projet",
+        platforms: "Sur quelles plateformes ?"
+      },
+      typeDescriptions: {
+        web: "Site web ou application accessible depuis un navigateur (comme un site vitrine, une boutique en ligne...)",
+        mobile: "Application à télécharger sur smartphone ou tablette (iPhone, Android)",
+        desktop: "Logiciel à installer sur un ordinateur (Windows, Mac)",
+        iot: "Objets connectés, capteurs, systèmes embarqués",
+        ai: "Intelligence artificielle, analyse de données, automatisation intelligente",
+        other: "Autre type de projet ou je ne suis pas sûr"
+      },
+      description: {
+        title: "Décrivez votre projet",
+        subtitleBeginner: "Répondez à ces quelques questions pour nous aider à comprendre votre besoin",
+        subtitleAdvanced: "Décrivez en détail votre projet et ses fonctionnalités",
+        whatIsIt: "En quelques mots, c'est quoi votre projet ?",
+        whatIsItPlaceholder: "Ex: Je veux créer un site pour vendre mes créations artisanales, avec un panier et un paiement en ligne...",
+        whoIsItFor: "À qui s'adresse-t-il ?",
+        whoIsItForPlaceholder: "Ex: Des particuliers qui aiment les produits faits main, principalement des femmes de 25-45 ans...",
+        mainFeatures: "Quelles sont les fonctionnalités principales ?",
+        mainFeaturesPlaceholder: "Ex: Catalogue de produits avec photos, panier d'achat, paiement par carte, espace client pour suivre ses commandes...",
+        inspiration: "Y a-t-il des sites/apps qui vous inspirent ?",
+        inspirationPlaceholder: "Ex: J'aime bien le design de Etsy, la simplicité d'utilisation de Vinted..."
+      },
+      targetAudienceLabel: "Public cible",
+      featuresLabel: "Fonctionnalités souhaitées",
+      inspirationLabel: "Sources d'inspiration",
+      design: {
+        title: "Parlons du design",
+        subtitle: "Avez-vous déjà des éléments visuels pour votre projet ?",
+        needsDesign: "Avez-vous besoin d'aide pour le design ?",
+        yesDescription: "Je n'ai pas de maquettes, j'ai besoin que vous conceviez l'apparence du projet",
+        partialDescription: "J'ai quelques idées ou éléments, mais j'ai besoin d'aide pour finaliser",
+        noDescription: "J'ai déjà des maquettes ou designs prêts à être développés"
+      },
+      budget: {
+        title: "Budget et délais",
+        subtitle: "Ces informations nous aident à vous proposer la meilleure solution",
+        smallHint: "Petit projet ou MVP",
+        mediumHint: "Projet standard",
+        largeHint: "Projet complexe",
+        xlargeHint: "Projet d'envergure"
+      },
+      files: {
+        title: "Documents (optionnel)",
+        subtitle: "Si vous avez des documents utiles, vous pouvez les ajouter ici"
+      },
+      summary: {
+        title: "Récapitulatif",
+        subtitle: "Vérifiez les informations avant d'envoyer votre demande"
+      }
     }
   },
   en: {
@@ -1351,6 +1438,93 @@ export const translations = {
       uploadError: "Error uploading file",
       today: "Today",
       yesterday: "Yesterday"
+    },
+    projectWizard: {
+      stepOf: "Step {current} of {total}",
+      previous: "Previous",
+      next: "Next",
+      submit: "Submit my request",
+      success: "Project created!",
+      steps: {
+        techLevel: "Your profile",
+        projectType: "Project type",
+        description: "Description",
+        design: "Design",
+        budget: "Budget",
+        files: "Documents",
+        summary: "Summary"
+      },
+      techLevel: {
+        title: "Welcome! Let's talk about your project",
+        subtitle: "What is your level of familiarity with IT projects?",
+        beginner: {
+          title: "I'm new to this",
+          description: "This is my first IT project or I have little experience in this area. I would like to be guided step by step."
+        },
+        intermediate: {
+          title: "I have some knowledge",
+          description: "I have already worked on similar projects or I understand the basics of development."
+        },
+        advanced: {
+          title: "I'm comfortable",
+          description: "I know the technical domain well and I know exactly what I need."
+        }
+      },
+      projectType: {
+        title: "What type of project do you want to create?",
+        subtitle: "Select one or more project types",
+        titleHint: "Give a short and descriptive name to your project (e.g., \"My e-commerce site\", \"Delivery app\")",
+        whatType: "Project type",
+        platforms: "On which platforms?"
+      },
+      typeDescriptions: {
+        web: "Website or application accessible from a browser (like a showcase site, online store...)",
+        mobile: "App to download on smartphone or tablet (iPhone, Android)",
+        desktop: "Software to install on a computer (Windows, Mac)",
+        iot: "Connected objects, sensors, embedded systems",
+        ai: "Artificial intelligence, data analysis, smart automation",
+        other: "Other type of project or I'm not sure"
+      },
+      description: {
+        title: "Describe your project",
+        subtitleBeginner: "Answer these few questions to help us understand your needs",
+        subtitleAdvanced: "Describe your project and its features in detail",
+        whatIsIt: "In a few words, what is your project?",
+        whatIsItPlaceholder: "E.g., I want to create a website to sell my handmade creations, with a cart and online payment...",
+        whoIsItFor: "Who is it for?",
+        whoIsItForPlaceholder: "E.g., Individuals who love handmade products, mainly women aged 25-45...",
+        mainFeatures: "What are the main features?",
+        mainFeaturesPlaceholder: "E.g., Product catalog with photos, shopping cart, card payment, customer area to track orders...",
+        inspiration: "Are there any sites/apps that inspire you?",
+        inspirationPlaceholder: "E.g., I like the design of Etsy, the simplicity of Vinted..."
+      },
+      targetAudienceLabel: "Target audience",
+      featuresLabel: "Desired features",
+      inspirationLabel: "Sources of inspiration",
+      design: {
+        title: "Let's talk about design",
+        subtitle: "Do you already have visual elements for your project?",
+        needsDesign: "Do you need help with design?",
+        yesDescription: "I don't have mockups, I need you to design the appearance of the project",
+        partialDescription: "I have some ideas or elements, but I need help to finalize",
+        noDescription: "I already have mockups or designs ready to be developed"
+      },
+      budget: {
+        title: "Budget and timeline",
+        subtitle: "This information helps us offer you the best solution",
+        smallHint: "Small project or MVP",
+        mediumHint: "Standard project",
+        largeHint: "Complex project",
+        xlargeHint: "Large scale project"
+      },
+      files: {
+        title: "Documents (optional)",
+        subtitle: "If you have useful documents, you can add them here"
+      },
+      summary: {
+        title: "Summary",
+        subtitle: "Check the information before submitting your request"
+      }
     }
   }
 }
