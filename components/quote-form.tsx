@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/contexts/language-context"
 import { createQuote, updateQuote } from "@/lib/quotes"
 import { QuoteFormData, Quote, QuoteProfile, QuoteAbaque, QuoteStatus, TransverseLevel, TransverseActivity, TransverseActivityType, CostingCategory, CostingActivity, CostingComponent, ComplexityLevel, Project } from "@/lib/types"
-import { Loader2, Check, Plus, Trash2, ChevronRight, ChevronLeft, Sparkles } from "lucide-react"
+import { Loader2, Check, Plus, Trash2, ChevronRight, ChevronLeft, Sparkles, PanelRightOpen } from "lucide-react"
 import { QuoteAIAssistant } from "@/components/quote-ai-assistant"
 
 interface QuoteFormProps {
@@ -28,6 +28,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
   const [error, setError] = useState("")
   const [success, setSuccess] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
+  const [aiPanelOpen, setAiPanelOpen] = useState(false)
   const isEditing = !!quote
 
   const [formData, setFormData] = useState<QuoteFormData>({
@@ -482,22 +483,6 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           <h3 className="text-lg font-semibold text-foreground">{t("quotes.form.step1Title")}</h3>
           <p className="text-sm text-foreground/50">{t("quotes.form.step1Desc")}</p>
         </div>
-        {!isEditing && project && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={handleGenerateWithAI}
-            disabled={generating || loading}
-            className="shrink-0 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 hover:from-purple-600 hover:to-pink-600 hover:text-white"
-          >
-            {generating ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Sparkles className="w-4 h-4 mr-2" />
-            )}
-            {generating ? t("quotes.form.generating") : t("quotes.form.generateWithAI")}
-          </Button>
-        )}
       </div>
 
       {/* Quote Name */}
@@ -1186,78 +1171,97 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {renderStepIndicator()}
+    <div className="relative">
+      {/* Main form area - avec marge à droite quand le panneau IA est ouvert */}
+      <form onSubmit={handleSubmit} className={`space-y-6 transition-all duration-300 ${aiPanelOpen ? 'mr-[380px]' : ''}`}>
+        {/* Header with AI toggle */}
+        <div className="flex items-center justify-between">
+          <div className="flex-1">
+            {renderStepIndicator()}
+          </div>
+          {!aiPanelOpen && (
+            <button
+              type="button"
+              onClick={() => setAiPanelOpen(true)}
+              className="flex items-center gap-2 bg-action text-white px-3 py-2 rounded-lg shadow-md hover:bg-action/90 transition-colors ml-4"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span className="text-sm font-medium hidden sm:inline">{t('quoteAI.title')}</span>
+              <PanelRightOpen className="w-4 h-4" />
+            </button>
+          )}
+        </div>
 
-      {renderCurrentStep()}
+        {renderCurrentStep()}
 
-      {error && (
-        <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">
-          {error}
-        </p>
-      )}
-
-      {success && (
-        <p className="text-sm text-pink-600 bg-pink-50 p-3 rounded-lg flex items-center gap-2">
-          <Check className="w-4 h-4" />
-          {t("quotes.form.success")}
-        </p>
-      )}
-
-      {/* Navigation Buttons */}
-      <div className="flex gap-3 pt-4 border-t border-gray-100">
-        {onCancel && currentStep === 1 && (
-          <Button
-            type="button"
-            variant="outline"
-            className="flex-1 border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
-            onClick={onCancel}
-            disabled={loading}
-          >
-            {t("quotes.form.cancel")}
-          </Button>
+        {error && (
+          <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">
+            {error}
+          </p>
         )}
 
-        {currentStep > 1 && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={goToPreviousStep}
-            disabled={loading}
-            className="flex-1 border-gray-200"
-          >
-            <ChevronLeft className="w-4 h-4 mr-2" />
-            {t("quotes.form.previous")}
-          </Button>
+        {success && (
+          <p className="text-sm text-pink-600 bg-pink-50 p-3 rounded-lg flex items-center gap-2">
+            <Check className="w-4 h-4" />
+            {t("quotes.form.success")}
+          </p>
         )}
 
-        {currentStep < TOTAL_STEPS ? (
-          <Button
-            type="button"
-            onClick={goToNextStep}
-            disabled={loading}
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
-          >
-            {t("quotes.form.next")}
-            <ChevronRight className="w-4 h-4 ml-2" />
-          </Button>
-        ) : (
-          <Button
-            type="submit"
-            className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
-            disabled={loading}
-          >
-            {loading ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Check className="w-4 h-4 mr-2" />
-            )}
-            {isEditing ? t("quotes.form.update") : t("quotes.form.create")}
-          </Button>
-        )}
-      </div>
+        {/* Navigation Buttons */}
+        <div className="flex gap-3 pt-4 border-t border-gray-100">
+          {onCancel && currentStep === 1 && (
+            <Button
+              type="button"
+              variant="outline"
+              className="flex-1 border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+              onClick={onCancel}
+              disabled={loading}
+            >
+              {t("quotes.form.cancel")}
+            </Button>
+          )}
 
-      {/* AI Assistant */}
+          {currentStep > 1 && (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={goToPreviousStep}
+              disabled={loading}
+              className="flex-1 border-gray-200"
+            >
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              {t("quotes.form.previous")}
+            </Button>
+          )}
+
+          {currentStep < TOTAL_STEPS ? (
+            <Button
+              type="button"
+              onClick={goToNextStep}
+              disabled={loading}
+              className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+            >
+              {t("quotes.form.next")}
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+              disabled={loading}
+            >
+              {loading ? (
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+              ) : (
+                <Check className="w-4 h-4 mr-2" />
+              )}
+              {isEditing ? t("quotes.form.update") : t("quotes.form.create")}
+            </Button>
+          )}
+        </div>
+      </form>
+
+      {/* AI Assistant Panel */}
       <QuoteAIAssistant
         quoteData={formData}
         onQuoteUpdate={(modifications) => {
@@ -1267,7 +1271,11 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           }))
         }}
         projectDescription={project?.description}
+        isOpen={aiPanelOpen}
+        onToggle={() => setAiPanelOpen(!aiPanelOpen)}
+        onGenerateFullQuote={!isEditing && project ? handleGenerateWithAI : undefined}
+        isGenerating={generating}
       />
-    </form>
+    </div>
   )
 }

@@ -769,7 +769,10 @@ export const translations = {
       placeholder: "Décrivez la modification souhaitée...",
       error: "Désolé, une erreur s'est produite. Veuillez réessayer.",
       trySaying: "Essayez par exemple :",
+      generatingFull: "Génération du devis en cours...",
+      generateFullSuccess: "J'ai généré un devis complet basé sur la description du projet ! Vous pouvez maintenant parcourir les différentes étapes et me demander des modifications si nécessaire.",
       suggestions: {
+        generateFull: "Génère un devis complet",
         reduceDays: "Réduis le temps de 20%",
         addTesting: "Ajoute une phase de tests",
         increaseComplexity: "Augmente la complexité du module principal",
@@ -1547,7 +1550,10 @@ export const translations = {
       placeholder: "Describe the change you want...",
       error: "Sorry, an error occurred. Please try again.",
       trySaying: "Try saying:",
+      generatingFull: "Generating quote...",
+      generateFullSuccess: "I've generated a complete quote based on the project description! You can now browse through the different steps and ask me for modifications if needed.",
       suggestions: {
+        generateFull: "Generate a full quote",
         reduceDays: "Reduce time by 20%",
         addTesting: "Add a testing phase",
         increaseComplexity: "Increase complexity of main module",

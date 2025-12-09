@@ -129,3 +129,9 @@
 .logo-cubic {
   font-family: 'Cubic', sans-serif;
 }
+
+/* Vertical text for side panel toggle */
+.writing-vertical {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
