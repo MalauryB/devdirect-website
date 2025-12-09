@@ -504,6 +504,8 @@ export const translations = {
       title: "Devis",
       newQuote: "Nouveau devis",
       noQuotes: "Aucun devis pour ce projet",
+      noQuotesClientDesc: "L'équipe n'a pas encore créé de devis pour ce projet.",
+      clientSubtitle: "Consultez les devis proposés pour votre projet",
       exportExcel: "Télécharger le récapitulatif Excel",
       exportPdf: "Télécharger le devis PDF",
       version: "Version",
@@ -678,9 +680,11 @@ export const translations = {
     documents: {
       title: "Documents",
       subtitle: "Documents du projet",
+      clientSubtitle: "Consultez et téléchargez les documents de votre projet",
       upload: "Ajouter un document",
       empty: "Aucun document",
       emptyDescription: "Aucun document n'a encore été ajouté à ce projet.",
+      emptyClientDescription: "L'équipe n'a pas encore partagé de documents pour ce projet.",
       uploadModal: {
         title: "Ajouter un document",
         name: "Nom du document",
@@ -1329,6 +1333,8 @@ export const translations = {
       title: "Quotes",
       newQuote: "New quote",
       noQuotes: "No quotes for this project",
+      noQuotesClientDesc: "The team has not yet created any quotes for this project.",
+      clientSubtitle: "View the quotes proposed for your project",
       exportExcel: "Download Excel summary",
       exportPdf: "Download PDF quote",
       version: "Version",
@@ -1503,9 +1509,11 @@ export const translations = {
     documents: {
       title: "Documents",
       subtitle: "Project documents",
+      clientSubtitle: "View and download your project documents",
       upload: "Add document",
       empty: "No documents",
       emptyDescription: "No documents have been added to this project yet.",
+      emptyClientDescription: "The team has not yet shared any documents for this project.",
       uploadModal: {
         title: "Add document",
         name: "Document name",

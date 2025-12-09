@@ -230,6 +230,10 @@ export default function DashboardPage() {
     if (selectedProject && isEngineer && activeSection === "allProjects") {
       loadQuotes(selectedProject.id)
       setProjectSubSection('details') // Reset to details when selecting a new project
+    } else if (selectedProject && !isEngineer && activeSection === "projects") {
+      // Client: load quotes for viewing and reset to details
+      loadQuotes(selectedProject.id)
+      setProjectSubSection('details')
     } else {
       setQuotes([])
       setShowQuoteForm(false)
@@ -1013,26 +1017,84 @@ export default function DashboardPage() {
 
           {activeSection === "projects" && (
             <div className="w-full">
-              {/* Vue détaillée d'un projet */}
+              {/* Vue détaillée d'un projet avec navigation secondaire */}
               {selectedProject ? (
-                <div className="w-full">
-                  <div className="flex items-center justify-between mb-6">
-                    <button
-                      onClick={() => setSelectedProject(null)}
-                      className="flex items-center gap-2 text-foreground/60 hover:text-foreground transition-colors"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                      {t('projects.details.back')}
-                    </button>
-
+                <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
+                  {/* Secondary sidebar for project sub-sections */}
+                  <div className="w-48 bg-gray-50 border-r border-gray-200 flex-shrink-0 flex flex-col">
+                    <div className="p-4 border-b border-gray-200">
+                      <button
+                        onClick={() => setSelectedProject(null)}
+                        className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
+                      >
+                        <ArrowLeft className="w-4 h-4" />
+                        {t('projects.details.back')}
+                      </button>
+                    </div>
+                    <nav className="p-2">
+                      <button
+                        onClick={() => setProjectSubSection('details')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
+                          projectSubSection === 'details'
+                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <FileText className="w-4 h-4" />
+                        {t('projects.subSections.details')}
+                      </button>
+                      <button
+                        onClick={() => setProjectSubSection('quotes')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'quotes'
+                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <Receipt className="w-4 h-4" />
+                        {t('projects.subSections.quotes')}
+                        {quotes.length > 0 && (
+                          <span className="ml-auto text-xs bg-gray-200 text-foreground/70 px-1.5 py-0.5 rounded">
+                            {quotes.length}
+                          </span>
+                        )}
+                      </button>
+                      <button
+                        onClick={() => setProjectSubSection('messages')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'messages'
+                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        {t('messages.title')}
+                      </button>
+                      <button
+                        onClick={() => setProjectSubSection('documents')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'documents'
+                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <FolderOpen className="w-4 h-4" />
+                        {t('documents.title')}
+                        {documents.length > 0 && (
+                          <span className="ml-auto text-xs bg-gray-200 text-foreground/70 px-1.5 py-0.5 rounded">
+                            {documents.length}
+                          </span>
+                        )}
+                      </button>
+                    </nav>
                     {/* Actions - only show for pending projects */}
                     {selectedProject.status === 'pending' && (
-                      <div className="flex items-center gap-2">
+                      <div className="mt-auto p-4 border-t border-gray-200 space-y-2">
                         <Button
                           variant="outline"
                           size="sm"
                           onClick={handleEditProject}
-                          className="text-foreground/70 hover:text-foreground"
+                          className="w-full text-foreground/70 hover:text-foreground"
                         >
                           <Pencil className="w-4 h-4 mr-2" />
                           {t('projects.actions.edit')}
@@ -1041,7 +1103,7 @@ export default function DashboardPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => setDeletingProject(selectedProject)}
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                          className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
                         >
                           <Trash2 className="w-4 h-4 mr-2" />
                           {t('projects.actions.delete')}
@@ -1050,241 +1112,436 @@ export default function DashboardPage() {
                     )}
                   </div>
 
-                  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                    {/* Header */}
-                    <div className="p-6 border-b border-gray-100">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-4">
-                          {/* Client avatar or initials */}
-                          <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden">
-                            {selectedProject.profiles?.avatar_url ? (
-                              <img
-                                src={selectedProject.profiles.avatar_url}
-                                alt={selectedProject.profiles.company_name || selectedProject.profiles.first_name || 'Client'}
-                                className="w-full h-full object-cover"
-                              />
-                            ) : (
-                              <span className="text-xl font-bold text-white">
-                                {(selectedProject.profiles?.company_name?.[0] || selectedProject.profiles?.first_name?.[0] || 'C').toUpperCase()}
-                              </span>
-                            )}
+                  {/* Main content area */}
+                  <div className={`flex-1 flex flex-col ${projectSubSection === 'messages' ? 'overflow-hidden' : 'p-4 lg:p-6 overflow-auto'}`}>
+                    {/* Project Header - visible only in details section */}
+                    {projectSubSection === 'details' && (
+                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+                        <div className="p-6">
+                          <div className="flex items-start justify-between gap-4">
+                            <div className="flex items-start gap-4">
+                              {/* User avatar or initials */}
+                              <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden">
+                                {avatarUrl ? (
+                                  <img
+                                    src={avatarUrl}
+                                    alt={firstName || 'User'}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <span className="text-xl font-bold text-white">
+                                    {(firstName?.[0] || 'U').toUpperCase()}
+                                  </span>
+                                )}
+                              </div>
+                              <div>
+                                <h2 className="text-xl font-bold text-foreground mb-2">
+                                  {selectedProject.title || t('projects.untitled')}
+                                </h2>
+                                <div className="flex flex-wrap gap-2 mb-3">
+                                  {selectedProject.project_types?.map((type) => (
+                                    <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
+                                      {t(`projects.types.${type}`)}
+                                    </span>
+                                  ))}
+                                </div>
+                                <p className="text-sm text-foreground/50">
+                                  {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                </p>
+                              </div>
+                            </div>
+                            <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
+                              {t(`projects.status.${selectedProject.status}`)}
+                            </span>
                           </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Details Sub-Section */}
+                    {projectSubSection === 'details' && (
+                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                        <div className="p-6 space-y-8">
+                          {/* Description */}
                           <div>
-                            <h2 className="text-xl font-bold text-foreground mb-2">
-                              {selectedProject.title || t('projects.untitled')}
-                            </h2>
-                          <div className="flex flex-wrap gap-2 mb-3">
-                            {selectedProject.project_types?.map((type) => (
-                              <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
-                                {t(`projects.types.${type}`)}
-                              </span>
-                            ))}
-                          </div>
-                          <p className="text-sm text-foreground/50">
-                            {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                          </p>
-                          </div>
-                        </div>
-                        <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
-                          {t(`projects.status.${selectedProject.status}`)}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6 space-y-8">
-                      {/* Description */}
-                      <div>
-                        <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                          <FileText className="w-4 h-4 text-[#6cb1bb]" />
-                          {t('projects.details.description')}
-                        </h3>
-                        <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.description || '-'}</p>
-                      </div>
-
-                      {/* Features */}
-                      {selectedProject.features && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Layers className="w-4 h-4 text-[#ba9fdf]" />
-                            {t('projects.details.features')}
-                          </h3>
-                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.features}</p>
-                        </div>
-                      )}
-
-                      {/* Target Audience */}
-                      {selectedProject.target_audience && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Target className="w-4 h-4 text-[#ea4c89]" />
-                            {t('projects.details.targetAudience')}
-                          </h3>
-                          <p className="text-foreground/70">{selectedProject.target_audience}</p>
-                        </div>
-                      )}
-
-                      {/* Services */}
-                      {selectedProject.services && selectedProject.services.length > 0 && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Wrench className="w-4 h-4 text-[#9c984d]" />
-                            {t('projects.details.services')}
-                          </h3>
-                          <div className="flex flex-wrap gap-2">
-                            {selectedProject.services.map((service) => (
-                              <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
-                                {t(`projects.services.${service}`)}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Platforms */}
-                      {selectedProject.platforms && selectedProject.platforms.length > 0 && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Monitor className="w-4 h-4 text-[#6cb1bb]" />
-                            {t('projects.details.platforms')}
-                          </h3>
-                          <div className="flex flex-wrap gap-2">
-                            {selectedProject.platforms.map((platform) => (
-                              <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
-                                {platform}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Existing Project */}
-                      {selectedProject.has_existing_project && selectedProject.existing_technologies && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Wrench className="w-4 h-4 text-[#7f7074]" />
-                            {t('projects.details.existingTech')}
-                          </h3>
-                          <p className="text-foreground/70">{selectedProject.existing_technologies}</p>
-                        </div>
-                      )}
-
-                      {/* Budget & Deadline */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {selectedProject.budget && (
-                          <div className="bg-gray-50 rounded-xl p-4">
-                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
-                              <Euro className="w-4 h-4 text-[#9c984d]" />
-                              {t('projects.details.budget')}
+                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                              <FileText className="w-4 h-4 text-[#6cb1bb]" />
+                              {t('projects.details.description')}
                             </h3>
-                            <p className="text-foreground/70">{t(`projects.budget.${selectedProject.budget}`)}</p>
+                            <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.description || '-'}</p>
                           </div>
-                        )}
-                        {selectedProject.deadline && (
-                          <div className="bg-gray-50 rounded-xl p-4">
-                            <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
-                              <Clock className="w-4 h-4 text-[#ea4c89]" />
-                              {t('projects.details.deadline')}
-                            </h3>
-                            <p className="text-foreground/70">{t(`projects.deadline.${selectedProject.deadline}`)}</p>
+
+                          {/* Features */}
+                          {selectedProject.features && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Layers className="w-4 h-4 text-[#ba9fdf]" />
+                                {t('projects.details.features')}
+                              </h3>
+                              <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.features}</p>
+                            </div>
+                          )}
+
+                          {/* Target Audience */}
+                          {selectedProject.target_audience && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Target className="w-4 h-4 text-[#ea4c89]" />
+                                {t('projects.details.targetAudience')}
+                              </h3>
+                              <p className="text-foreground/70">{selectedProject.target_audience}</p>
+                            </div>
+                          )}
+
+                          {/* Services */}
+                          {selectedProject.services && selectedProject.services.length > 0 && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Wrench className="w-4 h-4 text-[#9c984d]" />
+                                {t('projects.details.services')}
+                              </h3>
+                              <div className="flex flex-wrap gap-2">
+                                {selectedProject.services.map((service) => (
+                                  <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                    {t(`projects.services.${service}`)}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Platforms */}
+                          {selectedProject.platforms && selectedProject.platforms.length > 0 && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Monitor className="w-4 h-4 text-[#6cb1bb]" />
+                                {t('projects.details.platforms')}
+                              </h3>
+                              <div className="flex flex-wrap gap-2">
+                                {selectedProject.platforms.map((platform) => (
+                                  <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                    {platform}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Existing Project */}
+                          {selectedProject.has_existing_project && selectedProject.existing_technologies && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Wrench className="w-4 h-4 text-[#7f7074]" />
+                                {t('projects.details.existingTech')}
+                              </h3>
+                              <p className="text-foreground/70">{selectedProject.existing_technologies}</p>
+                            </div>
+                          )}
+
+                          {/* Budget & Deadline */}
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {selectedProject.budget && (
+                              <div className="bg-gray-50 rounded-xl p-4">
+                                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                                  <Euro className="w-4 h-4 text-[#9c984d]" />
+                                  {t('projects.details.budget')}
+                                </h3>
+                                <p className="text-foreground/70">{t(`projects.budget.${selectedProject.budget}`)}</p>
+                              </div>
+                            )}
+                            {selectedProject.deadline && (
+                              <div className="bg-gray-50 rounded-xl p-4">
+                                <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
+                                  <Clock className="w-4 h-4 text-[#ea4c89]" />
+                                  {t('projects.details.deadline')}
+                                </h3>
+                                <p className="text-foreground/70">{t(`projects.deadline.${selectedProject.deadline}`)}</p>
+                              </div>
+                            )}
                           </div>
-                        )}
+
+                          {/* Design needs */}
+                          {selectedProject.needs_design && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <Palette className="w-4 h-4 text-[#ba9fdf]" />
+                                {t('projects.details.needsDesign')}
+                              </h3>
+                              <p className="text-foreground/70">{t(`projects.form.needsDesign${selectedProject.needs_design.charAt(0).toUpperCase() + selectedProject.needs_design.slice(1)}`)}</p>
+                            </div>
+                          )}
+
+                          {/* Additional Info */}
+                          {selectedProject.additional_info && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
+                                <MessageCircle className="w-4 h-4 text-[#7f7074]" />
+                                {t('projects.details.additionalInfo')}
+                              </h3>
+                              <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.additional_info}</p>
+                            </div>
+                          )}
+
+                          {/* Attached Files */}
+                          {(selectedProject.specifications_file ||
+                            (selectedProject.design_files && selectedProject.design_files.length > 0) ||
+                            (selectedProject.brand_assets && selectedProject.brand_assets.length > 0) ||
+                            (selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0) ||
+                            (selectedProject.other_documents && selectedProject.other_documents.length > 0)) && (
+                            <div>
+                              <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
+                                <Paperclip className="w-4 h-4 text-[#6cb1bb]" />
+                                {t('projects.details.attachedFiles')}
+                              </h3>
+                              <div className="space-y-4">
+                                {/* Specifications file */}
+                                {selectedProject.specifications_file && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.specificationsFile')}</p>
+                                    <ProjectFileItem file={selectedProject.specifications_file} />
+                                  </div>
+                                )}
+
+                                {/* Design files */}
+                                {selectedProject.design_files && selectedProject.design_files.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.designFiles')}</p>
+                                    <div className="space-y-2">
+                                      {selectedProject.design_files.map((file, index) => (
+                                        <ProjectFileItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Brand assets */}
+                                {selectedProject.brand_assets && selectedProject.brand_assets.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.brandAssets')}</p>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                      {selectedProject.brand_assets.map((file, index) => (
+                                        <ProjectImageItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Inspiration images */}
+                                {selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.inspirationImages')}</p>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                                      {selectedProject.inspiration_images.map((file, index) => (
+                                        <ProjectImageItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Other documents */}
+                                {selectedProject.other_documents && selectedProject.other_documents.length > 0 && (
+                                  <div>
+                                    <p className="text-xs text-foreground/50 mb-2">{t('projects.form.otherDocuments')}</p>
+                                    <div className="space-y-2">
+                                      {selectedProject.other_documents.map((file, index) => (
+                                        <ProjectFileItem key={file.path || index} file={file} />
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       </div>
+                    )}
 
-                      {/* Design needs */}
-                      {selectedProject.needs_design && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <Palette className="w-4 h-4 text-[#ba9fdf]" />
-                            {t('projects.details.needsDesign')}
-                          </h3>
-                          <p className="text-foreground/70">{t(`projects.form.needsDesign${selectedProject.needs_design.charAt(0).toUpperCase() + selectedProject.needs_design.slice(1)}`)}</p>
+                    {/* Quotes Sub-Section (Client view - read only) */}
+                    {projectSubSection === 'quotes' && (
+                      <>
+                        <div className="flex items-center justify-between mb-6">
+                          <div>
+                            <h3 className="font-semibold text-foreground">{t('projects.subSections.quotes')}</h3>
+                            <p className="text-sm text-foreground/50">{t('quotes.clientSubtitle')}</p>
+                          </div>
                         </div>
-                      )}
 
-                      {/* Additional Info */}
-                      {selectedProject.additional_info && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
-                            <MessageCircle className="w-4 h-4 text-[#7f7074]" />
-                            {t('projects.details.additionalInfo')}
-                          </h3>
-                          <p className="text-foreground/70 whitespace-pre-wrap">{selectedProject.additional_info}</p>
-                        </div>
-                      )}
-
-                      {/* Attached Files */}
-                      {(selectedProject.specifications_file ||
-                        (selectedProject.design_files && selectedProject.design_files.length > 0) ||
-                        (selectedProject.brand_assets && selectedProject.brand_assets.length > 0) ||
-                        (selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0) ||
-                        (selectedProject.other_documents && selectedProject.other_documents.length > 0)) && (
-                        <div>
-                          <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-4">
-                            <Paperclip className="w-4 h-4 text-[#6cb1bb]" />
-                            {t('projects.details.attachedFiles')}
-                          </h3>
+                        {quotesLoading ? (
+                          <div className="flex items-center justify-center py-12">
+                            <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                          </div>
+                        ) : quotes.length === 0 ? (
+                          <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                            <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                            <p className="text-foreground/70 font-medium">{t('quotes.noQuotes')}</p>
+                            <p className="text-foreground/50 text-sm mt-1">{t('quotes.noQuotesClientDesc')}</p>
+                          </div>
+                        ) : (
                           <div className="space-y-4">
-                            {/* Specifications file */}
-                            {selectedProject.specifications_file && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.specificationsFile')}</p>
-                                <ProjectFileItem file={selectedProject.specifications_file} />
-                              </div>
-                            )}
-
-                            {/* Design files */}
-                            {selectedProject.design_files && selectedProject.design_files.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.designFiles')}</p>
-                                <div className="space-y-2">
-                                  {selectedProject.design_files.map((file, index) => (
-                                    <ProjectFileItem key={file.path || index} file={file} />
-                                  ))}
+                            {quotes.map((quote) => {
+                              const quoteData = calculateQuoteData(quote)
+                              return (
+                                <div
+                                  key={quote.id}
+                                  className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors"
+                                >
+                                  <div className="flex items-start justify-between gap-4">
+                                    <div className="flex-1 min-w-0">
+                                      <div className="flex items-center gap-2 mb-2">
+                                        <h4 className="font-semibold text-foreground">{quote.name}</h4>
+                                        <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
+                                          quote.status === 'draft' ? 'bg-gray-100 text-gray-700' :
+                                          quote.status === 'sent' ? 'bg-blue-100 text-blue-700' :
+                                          quote.status === 'accepted' ? 'bg-green-100 text-green-700' :
+                                          'bg-red-100 text-red-700'
+                                        }`}>
+                                          {t(`quotes.status.${quote.status}`)}
+                                        </span>
+                                      </div>
+                                      <p className="text-sm text-foreground/60 mb-3">
+                                        {t('quotes.createdAt')}: {new Date(quote.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                      </p>
+                                      <div className="flex items-center gap-4 text-sm">
+                                        <span className="text-foreground/70">
+                                          <strong>{quoteData.totalDays}</strong> {t('quotes.days')}
+                                        </span>
+                                        <span className="text-foreground font-semibold">
+                                          {formatCurrency(quoteData.totalTTC)} TTC
+                                        </span>
+                                      </div>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      {/* Download PDF */}
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => exportQuoteToPdf(quote, selectedProject)}
+                                        title={t('quotes.downloadPdf')}
+                                      >
+                                        <Download className="w-4 h-4" />
+                                      </Button>
+                                      {/* Download Excel */}
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => exportQuoteToExcel(quote, selectedProject?.title)}
+                                        title={t('quotes.downloadExcel')}
+                                      >
+                                        <FileSpreadsheet className="w-4 h-4" />
+                                      </Button>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
+                              )
+                            })}
+                          </div>
+                        )}
+                      </>
+                    )}
 
-                            {/* Brand assets */}
-                            {selectedProject.brand_assets && selectedProject.brand_assets.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.brandAssets')}</p>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                  {selectedProject.brand_assets.map((file, index) => (
-                                    <ProjectImageItem key={file.path || index} file={file} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Inspiration images */}
-                            {selectedProject.inspiration_images && selectedProject.inspiration_images.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.inspirationImages')}</p>
-                                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                  {selectedProject.inspiration_images.map((file, index) => (
-                                    <ProjectImageItem key={file.path || index} file={file} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Other documents */}
-                            {selectedProject.other_documents && selectedProject.other_documents.length > 0 && (
-                              <div>
-                                <p className="text-xs text-foreground/50 mb-2">{t('projects.form.otherDocuments')}</p>
-                                <div className="space-y-2">
-                                  {selectedProject.other_documents.map((file, index) => (
-                                    <ProjectFileItem key={file.path || index} file={file} />
-                                  ))}
-                                </div>
-                              </div>
-                            )}
+                    {/* Messages Sub-Section */}
+                    {projectSubSection === 'messages' && (
+                      <>
+                        {/* Header */}
+                        <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between flex-shrink-0">
+                          <div>
+                            <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
+                            <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
                           </div>
                         </div>
-                      )}
+                        {/* Message thread */}
+                        <div className="flex-1 bg-gray-50 overflow-hidden">
+                          <MessageThread
+                            projectId={selectedProject.id}
+                            currentUser={{
+                              id: user?.id || '',
+                              first_name: user?.user_metadata?.first_name,
+                              last_name: user?.user_metadata?.last_name,
+                              avatar_url: user?.user_metadata?.avatar_url,
+                              role: userRole
+                            }}
+                          />
+                        </div>
+                      </>
+                    )}
 
-                    </div>
+                    {/* Documents Sub-Section */}
+                    {projectSubSection === 'documents' && (
+                      <>
+                        {/* Header */}
+                        <div className="flex items-center justify-between mb-6">
+                          <div>
+                            <h3 className="font-semibold text-foreground">{t('documents.title')}</h3>
+                            <p className="text-sm text-foreground/50">{t('documents.clientSubtitle')}</p>
+                          </div>
+                        </div>
+
+                        {/* Documents List */}
+                        {documentsLoading ? (
+                          <div className="flex items-center justify-center py-12">
+                            <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                          </div>
+                        ) : documents.length === 0 ? (
+                          <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                            <FolderOpen className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                            <p className="text-foreground/70 font-medium">{t('documents.empty')}</p>
+                            <p className="text-foreground/50 text-sm mt-1">{t('documents.emptyClientDescription')}</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {documents.map((doc) => (
+                              <div
+                                key={doc.id}
+                                className="bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-colors"
+                              >
+                                <div className="flex items-start gap-4">
+                                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl flex-shrink-0">
+                                    {getFileIcon(doc.file_type)}
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-start justify-between gap-2">
+                                      <div>
+                                        <div className="flex items-center gap-2">
+                                          <h4 className="font-medium text-foreground truncate">{doc.name}</h4>
+                                          <span className="text-xs bg-action/10 text-action px-1.5 py-0.5 rounded font-medium">
+                                            v{doc.version}
+                                          </span>
+                                        </div>
+                                        <span className="inline-block text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded mt-1">
+                                          {t(`documents.types.${doc.type}`)}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-1 flex-shrink-0">
+                                        {/* Download button */}
+                                        <Button
+                                          variant="ghost"
+                                          size="sm"
+                                          onClick={async () => {
+                                            const { url } = await getDocumentDownloadUrl(doc.file_path)
+                                            if (url) window.open(url, '_blank')
+                                          }}
+                                          className="text-foreground/70 hover:text-foreground"
+                                        >
+                                          <Download className="w-4 h-4" />
+                                        </Button>
+                                      </div>
+                                    </div>
+                                    {doc.description && (
+                                      <p className="text-sm text-foreground/60 mt-2">{doc.description}</p>
+                                    )}
+                                    <div className="flex items-center gap-4 mt-2 text-xs text-foreground/50">
+                                      <span>{doc.file_name}</span>
+                                      <span>{formatFileSize(doc.file_size)}</span>
+                                      <span>{new Date(doc.created_at).toLocaleDateString('fr-FR')}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
                 </div>
               ) : (
