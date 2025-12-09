@@ -136,7 +136,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
           setIsOpen(!isOpen)
         }}
         className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 ${
-          isOpen ? 'bg-gray-900 text-white' : 'bg-[#e11d48] text-white hover:bg-[#be123c]'
+          isOpen ? 'bg-gray-900 text-white' : 'bg-action text-white hover:bg-action/90'
         }`}
       >
         {isOpen ? (
@@ -150,7 +150,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
       {isOpen && (
         <div className="fixed bottom-24 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 flex flex-col overflow-hidden" style={{ height: '500px', maxHeight: 'calc(100vh - 8rem)' }}>
           {/* Header */}
-          <div className="bg-[#e11d48] text-white px-4 py-3 flex items-center gap-3">
+          <div className="bg-action text-white px-4 py-3 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
               <Bot className="w-5 h-5" />
             </div>
@@ -168,7 +168,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
                 className={`flex gap-2 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
               >
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  message.role === 'user' ? 'bg-gray-900 text-white' : 'bg-rose-100 text-rose-600'
+                  message.role === 'user' ? 'bg-gray-900 text-white' : 'bg-action/10 text-action'
                 }`}>
                   {message.role === 'user' ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
                 </div>
@@ -184,7 +184,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
 
             {loading && (
               <div className="flex gap-2">
-                <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-action/10 text-action flex items-center justify-center flex-shrink-0">
                   <Bot className="w-4 h-4" />
                 </div>
                 <div className="bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-3">
@@ -214,7 +214,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
                       setInput(suggestion)
                       inputRef.current?.focus()
                     }}
-                    className="text-xs px-3 py-1.5 rounded-full bg-rose-50 text-rose-700 hover:bg-rose-100 transition-colors"
+                    className="text-xs px-3 py-1.5 rounded-full bg-action/10 text-action hover:bg-action/20 transition-colors"
                   >
                     {suggestion}
                   </button>
@@ -232,14 +232,14 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('quoteAI.placeholder')}
-                className="resize-none min-h-[44px] max-h-[120px] border-gray-200 focus:border-rose-400 rounded-xl"
+                className="resize-none min-h-[44px] max-h-[120px] border-gray-200 focus:border-action rounded-xl"
                 rows={1}
                 disabled={loading}
               />
               <Button
                 onClick={handleSubmit}
                 disabled={!input.trim() || loading}
-                className="bg-[#e11d48] hover:bg-[#be123c] rounded-xl px-4"
+                className="bg-action hover:bg-action/90 rounded-xl px-4"
               >
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
