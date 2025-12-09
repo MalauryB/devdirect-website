@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/contexts/language-context"
 import { QuoteFormData } from "@/lib/types"
-import { MessageCircle, X, Send, Loader2, Sparkles, Bot, User } from "lucide-react"
+import { X, Send, Loader2, Sparkles, Bot, User } from "lucide-react"
 
 interface Message {
   id: string
@@ -129,7 +129,12 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
     <>
       {/* Floating button */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
+        type="button"
+        onClick={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          setIsOpen(!isOpen)
+        }}
         className={`fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 ${
           isOpen ? 'bg-gray-900 text-white' : 'bg-gradient-to-r from-purple-600 to-blue-600 text-white'
         }`}
@@ -202,8 +207,10 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription 
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((suggestion, index) => (
                   <button
+                    type="button"
                     key={index}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault()
                       setInput(suggestion)
                       inputRef.current?.focus()
                     }}
