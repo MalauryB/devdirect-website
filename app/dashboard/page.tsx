@@ -1952,9 +1952,7 @@ export default function DashboardPage() {
                               }}
                               className="p-4 hover:bg-neutral-50 cursor-pointer transition-colors flex items-center gap-4"
                             >
-                              <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center flex-shrink-0">
-                                <MessageCircle className="w-4 h-4 text-neutral-600" />
-                              </div>
+                              <MessageCircle className="w-5 h-5 text-neutral-500 flex-shrink-0" />
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-foreground">
                                   {t('dashboard.engineer.actions.replyTo')} {project.profiles?.first_name || project.profiles?.company_name || t('dashboard.engineer.actions.client')}
@@ -1979,9 +1977,7 @@ export default function DashboardPage() {
                               }}
                               className="p-4 hover:bg-[#ea4c89]/5 cursor-pointer transition-colors flex items-center gap-4"
                             >
-                              <div className="w-8 h-8 bg-[#ea4c89]/10 rounded-full flex items-center justify-center flex-shrink-0">
-                                <Receipt className="w-4 h-4 text-[#ea4c89]" />
-                              </div>
+                              <Receipt className="w-5 h-5 text-[#ea4c89] flex-shrink-0" />
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-foreground">{t('dashboard.engineer.actions.createQuoteFor')}</p>
                                 <p className="text-sm text-foreground/50 truncate">{project.title || t('projects.untitled')}</p>
@@ -2006,9 +2002,7 @@ export default function DashboardPage() {
                               }}
                               className="p-4 hover:bg-slate-50 cursor-pointer transition-colors flex items-center gap-4"
                             >
-                              <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
-                                <Send className="w-4 h-4 text-slate-600" />
-                              </div>
+                              <Send className="w-5 h-5 text-slate-500 flex-shrink-0" />
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-foreground">{t('dashboard.engineer.actions.sendQuote')}</p>
                                 <p className="text-sm text-foreground/50 truncate">
