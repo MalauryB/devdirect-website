@@ -486,6 +486,10 @@ export default function DashboardPage() {
     if ('disabled' in item && item.disabled) return
     setActiveSection(item.id)
     setSidebarOpen(false)
+    // Reset selected project when navigating to project lists
+    if (item.id === 'allProjects' || item.id === 'projects') {
+      setSelectedProject(null)
+    }
   }
 
   const handleSignOut = async () => {
