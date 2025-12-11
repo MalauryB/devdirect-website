@@ -328,14 +328,34 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
                   key={entry.id}
                   className="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4"
                 >
+                  {/* Engineer avatar and name */}
+                  <div className="flex items-center gap-2 min-w-[140px]">
+                    <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
+                      {entry.engineer?.avatar_url ? (
+                        <img
+                          src={entry.engineer.avatar_url}
+                          alt={engineerName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-xs font-bold text-white">
+                          {(entry.engineer?.first_name?.[0] || 'I').toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-sm font-medium truncate">
+                      {isOwn ? 'Vous' : engineerName}
+                    </span>
+                  </div>
+
                   {/* Date */}
-                  <div className="flex items-center gap-2 min-w-[120px]">
+                  <div className="flex items-center gap-2 min-w-[110px]">
                     <Calendar className="w-4 h-4 text-foreground/40" />
                     <span className="text-sm">{formatDate(entry.date)}</span>
                   </div>
 
                   {/* Hours */}
-                  <div className="flex items-center gap-2 min-w-[80px]">
+                  <div className="flex items-center gap-2 min-w-[70px]">
                     <Clock className="w-4 h-4 text-foreground/40" />
                     <span className="font-medium">{Number(entry.hours).toFixed(1)}h</span>
                   </div>
@@ -353,13 +373,6 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
                       {entry.description || <span className="text-foreground/30 italic">{t('timeTracking.noDescription')}</span>}
                     </p>
                   </div>
-
-                  {/* Engineer name (if not own) */}
-                  {!isOwn && (
-                    <span className="text-xs text-foreground/50 bg-gray-100 px-2 py-1 rounded">
-                      {engineerName}
-                    </span>
-                  )}
 
                   {/* Actions (only for own entries) */}
                   {isOwn && isEngineer && (
