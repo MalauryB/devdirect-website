@@ -225,8 +225,13 @@ export default function DashboardPage() {
     setMounted(true)
   }, [])
 
+  // Read URL params on mount and set state
   useEffect(() => {
     const section = searchParams.get("section")
+    const projectId = searchParams.get("project")
+    const subSection = searchParams.get("sub") as 'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | null
+    const clientId = searchParams.get("client")
+
     const validSections = isEngineer
       ? ["overview", "allProjects", "clients", "profile"]
       : ["about", "projects", "profile", "messages"]
@@ -237,7 +242,48 @@ export default function DashboardPage() {
       // Set default section based on role
       setActiveSection(isEngineer ? "overview" : "about")
     }
-  }, [searchParams, isEngineer, activeSection])
+
+    // Restore project selection from URL
+    if (projectId && (allProjects.length > 0 || projects.length > 0)) {
+      const projectList = isEngineer ? allProjects : projects
+      const project = projectList.find(p => p.id === projectId)
+      if (project && !selectedProject) {
+        setSelectedProject(project)
+        if (subSection) {
+          setProjectSubSection(subSection)
+        }
+      }
+    }
+
+    // Restore client selection from URL (engineer only)
+    if (clientId && isEngineer && !selectedClientId) {
+      setSelectedClientId(clientId)
+    }
+  }, [searchParams, isEngineer, activeSection, allProjects, projects])
+
+  // Update URL when navigation state changes
+  useEffect(() => {
+    if (!mounted || !activeSection) return
+
+    const params = new URLSearchParams()
+    params.set("section", activeSection)
+
+    if (selectedProject) {
+      params.set("project", selectedProject.id)
+      params.set("sub", projectSubSection)
+    }
+
+    if (selectedClientId && activeSection === "clients") {
+      params.set("client", selectedClientId)
+    }
+
+    const newUrl = `/dashboard?${params.toString()}`
+    const currentUrl = window.location.pathname + window.location.search
+
+    if (newUrl !== currentUrl) {
+      router.replace(newUrl, { scroll: false })
+    }
+  }, [mounted, activeSection, selectedProject, projectSubSection, selectedClientId, router])
 
   useEffect(() => {
     if (user?.user_metadata) {
