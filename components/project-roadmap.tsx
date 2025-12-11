@@ -465,7 +465,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                 )}
                 {t('roadmap.generateWithAI')}
               </Button>
-              <Button onClick={handleOpenAdd}>
+              <Button onClick={handleOpenAdd} className="bg-action hover:bg-action/90 text-white">
                 <Plus className="w-4 h-4 mr-2" />
                 {t('roadmap.addManually')}
               </Button>

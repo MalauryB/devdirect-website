@@ -2508,17 +2508,53 @@ export default function DashboardPage() {
                       </button>
                     </div>
                     <nav className="p-2">
+                      {/* Messages - most used */}
                       <button
-                        onClick={() => setProjectSubSection('details')}
+                        onClick={() => setProjectSubSection('messages')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
-                          projectSubSection === 'details'
+                          projectSubSection === 'messages'
                             ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
-                        <FileText className="w-4 h-4" />
-                        {t('projects.subSections.details')}
+                        <div className="relative">
+                          <MessageCircle className="w-4 h-4" />
+                          {selectedProject && unreadCounts[selectedProject.id] > 0 && (
+                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                          )}
+                        </div>
+                        {t('messages.title')}
+                        {selectedProject && unreadCounts[selectedProject.id] > 0 && (
+                          <span className="ml-auto text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full">
+                            {unreadCounts[selectedProject.id]}
+                          </span>
+                        )}
                       </button>
+                      {/* Roadmap */}
+                      <button
+                        onClick={() => setProjectSubSection('roadmap')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'roadmap'
+                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <Flag className="w-4 h-4" />
+                        {t('roadmap.title')}
+                      </button>
+                      {/* Time tracking */}
+                      <button
+                        onClick={() => setProjectSubSection('time')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'time'
+                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <Clock className="w-4 h-4" />
+                        {t('timeTracking.title')}
+                      </button>
+                      {/* Quotes */}
                       <button
                         onClick={() => {
                           setProjectSubSection('quotes')
@@ -2542,27 +2578,7 @@ export default function DashboardPage() {
                           </span>
                         )}
                       </button>
-                      <button
-                        onClick={() => setProjectSubSection('messages')}
-                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
-                          projectSubSection === 'messages'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
-                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
-                        }`}
-                      >
-                        <div className="relative">
-                          <MessageCircle className="w-4 h-4" />
-                          {selectedProject && unreadCounts[selectedProject.id] > 0 && (
-                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
-                          )}
-                        </div>
-                        {t('messages.title')}
-                        {selectedProject && unreadCounts[selectedProject.id] > 0 && (
-                          <span className="ml-auto text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full">
-                            {unreadCounts[selectedProject.id]}
-                          </span>
-                        )}
-                      </button>
+                      {/* Documents */}
                       <button
                         onClick={() => setProjectSubSection('documents')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
@@ -2574,27 +2590,17 @@ export default function DashboardPage() {
                         <FolderOpen className="w-4 h-4" />
                         {t('documents.title')}
                       </button>
+                      {/* Details - least used */}
                       <button
-                        onClick={() => setProjectSubSection('time')}
+                        onClick={() => setProjectSubSection('details')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
-                          projectSubSection === 'time'
+                          projectSubSection === 'details'
                             ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
-                        <Clock className="w-4 h-4" />
-                        {t('timeTracking.title')}
-                      </button>
-                      <button
-                        onClick={() => setProjectSubSection('roadmap')}
-                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
-                          projectSubSection === 'roadmap'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
-                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
-                        }`}
-                      >
-                        <Flag className="w-4 h-4" />
-                        {t('roadmap.title')}
+                        <FileText className="w-4 h-4" />
+                        {t('projects.subSections.details')}
                       </button>
                     </nav>
                   </div>
