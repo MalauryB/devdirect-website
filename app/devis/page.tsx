@@ -383,29 +383,24 @@ export default function DevisPage() {
 
             <div className="space-y-3">
               <Label className="text-sm font-medium">{t('projectWizard.projectType.whatType')}</Label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                 {projectTypeOptions.map((type) => (
                   <button
                     key={type.id}
                     type="button"
                     onClick={() => handleProjectTypeToggle(type.id)}
-                    className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all ${
+                    className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 text-center transition-all ${
                       formData.project_types.includes(type.id)
                         ? 'border-gray-900 bg-gray-50'
                         : 'border-gray-200 hover:border-gray-300 bg-white'
                     }`}
                   >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                       formData.project_types.includes(type.id) ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
                     }`}>
-                      <type.icon className="w-5 h-5" />
+                      <type.icon className="w-4 h-4" />
                     </div>
-                    <div>
-                      <h3 className="font-medium text-foreground">{type.label}</h3>
-                      {techLevel === 'beginner' && (
-                        <p className="text-xs text-foreground/50 mt-1">{type.description}</p>
-                      )}
-                    </div>
+                    <span className="text-sm font-medium text-foreground">{type.label}</span>
                   </button>
                 ))}
               </div>
