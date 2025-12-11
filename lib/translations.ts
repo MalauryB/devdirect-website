@@ -356,6 +356,10 @@ export const translations = {
           urgencyHigh: "Élevée",
           urgencyMedium: "Moyenne",
           urgencyLow: "Faible",
+          filterAssigneeAll: "Assigné",
+          filterUnassigned: "Non assigné",
+          colAssigned: "Assigné",
+          unassigned: "Non assigné",
           clearFilters: "Effacer",
           noResults: "Aucun résultat avec ces filtres"
         }
@@ -1205,6 +1209,10 @@ export const translations = {
           urgencyHigh: "High",
           urgencyMedium: "Medium",
           urgencyLow: "Low",
+          filterAssigneeAll: "Assignee",
+          filterUnassigned: "Unassigned",
+          colAssigned: "Assigned",
+          unassigned: "Unassigned",
           clearFilters: "Clear",
           noResults: "No results with these filters"
         }

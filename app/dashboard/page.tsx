@@ -38,6 +38,7 @@ import { exportQuoteToPdf } from "@/lib/quote-pdf-export"
 import { updateProfileAvatarUrl } from "@/lib/supabase"
 import { MessageThread } from "@/components/message-thread"
 import { getAllUnreadCounts } from "@/lib/messages"
+import { getAllAssignments, assignAction, unassignAction, getEngineers, ActionAssignment, ActionType } from "@/lib/assignments"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -186,6 +187,11 @@ export default function DashboardPage() {
   const [projectFilter, setProjectFilter] = useState<string>('')
   const [clientFilter, setClientFilter] = useState<string>('')
   const [urgencyFilter, setUrgencyFilter] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all')
+  const [assigneeFilter, setAssigneeFilter] = useState<string>('all')
+  // Assignments state
+  const [assignments, setAssignments] = useState<ActionAssignment[]>([])
+  const [engineers, setEngineers] = useState<Partial<Profile>[]>([])
+  const [assigningAction, setAssigningAction] = useState<string | null>(null)
 
   // Documents state
   const [documents, setDocuments] = useState<ProjectDocument[]>([])
@@ -277,7 +283,7 @@ export default function DashboardPage() {
     setDocumentsLoading(false)
   }, [])
 
-  // Load engineer overview data (unread messages and all quotes)
+  // Load engineer overview data (unread messages, quotes, assignments, engineers)
   const loadEngineerOverviewData = useCallback(async () => {
     if (!user) return
     // Load unread message counts and oldest dates
@@ -287,7 +293,54 @@ export default function DashboardPage() {
     // Load all quotes
     const { quotes: fetchedQuotes } = await getAllQuotes()
     setAllQuotes(fetchedQuotes)
+    // Load assignments
+    const { assignments: fetchedAssignments } = await getAllAssignments()
+    setAssignments(fetchedAssignments)
+    // Load engineers for assignment dropdown
+    const { engineers: fetchedEngineers } = await getEngineers()
+    setEngineers(fetchedEngineers)
   }, [user])
+
+  // Handle assigning an engineer to an action
+  const handleAssignAction = useCallback(async (
+    actionType: ActionType,
+    engineerId: string | null,
+    projectId?: string,
+    quoteId?: string
+  ) => {
+    if (!user) return
+
+    const actionKey = `${actionType}-${projectId || ''}-${quoteId || ''}`
+    setAssigningAction(actionKey)
+
+    try {
+      if (engineerId) {
+        await assignAction(actionType, engineerId, user.id, projectId, quoteId)
+      } else {
+        await unassignAction(actionType, projectId, quoteId)
+      }
+      // Reload assignments
+      const { assignments: fetchedAssignments } = await getAllAssignments()
+      setAssignments(fetchedAssignments)
+    } catch (error) {
+      console.error('Error assigning action:', error)
+    } finally {
+      setAssigningAction(null)
+    }
+  }, [user])
+
+  // Helper to get assignment for an action
+  const getActionAssignment = useCallback((
+    actionType: ActionType,
+    projectId?: string,
+    quoteId?: string
+  ): ActionAssignment | undefined => {
+    return assignments.find(a =>
+      a.action_type === actionType &&
+      (projectId ? a.project_id === projectId : !a.project_id) &&
+      (quoteId ? a.quote_id === quoteId : !a.quote_id)
+    )
+  }, [assignments])
 
   useEffect(() => {
     if (user && (activeSection === "projects" || activeSection === "messages")) {
@@ -1947,6 +2000,8 @@ export default function DashboardPage() {
                           urgency: UrgencyLevel
                           projectName: string
                           clientName: string
+                          assignedTo?: string
+                          assignee?: Profile
                         }
 
                         const actionItems: ActionItem[] = []
@@ -1957,6 +2012,7 @@ export default function DashboardPage() {
                             const notificationDate = unreadOldestDates[project.id]
                             const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
                             const urgency = elapsed ? getUrgencyLevel(elapsed) : 'low'
+                            const assignment = getActionAssignment('message', project.id)
                             actionItems.push({
                               id: `msg-${project.id}`,
                               type: 'message',
@@ -1965,7 +2021,9 @@ export default function DashboardPage() {
                               elapsed,
                               urgency,
                               projectName: project.title || t('projects.untitled'),
-                              clientName: project.profiles?.first_name || project.profiles?.company_name || '-'
+                              clientName: project.profiles?.first_name || project.profiles?.company_name || '-',
+                              assignedTo: assignment?.assigned_to,
+                              assignee: assignment?.assignee
                             })
                           })
                         }
@@ -1976,6 +2034,7 @@ export default function DashboardPage() {
                             const notificationDate = project.created_at
                             const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
                             const urgency = elapsed ? getUrgencyLevel(elapsed) : 'low'
+                            const assignment = getActionAssignment('quote', project.id)
                             actionItems.push({
                               id: `quote-${project.id}`,
                               type: 'quote',
@@ -1984,7 +2043,9 @@ export default function DashboardPage() {
                               elapsed,
                               urgency,
                               projectName: project.title || t('projects.untitled'),
-                              clientName: project.profiles?.first_name || project.profiles?.company_name || '-'
+                              clientName: project.profiles?.first_name || project.profiles?.company_name || '-',
+                              assignedTo: assignment?.assigned_to,
+                              assignee: assignment?.assignee
                             })
                           })
                         }
@@ -1995,6 +2056,7 @@ export default function DashboardPage() {
                             const notificationDate = quote.created_at
                             const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
                             const urgency = elapsed ? getUrgencyLevel(elapsed) : 'low'
+                            const assignment = getActionAssignment('send', project?.id, quote.id)
                             actionItems.push({
                               id: `draft-${quote.id}`,
                               type: 'send',
@@ -2004,7 +2066,9 @@ export default function DashboardPage() {
                               elapsed,
                               urgency,
                               projectName: project?.title || t('projects.untitled'),
-                              clientName: project?.profiles?.first_name || project?.profiles?.company_name || '-'
+                              clientName: project?.profiles?.first_name || project?.profiles?.company_name || '-',
+                              assignedTo: assignment?.assigned_to,
+                              assignee: assignment?.assignee
                             })
                           })
                         }
@@ -2022,6 +2086,15 @@ export default function DashboardPage() {
                           // Urgency filter
                           if (urgencyFilter !== 'all' && item.urgency !== urgencyFilter) {
                             return false
+                          }
+                          // Assignee filter
+                          if (assigneeFilter !== 'all') {
+                            if (assigneeFilter === 'unassigned' && item.assignedTo) {
+                              return false
+                            }
+                            if (assigneeFilter !== 'unassigned' && item.assignedTo !== assigneeFilter) {
+                              return false
+                            }
                           }
                           return true
                         })
@@ -2094,12 +2167,26 @@ export default function DashboardPage() {
                               <option value="medium">{t('dashboard.engineer.actions.urgencyMedium')}</option>
                               <option value="low">{t('dashboard.engineer.actions.urgencyLow')}</option>
                             </select>
-                            {(projectFilter || clientFilter || urgencyFilter !== 'all') && (
+                            <select
+                              value={assigneeFilter}
+                              onChange={(e) => setAssigneeFilter(e.target.value)}
+                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300"
+                            >
+                              <option value="all">{t('dashboard.engineer.actions.filterAssigneeAll')}</option>
+                              <option value="unassigned">{t('dashboard.engineer.actions.filterUnassigned')}</option>
+                              {engineers.map(eng => (
+                                <option key={eng.id} value={eng.id}>
+                                  {eng.first_name || eng.email}
+                                </option>
+                              ))}
+                            </select>
+                            {(projectFilter || clientFilter || urgencyFilter !== 'all' || assigneeFilter !== 'all') && (
                               <button
                                 onClick={() => {
                                   setProjectFilter('')
                                   setClientFilter('')
                                   setUrgencyFilter('all')
+                                  setAssigneeFilter('all')
                                 }}
                                 className="text-xs text-neutral-500 hover:text-neutral-700 underline"
                               >
@@ -2115,6 +2202,7 @@ export default function DashboardPage() {
                               <TableHead>{t('dashboard.engineer.actions.colAction')}</TableHead>
                               <TableHead>{t('dashboard.engineer.actions.colProject')}</TableHead>
                               <TableHead>{t('dashboard.engineer.actions.colClient')}</TableHead>
+                              <TableHead>{t('dashboard.engineer.actions.colAssigned')}</TableHead>
                               <TableHead>{t('dashboard.engineer.actions.colDate')}</TableHead>
                               <TableHead>{t('dashboard.engineer.actions.colProcessingTime')}</TableHead>
                               <TableHead className="text-right">{t('dashboard.engineer.actions.colStatus')}</TableHead>
@@ -2123,7 +2211,7 @@ export default function DashboardPage() {
                           <TableBody>
                             {filteredItems.length === 0 ? (
                               <TableRow>
-                                <TableCell colSpan={7} className="text-center py-8 text-neutral-500">
+                                <TableCell colSpan={8} className="text-center py-8 text-neutral-500">
                                   {t('dashboard.engineer.actions.noResults')}
                                 </TableCell>
                               </TableRow>
@@ -2152,6 +2240,33 @@ export default function DashboardPage() {
                                 </TableCell>
                                 <TableCell className="text-neutral-600">{item.projectName}</TableCell>
                                 <TableCell className="text-neutral-600">{item.clientName}</TableCell>
+                                <TableCell onClick={(e) => e.stopPropagation()}>
+                                  <select
+                                    value={item.assignedTo || ''}
+                                    onChange={(e) => {
+                                      const engineerId = e.target.value || null
+                                      handleAssignAction(
+                                        item.type as ActionType,
+                                        engineerId,
+                                        item.project?.id,
+                                        item.quote?.id
+                                      )
+                                    }}
+                                    disabled={assigningAction === `${item.type}-${item.project?.id || ''}-${item.quote?.id || ''}`}
+                                    className={`text-xs border rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300 min-w-[100px] ${
+                                      assigningAction === `${item.type}-${item.project?.id || ''}-${item.quote?.id || ''}`
+                                        ? 'opacity-50 cursor-wait'
+                                        : 'cursor-pointer'
+                                    } ${item.assignedTo ? 'border-primary/30 text-primary' : 'border-neutral-200 text-neutral-400'}`}
+                                  >
+                                    <option value="">{t('dashboard.engineer.actions.unassigned')}</option>
+                                    {engineers.map(eng => (
+                                      <option key={eng.id} value={eng.id}>
+                                        {eng.first_name || eng.email}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </TableCell>
                                 <TableCell className="text-neutral-500 text-sm">
                                   {item.notificationDate ? formatDate(item.notificationDate) : '-'}
                                 </TableCell>
