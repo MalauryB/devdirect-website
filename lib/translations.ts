@@ -886,11 +886,48 @@ export const translations = {
         other: "Autre"
       }
     },
+    roadmap: {
+      title: "Roadmap",
+      subtitle: "Suivez les étapes clés du projet",
+      addMilestone: "Ajouter une étape",
+      addManually: "Ajouter manuellement",
+      editMilestone: "Modifier l'étape",
+      generateWithAI: "Générer avec l'IA",
+      generateSubtasks: "Décomposer en sous-tâches",
+      regenerate: "Régénérer",
+      regenerateConfirmTitle: "Régénérer la roadmap ?",
+      regenerateConfirmDescription: "Cette action supprimera toutes les étapes actuelles et en générera de nouvelles avec l'IA. Cette action est irréversible.",
+      regenerateConfirm: "Régénérer",
+      progress: "Progression",
+      milestonesCompleted: "étapes complétées",
+      noMilestones: "Aucune étape définie",
+      noMilestonesDescription: "Ajoutez des étapes manuellement ou générez une roadmap avec l'IA basée sur les informations du projet.",
+      milestoneTitle: "Titre",
+      milestoneTitlePlaceholder: "Ex: Livraison des maquettes",
+      milestoneDescription: "Description",
+      milestoneDescriptionPlaceholder: "Décrivez ce qui sera livré ou validé à cette étape...",
+      dueDate: "Date d'échéance",
+      overdue: "En retard",
+      completedOn: "Complété le",
+      by: "par",
+      assignees: "Assignés",
+      subtasks: "sous-tâches",
+      addSubtask: "Ajouter une sous-tâche",
+      subtaskTitlePlaceholder: "Titre de la sous-tâche...",
+      status: {
+        label: "Statut",
+        pending: "À faire",
+        inProgress: "En cours",
+        completed: "Terminé",
+        blocked: "Bloqué"
+      }
+    },
     common: {
       edit: "Modifier",
       delete: "Supprimer",
       save: "Enregistrer",
-      cancel: "Annuler"
+      cancel: "Annuler",
+      add: "Ajouter"
     }
   },
   en: {
@@ -1780,11 +1817,48 @@ export const translations = {
         other: "Other"
       }
     },
+    roadmap: {
+      title: "Roadmap",
+      subtitle: "Track key project milestones",
+      addMilestone: "Add milestone",
+      addManually: "Add manually",
+      editMilestone: "Edit milestone",
+      generateWithAI: "Generate with AI",
+      generateSubtasks: "Break down into subtasks",
+      regenerate: "Regenerate",
+      regenerateConfirmTitle: "Regenerate roadmap?",
+      regenerateConfirmDescription: "This will delete all current milestones and generate new ones with AI. This action cannot be undone.",
+      regenerateConfirm: "Regenerate",
+      progress: "Progress",
+      milestonesCompleted: "milestones completed",
+      noMilestones: "No milestones defined",
+      noMilestonesDescription: "Add milestones manually or generate a roadmap with AI based on the project information.",
+      milestoneTitle: "Title",
+      milestoneTitlePlaceholder: "E.g., Design delivery",
+      milestoneDescription: "Description",
+      milestoneDescriptionPlaceholder: "Describe what will be delivered or validated at this step...",
+      dueDate: "Due date",
+      overdue: "Overdue",
+      completedOn: "Completed on",
+      by: "by",
+      assignees: "Assignees",
+      subtasks: "subtasks",
+      addSubtask: "Add subtask",
+      subtaskTitlePlaceholder: "Subtask title...",
+      status: {
+        label: "Status",
+        pending: "To do",
+        inProgress: "In progress",
+        completed: "Completed",
+        blocked: "Blocked"
+      }
+    },
     common: {
       edit: "Edit",
       delete: "Delete",
       save: "Save",
-      cancel: "Cancel"
+      cancel: "Cancel",
+      add: "Add"
     }
   }
 }

@@ -40,6 +40,7 @@ import { MessageThread } from "@/components/message-thread"
 import { getAllUnreadCounts, markMessagesAsRead } from "@/lib/messages"
 import { getAllAssignments, assignAction, unassignAction, getEngineers, ActionAssignment, ActionType } from "@/lib/assignments"
 import { TimeTracking } from "@/components/time-tracking"
+import { ProjectRoadmap } from "@/components/project-roadmap"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -177,7 +178,7 @@ export default function DashboardPage() {
   const [sendQuoteLoading, setSendQuoteLoading] = useState(false)
 
   // Project sub-section state (for cascading navigation)
-  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages' | 'documents' | 'time'>('details')
+  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap'>('details')
 
   // Engineer action tracking state
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({})
@@ -2529,6 +2530,17 @@ export default function DashboardPage() {
                         <Clock className="w-4 h-4" />
                         {t('timeTracking.title')}
                       </button>
+                      <button
+                        onClick={() => setProjectSubSection('roadmap')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'roadmap'
+                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <ChevronRight className="w-4 h-4" />
+                        {t('roadmap.title')}
+                      </button>
                     </nav>
                   </div>
 
@@ -3241,6 +3253,23 @@ export default function DashboardPage() {
                             role: user?.user_metadata?.role
                           }}
                           isEngineer={isEngineer}
+                        />
+                      </div>
+                    )}
+
+                    {/* Roadmap Section */}
+                    {projectSubSection === 'roadmap' && (
+                      <div className="bg-white border border-neutral-200 rounded-xl p-6">
+                        <ProjectRoadmap
+                          project={selectedProject}
+                          currentUser={{
+                            id: user?.id || '',
+                            first_name: user?.user_metadata?.first_name,
+                            last_name: user?.user_metadata?.last_name,
+                            role: user?.user_metadata?.role
+                          }}
+                          isEngineer={isEngineer}
+                          engineers={engineers}
                         />
                       </div>
                     )}
