@@ -123,24 +123,44 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
     }
   }
 
-  // Scroll to bottom when messages change
+  // Scroll to bottom when messages change and loading is complete
   useEffect(() => {
-    if (messages.length > 0) {
-      // Use requestAnimationFrame to ensure DOM is updated before scrolling
-      requestAnimationFrame(() => {
+    if (messages.length > 0 && !loading) {
+      // Use multiple scroll attempts to ensure we reach the bottom
+      // First scroll immediately after render
+      const scrollSequence = () => {
         scrollToBottom(isInitialLoad ? "instant" : "smooth")
+      }
 
-        // For initial load, do an additional scroll after a short delay
-        // to handle any async content like images
-        if (isInitialLoad) {
-          setTimeout(() => {
-            scrollToBottom("instant")
-          }, 100)
+      // Immediate scroll
+      scrollSequence()
+
+      // Scroll again after a short delay to handle layout shifts
+      const timer1 = setTimeout(scrollSequence, 50)
+
+      // And one more time for good measure (handles images, etc.)
+      const timer2 = setTimeout(scrollSequence, 200)
+
+      if (isInitialLoad) {
+        // Final scroll after longer delay for any async content
+        const timer3 = setTimeout(() => {
+          scrollToBottom("instant")
           setIsInitialLoad(false)
+        }, 400)
+
+        return () => {
+          clearTimeout(timer1)
+          clearTimeout(timer2)
+          clearTimeout(timer3)
         }
-      })
+      }
+
+      return () => {
+        clearTimeout(timer1)
+        clearTimeout(timer2)
+      }
     }
-  }, [messages, isInitialLoad])
+  }, [messages, loading, isInitialLoad])
 
   const handleSend = async () => {
     if (!newMessage.trim() && !attachment) return
