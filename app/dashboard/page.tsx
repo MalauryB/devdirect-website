@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -166,6 +166,15 @@ export default function DashboardPage() {
   const [allProjects, setAllProjects] = useState<Project[]>([])
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null)
+
+  // Projects DataGrid filters (for engineers)
+  const [projectSearchQuery, setProjectSearchQuery] = useState('')
+  const [projectStatusFilter, setProjectStatusFilter] = useState<string>('all')
+  const [projectTypeFilter, setProjectTypeFilter] = useState<string>('all')
+  const [projectClientFilter, setProjectClientFilter] = useState<string>('all')
+
+  // Clients DataGrid search (for engineers)
+  const [clientSearchQuery, setClientSearchQuery] = useState('')
 
   // Quotes state (for engineers)
   const [quotes, setQuotes] = useState<Quote[]>([])
@@ -2538,7 +2547,7 @@ export default function DashboardPage() {
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
-                        <ChevronRight className="w-4 h-4" />
+                        <Flag className="w-4 h-4" />
                         {t('roadmap.title')}
                       </button>
                     </nav>
@@ -3277,88 +3286,225 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <>
-                  <div className="flex items-center justify-between mb-6">
-                    <div>
-                      <h2 className="text-xl font-bold text-foreground">{t('dashboard.allProjects.title')}</h2>
-                      <p className="text-foreground/60 text-sm">{t('dashboard.allProjects.subtitle')}</p>
-                    </div>
+                  {(() => {
+                    // Filter projects based on search and filters
+                    const filteredProjects = allProjects.filter(project => {
+                      // Search filter
+                      const searchLower = projectSearchQuery.toLowerCase()
+                      const matchesSearch = !projectSearchQuery ||
+                        (project.title || '').toLowerCase().includes(searchLower) ||
+                        (project.description || '').toLowerCase().includes(searchLower) ||
+                        (project.profiles?.company_name || '').toLowerCase().includes(searchLower) ||
+                        (project.profiles?.first_name || '').toLowerCase().includes(searchLower) ||
+                        (project.profiles?.last_name || '').toLowerCase().includes(searchLower)
 
-                    {/* Status Filter */}
-                    <div className="flex items-center gap-2">
-                      <Filter className="w-4 h-4 text-foreground/50" />
-                      <select
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                        className="bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
-                      >
-                        <option value="all">{t('dashboard.allProjects.allStatuses')}</option>
-                        <option value="pending">{t('projects.status.pending')}</option>
-                        <option value="in_review">{t('projects.status.in_review')}</option>
-                        <option value="active">{t('projects.status.active')}</option>
-                        <option value="won">{t('projects.status.won')}</option>
-                        <option value="lost">{t('projects.status.lost')}</option>
-                        <option value="cancelled">{t('projects.status.cancelled')}</option>
-                        <option value="closed">{t('projects.status.closed')}</option>
-                      </select>
-                    </div>
-                  </div>
+                      // Status filter
+                      const matchesStatus = projectStatusFilter === 'all' || project.status === projectStatusFilter
 
-                  {projectsLoading ? (
-                    <div className="flex items-center justify-center py-12">
-                      <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
-                    </div>
-                  ) : allProjects.length === 0 ? (
-                    <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
-                      <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
-                      <p className="text-foreground/70 font-medium">{t('dashboard.engineer.noProjects')}</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {allProjects.map((project) => (
-                        <div
-                          key={project.id}
-                          onClick={() => {
-                            setSelectedProject(project)
-                            setProjectSubSection('details')
-                          }}
-                          className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1 min-w-0">
-                              <h3 className="font-semibold text-foreground mb-1">
-                                {project.title || t('projects.untitled')}
-                              </h3>
-                              <div className="flex flex-wrap gap-2 mb-2">
-                                {project.project_types?.map((type) => (
-                                  <span key={type} className="text-xs bg-neutral-100 text-foreground/70 px-2 py-0.5 rounded">
-                                    {t(`projects.types.${type}`)}
-                                  </span>
-                                ))}
-                              </div>
-                              <p className="text-sm text-foreground/60 line-clamp-2">{project.description}</p>
-                              <div className="flex flex-wrap items-center gap-4 mt-3 text-sm text-foreground/50">
-                                {project.budget && (
-                                  <span className="flex items-center gap-1">
-                                    <Euro className="w-4 h-4" />
-                                    {t(`projects.budget.${project.budget}`)}
-                                  </span>
-                                )}
-                                {project.deadline && (
-                                  <span className="flex items-center gap-1">
-                                    <Calendar className="w-4 h-4" />
-                                    {t(`projects.deadline.${project.deadline}`)}
-                                  </span>
-                                )}
-                              </div>
-                            </div>
-                            <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
-                              {t(`projects.status.${project.status}`)}
-                            </span>
+                      // Type filter
+                      const matchesType = projectTypeFilter === 'all' ||
+                        (project.project_types && project.project_types.includes(projectTypeFilter))
+
+                      // Client filter
+                      const matchesClient = projectClientFilter === 'all' || project.user_id === projectClientFilter
+
+                      return matchesSearch && matchesStatus && matchesType && matchesClient
+                    })
+
+                    // Get unique clients for filter dropdown
+                    const uniqueClients = [...new Map(allProjects.map(p => [
+                      p.user_id,
+                      { id: p.user_id, name: p.profiles?.company_name || `${p.profiles?.first_name || ''} ${p.profiles?.last_name || ''}`.trim() || 'Client' }
+                    ])).values()]
+
+                    // Get unique project types for filter dropdown
+                    const uniqueTypes = [...new Set(allProjects.flatMap(p => p.project_types || []))]
+
+                    const hasActiveFilters = projectSearchQuery || projectStatusFilter !== 'all' || projectTypeFilter !== 'all' || projectClientFilter !== 'all'
+
+                    return (
+                      <>
+                        <div className="flex items-center justify-between mb-6">
+                          <div>
+                            <h2 className="text-xl font-bold text-foreground">{t('dashboard.allProjects.title')}</h2>
+                            <p className="text-foreground/60 text-sm">{t('dashboard.allProjects.subtitle')}</p>
                           </div>
                         </div>
-                      ))}
-                    </div>
-                  )}
+
+                        {/* Search and Filters */}
+                        <div className="bg-white border border-neutral-200 rounded-xl p-4 mb-4">
+                          <div className="flex flex-wrap items-center gap-3">
+                            {/* Search */}
+                            <div className="relative flex-1 min-w-[200px]">
+                              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
+                              <Input
+                                placeholder={t('projects.grid.search')}
+                                value={projectSearchQuery}
+                                onChange={(e) => setProjectSearchQuery(e.target.value)}
+                                className="pl-9 h-9"
+                              />
+                            </div>
+
+                            {/* Status Filter */}
+                            <select
+                              value={projectStatusFilter}
+                              onChange={(e) => setProjectStatusFilter(e.target.value)}
+                              className="bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400 h-9"
+                            >
+                              <option value="all">{t('projects.grid.allStatuses')}</option>
+                              <option value="pending">{t('projects.status.pending')}</option>
+                              <option value="in_review">{t('projects.status.in_review')}</option>
+                              <option value="active">{t('projects.status.active')}</option>
+                              <option value="won">{t('projects.status.won')}</option>
+                              <option value="lost">{t('projects.status.lost')}</option>
+                              <option value="cancelled">{t('projects.status.cancelled')}</option>
+                              <option value="closed">{t('projects.status.closed')}</option>
+                            </select>
+
+                            {/* Type Filter */}
+                            <select
+                              value={projectTypeFilter}
+                              onChange={(e) => setProjectTypeFilter(e.target.value)}
+                              className="bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400 h-9"
+                            >
+                              <option value="all">{t('projects.grid.allTypes')}</option>
+                              {uniqueTypes.map(type => (
+                                <option key={type} value={type}>{t(`projects.types.${type}`)}</option>
+                              ))}
+                            </select>
+
+                            {/* Client Filter */}
+                            <select
+                              value={projectClientFilter}
+                              onChange={(e) => setProjectClientFilter(e.target.value)}
+                              className="bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400 h-9"
+                            >
+                              <option value="all">{t('projects.grid.allClients')}</option>
+                              {uniqueClients.map(client => (
+                                <option key={client.id} value={client.id}>{client.name}</option>
+                              ))}
+                            </select>
+
+                            {/* Clear filters */}
+                            {hasActiveFilters && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  setProjectSearchQuery('')
+                                  setProjectStatusFilter('all')
+                                  setProjectTypeFilter('all')
+                                  setProjectClientFilter('all')
+                                }}
+                                className="text-foreground/60 hover:text-foreground h-9"
+                              >
+                                <X className="w-4 h-4 mr-1" />
+                                {t('projects.grid.clearFilters')}
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+
+                        {projectsLoading ? (
+                          <div className="flex items-center justify-center py-12">
+                            <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+                          </div>
+                        ) : allProjects.length === 0 ? (
+                          <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                            <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                            <p className="text-foreground/70 font-medium">{t('dashboard.engineer.noProjects')}</p>
+                          </div>
+                        ) : filteredProjects.length === 0 ? (
+                          <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                            <Search className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                            <p className="text-foreground/70 font-medium">{t('projects.grid.noResults')}</p>
+                            <p className="text-foreground/50 text-sm mt-1">{t('projects.grid.noResultsDesc')}</p>
+                          </div>
+                        ) : (
+                          <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
+                            <Table>
+                              <TableHeader>
+                                <TableRow className="hover:bg-transparent">
+                                  <TableHead className="w-[300px]">{t('projects.grid.colTitle')}</TableHead>
+                                  <TableHead>{t('projects.grid.colClient')}</TableHead>
+                                  <TableHead>{t('projects.grid.colType')}</TableHead>
+                                  <TableHead>{t('projects.grid.colBudget')}</TableHead>
+                                  <TableHead>{t('projects.grid.colDeadline')}</TableHead>
+                                  <TableHead>{t('projects.grid.colCreated')}</TableHead>
+                                  <TableHead className="text-right">{t('projects.grid.colStatus')}</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {filteredProjects.map((project) => (
+                                  <TableRow
+                                    key={project.id}
+                                    onClick={() => {
+                                      setSelectedProject(project)
+                                      setProjectSubSection('details')
+                                    }}
+                                    className="cursor-pointer hover:bg-neutral-50"
+                                  >
+                                    <TableCell className="max-w-[250px]">
+                                      <div className="font-medium text-foreground truncate">
+                                        {project.title || t('projects.untitled')}
+                                      </div>
+                                      <div className="text-xs text-foreground/50 truncate mt-0.5" title={project.description}>
+                                        {project.description}
+                                      </div>
+                                    </TableCell>
+                                    <TableCell>
+                                      <div className="flex items-center gap-2">
+                                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
+                                          {project.profiles?.avatar_url ? (
+                                            <img src={project.profiles.avatar_url} alt="" className="w-full h-full object-cover" />
+                                          ) : (
+                                            <span className="text-xs font-bold text-white">
+                                              {(project.profiles?.first_name?.[0] || 'C').toUpperCase()}
+                                            </span>
+                                          )}
+                                        </div>
+                                        <div className="min-w-0">
+                                          <div className="text-sm font-medium truncate">
+                                            {project.profiles?.company_name || `${project.profiles?.first_name || ''} ${project.profiles?.last_name || ''}`.trim() || 'Client'}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </TableCell>
+                                    <TableCell>
+                                      <div className="flex flex-wrap gap-1">
+                                        {project.project_types?.slice(0, 2).map((type) => (
+                                          <span key={type} className="text-xs bg-neutral-100 text-foreground/70 px-2 py-0.5 rounded">
+                                            {t(`projects.types.${type}`)}
+                                          </span>
+                                        ))}
+                                        {(project.project_types?.length || 0) > 2 && (
+                                          <span className="text-xs text-foreground/50">+{(project.project_types?.length || 0) - 2}</span>
+                                        )}
+                                      </div>
+                                    </TableCell>
+                                    <TableCell className="text-sm text-foreground/70">
+                                      {project.budget ? t(`projects.budget.${project.budget}`) : '-'}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-foreground/70">
+                                      {project.deadline ? t(`projects.deadline.${project.deadline}`) : '-'}
+                                    </TableCell>
+                                    <TableCell className="text-sm text-foreground/50">
+                                      {new Date(project.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' })}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
+                                        {t(`projects.status.${project.status}`)}
+                                      </span>
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        )}
+                      </>
+                    )
+                  })()}
                 </>
               )}
             </div>
@@ -3526,56 +3672,126 @@ export default function DashboardPage() {
                   )
                 }
 
-                // Show client list
+                // Show client list with DataGrid
+                const filteredClients = clients.filter(client => {
+                  if (!clientSearchQuery) return true
+                  const searchLower = clientSearchQuery.toLowerCase()
+                  return (
+                    (client.company_name || '').toLowerCase().includes(searchLower) ||
+                    (client.first_name || '').toLowerCase().includes(searchLower) ||
+                    (client.last_name || '').toLowerCase().includes(searchLower) ||
+                    (client.email || '').toLowerCase().includes(searchLower) ||
+                    (client.phone || '').toLowerCase().includes(searchLower)
+                  )
+                })
+
                 return (
                   <>
-                    <h2 className="text-xl font-bold text-foreground mb-2">{t('dashboard.clients.title')}</h2>
-                    <p className="text-foreground/60 mb-6">{t('dashboard.clients.subtitle')}</p>
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h2 className="text-xl font-bold text-foreground">{t('dashboard.clients.title')}</h2>
+                        <p className="text-foreground/60 text-sm">{t('dashboard.clients.subtitle')}</p>
+                      </div>
+                    </div>
+
+                    {/* Search */}
+                    <div className="bg-white border border-neutral-200 rounded-xl p-4 mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="relative flex-1 max-w-md">
+                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
+                          <Input
+                            placeholder={t('dashboard.clients.grid.search')}
+                            value={clientSearchQuery}
+                            onChange={(e) => setClientSearchQuery(e.target.value)}
+                            className="pl-9 h-9"
+                          />
+                        </div>
+                        {clientSearchQuery && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setClientSearchQuery('')}
+                            className="text-foreground/60 hover:text-foreground h-9"
+                          >
+                            <X className="w-4 h-4 mr-1" />
+                            {t('projects.grid.clearFilters')}
+                          </Button>
+                        )}
+                      </div>
+                    </div>
 
                     {clients.length === 0 ? (
                       <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
                         <Users className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                         <p className="text-foreground/70 font-medium">{t('dashboard.clients.noClients')}</p>
                       </div>
+                    ) : filteredClients.length === 0 ? (
+                      <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                        <Search className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
+                        <p className="text-foreground/70 font-medium">{t('dashboard.clients.grid.noResults')}</p>
+                        <p className="text-foreground/50 text-sm mt-1">{t('dashboard.clients.grid.noResultsDesc')}</p>
+                      </div>
                     ) : (
-                      <div className="space-y-4">
-                        {clients.map((client) => (
-                          <div
-                            key={client.user_id}
-                            onClick={() => setSelectedClientId(client.user_id)}
-                            className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
-                          >
-                            <div className="flex items-center justify-between gap-4">
-                              <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden">
-                                  {client.avatar_url ? (
-                                    <img
-                                      src={client.avatar_url}
-                                      alt={getClientDisplayName(client)}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  ) : (
-                                    <span className="text-lg font-bold text-white">
-                                      {(client.company_name?.[0] || client.first_name?.[0] || client.email?.[0] || 'C').toUpperCase()}
-                                    </span>
-                                  )}
-                                </div>
-                                <div>
-                                  <p className="font-medium text-foreground">{getClientDisplayName(client)}</p>
-                                  {client.company_name && (client.first_name || client.last_name) && (
-                                    <p className="text-sm text-foreground/50">
-                                      {`${client.first_name} ${client.last_name}`.trim()}
-                                    </p>
-                                  )}
-                                  <p className="text-sm text-foreground/50">
-                                    {client.project_count} {t('dashboard.clients.projectCount')}
-                                  </p>
-                                </div>
-                              </div>
-                              <ChevronRight className="w-5 h-5 text-foreground/30" />
-                            </div>
-                          </div>
-                        ))}
+                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="hover:bg-transparent">
+                              <TableHead className="w-[300px]">{t('dashboard.clients.grid.colClient')}</TableHead>
+                              <TableHead>{t('dashboard.clients.grid.colEmail')}</TableHead>
+                              <TableHead>{t('dashboard.clients.grid.colPhone')}</TableHead>
+                              <TableHead className="text-right">{t('dashboard.clients.grid.colProjects')}</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {filteredClients.map((client) => (
+                              <TableRow
+                                key={client.user_id}
+                                onClick={() => setSelectedClientId(client.user_id)}
+                                className="cursor-pointer hover:bg-neutral-50"
+                              >
+                                <TableCell>
+                                  <div className="flex items-center gap-3">
+                                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
+                                      {client.avatar_url ? (
+                                        <img
+                                          src={client.avatar_url}
+                                          alt={getClientDisplayName(client)}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      ) : (
+                                        <span className="text-sm font-bold text-white">
+                                          {(client.company_name?.[0] || client.first_name?.[0] || client.email?.[0] || 'C').toUpperCase()}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="min-w-0">
+                                      <div className="font-medium text-foreground truncate">
+                                        {getClientDisplayName(client)}
+                                      </div>
+                                      {client.company_name && (client.first_name || client.last_name) && (
+                                        <div className="text-xs text-foreground/50 truncate">
+                                          {`${client.first_name} ${client.last_name}`.trim()}
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </TableCell>
+                                <TableCell className="text-sm text-foreground/70">
+                                  {client.email || '-'}
+                                </TableCell>
+                                <TableCell className="text-sm text-foreground/70">
+                                  {client.phone || '-'}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <span className="inline-flex items-center gap-1 text-sm text-foreground/70">
+                                    <FileText className="w-4 h-4" />
+                                    {client.project_count}
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </div>
                     )}
                   </>

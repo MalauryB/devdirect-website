@@ -377,7 +377,16 @@ export const translations = {
         phone: "Téléphone",
         company: "Entreprise",
         clientProjects: "Projets du client",
-        unknownClient: "Client inconnu"
+        unknownClient: "Client inconnu",
+        grid: {
+          search: "Rechercher un client...",
+          colClient: "Client",
+          colEmail: "Email",
+          colPhone: "Téléphone",
+          colProjects: "Projets",
+          noResults: "Aucun client trouvé",
+          noResultsDesc: "Modifiez votre recherche"
+        }
       },
       allProjects: {
         title: "Tous les projets",
@@ -504,6 +513,25 @@ export const translations = {
         lost: "Perdu",
         cancelled: "Annulé",
         closed: "Clos"
+      },
+      grid: {
+        search: "Rechercher un projet...",
+        filterByStatus: "Filtrer par statut",
+        filterByType: "Filtrer par type",
+        filterByClient: "Filtrer par client",
+        allStatuses: "Tous les statuts",
+        allTypes: "Tous les types",
+        allClients: "Tous les clients",
+        clearFilters: "Effacer les filtres",
+        colTitle: "Projet",
+        colClient: "Client",
+        colType: "Type",
+        colStatus: "Statut",
+        colBudget: "Budget",
+        colDeadline: "Délai",
+        colCreated: "Créé le",
+        noResults: "Aucun projet trouvé",
+        noResultsDesc: "Modifiez vos filtres ou créez un nouveau projet"
       },
       details: {
         back: "Retour aux projets",
@@ -1308,7 +1336,16 @@ export const translations = {
         phone: "Phone",
         company: "Company",
         clientProjects: "Client projects",
-        unknownClient: "Unknown client"
+        unknownClient: "Unknown client",
+        grid: {
+          search: "Search clients...",
+          colClient: "Client",
+          colEmail: "Email",
+          colPhone: "Phone",
+          colProjects: "Projects",
+          noResults: "No clients found",
+          noResultsDesc: "Adjust your search"
+        }
       },
       allProjects: {
         title: "All projects",
@@ -1435,6 +1472,25 @@ export const translations = {
         lost: "Lost",
         cancelled: "Cancelled",
         closed: "Closed"
+      },
+      grid: {
+        search: "Search projects...",
+        filterByStatus: "Filter by status",
+        filterByType: "Filter by type",
+        filterByClient: "Filter by client",
+        allStatuses: "All statuses",
+        allTypes: "All types",
+        allClients: "All clients",
+        clearFilters: "Clear filters",
+        colTitle: "Project",
+        colClient: "Client",
+        colType: "Type",
+        colStatus: "Status",
+        colBudget: "Budget",
+        colDeadline: "Deadline",
+        colCreated: "Created",
+        noResults: "No projects found",
+        noResultsDesc: "Adjust your filters or create a new project"
       },
       details: {
         back: "Back to projects",

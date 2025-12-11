@@ -102,14 +102,14 @@ const STATUS_CONFIG: Record<MilestoneStatus, { icon: React.ReactNode; color: str
   },
   in_progress: {
     icon: <Clock className="w-4 h-4" />,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-100',
+    color: 'text-[#ea4c89]',
+    bgColor: 'bg-[#ea4c89]/10',
     label: 'roadmap.status.inProgress'
   },
   completed: {
     icon: <Check className="w-4 h-4" />,
-    color: 'text-green-500',
-    bgColor: 'bg-green-100',
+    color: 'text-[#ea4c89]',
+    bgColor: 'bg-[#ea4c89]/10',
     label: 'roadmap.status.completed'
   },
   blocked: {
@@ -419,7 +419,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
               )}
               {t('roadmap.generateWithAI')}
             </Button>
-            <Button onClick={handleOpenAdd} className="gap-2">
+            <Button onClick={handleOpenAdd} variant="outline" className="gap-2 border-[#ea4c89] text-foreground bg-white hover:bg-[#ea4c89]/5">
               <Plus className="w-4 h-4" />
               {t('roadmap.addMilestone')}
             </Button>
@@ -438,7 +438,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
           </div>
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="h-full bg-green-500 transition-all duration-500"
+              className="h-full bg-[#ea4c89] transition-all duration-500"
               style={{ width: `${stats.progress}%` }}
             />
           </div>
@@ -485,7 +485,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
               <div
                 key={milestone.id}
                 className={`bg-white border rounded-xl transition-all ${
-                  milestone.status === 'completed' ? 'border-green-200 bg-green-50/30' : 'border-gray-200'
+                  milestone.status === 'completed' ? 'border-[#ea4c89]/30 bg-[#ea4c89]/5' : 'border-gray-200'
                 } ${overdue ? 'border-red-200' : ''}`}
               >
                 <div className="p-4">
@@ -508,8 +508,8 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                       disabled={!isEngineer}
                       className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                         milestone.status === 'completed'
-                          ? 'bg-green-500 text-white'
-                          : 'border-2 border-gray-300 hover:border-green-500'
+                          ? 'bg-[#ea4c89] text-white'
+                          : 'border-2 border-gray-300 hover:border-[#ea4c89]'
                       } ${!isEngineer ? 'cursor-default' : 'cursor-pointer'}`}
                     >
                       {milestone.status === 'completed' && <Check className="w-4 h-4" />}
@@ -584,7 +584,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                                         }
                                       }}
                                       className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-left text-sm transition-colors ${
-                                        isAssigned ? 'bg-blue-50 text-blue-700' : 'hover:bg-gray-100'
+                                        isAssigned ? 'bg-[#ea4c89]/10 text-[#ea4c89]' : 'hover:bg-gray-100'
                                       }`}
                                     >
                                       <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -597,7 +597,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                                         )}
                                       </div>
                                       <span className="flex-1 truncate">{eng.first_name} {eng.last_name}</span>
-                                      {isAssigned && <Check className="w-4 h-4 text-blue-600" />}
+                                      {isAssigned && <Check className="w-4 h-4 text-[#ea4c89]" />}
                                     </button>
                                   )
                                 })}
@@ -701,7 +701,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
 
                         {/* Completed info */}
                         {milestone.status === 'completed' && milestone.completed_at && (
-                          <span className="text-xs text-green-600">
+                          <span className="text-xs text-[#ea4c89]">
                             {t('roadmap.completedOn')} {formatDate(milestone.completed_at)}
                             {milestone.completer && (
                               <span> {t('roadmap.by')} {milestone.completer.first_name}</span>
@@ -730,8 +730,8 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                                 disabled={!isEngineer}
                                 className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors border-2 ${
                                   subtask.is_completed
-                                    ? 'bg-green-500 border-green-500 text-white'
-                                    : 'border-gray-300 hover:border-green-500'
+                                    ? 'bg-[#ea4c89] border-[#ea4c89] text-white'
+                                    : 'border-gray-300 hover:border-[#ea4c89]'
                                 } ${!isEngineer ? 'cursor-default' : 'cursor-pointer'}`}
                               >
                                 {subtask.is_completed && <Check className="w-3 h-3" />}
