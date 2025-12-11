@@ -348,7 +348,16 @@ export const translations = {
           colClient: "Client",
           colDate: "Date",
           colProcessingTime: "Temps",
-          colStatus: "Statut"
+          colStatus: "Statut",
+          filterByProject: "Projet...",
+          filterByClient: "Client...",
+          filterUrgencyAll: "Urgence",
+          urgencyCritical: "Critique",
+          urgencyHigh: "Élevée",
+          urgencyMedium: "Moyenne",
+          urgencyLow: "Faible",
+          clearFilters: "Effacer",
+          noResults: "Aucun résultat avec ces filtres"
         }
       },
       clients: {
@@ -1188,7 +1197,16 @@ export const translations = {
           colClient: "Client",
           colDate: "Date",
           colProcessingTime: "Time",
-          colStatus: "Status"
+          colStatus: "Status",
+          filterByProject: "Project...",
+          filterByClient: "Client...",
+          filterUrgencyAll: "Urgency",
+          urgencyCritical: "Critical",
+          urgencyHigh: "High",
+          urgencyMedium: "Medium",
+          urgencyLow: "Low",
+          clearFilters: "Clear",
+          noResults: "No results with these filters"
         }
       },
       clients: {

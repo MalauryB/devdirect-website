@@ -79,16 +79,42 @@ const getTimeElapsed = (dateString: string): { value: number; unit: 'min' | 'h' 
   }
 }
 
-// Get color class based on processing time urgency
+// Urgency levels based on processing time
+type UrgencyLevel = 'critical' | 'high' | 'medium' | 'low'
+
+const getUrgencyLevel = (elapsed: { value: number; unit: 'min' | 'h' | 'j' }): UrgencyLevel => {
+  const totalHours = elapsed.unit === 'j' ? elapsed.value * 24 : elapsed.unit === 'h' ? elapsed.value : elapsed.value / 60
+
+  if (totalHours >= 72) return 'critical'  // >= 3 days
+  if (totalHours >= 24) return 'high'      // >= 1 day
+  if (totalHours >= 4) return 'medium'     // >= 4 hours
+  return 'low'                              // < 4 hours
+}
+
+// Get color class for urgency badge
+const getUrgencyBadgeColor = (urgency: UrgencyLevel): string => {
+  switch (urgency) {
+    case 'critical': return 'text-red-700 bg-red-100 border-red-200'
+    case 'high': return 'text-orange-700 bg-orange-100 border-orange-200'
+    case 'medium': return 'text-yellow-700 bg-yellow-100 border-yellow-200'
+    case 'low': return 'text-green-700 bg-green-100 border-green-200'
+  }
+}
+
+// Get row background color based on urgency
+const getRowUrgencyColor = (urgency: UrgencyLevel): string => {
+  switch (urgency) {
+    case 'critical': return 'bg-red-50/50 hover:bg-red-50'
+    case 'high': return 'bg-orange-50/50 hover:bg-orange-50'
+    case 'medium': return 'bg-yellow-50/30 hover:bg-yellow-50/50'
+    case 'low': return 'hover:bg-neutral-50'
+  }
+}
+
+// Get color class based on processing time urgency (for time badge)
 const getTimeElapsedColor = (elapsed: { value: number; unit: 'min' | 'h' | 'j' }): string => {
-  if (elapsed.unit === 'j') {
-    if (elapsed.value >= 3) return 'text-red-600 bg-red-50'
-    if (elapsed.value >= 1) return 'text-orange-600 bg-orange-50'
-  }
-  if (elapsed.unit === 'h' && elapsed.value >= 12) {
-    return 'text-orange-600 bg-orange-50'
-  }
-  return 'text-neutral-600 bg-neutral-100'
+  const urgency = getUrgencyLevel(elapsed)
+  return getUrgencyBadgeColor(urgency)
 }
 
 export default function DashboardPage() {
@@ -156,6 +182,10 @@ export default function DashboardPage() {
   const [unreadOldestDates, setUnreadOldestDates] = useState<Record<string, string>>({})
   const [allQuotes, setAllQuotes] = useState<Quote[]>([])
   const [actionTypeFilter, setActionTypeFilter] = useState<'all' | 'message' | 'quote' | 'send'>('all')
+  // Column filters for Actions DataGrid
+  const [projectFilter, setProjectFilter] = useState<string>('')
+  const [clientFilter, setClientFilter] = useState<string>('')
+  const [urgencyFilter, setUrgencyFilter] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all')
 
   // Documents state
   const [documents, setDocuments] = useState<ProjectDocument[]>([])
@@ -1989,11 +2019,122 @@ export default function DashboardPage() {
 
                     {/* Detailed actions list - DataGrid */}
                     {hasActions ? (
+                      (() => {
+                        // Build unified action items list with urgency levels
+                        type ActionItem = {
+                          id: string
+                          type: 'message' | 'quote' | 'send'
+                          project: Project | null
+                          quote?: Quote
+                          notificationDate: string | null
+                          elapsed: { value: number; unit: 'min' | 'h' | 'j' } | null
+                          urgency: UrgencyLevel
+                          projectName: string
+                          clientName: string
+                        }
+
+                        const actionItems: ActionItem[] = []
+
+                        // Add unread messages
+                        if (actionTypeFilter === 'all' || actionTypeFilter === 'message') {
+                          projectsWithUnread.forEach(project => {
+                            const notificationDate = unreadOldestDates[project.id]
+                            const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
+                            const urgency = elapsed ? getUrgencyLevel(elapsed) : 'low'
+                            actionItems.push({
+                              id: `msg-${project.id}`,
+                              type: 'message',
+                              project,
+                              notificationDate,
+                              elapsed,
+                              urgency,
+                              projectName: project.title || t('projects.untitled'),
+                              clientName: project.profiles?.first_name || project.profiles?.company_name || '-'
+                            })
+                          })
+                        }
+
+                        // Add projects needing quotes
+                        if (actionTypeFilter === 'all' || actionTypeFilter === 'quote') {
+                          projectsNeedingQuotes.forEach(project => {
+                            const notificationDate = project.created_at
+                            const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
+                            const urgency = elapsed ? getUrgencyLevel(elapsed) : 'low'
+                            actionItems.push({
+                              id: `quote-${project.id}`,
+                              type: 'quote',
+                              project,
+                              notificationDate,
+                              elapsed,
+                              urgency,
+                              projectName: project.title || t('projects.untitled'),
+                              clientName: project.profiles?.first_name || project.profiles?.company_name || '-'
+                            })
+                          })
+                        }
+
+                        // Add draft quotes to send
+                        if (actionTypeFilter === 'all' || actionTypeFilter === 'send') {
+                          draftQuotesWithProjects.forEach(({ quote, project }) => {
+                            const notificationDate = quote.created_at
+                            const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
+                            const urgency = elapsed ? getUrgencyLevel(elapsed) : 'low'
+                            actionItems.push({
+                              id: `draft-${quote.id}`,
+                              type: 'send',
+                              project: project || null,
+                              quote,
+                              notificationDate,
+                              elapsed,
+                              urgency,
+                              projectName: project?.title || t('projects.untitled'),
+                              clientName: project?.profiles?.first_name || project?.profiles?.company_name || '-'
+                            })
+                          })
+                        }
+
+                        // Apply column filters
+                        const filteredItems = actionItems.filter(item => {
+                          // Project filter
+                          if (projectFilter && !item.projectName.toLowerCase().includes(projectFilter.toLowerCase())) {
+                            return false
+                          }
+                          // Client filter
+                          if (clientFilter && !item.clientName.toLowerCase().includes(clientFilter.toLowerCase())) {
+                            return false
+                          }
+                          // Urgency filter
+                          if (urgencyFilter !== 'all' && item.urgency !== urgencyFilter) {
+                            return false
+                          }
+                          return true
+                        })
+
+                        // Sort by urgency (critical first)
+                        const urgencyOrder = { critical: 0, high: 1, medium: 2, low: 3 }
+                        filteredItems.sort((a, b) => urgencyOrder[a.urgency] - urgencyOrder[b.urgency])
+
+                        // Get unique values for filter dropdowns
+                        const uniqueProjects = [...new Set(actionItems.map(i => i.projectName))].filter(p => p !== '-')
+                        const uniqueClients = [...new Set(actionItems.map(i => i.clientName))].filter(c => c !== '-')
+
+                        return (
                       <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
-                        <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
-                          <h3 className="font-semibold text-foreground">{t('dashboard.engineer.actions.title')}</h3>
-                          <div className="flex items-center gap-2">
-                            <Filter className="w-4 h-4 text-neutral-400" />
+                        <div className="p-4 border-b border-neutral-200 flex flex-col gap-3">
+                          <div className="flex items-center justify-between">
+                            <h3 className="font-semibold text-foreground">{t('dashboard.engineer.actions.title')}</h3>
+                            <div className="flex items-center gap-2 text-xs text-neutral-500">
+                              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400"></span> {t('dashboard.engineer.actions.urgencyCritical')}</span>
+                              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-orange-400"></span> {t('dashboard.engineer.actions.urgencyHigh')}</span>
+                              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-400"></span> {t('dashboard.engineer.actions.urgencyMedium')}</span>
+                              <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-400"></span> {t('dashboard.engineer.actions.urgencyLow')}</span>
+                            </div>
+                          </div>
+                          {/* Filters row */}
+                          <div className="flex flex-wrap items-center gap-2">
+                            <div className="flex items-center gap-1">
+                              <Filter className="w-4 h-4 text-neutral-400" />
+                            </div>
                             <select
                               value={actionTypeFilter}
                               onChange={(e) => setActionTypeFilter(e.target.value as 'all' | 'message' | 'quote' | 'send')}
@@ -2004,6 +2145,51 @@ export default function DashboardPage() {
                               <option value="quote">{t('dashboard.engineer.actions.filterQuotes')}</option>
                               <option value="send">{t('dashboard.engineer.actions.filterSend')}</option>
                             </select>
+                            <input
+                              type="text"
+                              placeholder={t('dashboard.engineer.actions.filterByProject')}
+                              value={projectFilter}
+                              onChange={(e) => setProjectFilter(e.target.value)}
+                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300 w-32"
+                              list="project-suggestions"
+                            />
+                            <datalist id="project-suggestions">
+                              {uniqueProjects.map(p => <option key={p} value={p} />)}
+                            </datalist>
+                            <input
+                              type="text"
+                              placeholder={t('dashboard.engineer.actions.filterByClient')}
+                              value={clientFilter}
+                              onChange={(e) => setClientFilter(e.target.value)}
+                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300 w-32"
+                              list="client-suggestions"
+                            />
+                            <datalist id="client-suggestions">
+                              {uniqueClients.map(c => <option key={c} value={c} />)}
+                            </datalist>
+                            <select
+                              value={urgencyFilter}
+                              onChange={(e) => setUrgencyFilter(e.target.value as 'all' | 'critical' | 'high' | 'medium' | 'low')}
+                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300"
+                            >
+                              <option value="all">{t('dashboard.engineer.actions.filterUrgencyAll')}</option>
+                              <option value="critical">{t('dashboard.engineer.actions.urgencyCritical')}</option>
+                              <option value="high">{t('dashboard.engineer.actions.urgencyHigh')}</option>
+                              <option value="medium">{t('dashboard.engineer.actions.urgencyMedium')}</option>
+                              <option value="low">{t('dashboard.engineer.actions.urgencyLow')}</option>
+                            </select>
+                            {(projectFilter || clientFilter || urgencyFilter !== 'all') && (
+                              <button
+                                onClick={() => {
+                                  setProjectFilter('')
+                                  setClientFilter('')
+                                  setUrgencyFilter('all')
+                                }}
+                                className="text-xs text-neutral-500 hover:text-neutral-700 underline"
+                              >
+                                {t('dashboard.engineer.actions.clearFilters')}
+                              </button>
+                            )}
                           </div>
                         </div>
                         <Table>
@@ -2019,118 +2205,71 @@ export default function DashboardPage() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {/* Unread messages */}
-                            {(actionTypeFilter === 'all' || actionTypeFilter === 'message') && projectsWithUnread.map((project) => {
-                              const notificationDate = unreadOldestDates[project.id]
-                              const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
-                              return (
-                              <TableRow
-                                key={`msg-${project.id}`}
-                                onClick={() => {
-                                  setSelectedProject(project)
-                                  setActiveSection('allProjects')
-                                  setProjectSubSection('messages')
-                                }}
-                                className="cursor-pointer"
-                              >
-                                <TableCell><MessageCircle className="w-4 h-4 text-neutral-500" /></TableCell>
-                                <TableCell className="font-medium">{t('dashboard.engineer.actions.replyTo')}</TableCell>
-                                <TableCell className="text-neutral-600">{project.title || t('projects.untitled')}</TableCell>
-                                <TableCell className="text-neutral-600">{project.profiles?.first_name || project.profiles?.company_name || '-'}</TableCell>
-                                <TableCell className="text-neutral-500 text-sm">
-                                  {notificationDate ? formatDate(notificationDate) : '-'}
-                                </TableCell>
-                                <TableCell>
-                                  {elapsed && (
-                                    <span className={`text-xs px-2 py-1 rounded-full ${getTimeElapsedColor(elapsed)}`}>
-                                      {elapsed.value} {elapsed.unit}
-                                    </span>
-                                  )}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                  <span className="text-xs bg-neutral-200 text-neutral-700 px-2 py-1 rounded-full">
-                                    {unreadCounts[project.id]} msg
-                                  </span>
+                            {filteredItems.length === 0 ? (
+                              <TableRow>
+                                <TableCell colSpan={7} className="text-center py-8 text-neutral-500">
+                                  {t('dashboard.engineer.actions.noResults')}
                                 </TableCell>
                               </TableRow>
-                            )})}
-
-                            {/* Projects needing quotes */}
-                            {(actionTypeFilter === 'all' || actionTypeFilter === 'quote') && projectsNeedingQuotes.map((project) => {
-                              const notificationDate = project.created_at
-                              const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
-                              return (
+                            ) : (
+                              filteredItems.map((item) => (
                               <TableRow
-                                key={`quote-${project.id}`}
+                                key={item.id}
                                 onClick={() => {
-                                  setSelectedProject(project)
-                                  setActiveSection('allProjects')
-                                  setProjectSubSection('quotes')
-                                }}
-                                className="cursor-pointer"
-                              >
-                                <TableCell><Receipt className="w-4 h-4 text-[#ea4c89]" /></TableCell>
-                                <TableCell className="font-medium">{t('dashboard.engineer.actions.createQuote')}</TableCell>
-                                <TableCell className="text-neutral-600">{project.title || t('projects.untitled')}</TableCell>
-                                <TableCell className="text-neutral-600">{project.profiles?.first_name || project.profiles?.company_name || '-'}</TableCell>
-                                <TableCell className="text-neutral-500 text-sm">
-                                  {notificationDate ? formatDate(notificationDate) : '-'}
-                                </TableCell>
-                                <TableCell>
-                                  {elapsed && (
-                                    <span className={`text-xs px-2 py-1 rounded-full ${getTimeElapsedColor(elapsed)}`}>
-                                      {elapsed.value} {elapsed.unit}
-                                    </span>
-                                  )}
-                                </TableCell>
-                                <TableCell className="text-right">
-                                  <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadgeClass(project.status)}`}>
-                                    {t(`projects.status.${project.status}`)}
-                                  </span>
-                                </TableCell>
-                              </TableRow>
-                            )})}
-
-                            {/* Draft quotes to send */}
-                            {(actionTypeFilter === 'all' || actionTypeFilter === 'send') && draftQuotesWithProjects.map(({ quote, project }) => {
-                              const notificationDate = quote.created_at
-                              const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
-                              return (
-                              <TableRow
-                                key={`draft-${quote.id}`}
-                                onClick={() => {
-                                  if (project) {
-                                    setSelectedProject(project)
+                                  if (item.project) {
+                                    setSelectedProject(item.project)
                                     setActiveSection('allProjects')
-                                    setProjectSubSection('quotes')
+                                    setProjectSubSection(item.type === 'message' ? 'messages' : 'quotes')
                                   }
                                 }}
-                                className="cursor-pointer"
+                                className={`cursor-pointer ${getRowUrgencyColor(item.urgency)}`}
                               >
-                                <TableCell><Send className="w-4 h-4 text-slate-500" /></TableCell>
-                                <TableCell className="font-medium">{t('dashboard.engineer.actions.sendQuote')}</TableCell>
-                                <TableCell className="text-neutral-600">{project?.title || t('projects.untitled')}</TableCell>
-                                <TableCell className="text-neutral-600">{project?.profiles?.first_name || project?.profiles?.company_name || '-'}</TableCell>
+                                <TableCell>
+                                  {item.type === 'message' && <MessageCircle className="w-4 h-4 text-neutral-500" />}
+                                  {item.type === 'quote' && <Receipt className="w-4 h-4 text-[#ea4c89]" />}
+                                  {item.type === 'send' && <Send className="w-4 h-4 text-slate-500" />}
+                                </TableCell>
+                                <TableCell className="font-medium">
+                                  {item.type === 'message' && t('dashboard.engineer.actions.replyTo')}
+                                  {item.type === 'quote' && t('dashboard.engineer.actions.createQuote')}
+                                  {item.type === 'send' && t('dashboard.engineer.actions.sendQuote')}
+                                </TableCell>
+                                <TableCell className="text-neutral-600">{item.projectName}</TableCell>
+                                <TableCell className="text-neutral-600">{item.clientName}</TableCell>
                                 <TableCell className="text-neutral-500 text-sm">
-                                  {notificationDate ? formatDate(notificationDate) : '-'}
+                                  {item.notificationDate ? formatDate(item.notificationDate) : '-'}
                                 </TableCell>
                                 <TableCell>
-                                  {elapsed && (
-                                    <span className={`text-xs px-2 py-1 rounded-full ${getTimeElapsedColor(elapsed)}`}>
-                                      {elapsed.value} {elapsed.unit}
+                                  {item.elapsed && (
+                                    <span className={`text-xs px-2 py-1 rounded-full border ${getTimeElapsedColor(item.elapsed)}`}>
+                                      {item.elapsed.value} {item.elapsed.unit}
                                     </span>
                                   )}
                                 </TableCell>
                                 <TableCell className="text-right">
-                                  <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
-                                    {t('quotes.status.draft')}
-                                  </span>
+                                  {item.type === 'message' && (
+                                    <span className="text-xs bg-neutral-200 text-neutral-700 px-2 py-1 rounded-full">
+                                      {unreadCounts[item.project?.id || '']} msg
+                                    </span>
+                                  )}
+                                  {item.type === 'quote' && item.project && (
+                                    <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadgeClass(item.project.status)}`}>
+                                      {t(`projects.status.${item.project.status}`)}
+                                    </span>
+                                  )}
+                                  {item.type === 'send' && (
+                                    <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
+                                      {t('quotes.status.draft')}
+                                    </span>
+                                  )}
                                 </TableCell>
                               </TableRow>
-                            )})}
+                            )))}
                           </TableBody>
                         </Table>
                       </div>
+                        )
+                      })()
                     ) : (
                       <div className="bg-white border border-neutral-200 rounded-xl p-8 text-center">
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
