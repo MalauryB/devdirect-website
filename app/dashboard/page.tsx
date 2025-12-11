@@ -380,6 +380,31 @@ export default function DashboardPage() {
     }
   }, [user, isEngineer, activeSection, loadEngineerOverviewData])
 
+  // Load unread message counts for clients (for badge in menu)
+  useEffect(() => {
+    const loadClientUnreadCounts = async () => {
+      if (user && !isEngineer) {
+        const { counts } = await getAllUnreadCounts(user.id)
+        setUnreadCounts(counts)
+      }
+    }
+    loadClientUnreadCounts()
+  }, [user, isEngineer])
+
+  // Load engineer action counts at startup (for badge in menu)
+  useEffect(() => {
+    const loadEngineerActionCounts = async () => {
+      if (user && isEngineer) {
+        // Load unread counts and quotes for badge calculation
+        const { counts } = await getAllUnreadCounts(user.id)
+        setUnreadCounts(counts)
+        const { quotes: fetchedQuotes } = await getAllQuotes()
+        setAllQuotes(fetchedQuotes)
+      }
+    }
+    loadEngineerActionCounts()
+  }, [user, isEngineer])
+
   // Load quotes when a project is selected in allProjects section (engineer view)
   useEffect(() => {
     if (selectedProject && isEngineer && activeSection === "allProjects") {
@@ -489,6 +514,10 @@ export default function DashboardPage() {
     // Reset selected project when navigating to project lists
     if (item.id === 'allProjects' || item.id === 'projects') {
       setSelectedProject(null)
+    }
+    // Reset selected client when navigating to clients list
+    if (item.id === 'clients') {
+      setSelectedClientId(null)
     }
   }
 
@@ -751,6 +780,29 @@ export default function DashboardPage() {
           <nav className={`flex-1 p-4 space-y-0.5 overflow-y-auto ${!sidebarExpanded && !sidebarOpen ? "lg:p-2" : ""}`}>
             {menuItems.map((item) => {
               const isDisabled = 'disabled' in item ? Boolean(item.disabled) : false
+              // Calculate badge count based on menu item and user role
+              let badgeCount = 0
+              if (item.id === 'messages' && !isEngineer) {
+                // Client: count unread messages
+                badgeCount = Object.values(unreadCounts).reduce((sum, count) => sum + count, 0)
+              } else if (item.id === 'overview' && isEngineer) {
+                // Engineer: count total actions (unread messages + projects needing quotes + draft quotes)
+                const excludedStatuses = ['cancelled', 'lost', 'closed']
+                const activeProjectIds = allProjects.filter(p => !excludedStatuses.includes(p.status)).map(p => p.id)
+                const unreadMessageCount = Object.entries(unreadCounts)
+                  .filter(([projectId]) => activeProjectIds.includes(projectId))
+                  .reduce((sum, [, count]) => sum + count, 0)
+                const projectsNeedingQuotes = allProjects.filter(p =>
+                  !excludedStatuses.includes(p.status) &&
+                  (p.status === 'pending' || p.status === 'in_review') &&
+                  !allQuotes.some(q => q.project_id === p.id)
+                ).length
+                const draftQuotes = allQuotes.filter(q =>
+                  q.status === 'draft' &&
+                  allProjects.some(p => p.id === q.project_id && !excludedStatuses.includes(p.status))
+                ).length
+                badgeCount = unreadMessageCount + projectsNeedingQuotes + draftQuotes
+              }
               return (
                 <button
                   key={item.id}
@@ -767,8 +819,18 @@ export default function DashboardPage() {
                       : "hover:bg-neutral-50 text-neutral-600"
                   }`}
                 >
-                  <item.icon className="w-5 h-5 flex-shrink-0" />
+                  <div className="relative">
+                    <item.icon className="w-5 h-5 flex-shrink-0" />
+                    {badgeCount > 0 && !sidebarExpanded && !sidebarOpen && (
+                      <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                    )}
+                  </div>
                   <span className={`flex-1 transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:hidden" : ""}`}>{item.label}</span>
+                  {badgeCount > 0 && (sidebarExpanded || sidebarOpen) && (
+                    <span className="bg-red-500 text-white text-xs font-medium px-1.5 py-0.5 rounded-full min-w-[20px] text-center">
+                      {badgeCount > 99 ? '99+' : badgeCount}
+                    </span>
+                  )}
                   {isDisabled && (sidebarExpanded || sidebarOpen) && (
                     <span className="text-xs text-neutral-400">
                       {t('dashboard.comingSoon')}
@@ -1226,8 +1288,18 @@ export default function DashboardPage() {
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <div className="relative">
+                          <MessageCircle className="w-4 h-4" />
+                          {selectedProject && unreadCounts[selectedProject.id] > 0 && (
+                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                          )}
+                        </div>
                         {t('messages.title')}
+                        {selectedProject && unreadCounts[selectedProject.id] > 0 && (
+                          <span className="ml-auto text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full">
+                            {unreadCounts[selectedProject.id]}
+                          </span>
+                        )}
                       </button>
                       <button
                         onClick={() => setProjectSubSection('documents')}
@@ -2421,8 +2493,18 @@ export default function DashboardPage() {
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <div className="relative">
+                          <MessageCircle className="w-4 h-4" />
+                          {selectedProject && unreadCounts[selectedProject.id] > 0 && (
+                            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full" />
+                          )}
+                        </div>
                         {t('messages.title')}
+                        {selectedProject && unreadCounts[selectedProject.id] > 0 && (
+                          <span className="ml-auto text-xs bg-red-500 text-white px-1.5 py-0.5 rounded-full">
+                            {unreadCounts[selectedProject.id]}
+                          </span>
+                        )}
                       </button>
                       <button
                         onClick={() => setProjectSubSection('documents')}

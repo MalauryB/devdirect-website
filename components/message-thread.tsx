@@ -9,10 +9,19 @@ import {
   getProjectMessages,
   sendMessage,
   markMessagesAsRead,
-  subscribeToProjectMessages
+  subscribeToProjectMessages,
+  updateMessage,
+  softDeleteMessage,
+  hardDeleteMessage
 } from "@/lib/messages"
 import { uploadFile, validateFile, getSignedUrl } from "@/lib/storage"
-import { Loader2, Send, Paperclip, X, FileText, Image as ImageIcon, Download } from "lucide-react"
+import { Loader2, Send, Paperclip, X, FileText, Image as ImageIcon, Download, MoreVertical, Pencil, Trash2 } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 interface MessageThreadProps {
   projectId: string
@@ -35,13 +44,18 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
   const [attachment, setAttachment] = useState<MessageAttachment | null>(null)
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState("")
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null)
+  const [editContent, setEditContent] = useState("")
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const isEngineer = currentUser.role === 'engineer'
 
   // Load messages and refresh signed URLs for attachments
   useEffect(() => {
     const loadMessages = async () => {
       setLoading(true)
+      setIsInitialLoad(true) // Reset initial load state when changing project
       const { messages: loadedMessages } = await getProjectMessages(projectId)
 
       // Refresh signed URLs for messages with attachments
@@ -102,10 +116,31 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
     }
   }, [projectId, currentUser.id])
 
+  // Scroll to bottom helper function
+  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior })
+    }
+  }
+
   // Scroll to bottom when messages change
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+    if (messages.length > 0) {
+      // Use requestAnimationFrame to ensure DOM is updated before scrolling
+      requestAnimationFrame(() => {
+        scrollToBottom(isInitialLoad ? "instant" : "smooth")
+
+        // For initial load, do an additional scroll after a short delay
+        // to handle any async content like images
+        if (isInitialLoad) {
+          setTimeout(() => {
+            scrollToBottom("instant")
+          }, 100)
+          setIsInitialLoad(false)
+        }
+      })
+    }
+  }, [messages, isInitialLoad])
 
   const handleSend = async () => {
     if (!newMessage.trim() && !attachment) return
@@ -168,6 +203,45 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
 
   const removeAttachment = () => {
     setAttachment(null)
+  }
+
+  const handleStartEdit = (message: Message) => {
+    setEditingMessageId(message.id)
+    setEditContent(message.content)
+  }
+
+  const handleCancelEdit = () => {
+    setEditingMessageId(null)
+    setEditContent("")
+  }
+
+  const handleSaveEdit = async () => {
+    if (!editingMessageId || !editContent.trim()) return
+
+    const { message: updatedMessage, error: updateError } = await updateMessage(editingMessageId, editContent.trim())
+    if (!updateError && updatedMessage) {
+      setMessages(prev => prev.map(m => m.id === editingMessageId ? updatedMessage : m))
+    }
+    setEditingMessageId(null)
+    setEditContent("")
+  }
+
+  const handleDelete = async (messageId: string) => {
+    if (isEngineer) {
+      // Engineer can hard delete
+      const { error: deleteError } = await hardDeleteMessage(messageId)
+      if (!deleteError) {
+        setMessages(prev => prev.filter(m => m.id !== messageId))
+      }
+    } else {
+      // Client can only soft delete
+      const { error: deleteError } = await softDeleteMessage(messageId)
+      if (!deleteError) {
+        setMessages(prev => prev.map(m =>
+          m.id === messageId ? { ...m, is_deleted: true, deleted_at: new Date().toISOString() } : m
+        ))
+      }
+    }
   }
 
   const formatTime = (dateString: string) => {
@@ -267,11 +341,13 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
               {/* Messages for this date */}
               {group.messages.map((message) => {
                 const isOwn = message.sender_id === currentUser.id
+                const isEditing = editingMessageId === message.id
+                const isDeleted = message.is_deleted
 
                 return (
                   <div
                     key={message.id}
-                    className={`flex gap-3 mb-4 ${isOwn ? 'flex-row-reverse' : ''}`}
+                    className={`flex gap-3 mb-4 group ${isOwn ? 'flex-row-reverse' : ''}`}
                   >
                     {/* Avatar */}
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -297,18 +373,62 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
                         <span className={`text-xs text-foreground/40 ${isOwn ? 'order-1' : ''}`}>
                           {formatTime(message.created_at)}
                         </span>
+                        {/* Actions menu - only for own messages */}
+                        {isOwn && !isDeleted && !isEditing && (
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <button className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-200 rounded ${isOwn ? 'order-0' : 'order-3'}`}>
+                                <MoreVertical className="w-3 h-3 text-foreground/50" />
+                              </button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align={isOwn ? "end" : "start"}>
+                              <DropdownMenuItem onClick={() => handleStartEdit(message)}>
+                                <Pencil className="w-3 h-3 mr-2" />
+                                {t('messages.edit')}
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(message.id)}
+                                className="text-red-600 focus:text-red-600"
+                              >
+                                <Trash2 className="w-3 h-3 mr-2" />
+                                {t('messages.delete')}
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        )}
                       </div>
 
                       <div
                         className={`rounded-2xl px-4 py-2 ${
-                          isOwn
-                            ? 'bg-[rgb(239,239,239)] text-foreground rounded-tr-sm'
-                            : 'bg-gray-100 text-foreground rounded-tl-sm'
+                          isDeleted
+                            ? 'bg-gray-100 text-foreground/40'
+                            : isOwn
+                              ? 'bg-[rgb(239,239,239)] text-foreground rounded-tr-sm'
+                              : 'bg-gray-100 text-foreground rounded-tl-sm'
                         }`}
                       >
-                        {message.content && (
+                        {isEditing ? (
+                          <div className="space-y-2">
+                            <Textarea
+                              value={editContent}
+                              onChange={(e) => setEditContent(e.target.value)}
+                              className="min-h-[60px] text-sm"
+                              autoFocus
+                            />
+                            <div className="flex gap-2 justify-end">
+                              <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
+                                {t('common.cancel')}
+                              </Button>
+                              <Button size="sm" onClick={handleSaveEdit}>
+                                {t('common.save')}
+                              </Button>
+                            </div>
+                          </div>
+                        ) : isDeleted ? (
+                          <p className="text-sm italic line-through">{message.content}</p>
+                        ) : message.content ? (
                           <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                        )}
+                        ) : null}
 
                         {/* Attachment */}
                         {message.attachment && (

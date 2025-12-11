@@ -259,6 +259,8 @@ export interface Message {
   attachment?: MessageAttachment | null
   is_read: boolean
   read_at: string | null
+  is_deleted?: boolean
+  deleted_at?: string | null
   created_at: string
   updated_at: string
   // Relations (joined)

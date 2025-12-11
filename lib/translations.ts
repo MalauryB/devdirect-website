@@ -700,7 +700,9 @@ export const translations = {
       sendError: "Erreur lors de l'envoi du message",
       uploadError: "Erreur lors de l'upload du fichier",
       today: "Aujourd'hui",
-      yesterday: "Hier"
+      yesterday: "Hier",
+      edit: "Modifier",
+      delete: "Supprimer"
     },
     documents: {
       title: "Documents",
@@ -1554,7 +1556,9 @@ export const translations = {
       sendError: "Error sending message",
       uploadError: "Error uploading file",
       today: "Today",
-      yesterday: "Yesterday"
+      yesterday: "Yesterday",
+      edit: "Edit",
+      delete: "Delete"
     },
     documents: {
       title: "Documents",

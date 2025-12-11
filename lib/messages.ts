@@ -161,3 +161,51 @@ export function subscribeToMessageUpdates(
 
   return subscription
 }
+
+// Update a message content
+export async function updateMessage(
+  messageId: string,
+  content: string
+): Promise<{ message: Message | null; error: Error | null }> {
+  const { data, error } = await supabase
+    .from('messages')
+    .update({
+      content,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', messageId)
+    .select(`
+      *,
+      sender:sender_id(id, first_name, last_name, avatar_url, role, company_name)
+    `)
+    .single()
+
+  return { message: data, error }
+}
+
+// Soft delete a message (mark as deleted, visible as struck-through)
+export async function softDeleteMessage(
+  messageId: string
+): Promise<{ error: Error | null }> {
+  const { error } = await supabase
+    .from('messages')
+    .update({
+      is_deleted: true,
+      deleted_at: new Date().toISOString()
+    })
+    .eq('id', messageId)
+
+  return { error }
+}
+
+// Hard delete a message (permanently remove - engineers only)
+export async function hardDeleteMessage(
+  messageId: string
+): Promise<{ error: Error | null }> {
+  const { error } = await supabase
+    .from('messages')
+    .delete()
+    .eq('id', messageId)
+
+  return { error }
+}
