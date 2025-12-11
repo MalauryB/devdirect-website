@@ -2176,7 +2176,9 @@ export default function DashboardPage() {
                               <option value="unassigned">{t('dashboard.engineer.actions.filterUnassigned')}</option>
                               {engineers.map(eng => (
                                 <option key={eng.id} value={eng.id}>
-                                  {eng.first_name || eng.email}
+                                  {eng.first_name && eng.last_name
+                                    ? `${eng.first_name} ${eng.last_name}`
+                                    : eng.first_name || eng.email}
                                 </option>
                               ))}
                             </select>
@@ -2262,7 +2264,9 @@ export default function DashboardPage() {
                                     <option value="">{t('dashboard.engineer.actions.unassigned')}</option>
                                     {engineers.map(eng => (
                                       <option key={eng.id} value={eng.id}>
-                                        {eng.first_name || eng.email}
+                                        {eng.first_name && eng.last_name
+                                          ? `${eng.first_name} ${eng.last_name}`
+                                          : eng.first_name || eng.email}
                                       </option>
                                     ))}
                                   </select>
