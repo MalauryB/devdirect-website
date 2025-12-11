@@ -76,23 +76,30 @@ export async function getUnreadCount(
 }
 
 // Get unread counts for all projects (for badges)
+// Returns counts per project and the date of the oldest unread message (notification date)
 export async function getAllUnreadCounts(
   userId: string
-): Promise<{ counts: Record<string, number>; error: Error | null }> {
+): Promise<{ counts: Record<string, number>; oldestDates: Record<string, string>; error: Error | null }> {
   const { data, error } = await supabase
     .from('messages')
-    .select('project_id')
+    .select('project_id, created_at')
     .neq('sender_id', userId)
     .eq('is_read', false)
+    .order('created_at', { ascending: true })
 
   const counts: Record<string, number> = {}
+  const oldestDates: Record<string, string> = {}
   if (data) {
     for (const msg of data) {
       counts[msg.project_id] = (counts[msg.project_id] || 0) + 1
+      // Keep only the oldest (first) unread message date per project
+      if (!oldestDates[msg.project_id]) {
+        oldestDates[msg.project_id] = msg.created_at
+      }
     }
   }
 
-  return { counts, error }
+  return { counts, oldestDates, error }
 }
 
 // Subscribe to new messages for a project (real-time)

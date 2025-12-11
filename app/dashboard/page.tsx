@@ -49,6 +49,48 @@ const formatCurrency = (amount: number): string => {
   }).format(amount)
 }
 
+// Format date helper (short format)
+const formatDate = (dateString: string): string => {
+  const date = new Date(dateString)
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  }).format(date)
+}
+
+// Calculate time elapsed since a date (for processing time display)
+const getTimeElapsed = (dateString: string): { value: number; unit: 'min' | 'h' | 'j' } => {
+  const now = new Date()
+  const date = new Date(dateString)
+  const diffMs = now.getTime() - date.getTime()
+  const diffMinutes = Math.floor(diffMs / (1000 * 60))
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+
+  if (diffDays >= 1) {
+    return { value: diffDays, unit: 'j' }
+  } else if (diffHours >= 1) {
+    return { value: diffHours, unit: 'h' }
+  } else {
+    return { value: Math.max(1, diffMinutes), unit: 'min' }
+  }
+}
+
+// Get color class based on processing time urgency
+const getTimeElapsedColor = (elapsed: { value: number; unit: 'min' | 'h' | 'j' }): string => {
+  if (elapsed.unit === 'j') {
+    if (elapsed.value >= 3) return 'text-red-600 bg-red-50'
+    if (elapsed.value >= 1) return 'text-orange-600 bg-orange-50'
+  }
+  if (elapsed.unit === 'h' && elapsed.value >= 12) {
+    return 'text-orange-600 bg-orange-50'
+  }
+  return 'text-neutral-600 bg-neutral-100'
+}
+
 export default function DashboardPage() {
   const { user, loading, signOut, updateProfile } = useAuth()
   const { t } = useLanguage()
@@ -111,6 +153,7 @@ export default function DashboardPage() {
 
   // Engineer action tracking state
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({})
+  const [unreadOldestDates, setUnreadOldestDates] = useState<Record<string, string>>({})
   const [allQuotes, setAllQuotes] = useState<Quote[]>([])
   const [actionTypeFilter, setActionTypeFilter] = useState<'all' | 'message' | 'quote' | 'send'>('all')
 
@@ -207,9 +250,10 @@ export default function DashboardPage() {
   // Load engineer overview data (unread messages and all quotes)
   const loadEngineerOverviewData = useCallback(async () => {
     if (!user) return
-    // Load unread message counts
-    const { counts } = await getAllUnreadCounts(user.id)
+    // Load unread message counts and oldest dates
+    const { counts, oldestDates } = await getAllUnreadCounts(user.id)
     setUnreadCounts(counts)
+    setUnreadOldestDates(oldestDates)
     // Load all quotes
     const { quotes: fetchedQuotes } = await getAllQuotes()
     setAllQuotes(fetchedQuotes)
@@ -1969,12 +2013,17 @@ export default function DashboardPage() {
                               <TableHead>{t('dashboard.engineer.actions.colAction')}</TableHead>
                               <TableHead>{t('dashboard.engineer.actions.colProject')}</TableHead>
                               <TableHead>{t('dashboard.engineer.actions.colClient')}</TableHead>
+                              <TableHead>{t('dashboard.engineer.actions.colDate')}</TableHead>
+                              <TableHead>{t('dashboard.engineer.actions.colProcessingTime')}</TableHead>
                               <TableHead className="text-right">{t('dashboard.engineer.actions.colStatus')}</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
                             {/* Unread messages */}
-                            {(actionTypeFilter === 'all' || actionTypeFilter === 'message') && projectsWithUnread.map((project) => (
+                            {(actionTypeFilter === 'all' || actionTypeFilter === 'message') && projectsWithUnread.map((project) => {
+                              const notificationDate = unreadOldestDates[project.id]
+                              const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
+                              return (
                               <TableRow
                                 key={`msg-${project.id}`}
                                 onClick={() => {
@@ -1988,16 +2037,29 @@ export default function DashboardPage() {
                                 <TableCell className="font-medium">{t('dashboard.engineer.actions.replyTo')}</TableCell>
                                 <TableCell className="text-neutral-600">{project.title || t('projects.untitled')}</TableCell>
                                 <TableCell className="text-neutral-600">{project.profiles?.first_name || project.profiles?.company_name || '-'}</TableCell>
+                                <TableCell className="text-neutral-500 text-sm">
+                                  {notificationDate ? formatDate(notificationDate) : '-'}
+                                </TableCell>
+                                <TableCell>
+                                  {elapsed && (
+                                    <span className={`text-xs px-2 py-1 rounded-full ${getTimeElapsedColor(elapsed)}`}>
+                                      {elapsed.value} {elapsed.unit}
+                                    </span>
+                                  )}
+                                </TableCell>
                                 <TableCell className="text-right">
                                   <span className="text-xs bg-neutral-200 text-neutral-700 px-2 py-1 rounded-full">
                                     {unreadCounts[project.id]} msg
                                   </span>
                                 </TableCell>
                               </TableRow>
-                            ))}
+                            )})}
 
                             {/* Projects needing quotes */}
-                            {(actionTypeFilter === 'all' || actionTypeFilter === 'quote') && projectsNeedingQuotes.map((project) => (
+                            {(actionTypeFilter === 'all' || actionTypeFilter === 'quote') && projectsNeedingQuotes.map((project) => {
+                              const notificationDate = project.created_at
+                              const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
+                              return (
                               <TableRow
                                 key={`quote-${project.id}`}
                                 onClick={() => {
@@ -2011,16 +2073,29 @@ export default function DashboardPage() {
                                 <TableCell className="font-medium">{t('dashboard.engineer.actions.createQuote')}</TableCell>
                                 <TableCell className="text-neutral-600">{project.title || t('projects.untitled')}</TableCell>
                                 <TableCell className="text-neutral-600">{project.profiles?.first_name || project.profiles?.company_name || '-'}</TableCell>
+                                <TableCell className="text-neutral-500 text-sm">
+                                  {notificationDate ? formatDate(notificationDate) : '-'}
+                                </TableCell>
+                                <TableCell>
+                                  {elapsed && (
+                                    <span className={`text-xs px-2 py-1 rounded-full ${getTimeElapsedColor(elapsed)}`}>
+                                      {elapsed.value} {elapsed.unit}
+                                    </span>
+                                  )}
+                                </TableCell>
                                 <TableCell className="text-right">
                                   <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadgeClass(project.status)}`}>
                                     {t(`projects.status.${project.status}`)}
                                   </span>
                                 </TableCell>
                               </TableRow>
-                            ))}
+                            )})}
 
                             {/* Draft quotes to send */}
-                            {(actionTypeFilter === 'all' || actionTypeFilter === 'send') && draftQuotesWithProjects.map(({ quote, project }) => (
+                            {(actionTypeFilter === 'all' || actionTypeFilter === 'send') && draftQuotesWithProjects.map(({ quote, project }) => {
+                              const notificationDate = quote.created_at
+                              const elapsed = notificationDate ? getTimeElapsed(notificationDate) : null
+                              return (
                               <TableRow
                                 key={`draft-${quote.id}`}
                                 onClick={() => {
@@ -2036,13 +2111,23 @@ export default function DashboardPage() {
                                 <TableCell className="font-medium">{t('dashboard.engineer.actions.sendQuote')}</TableCell>
                                 <TableCell className="text-neutral-600">{project?.title || t('projects.untitled')}</TableCell>
                                 <TableCell className="text-neutral-600">{project?.profiles?.first_name || project?.profiles?.company_name || '-'}</TableCell>
+                                <TableCell className="text-neutral-500 text-sm">
+                                  {notificationDate ? formatDate(notificationDate) : '-'}
+                                </TableCell>
+                                <TableCell>
+                                  {elapsed && (
+                                    <span className={`text-xs px-2 py-1 rounded-full ${getTimeElapsedColor(elapsed)}`}>
+                                      {elapsed.value} {elapsed.unit}
+                                    </span>
+                                  )}
+                                </TableCell>
                                 <TableCell className="text-right">
                                   <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
                                     {t('quotes.status.draft')}
                                   </span>
                                 </TableCell>
                               </TableRow>
-                            ))}
+                            )})}
                           </TableBody>
                         </Table>
                       </div>

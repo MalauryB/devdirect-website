@@ -346,6 +346,8 @@ export const translations = {
           colAction: "Action",
           colProject: "Projet",
           colClient: "Client",
+          colDate: "Date",
+          colProcessingTime: "Temps",
           colStatus: "Statut"
         }
       },
@@ -1184,6 +1186,8 @@ export const translations = {
           colAction: "Action",
           colProject: "Project",
           colClient: "Client",
+          colDate: "Date",
+          colProcessingTime: "Time",
           colStatus: "Status"
         }
       },
