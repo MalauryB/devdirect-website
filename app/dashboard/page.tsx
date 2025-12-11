@@ -9,6 +9,14 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -104,6 +112,7 @@ export default function DashboardPage() {
   // Engineer action tracking state
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({})
   const [allQuotes, setAllQuotes] = useState<Quote[]>([])
+  const [actionTypeFilter, setActionTypeFilter] = useState<'all' | 'message' | 'quote' | 'send'>('all')
 
   // Documents state
   const [documents, setDocuments] = useState<ProjectDocument[]>([])
@@ -1934,88 +1943,108 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
-                    {/* Detailed actions list */}
+                    {/* Detailed actions list - DataGrid */}
                     {hasActions ? (
                       <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
-                        <div className="p-4 border-b border-neutral-200">
+                        <div className="p-4 border-b border-neutral-200 flex items-center justify-between">
                           <h3 className="font-semibold text-foreground">{t('dashboard.engineer.actions.title')}</h3>
+                          <div className="flex items-center gap-2">
+                            <Filter className="w-4 h-4 text-neutral-400" />
+                            <select
+                              value={actionTypeFilter}
+                              onChange={(e) => setActionTypeFilter(e.target.value as 'all' | 'message' | 'quote' | 'send')}
+                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300"
+                            >
+                              <option value="all">{t('dashboard.engineer.actions.filterAll')}</option>
+                              <option value="message">{t('dashboard.engineer.actions.filterMessages')}</option>
+                              <option value="quote">{t('dashboard.engineer.actions.filterQuotes')}</option>
+                              <option value="send">{t('dashboard.engineer.actions.filterSend')}</option>
+                            </select>
+                          </div>
                         </div>
-                        <div className="divide-y divide-neutral-200">
-                          {/* Unread messages */}
-                          {projectsWithUnread.map((project) => (
-                            <div
-                              key={`msg-${project.id}`}
-                              onClick={() => {
-                                setSelectedProject(project)
-                                setActiveSection('allProjects')
-                                setProjectSubSection('messages')
-                              }}
-                              className="p-4 hover:bg-neutral-50 cursor-pointer transition-colors flex items-center gap-4"
-                            >
-                              <MessageCircle className="w-5 h-5 text-neutral-500 flex-shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium text-foreground">
-                                  {t('dashboard.engineer.actions.replyTo')} {project.profiles?.first_name || project.profiles?.company_name || t('dashboard.engineer.actions.client')}
-                                </p>
-                                <p className="text-sm text-foreground/50 truncate">{project.title || t('projects.untitled')}</p>
-                              </div>
-                              <span className="text-xs bg-neutral-200 text-neutral-700 px-2 py-1 rounded-full font-medium">
-                                {unreadCounts[project.id]} {t('dashboard.engineer.actions.newMessage')}
-                              </span>
-                              <ChevronRight className="w-4 h-4 text-foreground/30" />
-                            </div>
-                          ))}
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="hover:bg-transparent">
+                              <TableHead className="w-10"></TableHead>
+                              <TableHead>{t('dashboard.engineer.actions.colAction')}</TableHead>
+                              <TableHead>{t('dashboard.engineer.actions.colProject')}</TableHead>
+                              <TableHead>{t('dashboard.engineer.actions.colClient')}</TableHead>
+                              <TableHead className="text-right">{t('dashboard.engineer.actions.colStatus')}</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {/* Unread messages */}
+                            {(actionTypeFilter === 'all' || actionTypeFilter === 'message') && projectsWithUnread.map((project) => (
+                              <TableRow
+                                key={`msg-${project.id}`}
+                                onClick={() => {
+                                  setSelectedProject(project)
+                                  setActiveSection('allProjects')
+                                  setProjectSubSection('messages')
+                                }}
+                                className="cursor-pointer"
+                              >
+                                <TableCell><MessageCircle className="w-4 h-4 text-neutral-500" /></TableCell>
+                                <TableCell className="font-medium">{t('dashboard.engineer.actions.replyTo')}</TableCell>
+                                <TableCell className="text-neutral-600">{project.title || t('projects.untitled')}</TableCell>
+                                <TableCell className="text-neutral-600">{project.profiles?.first_name || project.profiles?.company_name || '-'}</TableCell>
+                                <TableCell className="text-right">
+                                  <span className="text-xs bg-neutral-200 text-neutral-700 px-2 py-1 rounded-full">
+                                    {unreadCounts[project.id]} msg
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ))}
 
-                          {/* Projects needing quotes */}
-                          {projectsNeedingQuotes.map((project) => (
-                            <div
-                              key={`quote-${project.id}`}
-                              onClick={() => {
-                                setSelectedProject(project)
-                                setActiveSection('allProjects')
-                                setProjectSubSection('quotes')
-                              }}
-                              className="p-4 hover:bg-[#ea4c89]/5 cursor-pointer transition-colors flex items-center gap-4"
-                            >
-                              <Receipt className="w-5 h-5 text-[#ea4c89] flex-shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium text-foreground">{t('dashboard.engineer.actions.createQuoteFor')}</p>
-                                <p className="text-sm text-foreground/50 truncate">{project.title || t('projects.untitled')}</p>
-                              </div>
-                              <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusBadgeClass(project.status)}`}>
-                                {t(`projects.status.${project.status}`)}
-                              </span>
-                              <ChevronRight className="w-4 h-4 text-foreground/30" />
-                            </div>
-                          ))}
-
-                          {/* Draft quotes to send */}
-                          {draftQuotesWithProjects.map(({ quote, project }) => (
-                            <div
-                              key={`draft-${quote.id}`}
-                              onClick={() => {
-                                if (project) {
+                            {/* Projects needing quotes */}
+                            {(actionTypeFilter === 'all' || actionTypeFilter === 'quote') && projectsNeedingQuotes.map((project) => (
+                              <TableRow
+                                key={`quote-${project.id}`}
+                                onClick={() => {
                                   setSelectedProject(project)
                                   setActiveSection('allProjects')
                                   setProjectSubSection('quotes')
-                                }
-                              }}
-                              className="p-4 hover:bg-slate-50 cursor-pointer transition-colors flex items-center gap-4"
-                            >
-                              <Send className="w-5 h-5 text-slate-500 flex-shrink-0" />
-                              <div className="flex-1 min-w-0">
-                                <p className="font-medium text-foreground">{t('dashboard.engineer.actions.sendQuote')}</p>
-                                <p className="text-sm text-foreground/50 truncate">
-                                  {quote.name || `${t('quotes.version')} ${quote.version}`} - {project?.title || t('projects.untitled')}
-                                </p>
-                              </div>
-                              <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full font-medium">
-                                {t('quotes.status.draft')}
-                              </span>
-                              <ChevronRight className="w-4 h-4 text-foreground/30" />
-                            </div>
-                          ))}
-                        </div>
+                                }}
+                                className="cursor-pointer"
+                              >
+                                <TableCell><Receipt className="w-4 h-4 text-[#ea4c89]" /></TableCell>
+                                <TableCell className="font-medium">{t('dashboard.engineer.actions.createQuote')}</TableCell>
+                                <TableCell className="text-neutral-600">{project.title || t('projects.untitled')}</TableCell>
+                                <TableCell className="text-neutral-600">{project.profiles?.first_name || project.profiles?.company_name || '-'}</TableCell>
+                                <TableCell className="text-right">
+                                  <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadgeClass(project.status)}`}>
+                                    {t(`projects.status.${project.status}`)}
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+
+                            {/* Draft quotes to send */}
+                            {(actionTypeFilter === 'all' || actionTypeFilter === 'send') && draftQuotesWithProjects.map(({ quote, project }) => (
+                              <TableRow
+                                key={`draft-${quote.id}`}
+                                onClick={() => {
+                                  if (project) {
+                                    setSelectedProject(project)
+                                    setActiveSection('allProjects')
+                                    setProjectSubSection('quotes')
+                                  }
+                                }}
+                                className="cursor-pointer"
+                              >
+                                <TableCell><Send className="w-4 h-4 text-slate-500" /></TableCell>
+                                <TableCell className="font-medium">{t('dashboard.engineer.actions.sendQuote')}</TableCell>
+                                <TableCell className="text-neutral-600">{project?.title || t('projects.untitled')}</TableCell>
+                                <TableCell className="text-neutral-600">{project?.profiles?.first_name || project?.profiles?.company_name || '-'}</TableCell>
+                                <TableCell className="text-right">
+                                  <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full">
+                                    {t('quotes.status.draft')}
+                                  </span>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
                       </div>
                     ) : (
                       <div className="bg-white border border-neutral-200 rounded-xl p-8 text-center">

@@ -335,9 +335,18 @@ export const translations = {
           client: "un client",
           newMessage: "nouveau(x)",
           createQuoteFor: "Créer un devis",
+          createQuote: "Créer un devis",
           sendQuote: "Envoyer le devis",
           allDone: "Tout est à jour !",
-          noActions: "Vous n'avez aucune action en attente."
+          noActions: "Vous n'avez aucune action en attente.",
+          filterAll: "Tout",
+          filterMessages: "Messages",
+          filterQuotes: "À créer",
+          filterSend: "À envoyer",
+          colAction: "Action",
+          colProject: "Projet",
+          colClient: "Client",
+          colStatus: "Statut"
         }
       },
       clients: {
@@ -1166,7 +1175,16 @@ export const translations = {
           createQuoteFor: "Create a quote",
           sendQuote: "Send quote",
           allDone: "All caught up!",
-          noActions: "You have no pending actions."
+          noActions: "You have no pending actions.",
+          createQuote: "Create quote",
+          filterAll: "All",
+          filterMessages: "Messages",
+          filterQuotes: "To create",
+          filterSend: "To send",
+          colAction: "Action",
+          colProject: "Project",
+          colClient: "Client",
+          colStatus: "Status"
         }
       },
       clients: {
