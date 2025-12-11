@@ -1950,10 +1950,10 @@ export default function DashboardPage() {
                                 setActiveSection('allProjects')
                                 setProjectSubSection('messages')
                               }}
-                              className="p-4 hover:bg-blue-50 cursor-pointer transition-colors flex items-center gap-4"
+                              className="p-4 hover:bg-neutral-50 cursor-pointer transition-colors flex items-center gap-4"
                             >
-                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <MessageCircle className="w-4 h-4 text-blue-600" />
+                              <div className="w-8 h-8 bg-neutral-200 rounded-full flex items-center justify-center flex-shrink-0">
+                                <MessageCircle className="w-4 h-4 text-neutral-600" />
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-foreground">
@@ -1961,7 +1961,7 @@ export default function DashboardPage() {
                                 </p>
                                 <p className="text-sm text-foreground/50 truncate">{project.title || t('projects.untitled')}</p>
                               </div>
-                              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full font-medium">
+                              <span className="text-xs bg-neutral-200 text-neutral-700 px-2 py-1 rounded-full font-medium">
                                 {unreadCounts[project.id]} {t('dashboard.engineer.actions.newMessage')}
                               </span>
                               <ChevronRight className="w-4 h-4 text-foreground/30" />
@@ -1977,10 +1977,10 @@ export default function DashboardPage() {
                                 setActiveSection('allProjects')
                                 setProjectSubSection('quotes')
                               }}
-                              className="p-4 hover:bg-amber-50 cursor-pointer transition-colors flex items-center gap-4"
+                              className="p-4 hover:bg-[#ea4c89]/5 cursor-pointer transition-colors flex items-center gap-4"
                             >
-                              <div className="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <Receipt className="w-4 h-4 text-amber-600" />
+                              <div className="w-8 h-8 bg-[#ea4c89]/10 rounded-full flex items-center justify-center flex-shrink-0">
+                                <Receipt className="w-4 h-4 text-[#ea4c89]" />
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-foreground">{t('dashboard.engineer.actions.createQuoteFor')}</p>
@@ -2004,10 +2004,10 @@ export default function DashboardPage() {
                                   setProjectSubSection('quotes')
                                 }
                               }}
-                              className="p-4 hover:bg-purple-50 cursor-pointer transition-colors flex items-center gap-4"
+                              className="p-4 hover:bg-slate-50 cursor-pointer transition-colors flex items-center gap-4"
                             >
-                              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <Send className="w-4 h-4 text-purple-600" />
+                              <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center flex-shrink-0">
+                                <Send className="w-4 h-4 text-slate-600" />
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="font-medium text-foreground">{t('dashboard.engineer.actions.sendQuote')}</p>
@@ -2015,7 +2015,7 @@ export default function DashboardPage() {
                                   {quote.name || `${t('quotes.version')} ${quote.version}`} - {project?.title || t('projects.untitled')}
                                 </p>
                               </div>
-                              <span className="text-xs bg-neutral-100 text-foreground/70 px-2 py-1 rounded-full font-medium">
+                              <span className="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded-full font-medium">
                                 {t('quotes.status.draft')}
                               </span>
                               <ChevronRight className="w-4 h-4 text-foreground/30" />
