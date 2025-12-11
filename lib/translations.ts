@@ -853,6 +853,44 @@ export const translations = {
         increaseComplexity: "Augmente la complexité du module principal",
         addMaintenance: "Ajoute 3 mois de maintenance"
       }
+    },
+    timeTracking: {
+      title: "Temps imputés",
+      subtitle: "Suivez le temps passé sur ce projet",
+      addEntry: "Pointer du temps",
+      editEntry: "Modifier l'entrée",
+      addFirstEntry: "Ajouter une première entrée",
+      totalTime: "Temps total",
+      days: "jours",
+      byEngineer: "Par ingénieur",
+      byCategory: "Par catégorie",
+      byMonth: "Par mois",
+      recentEntries: "Entrées récentes",
+      noEntries: "Aucune entrée de temps",
+      noDescription: "Pas de description",
+      date: "Date",
+      hours: "Heures",
+      hoursHint: "Utilisez des décimales (ex: 2.5 pour 2h30)",
+      category: "Catégorie",
+      selectCategory: "Sélectionner une catégorie",
+      description: "Description",
+      descriptionPlaceholder: "Décrivez le travail effectué...",
+      categories: {
+        development: "Développement",
+        meeting: "Réunion",
+        review: "Revue de code",
+        documentation: "Documentation",
+        design: "Design",
+        testing: "Tests",
+        support: "Support",
+        other: "Autre"
+      }
+    },
+    common: {
+      edit: "Modifier",
+      delete: "Supprimer",
+      save: "Enregistrer",
+      cancel: "Annuler"
     }
   },
   en: {
@@ -1709,6 +1747,44 @@ export const translations = {
         increaseComplexity: "Increase complexity of main module",
         addMaintenance: "Add 3 months of maintenance"
       }
+    },
+    timeTracking: {
+      title: "Time Tracking",
+      subtitle: "Track time spent on this project",
+      addEntry: "Log time",
+      editEntry: "Edit entry",
+      addFirstEntry: "Add first entry",
+      totalTime: "Total time",
+      days: "days",
+      byEngineer: "By engineer",
+      byCategory: "By category",
+      byMonth: "By month",
+      recentEntries: "Recent entries",
+      noEntries: "No time entries",
+      noDescription: "No description",
+      date: "Date",
+      hours: "Hours",
+      hoursHint: "Use decimals (e.g., 2.5 for 2h30)",
+      category: "Category",
+      selectCategory: "Select a category",
+      description: "Description",
+      descriptionPlaceholder: "Describe the work done...",
+      categories: {
+        development: "Development",
+        meeting: "Meeting",
+        review: "Code review",
+        documentation: "Documentation",
+        design: "Design",
+        testing: "Testing",
+        support: "Support",
+        other: "Other"
+      }
+    },
+    common: {
+      edit: "Edit",
+      delete: "Delete",
+      save: "Save",
+      cancel: "Cancel"
     }
   }
 }
