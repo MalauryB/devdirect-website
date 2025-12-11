@@ -54,26 +54,52 @@ export async function POST(request: NextRequest) {
     let modifications: Partial<QuoteFormData> | null = null
     let cleanMessage = responseText
 
-    // Look for JSON block with modifications
+    // Look for JSON block with modifications (```json ... ```)
     const jsonMatch = responseText.match(/```json\n?([\s\S]*?)\n?```/)
     if (jsonMatch) {
       try {
-        modifications = JSON.parse(jsonMatch[1])
-        // Remove the JSON block from the message
-        cleanMessage = responseText.replace(/```json\n?[\s\S]*?\n?```/g, '').trim()
+        const parsed = JSON.parse(jsonMatch[1])
+        // Validate that it looks like quote data (has at least one expected key)
+        if (parsed && typeof parsed === 'object' &&
+            (parsed.profiles || parsed.abaques || parsed.costing_categories ||
+             parsed.transverse_levels || parsed.notes || parsed.discount_percent)) {
+          modifications = parsed
+          // Remove the JSON block from the message
+          cleanMessage = responseText.replace(/```json\n?[\s\S]*?\n?```/g, '').trim()
+        }
       } catch {
         // JSON parsing failed, no modifications
       }
     }
 
-    // Also try to find inline JSON markers
+    // Also try to find inline JSON markers [MODIFICATIONS]...[/MODIFICATIONS]
     const inlineJsonMatch = responseText.match(/\[MODIFICATIONS\]([\s\S]*?)\[\/MODIFICATIONS\]/)
     if (inlineJsonMatch && !modifications) {
       try {
-        modifications = JSON.parse(inlineJsonMatch[1])
-        cleanMessage = responseText.replace(/\[MODIFICATIONS\][\s\S]*?\[\/MODIFICATIONS\]/g, '').trim()
+        const parsed = JSON.parse(inlineJsonMatch[1])
+        if (parsed && typeof parsed === 'object') {
+          modifications = parsed
+          cleanMessage = responseText.replace(/\[MODIFICATIONS\][\s\S]*?\[\/MODIFICATIONS\]/g, '').trim()
+        }
       } catch {
         // JSON parsing failed
+      }
+    }
+
+    // Try to find any JSON object that looks like quote modifications (last resort)
+    if (!modifications) {
+      // Look for a JSON object that starts with { and contains quote-related keys
+      const anyJsonMatch = responseText.match(/(\{[\s\S]*"(?:profiles|abaques|costing_categories|transverse_levels)"[\s\S]*\})/)
+      if (anyJsonMatch) {
+        try {
+          const parsed = JSON.parse(anyJsonMatch[1])
+          if (parsed && typeof parsed === 'object') {
+            modifications = parsed
+            cleanMessage = responseText.replace(anyJsonMatch[0], '').trim()
+          }
+        } catch {
+          // JSON parsing failed
+        }
       }
     }
 
@@ -130,20 +156,28 @@ Tu peux :
 7. **Ajuster les profils** (taux journaliers, noms)
 8. **Modifier les activités transverses** et leurs pourcentages
 
-## FORMAT DE RÉPONSE
+## FORMAT DE RÉPONSE OBLIGATOIRE
 
-Quand tu effectues des modifications, retourne-les dans un bloc JSON:
+Quand tu effectues des modifications, tu DOIS:
 
+1. D'abord expliquer brièvement ce que tu vas modifier
+2. Ensuite inclure un bloc JSON avec les modifications COMPLÈTES des sections concernées
+
+IMPORTANT: Le bloc JSON doit contenir la TOTALITÉ de la section modifiée, pas seulement les éléments changés.
+Par exemple, si tu modifies une activité dans costing_categories, inclus TOUTES les catégories avec TOUTES leurs activités.
+
+Format OBLIGATOIRE:
 \`\`\`json
 {
-  "profiles": [...],
-  "abaques": [...],
-  "costing_categories": [...],
-  // etc. - uniquement les champs modifiés
+  "costing_categories": [
+    // LA LISTE COMPLETE des catégories avec leurs activités
+  ]
 }
 \`\`\`
 
-Accompagne toujours ta réponse d'une explication en français de ce que tu as modifié et pourquoi.
+NE PAS inclure de commentaires dans le JSON.
+NE PAS retourner le JSON dans le texte sans le bloc \`\`\`json.
+TOUJOURS utiliser le format \`\`\`json ... \`\`\` pour le JSON.
 
 ## RÈGLES
 
