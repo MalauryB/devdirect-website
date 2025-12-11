@@ -273,8 +273,8 @@ export default function DashboardPage() {
       case 'won': return 'bg-green-100 text-green-800'
       case 'lost': return 'bg-red-100 text-red-800'
       case 'cancelled': return 'bg-orange-100 text-orange-800'
-      case 'closed': return 'bg-gray-100 text-gray-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'closed': return 'bg-muted text-gray-800'
+      default: return 'bg-muted text-gray-800'
     }
   }
 
@@ -417,12 +417,12 @@ export default function DashboardPage() {
 
   const getQuoteStatusBadgeClass = (status: string) => {
     switch (status) {
-      case 'draft': return 'bg-gray-100 text-gray-800'
+      case 'draft': return 'bg-muted text-gray-800'
       case 'sent': return 'bg-blue-100 text-blue-800'
       case 'accepted': return 'bg-green-100 text-green-800'
       case 'rejected': return 'bg-red-100 text-red-800'
       case 'expired': return 'bg-orange-100 text-orange-800'
-      default: return 'bg-gray-100 text-gray-800'
+      default: return 'bg-muted text-gray-800'
     }
   }
 
@@ -446,8 +446,8 @@ export default function DashboardPage() {
     }
 
     return (
-      <div className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-        <div className="w-10 h-10 rounded bg-gray-100 flex items-center justify-center flex-shrink-0">
+      <div className="flex items-center gap-3 p-3 bg-muted/50 border border-border rounded-lg">
+        <div className="w-10 h-10 rounded bg-muted flex items-center justify-center flex-shrink-0">
           <FileText className="w-5 h-5 text-foreground/50" />
         </div>
         <div className="flex-1 min-w-0">
@@ -492,7 +492,7 @@ export default function DashboardPage() {
     return (
       <div
         onClick={handleOpen}
-        className="aspect-square rounded-lg overflow-hidden bg-gray-100 border border-gray-200 cursor-pointer hover:border-gray-300 transition-colors relative"
+        className="aspect-square rounded-lg overflow-hidden bg-muted border border-border cursor-pointer hover:border-primary/30 transition-colors relative"
       >
         {loading ? (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -551,7 +551,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen bg-background flex">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div
@@ -564,13 +564,13 @@ export default function DashboardPage() {
       <aside
         onMouseEnter={() => setSidebarExpanded(true)}
         onMouseLeave={() => setSidebarExpanded(false)}
-        className={`fixed lg:fixed inset-y-0 left-0 z-50 bg-white border-r border-gray-200 transform transition-all duration-200 ease-in-out ${
+        className={`fixed lg:fixed inset-y-0 left-0 z-50 bg-white border-r border-border transform transition-all duration-200 ease-in-out ${
           sidebarOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0"
         } ${sidebarExpanded ? "lg:w-64" : "lg:w-16"}`}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar header */}
-          <div className={`p-4 border-b border-gray-200 ${!sidebarExpanded && !sidebarOpen ? "lg:px-3" : ""}`}>
+          <div className={`p-4 border-b border-border ${!sidebarExpanded && !sidebarOpen ? "lg:px-3" : ""}`}>
             <div className="flex items-center justify-between">
               <Link href="/" className={`text-xl font-bold logo-cubic text-black transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : ""}`}>
                 {t('name')}
@@ -580,7 +580,7 @@ export default function DashboardPage() {
                 <span className="text-xl font-bold logo-cubic text-black">M</span>
               </div>
               <button
-                className="lg:hidden p-2 hover:bg-gray-50 rounded-lg"
+                className="lg:hidden p-2 hover:bg-primary/5 rounded-lg"
                 onClick={() => setSidebarOpen(false)}
               >
                 <X className="w-5 h-5" />
@@ -602,16 +602,16 @@ export default function DashboardPage() {
                     !sidebarExpanded && !sidebarOpen ? "lg:justify-center lg:px-0" : ""
                   } ${
                     activeSection === item.id
-                      ? "bg-gray-100 text-foreground font-medium"
+                      ? "bg-action/10 text-action font-medium"
                       : isDisabled
                       ? "opacity-50 cursor-not-allowed text-foreground/60"
-                      : "hover:bg-gray-50 text-foreground"
+                      : "hover:bg-primary/5 text-foreground"
                   }`}
                 >
-                  <item.icon className="w-5 h-5 flex-shrink-0" />
+                  <item.icon className={`w-5 h-5 flex-shrink-0 ${activeSection === item.id ? 'text-action' : ''}`} />
                   <span className={`flex-1 transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:hidden" : ""}`}>{item.label}</span>
                   {isDisabled && (sidebarExpanded || sidebarOpen) && (
-                    <span className="text-xs bg-gray-100 text-foreground/60 px-1.5 py-0.5 rounded">
+                    <span className="text-xs bg-primary/10 text-primary px-1.5 py-0.5 rounded">
                       {t('dashboard.comingSoon')}
                     </span>
                   )}
@@ -628,9 +628,9 @@ export default function DashboardPage() {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top header bar */}
-        <div className="sticky top-0 z-30 bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between">
+        <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-sm border-b border-border px-4 py-3 flex items-center justify-between">
           <button
-            className="lg:hidden p-2 hover:bg-gray-50 rounded-lg"
+            className="lg:hidden p-2 hover:bg-primary/5 rounded-lg"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="w-5 h-5" />
@@ -640,7 +640,7 @@ export default function DashboardPage() {
           {/* User account dropdown */}
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <button className="w-9 h-9 rounded-full bg-white border-2 border-gray-300 text-foreground flex items-center justify-center hover:bg-gray-50 transition-colors focus:outline-none overflow-hidden">
+              <button className="w-9 h-9 rounded-full bg-white border-2 border-action text-action flex items-center justify-center hover:bg-action/10 transition-colors focus:outline-none overflow-hidden">
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
@@ -654,27 +654,27 @@ export default function DashboardPage() {
                 )}
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-white border border-gray-200 shadow-lg">
-              <div className="px-3 py-3 border-b border-gray-100">
+            <DropdownMenuContent align="end" className="w-56 bg-white border border-primary/20 shadow-lg">
+              <div className="px-3 py-3 border-b border-primary/10">
                 <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
                 <p className="text-xs text-foreground/60 truncate">{user.email}</p>
               </div>
               <DropdownMenuItem
-                className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50 py-2.5 flex items-center"
+                className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 flex items-center"
                 onClick={() => setActiveSection("profile")}
               >
                 <User className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
                 <span className="text-foreground">{t('navigation.profile')}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50 py-2.5 flex items-center">
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5 py-2.5 flex items-center">
                 <Link href="/">
                   <Home className="w-4 h-4 mr-3 text-foreground flex-shrink-0" />
                   <span className="text-foreground">{t('navigation.accueil')}</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-gray-100" />
+              <DropdownMenuSeparator className="bg-primary/10" />
               <DropdownMenuItem
-                className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50 py-2.5 text-red-600 focus:text-red-600 flex items-center"
+                className="cursor-pointer hover:bg-primary/5 focus:bg-muted/50 py-2.5 text-red-600 focus:text-red-600 flex items-center"
                 onClick={handleSignOut}
               >
                 <LogOut className="w-4 h-4 mr-3 flex-shrink-0" />
@@ -695,7 +695,7 @@ export default function DashboardPage() {
                   <h3 className="text-sm font-medium text-foreground">{t('profile.avatar')}</h3>
                   <div className="flex items-center gap-6">
                     <div className="relative">
-                      <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-gray-200 flex-shrink-0">
+                      <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden border-2 border-border flex-shrink-0">
                         {avatarUrl ? (
                           <img
                             src={avatarUrl}
@@ -704,7 +704,7 @@ export default function DashboardPage() {
                             style={{ objectPosition: 'center' }}
                           />
                         ) : (
-                          <User className="w-10 h-10 text-gray-400" />
+                          <User className="w-10 h-10 text-muted-foreground" />
                         )}
                       </div>
                       <label className="absolute bottom-0 right-0 w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
@@ -742,7 +742,7 @@ export default function DashboardPage() {
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         disabled={saving}
-                        className="border-gray-200 focus:border-gray-400"
+                        className="border-border focus:border-gray-400"
                       />
                     </div>
                     <div className="space-y-1">
@@ -754,7 +754,7 @@ export default function DashboardPage() {
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         disabled={saving}
-                        className="border-gray-200 focus:border-gray-400"
+                        className="border-border focus:border-gray-400"
                       />
                     </div>
                   </div>
@@ -767,7 +767,7 @@ export default function DashboardPage() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       disabled={saving}
-                      className="border-gray-200 focus:border-gray-400"
+                      className="border-border focus:border-gray-400"
                     />
                   </div>
                 </div>
@@ -785,7 +785,7 @@ export default function DashboardPage() {
                         value={jobTitle}
                         onChange={(e) => setJobTitle(e.target.value)}
                         disabled={saving}
-                        className="border-gray-200 focus:border-gray-400"
+                        className="border-border focus:border-gray-400"
                       />
                     </div>
 
@@ -799,7 +799,7 @@ export default function DashboardPage() {
                         onChange={(e) => setBio(e.target.value)}
                         disabled={saving}
                         rows={4}
-                        className="border-gray-200 focus:border-gray-400 resize-none bg-white"
+                        className="border-border focus:border-gray-400 resize-none bg-white"
                       />
                     </div>
 
@@ -813,7 +813,7 @@ export default function DashboardPage() {
                           value={newSkill}
                           onChange={(e) => setNewSkill(e.target.value)}
                           disabled={saving}
-                          className="flex-1 border-gray-200 focus:border-gray-400"
+                          className="flex-1 border-border focus:border-gray-400"
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault()
@@ -845,7 +845,7 @@ export default function DashboardPage() {
                           {skills.map((skill, index) => (
                             <span
                               key={index}
-                              className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-foreground rounded-full text-sm"
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-muted text-foreground rounded-full text-sm"
                             >
                               {skill}
                               <button
@@ -874,13 +874,13 @@ export default function DashboardPage() {
                         className="flex gap-4"
                       >
                         <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-                          clientType === "individual" ? 'border-gray-900' : 'border-gray-200'
+                          clientType === "individual" ? 'border-gray-900' : 'border-border'
                         }`}>
                           <RadioGroupItem value="individual" className="border-gray-300" />
                           <span className="text-sm">{t('profile.individual')}</span>
                         </label>
                         <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-                          clientType === "company" ? 'border-gray-900' : 'border-gray-200'
+                          clientType === "company" ? 'border-gray-900' : 'border-border'
                         }`}>
                           <RadioGroupItem value="company" className="border-gray-300" />
                           <span className="text-sm">{t('profile.company')}</span>
@@ -901,7 +901,7 @@ export default function DashboardPage() {
                             value={companyName}
                             onChange={(e) => setCompanyName(e.target.value)}
                             disabled={saving}
-                            className="border-gray-200 focus:border-gray-400"
+                            className="border-border focus:border-gray-400"
                           />
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -914,7 +914,7 @@ export default function DashboardPage() {
                               value={siret}
                               onChange={(e) => setSiret(e.target.value)}
                               disabled={saving}
-                              className="border-gray-200 focus:border-gray-400"
+                              className="border-border focus:border-gray-400"
                             />
                           </div>
                           <div className="space-y-1">
@@ -926,7 +926,7 @@ export default function DashboardPage() {
                               value={vatNumber}
                               onChange={(e) => setVatNumber(e.target.value)}
                               disabled={saving}
-                              className="border-gray-200 focus:border-gray-400"
+                              className="border-border focus:border-gray-400"
                             />
                           </div>
                         </div>
@@ -945,7 +945,7 @@ export default function DashboardPage() {
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
                           disabled={saving}
-                          className="border-gray-200 focus:border-gray-400"
+                          className="border-border focus:border-gray-400"
                         />
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -958,7 +958,7 @@ export default function DashboardPage() {
                             value={postalCode}
                             onChange={(e) => setPostalCode(e.target.value)}
                             disabled={saving}
-                            className="border-gray-200 focus:border-gray-400"
+                            className="border-border focus:border-gray-400"
                           />
                         </div>
                         <div className="space-y-1">
@@ -970,7 +970,7 @@ export default function DashboardPage() {
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
                             disabled={saving}
-                            className="border-gray-200 focus:border-gray-400"
+                            className="border-border focus:border-gray-400"
                           />
                         </div>
                         <div className="space-y-1 col-span-2 md:col-span-1">
@@ -982,7 +982,7 @@ export default function DashboardPage() {
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}
                             disabled={saving}
-                            className="border-gray-200 focus:border-gray-400"
+                            className="border-border focus:border-gray-400"
                           />
                         </div>
                       </div>
@@ -1021,8 +1021,8 @@ export default function DashboardPage() {
               {selectedProject ? (
                 <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
                   {/* Secondary sidebar for project sub-sections */}
-                  <div className="w-48 bg-gray-50 border-r border-gray-200 flex-shrink-0 flex flex-col">
-                    <div className="p-4 border-b border-gray-200">
+                  <div className="w-48 bg-muted/50 border-r border-border flex-shrink-0 flex flex-col">
+                    <div className="p-4 border-b border-border">
                       <button
                         onClick={() => setSelectedProject(null)}
                         className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
@@ -1036,7 +1036,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('details')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
                           projectSubSection === 'details'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -1047,7 +1047,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('quotes')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'quotes'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -1063,7 +1063,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('messages')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'messages'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -1074,7 +1074,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('documents')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'documents'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -1089,7 +1089,7 @@ export default function DashboardPage() {
                     </nav>
                     {/* Actions - only show for pending projects */}
                     {selectedProject.status === 'pending' && (
-                      <div className="mt-auto p-4 border-t border-gray-200 space-y-2">
+                      <div className="mt-auto p-4 border-t border-border space-y-2">
                         <Button
                           variant="outline"
                           size="sm"
@@ -1116,7 +1116,7 @@ export default function DashboardPage() {
                   <div className={`flex-1 flex flex-col ${projectSubSection === 'messages' ? 'overflow-hidden' : 'p-4 lg:p-6 overflow-auto'}`}>
                     {/* Project Header - visible only in details section */}
                     {projectSubSection === 'details' && (
-                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden mb-6">
                         <div className="p-6">
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-start gap-4">
@@ -1140,7 +1140,7 @@ export default function DashboardPage() {
                                 </h2>
                                 <div className="flex flex-wrap gap-2 mb-3">
                                   {selectedProject.project_types?.map((type) => (
-                                    <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
+                                    <span key={type} className="text-sm bg-muted text-foreground/70 px-3 py-1 rounded-full">
                                       {t(`projects.types.${type}`)}
                                     </span>
                                   ))}
@@ -1160,7 +1160,7 @@ export default function DashboardPage() {
 
                     {/* Details Sub-Section */}
                     {projectSubSection === 'details' && (
-                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
                         <div className="p-6 space-y-8">
                           {/* Description */}
                           <div>
@@ -1202,7 +1202,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.services.map((service) => (
-                                  <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={service} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {t(`projects.services.${service}`)}
                                   </span>
                                 ))}
@@ -1219,7 +1219,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.platforms.map((platform) => (
-                                  <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={platform} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {platform}
                                   </span>
                                 ))}
@@ -1241,7 +1241,7 @@ export default function DashboardPage() {
                           {/* Budget & Deadline */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {selectedProject.budget && (
-                              <div className="bg-gray-50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Euro className="w-4 h-4 text-[#9c984d]" />
                                   {t('projects.details.budget')}
@@ -1250,7 +1250,7 @@ export default function DashboardPage() {
                               </div>
                             )}
                             {selectedProject.deadline && (
-                              <div className="bg-gray-50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Clock className="w-4 h-4 text-[#ea4c89]" />
                                   {t('projects.details.deadline')}
@@ -1371,7 +1371,7 @@ export default function DashboardPage() {
                             <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                           </div>
                         ) : quotes.length === 0 ? (
-                          <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('quotes.noQuotes')}</p>
                             <p className="text-foreground/50 text-sm mt-1">{t('quotes.noQuotesClientDesc')}</p>
@@ -1383,14 +1383,14 @@ export default function DashboardPage() {
                               return (
                                 <div
                                   key={quote.id}
-                                  className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors"
+                                  className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors"
                                 >
                                   <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
                                       <div className="flex items-center gap-2 mb-2">
                                         <h4 className="font-semibold text-foreground">{quote.name}</h4>
                                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                                          quote.status === 'draft' ? 'bg-gray-100 text-gray-700' :
+                                          quote.status === 'draft' ? 'bg-muted text-gray-700' :
                                           quote.status === 'sent' ? 'bg-blue-100 text-blue-700' :
                                           quote.status === 'accepted' ? 'bg-green-100 text-green-700' :
                                           'bg-red-100 text-red-700'
@@ -1443,14 +1443,14 @@ export default function DashboardPage() {
                     {projectSubSection === 'messages' && (
                       <>
                         {/* Header */}
-                        <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between flex-shrink-0">
+                        <div className="p-4 border-b border-border bg-white flex items-center justify-between flex-shrink-0">
                           <div>
                             <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
                             <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
                           </div>
                         </div>
                         {/* Message thread */}
-                        <div className="flex-1 bg-gray-50 overflow-hidden">
+                        <div className="flex-1 bg-muted/50 overflow-hidden">
                           <MessageThread
                             projectId={selectedProject.id}
                             currentUser={{
@@ -1482,7 +1482,7 @@ export default function DashboardPage() {
                             <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                           </div>
                         ) : documents.length === 0 ? (
-                          <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <FolderOpen className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('documents.empty')}</p>
                             <p className="text-foreground/50 text-sm mt-1">{t('documents.emptyClientDescription')}</p>
@@ -1492,10 +1492,10 @@ export default function DashboardPage() {
                             {documents.map((doc) => (
                               <div
                                 key={doc.id}
-                                className="bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-colors"
+                                className="bg-white border border-border rounded-xl p-4 hover:border-primary/30 transition-colors"
                               >
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl flex-shrink-0">
+                                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-xl flex-shrink-0">
                                     {getFileIcon(doc.file_type)}
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -1507,7 +1507,7 @@ export default function DashboardPage() {
                                             v{doc.version}
                                           </span>
                                         </div>
-                                        <span className="inline-block text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded mt-1">
+                                        <span className="inline-block text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded mt-1">
                                           {t(`documents.types.${doc.type}`)}
                                         </span>
                                       </div>
@@ -1560,7 +1560,7 @@ export default function DashboardPage() {
                   </div>
 
                   {showProjectForm && (
-                    <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6 min-h-[600px]">
+                    <div className="bg-white border border-border rounded-xl p-6 mb-6 min-h-[600px]">
                       <ProjectFormWizard
                         project={editingProject}
                         onSuccess={() => {
@@ -1581,7 +1581,7 @@ export default function DashboardPage() {
                       <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                     </div>
                   ) : projects.length === 0 ? (
-                    <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                    <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                       <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                       <p className="text-foreground/70 font-medium">{t('projects.noProjects')}</p>
                       <p className="text-foreground/50 text-sm mt-1">{t('projects.noProjectsDesc')}</p>
@@ -1592,7 +1592,7 @@ export default function DashboardPage() {
                         <div
                           key={project.id}
                           onClick={() => setSelectedProject(project)}
-                          className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                          className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors cursor-pointer"
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 min-w-0">
@@ -1601,7 +1601,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2 mb-2">
                                 {project.project_types?.map((type) => (
-                                  <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                                  <span key={type} className="text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded">
                                     {t(`projects.types.${type}`)}
                                   </span>
                                 ))}
@@ -1717,8 +1717,8 @@ export default function DashboardPage() {
           {activeSection === "messages" && !isEngineer && (
             <div className="flex gap-0 -m-4 lg:-m-6 h-[calc(100vh-65px)]">
               {/* Secondary sidebar for projects */}
-              <div className="w-56 bg-gray-50 border-r border-gray-200 flex-shrink-0 flex flex-col">
-                <div className="p-4 border-b border-gray-200">
+              <div className="w-56 bg-muted/50 border-r border-border flex-shrink-0 flex flex-col">
+                <div className="p-4 border-b border-border">
                   <h2 className="font-semibold text-foreground">{t('messages.title')}</h2>
                   <p className="text-xs text-foreground/50 mt-1">{t('messages.sectionDescription')}</p>
                 </div>
@@ -1750,7 +1750,7 @@ export default function DashboardPage() {
                         onClick={() => setSelectedProject(project)}
                         className={`w-full flex items-start gap-2 px-3 py-2.5 rounded-lg text-left text-sm transition-colors mb-1 ${
                           selectedProject?.id === project.id
-                            ? 'bg-white border border-gray-200 text-foreground'
+                            ? 'bg-white border border-border text-foreground'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -1776,7 +1776,7 @@ export default function DashboardPage() {
                 {selectedProject ? (
                   <>
                     {/* Header */}
-                    <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
+                    <div className="p-4 border-b border-border bg-white flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
                         <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
@@ -1795,7 +1795,7 @@ export default function DashboardPage() {
                       </Button>
                     </div>
                     {/* Message thread */}
-                    <div className="flex-1 bg-gray-50 overflow-hidden">
+                    <div className="flex-1 bg-muted/50 overflow-hidden">
                       <MessageThread
                         projectId={selectedProject.id}
                         currentUser={{
@@ -1810,7 +1810,7 @@ export default function DashboardPage() {
                     </div>
                   </>
                 ) : (
-                  <div className="flex-1 flex items-center justify-center bg-gray-50">
+                  <div className="flex-1 flex items-center justify-center bg-muted/50">
                     <div className="text-center">
                       <MessageSquare className="w-12 h-12 text-foreground/20 mx-auto mb-4" />
                       <p className="text-foreground/50">{t('messages.selectToView')}</p>
@@ -1854,7 +1854,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div
                         className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
-                          totalUnreadMessages > 0 ? 'border-blue-200 bg-blue-50/50' : 'border-gray-200'
+                          totalUnreadMessages > 0 ? 'border-secondary/50 bg-secondary/10' : 'border-border'
                         }`}
                         onClick={() => {
                           if (projectsWithUnread.length > 0) {
@@ -1866,12 +1866,12 @@ export default function DashboardPage() {
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                            totalUnreadMessages > 0 ? 'bg-blue-100' : 'bg-gray-100'
+                            totalUnreadMessages > 0 ? 'bg-secondary/20' : 'bg-muted'
                           }`}>
-                            <MessageCircle className={`w-5 h-5 ${totalUnreadMessages > 0 ? 'text-blue-600' : 'text-gray-400'}`} />
+                            <MessageCircle className={`w-5 h-5 ${totalUnreadMessages > 0 ? 'text-secondary' : 'text-muted-foreground'}`} />
                           </div>
                           <div>
-                            <p className={`text-2xl font-bold ${totalUnreadMessages > 0 ? 'text-blue-600' : 'text-foreground/30'}`}>
+                            <p className={`text-2xl font-bold ${totalUnreadMessages > 0 ? 'text-secondary' : 'text-foreground/30'}`}>
                               {totalUnreadMessages}
                             </p>
                             <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.unreadMessages')}</p>
@@ -1881,7 +1881,7 @@ export default function DashboardPage() {
 
                       <div
                         className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
-                          projectsNeedingQuotes.length > 0 ? 'border-amber-200 bg-amber-50/50' : 'border-gray-200'
+                          projectsNeedingQuotes.length > 0 ? 'border-primary/50 bg-primary/10' : 'border-border'
                         }`}
                         onClick={() => {
                           if (projectsNeedingQuotes.length > 0) {
@@ -1893,12 +1893,12 @@ export default function DashboardPage() {
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                            projectsNeedingQuotes.length > 0 ? 'bg-amber-100' : 'bg-gray-100'
+                            projectsNeedingQuotes.length > 0 ? 'bg-primary/20' : 'bg-muted'
                           }`}>
-                            <Receipt className={`w-5 h-5 ${projectsNeedingQuotes.length > 0 ? 'text-amber-600' : 'text-gray-400'}`} />
+                            <Receipt className={`w-5 h-5 ${projectsNeedingQuotes.length > 0 ? 'text-primary' : 'text-muted-foreground'}`} />
                           </div>
                           <div>
-                            <p className={`text-2xl font-bold ${projectsNeedingQuotes.length > 0 ? 'text-amber-600' : 'text-foreground/30'}`}>
+                            <p className={`text-2xl font-bold ${projectsNeedingQuotes.length > 0 ? 'text-primary' : 'text-foreground/30'}`}>
                               {projectsNeedingQuotes.length}
                             </p>
                             <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.quotesToCreate')}</p>
@@ -1908,7 +1908,7 @@ export default function DashboardPage() {
 
                       <div
                         className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
-                          draftQuotesWithProjects.length > 0 ? 'border-purple-200 bg-purple-50/50' : 'border-gray-200'
+                          draftQuotesWithProjects.length > 0 ? 'border-action/50 bg-action/10' : 'border-border'
                         }`}
                         onClick={() => {
                           if (draftQuotesWithProjects.length > 0 && draftQuotesWithProjects[0].project) {
@@ -1920,12 +1920,12 @@ export default function DashboardPage() {
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                            draftQuotesWithProjects.length > 0 ? 'bg-purple-100' : 'bg-gray-100'
+                            draftQuotesWithProjects.length > 0 ? 'bg-action/20' : 'bg-muted'
                           }`}>
-                            <Send className={`w-5 h-5 ${draftQuotesWithProjects.length > 0 ? 'text-purple-600' : 'text-gray-400'}`} />
+                            <Send className={`w-5 h-5 ${draftQuotesWithProjects.length > 0 ? 'text-action' : 'text-muted-foreground'}`} />
                           </div>
                           <div>
-                            <p className={`text-2xl font-bold ${draftQuotesWithProjects.length > 0 ? 'text-purple-600' : 'text-foreground/30'}`}>
+                            <p className={`text-2xl font-bold ${draftQuotesWithProjects.length > 0 ? 'text-action' : 'text-foreground/30'}`}>
                               {draftQuotesWithProjects.length}
                             </p>
                             <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.quotesToSend')}</p>
@@ -1936,11 +1936,11 @@ export default function DashboardPage() {
 
                     {/* Detailed actions list */}
                     {hasActions ? (
-                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                        <div className="p-4 border-b border-gray-100">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
+                        <div className="p-4 border-b border-border">
                           <h3 className="font-semibold text-foreground">{t('dashboard.engineer.actions.title')}</h3>
                         </div>
-                        <div className="divide-y divide-gray-100">
+                        <div className="divide-y divide-border">
                           {/* Unread messages */}
                           {projectsWithUnread.map((project) => (
                             <div
@@ -2015,7 +2015,7 @@ export default function DashboardPage() {
                                   {quote.name || `${t('quotes.version')} ${quote.version}`} - {project?.title || t('projects.untitled')}
                                 </p>
                               </div>
-                              <span className="text-xs bg-gray-100 text-foreground/70 px-2 py-1 rounded-full font-medium">
+                              <span className="text-xs bg-muted text-foreground/70 px-2 py-1 rounded-full font-medium">
                                 {t('quotes.status.draft')}
                               </span>
                               <ChevronRight className="w-4 h-4 text-foreground/30" />
@@ -2024,7 +2024,7 @@ export default function DashboardPage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="bg-white border border-gray-200 rounded-xl p-8 text-center">
+                      <div className="bg-white border border-border rounded-xl p-8 text-center">
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                           <Check className="w-8 h-8 text-green-600" />
                         </div>
@@ -2053,8 +2053,8 @@ export default function DashboardPage() {
                 // Project detail view with cascading navigation
                 <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
                   {/* Secondary sidebar for project sub-sections */}
-                  <div className="w-48 bg-gray-50 border-r border-gray-200 flex-shrink-0 flex flex-col">
-                    <div className="p-4 border-b border-gray-200">
+                  <div className="w-48 bg-muted/50 border-r border-border flex-shrink-0 flex flex-col">
+                    <div className="p-4 border-b border-border">
                       <button
                         onClick={() => setSelectedProject(null)}
                         className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
@@ -2068,7 +2068,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('details')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
                           projectSubSection === 'details'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2086,7 +2086,7 @@ export default function DashboardPage() {
                         }}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'quotes'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2102,7 +2102,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('messages')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'messages'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2113,7 +2113,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('documents')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'documents'
-                            ? 'bg-white border border-gray-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2127,7 +2127,7 @@ export default function DashboardPage() {
                   <div className={`flex-1 flex flex-col ${projectSubSection === 'messages' ? 'overflow-hidden' : 'p-4 lg:p-6 overflow-auto'}`}>
                     {/* Project Header - visible only in details section */}
                     {projectSubSection === 'details' && (
-                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden mb-6">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden mb-6">
                         <div className="p-6">
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-start gap-4">
@@ -2151,7 +2151,7 @@ export default function DashboardPage() {
                                 </h2>
                                 <div className="flex flex-wrap gap-2 mb-3">
                                   {selectedProject.project_types?.map((type) => (
-                                    <span key={type} className="text-sm bg-gray-100 text-foreground/70 px-3 py-1 rounded-full">
+                                    <span key={type} className="text-sm bg-muted text-foreground/70 px-3 py-1 rounded-full">
                                       {t(`projects.types.${type}`)}
                                     </span>
                                   ))}
@@ -2171,7 +2171,7 @@ export default function DashboardPage() {
 
                     {/* Details Sub-Section */}
                     {projectSubSection === 'details' && (
-                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
                         <div className="p-6 space-y-8">
                           {/* Description */}
                           <div>
@@ -2213,7 +2213,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.services.map((service) => (
-                                  <span key={service} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={service} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {t(`projects.services.${service}`)}
                                   </span>
                                 ))}
@@ -2230,7 +2230,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.platforms.map((platform) => (
-                                  <span key={platform} className="text-sm bg-gray-50 border border-gray-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={platform} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {platform}
                                   </span>
                                 ))}
@@ -2241,7 +2241,7 @@ export default function DashboardPage() {
                           {/* Budget & Deadline */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {selectedProject.budget && (
-                              <div className="bg-gray-50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Euro className="w-4 h-4 text-[#9c984d]" />
                                   {t('projects.details.budget')}
@@ -2250,7 +2250,7 @@ export default function DashboardPage() {
                               </div>
                             )}
                             {selectedProject.deadline && (
-                              <div className="bg-gray-50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Clock className="w-4 h-4 text-[#ea4c89]" />
                                   {t('projects.details.deadline')}
@@ -2338,8 +2338,8 @@ export default function DashboardPage() {
 
                     {/* Quotes Sub-Section */}
                     {projectSubSection === 'quotes' && (
-                      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-gray-100">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-border">
                           <h3 className="flex items-center gap-2 font-semibold text-foreground">
                             <Receipt className="w-5 h-5 text-[#9c984d]" />
                             {showQuoteForm
@@ -2375,7 +2375,7 @@ export default function DashboardPage() {
                         </div>
 
                         {showQuoteForm && (
-                          <div className="p-4 border-b border-gray-100 bg-gray-50">
+                          <div className="p-4 border-b border-border bg-muted/50">
                             <QuoteForm
                               projectId={selectedProject.id}
                               project={selectedProject}
@@ -2404,11 +2404,11 @@ export default function DashboardPage() {
                               <p className="text-foreground/50">{t('quotes.noQuotes')}</p>
                             </div>
                           ) : (
-                            <div className="divide-y divide-gray-100">
+                            <div className="divide-y divide-border">
                               {quotes.map((quote) => {
                                 const quoteData = calculateQuoteData(quote)
                                 return (
-                                <div key={quote.id} className="p-4 hover:bg-gray-50 transition-colors">
+                                <div key={quote.id} className="p-4 hover:bg-primary/5 transition-colors">
                                   <div className="flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-3">
                                       <span className="font-medium text-foreground">
@@ -2477,14 +2477,14 @@ export default function DashboardPage() {
                     {projectSubSection === 'messages' && (
                       <>
                         {/* Header */}
-                        <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between flex-shrink-0">
+                        <div className="p-4 border-b border-border bg-white flex items-center justify-between flex-shrink-0">
                           <div>
                             <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
                             <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
                           </div>
                         </div>
                         {/* Message thread */}
-                        <div className="flex-1 bg-gray-50 overflow-hidden">
+                        <div className="flex-1 bg-muted/50 overflow-hidden">
                           <MessageThread
                             projectId={selectedProject.id}
                             currentUser={{
@@ -2524,7 +2524,7 @@ export default function DashboardPage() {
                         {showUploadModal && (
                           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                             <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
-                              <div className="p-4 border-b border-gray-200">
+                              <div className="p-4 border-b border-border">
                                 <h3 className="font-semibold text-foreground">{t('documents.uploadModal.title')}</h3>
                               </div>
                               <form
@@ -2581,7 +2581,7 @@ export default function DashboardPage() {
                                     id="doc-type"
                                     name="type"
                                     required
-                                    className="mt-1 w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+                                    className="mt-1 w-full bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
                                   >
                                     <option value="signed_quote">{t('documents.types.signed_quote')}</option>
                                     <option value="contract">{t('documents.types.contract')}</option>
@@ -2640,7 +2640,7 @@ export default function DashboardPage() {
                             <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                           </div>
                         ) : documents.length === 0 ? (
-                          <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <FolderOpen className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('documents.empty')}</p>
                             <p className="text-foreground/50 text-sm mt-1">{t('documents.emptyDescription')}</p>
@@ -2650,10 +2650,10 @@ export default function DashboardPage() {
                             {documents.map((doc) => (
                               <div
                                 key={doc.id}
-                                className="bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-colors"
+                                className="bg-white border border-border rounded-xl p-4 hover:border-primary/30 transition-colors"
                               >
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center text-xl flex-shrink-0">
+                                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-xl flex-shrink-0">
                                     {getFileIcon(doc.file_type)}
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -2665,7 +2665,7 @@ export default function DashboardPage() {
                                             v{doc.version}
                                           </span>
                                         </div>
-                                        <span className="inline-block text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded mt-1">
+                                        <span className="inline-block text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded mt-1">
                                           {t(`documents.types.${doc.type}`)}
                                         </span>
                                       </div>
@@ -2785,11 +2785,11 @@ export default function DashboardPage() {
                                     )}
                                     {/* Version history list */}
                                     {expandedVersionsId === doc.id && documentVersions.length > 0 && (
-                                      <div className="mt-3 pl-3 border-l-2 border-gray-200 space-y-2">
+                                      <div className="mt-3 pl-3 border-l-2 border-border space-y-2">
                                         {documentVersions.filter(v => v.id !== doc.id).map((version) => (
                                           <div key={version.id} className="flex items-center justify-between text-xs text-foreground/60">
                                             <div className="flex items-center gap-2">
-                                              <span className="bg-gray-100 px-1.5 py-0.5 rounded">v{version.version}</span>
+                                              <span className="bg-muted px-1.5 py-0.5 rounded">v{version.version}</span>
                                               <span>{version.file_name}</span>
                                               <span>({formatFileSize(version.file_size)})</span>
                                               <span>{new Date(version.created_at).toLocaleDateString()}</span>
@@ -2835,7 +2835,7 @@ export default function DashboardPage() {
                       <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+                        className="bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
                       >
                         <option value="all">{t('dashboard.allProjects.allStatuses')}</option>
                         <option value="pending">{t('projects.status.pending')}</option>
@@ -2854,7 +2854,7 @@ export default function DashboardPage() {
                       <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                     </div>
                   ) : allProjects.length === 0 ? (
-                    <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                    <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                       <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                       <p className="text-foreground/70 font-medium">{t('dashboard.engineer.noProjects')}</p>
                     </div>
@@ -2864,7 +2864,7 @@ export default function DashboardPage() {
                         <div
                           key={project.id}
                           onClick={() => setSelectedProject(project)}
-                          className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                          className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors cursor-pointer"
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 min-w-0">
@@ -2873,7 +2873,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2 mb-2">
                                 {project.project_types?.map((type) => (
-                                  <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                                  <span key={type} className="text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded">
                                     {t(`projects.types.${type}`)}
                                   </span>
                                 ))}
@@ -2975,7 +2975,7 @@ export default function DashboardPage() {
                       </button>
 
                       {/* Client Info Card */}
-                      <div className="bg-white border border-gray-200 rounded-xl p-6 mb-6">
+                      <div className="bg-white border border-border rounded-xl p-6 mb-6">
                         <div className="flex items-start gap-4">
                           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shrink-0 overflow-hidden">
                             {selectedClient.avatar_url ? (
@@ -3041,7 +3041,7 @@ export default function DashboardPage() {
                               setSelectedProject(project)
                               setActiveSection('allProjects')
                             }}
-                            className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                            className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors cursor-pointer"
                           >
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex-1 min-w-0">
@@ -3050,7 +3050,7 @@ export default function DashboardPage() {
                                 </h4>
                                 <div className="flex flex-wrap gap-2 mb-2">
                                   {project.project_types?.map((type) => (
-                                    <span key={type} className="text-xs bg-gray-100 text-foreground/70 px-2 py-0.5 rounded">
+                                    <span key={type} className="text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded">
                                       {t(`projects.types.${type}`)}
                                     </span>
                                   ))}
@@ -3075,7 +3075,7 @@ export default function DashboardPage() {
                     <p className="text-foreground/60 mb-6">{t('dashboard.clients.subtitle')}</p>
 
                     {clients.length === 0 ? (
-                      <div className="text-center py-12 bg-gray-50 border border-gray-200 rounded-xl">
+                      <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                         <Users className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                         <p className="text-foreground/70 font-medium">{t('dashboard.clients.noClients')}</p>
                       </div>
@@ -3085,7 +3085,7 @@ export default function DashboardPage() {
                           <div
                             key={client.user_id}
                             onClick={() => setSelectedClientId(client.user_id)}
-                            className="bg-white border border-gray-200 rounded-xl p-5 hover:border-gray-300 transition-colors cursor-pointer"
+                            className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors cursor-pointer"
                           >
                             <div className="flex items-center justify-between gap-4">
                               <div className="flex items-center gap-4">
