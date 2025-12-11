@@ -801,63 +801,22 @@ export default function DevisPage() {
         </div>
       </header>
 
-      {/* Progress indicator */}
-      <div className="container mx-auto px-4 pt-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-center gap-4 mb-8">
-            <div className={`flex items-center gap-2 ${mainStep >= 1 ? 'text-foreground' : 'text-foreground/40'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                mainStep >= 1 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-foreground/60'
-              }`}>
-                {mainStep > 1 ? <Check className="w-4 h-4" /> : '1'}
-              </div>
-              <span className="text-sm font-medium hidden sm:block">Votre projet</span>
-            </div>
-            <div className={`w-12 h-0.5 ${mainStep >= 2 ? 'bg-gray-900' : 'bg-gray-200'}`} />
-            <div className={`flex items-center gap-2 ${mainStep >= 2 ? 'text-foreground' : 'text-foreground/40'}`}>
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                mainStep >= 2 ? 'bg-gray-900 text-white' : 'bg-gray-200 text-foreground/60'
-              }`}>
-                {success ? <Check className="w-4 h-4" /> : '2'}
-              </div>
-              <span className="text-sm font-medium hidden sm:block">Connexion</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* Main Content */}
-      <main className="container mx-auto px-4 pb-12">
-        <div className="max-w-4xl mx-auto">
+      <main className="container mx-auto px-4 py-8 pb-12">
+        <div className="max-w-2xl mx-auto">
           {/* Step 1: Project Form Wizard */}
           {mainStep === 1 && (
             <>
-              {/* Wizard progress */}
+              {/* Wizard progress - simplified */}
               <div className="mb-8">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  {wizardSteps.map((step, index) => (
-                    <div key={step.id} className="flex items-center">
-                      <div
-                        className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
-                          index < wizardStep
-                            ? 'bg-gray-900 text-white'
-                            : index === wizardStep
-                            ? 'bg-gray-900 text-white'
-                            : 'bg-gray-200 text-gray-500'
-                        }`}
-                      >
-                        {index < wizardStep ? (
-                          <Check className="w-4 h-4" />
-                        ) : (
-                          <step.icon className="w-4 h-4" />
-                        )}
-                      </div>
-                      {index < wizardSteps.length - 1 && (
-                        <div className={`w-8 h-1 mx-1 rounded ${
-                          index < wizardStep ? 'bg-gray-900' : 'bg-gray-200'
-                        }`} />
-                      )}
-                    </div>
+                <div className="flex items-center gap-1 mb-2">
+                  {wizardSteps.map((_, index) => (
+                    <div
+                      key={index}
+                      className={`h-1 flex-1 rounded-full transition-colors ${
+                        index <= wizardStep ? 'bg-gray-900' : 'bg-gray-200'
+                      }`}
+                    />
                   ))}
                 </div>
                 <p className="text-center text-sm text-foreground/50">
