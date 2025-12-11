@@ -59,6 +59,6 @@ CREATE POLICY "Clients can view time entries for their projects" ON time_entries
   USING (
     EXISTS (
       SELECT 1 FROM projects p
-      WHERE p.id = project_id AND p.client_id = auth.uid()
+      WHERE p.id = project_id AND p.user_id = auth.uid()
     )
   );
