@@ -1881,7 +1881,7 @@ export default function DashboardPage() {
 
                       <div
                         className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
-                          projectsNeedingQuotes.length > 0 ? 'border-neutral-300 bg-neutral-50' : 'border-neutral-200'
+                          projectsNeedingQuotes.length > 0 ? 'border-[#ea4c89]/30 bg-[#ea4c89]/5' : 'border-neutral-200'
                         }`}
                         onClick={() => {
                           if (projectsNeedingQuotes.length > 0) {
@@ -1893,12 +1893,12 @@ export default function DashboardPage() {
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                            projectsNeedingQuotes.length > 0 ? 'bg-neutral-200' : 'bg-neutral-100'
+                            projectsNeedingQuotes.length > 0 ? 'bg-[#ea4c89]/10' : 'bg-neutral-100'
                           }`}>
-                            <Receipt className={`w-5 h-5 ${projectsNeedingQuotes.length > 0 ? 'text-neutral-900' : 'text-neutral-400'}`} />
+                            <Receipt className={`w-5 h-5 ${projectsNeedingQuotes.length > 0 ? 'text-[#ea4c89]' : 'text-neutral-400'}`} />
                           </div>
                           <div>
-                            <p className={`text-2xl font-bold ${projectsNeedingQuotes.length > 0 ? 'text-neutral-900' : 'text-foreground/30'}`}>
+                            <p className={`text-2xl font-bold ${projectsNeedingQuotes.length > 0 ? 'text-[#ea4c89]' : 'text-foreground/30'}`}>
                               {projectsNeedingQuotes.length}
                             </p>
                             <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.quotesToCreate')}</p>
@@ -1908,7 +1908,7 @@ export default function DashboardPage() {
 
                       <div
                         className={`bg-white border rounded-xl p-4 cursor-pointer transition-all hover:shadow-md ${
-                          draftQuotesWithProjects.length > 0 ? 'border-neutral-300 bg-neutral-50' : 'border-neutral-200'
+                          draftQuotesWithProjects.length > 0 ? 'border-slate-300 bg-slate-50' : 'border-neutral-200'
                         }`}
                         onClick={() => {
                           if (draftQuotesWithProjects.length > 0 && draftQuotesWithProjects[0].project) {
@@ -1920,12 +1920,12 @@ export default function DashboardPage() {
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                            draftQuotesWithProjects.length > 0 ? 'bg-neutral-200' : 'bg-neutral-100'
+                            draftQuotesWithProjects.length > 0 ? 'bg-slate-200' : 'bg-neutral-100'
                           }`}>
-                            <Send className={`w-5 h-5 ${draftQuotesWithProjects.length > 0 ? 'text-neutral-900' : 'text-neutral-400'}`} />
+                            <Send className={`w-5 h-5 ${draftQuotesWithProjects.length > 0 ? 'text-slate-600' : 'text-neutral-400'}`} />
                           </div>
                           <div>
-                            <p className={`text-2xl font-bold ${draftQuotesWithProjects.length > 0 ? 'text-neutral-900' : 'text-foreground/30'}`}>
+                            <p className={`text-2xl font-bold ${draftQuotesWithProjects.length > 0 ? 'text-slate-600' : 'text-foreground/30'}`}>
                               {draftQuotesWithProjects.length}
                             </p>
                             <p className="text-xs text-foreground/50">{t('dashboard.engineer.actions.quotesToSend')}</p>
