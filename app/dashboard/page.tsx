@@ -37,7 +37,7 @@ import { exportQuoteToExcel, calculateQuoteData } from "@/lib/quote-export"
 import { exportQuoteToPdf } from "@/lib/quote-pdf-export"
 import { updateProfileAvatarUrl } from "@/lib/supabase"
 import { MessageThread } from "@/components/message-thread"
-import { getAllUnreadCounts } from "@/lib/messages"
+import { getAllUnreadCounts, markMessagesAsRead } from "@/lib/messages"
 import { getAllAssignments, assignAction, unassignAction, getEngineers, ActionAssignment, ActionType } from "@/lib/assignments"
 
 // Format currency helper
@@ -192,6 +192,8 @@ export default function DashboardPage() {
   const [assignments, setAssignments] = useState<ActionAssignment[]>([])
   const [engineers, setEngineers] = useState<Partial<Profile>[]>([])
   const [assigningAction, setAssigningAction] = useState<string | null>(null)
+  // Mark as handled state
+  const [markingAsHandled, setMarkingAsHandled] = useState<string | null>(null)
 
   // Documents state
   const [documents, setDocuments] = useState<ProjectDocument[]>([])
@@ -301,6 +303,23 @@ export default function DashboardPage() {
     setEngineers(fetchedEngineers)
   }, [user])
 
+  // Handle marking messages as handled (read without replying)
+  const handleMarkAsHandled = useCallback(async (projectId: string) => {
+    if (!user) return
+    setMarkingAsHandled(projectId)
+    try {
+      await markMessagesAsRead(projectId, user.id)
+      // Reload unread counts
+      const { counts, oldestDates } = await getAllUnreadCounts(user.id)
+      setUnreadCounts(counts)
+      setUnreadOldestDates(oldestDates)
+    } catch (error) {
+      console.error('Error marking messages as handled:', error)
+    } finally {
+      setMarkingAsHandled(null)
+    }
+  }, [user])
+
   // Handle assigning an engineer to an action
   const handleAssignAction = useCallback(async (
     actionType: ActionType,
@@ -365,11 +384,11 @@ export default function DashboardPage() {
   useEffect(() => {
     if (selectedProject && isEngineer && activeSection === "allProjects") {
       loadQuotes(selectedProject.id)
-      setProjectSubSection('details') // Reset to details when selecting a new project
+      // Don't reset projectSubSection here - it's set by the action click handler
     } else if (selectedProject && !isEngineer && activeSection === "projects") {
-      // Client: load quotes for viewing and reset to details
+      // Client: load quotes for viewing
       loadQuotes(selectedProject.id)
-      setProjectSubSection('details')
+      // Don't reset projectSubSection here - it's set by the action click handler
     } else {
       setQuotes([])
       setShowQuoteForm(false)
@@ -1727,7 +1746,10 @@ export default function DashboardPage() {
                       {projects.map((project) => (
                         <div
                           key={project.id}
-                          onClick={() => setSelectedProject(project)}
+                          onClick={() => {
+                            setSelectedProject(project)
+                            setProjectSubSection('details')
+                          }}
                           className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
                         >
                           <div className="flex items-start justify-between gap-4">
@@ -1883,7 +1905,10 @@ export default function DashboardPage() {
                     {projects.map((project) => (
                       <button
                         key={project.id}
-                        onClick={() => setSelectedProject(project)}
+                        onClick={() => {
+                          setSelectedProject(project)
+                          setProjectSubSection('messages')
+                        }}
                         className={`w-full flex items-start gap-2 px-3 py-2.5 rounded-lg text-left text-sm transition-colors mb-1 ${
                           selectedProject?.id === project.id
                             ? 'bg-white border border-neutral-200 text-foreground'
@@ -1965,21 +1990,25 @@ export default function DashboardPage() {
 
               {/* Actions to take */}
               {(() => {
-                // Calculate projects with unread messages
-                const projectsWithUnread = allProjects.filter(p => unreadCounts[p.id] > 0)
+                // Exclude cancelled, lost, closed projects from all action calculations
+                const excludedStatuses = ['cancelled', 'lost', 'closed']
+                const activeProjects = allProjects.filter(p => !excludedStatuses.includes(p.status))
+
+                // Calculate projects with unread messages (only from active projects)
+                const projectsWithUnread = activeProjects.filter(p => unreadCounts[p.id] > 0)
                 const totalUnreadMessages = Object.values(unreadCounts).reduce((sum, count) => sum + count, 0)
 
-                // Calculate projects needing quotes (pending/in_review without any quote)
-                const projectsNeedingQuotes = allProjects.filter(p =>
+                // Calculate projects needing quotes (pending/in_review without any quote, only from active projects)
+                const projectsNeedingQuotes = activeProjects.filter(p =>
                   (p.status === 'pending' || p.status === 'in_review') &&
                   !allQuotes.some(q => q.project_id === p.id)
                 )
 
-                // Calculate draft quotes that need to be sent
+                // Calculate draft quotes that need to be sent (only for active projects)
                 const draftQuotes = allQuotes.filter(q => q.status === 'draft')
                 const draftQuotesWithProjects = draftQuotes.map(q => ({
                   quote: q,
-                  project: allProjects.find(p => p.id === q.project_id)
+                  project: activeProjects.find(p => p.id === q.project_id)
                 })).filter(item => item.project)
 
                 const hasActions = projectsWithUnread.length > 0 || projectsNeedingQuotes.length > 0 || draftQuotesWithProjects.length > 0
@@ -3145,7 +3174,10 @@ export default function DashboardPage() {
                       {allProjects.map((project) => (
                         <div
                           key={project.id}
-                          onClick={() => setSelectedProject(project)}
+                          onClick={() => {
+                            setSelectedProject(project)
+                            setProjectSubSection('details')
+                          }}
                           className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
                         >
                           <div className="flex items-start justify-between gap-4">
@@ -3322,6 +3354,7 @@ export default function DashboardPage() {
                             onClick={() => {
                               setSelectedProject(project)
                               setActiveSection('allProjects')
+                              setProjectSubSection('details')
                             }}
                             className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
                           >

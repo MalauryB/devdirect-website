@@ -361,7 +361,8 @@ export const translations = {
           colAssigned: "Assigné",
           unassigned: "Non assigné",
           clearFilters: "Effacer",
-          noResults: "Aucun résultat avec ces filtres"
+          noResults: "Aucun résultat avec ces filtres",
+          markHandled: "Traité"
         }
       },
       clients: {
@@ -1214,7 +1215,8 @@ export const translations = {
           colAssigned: "Assigned",
           unassigned: "Unassigned",
           clearFilters: "Clear",
-          noResults: "No results with these filters"
+          noResults: "No results with these filters",
+          markHandled: "Done"
         }
       },
       clients: {
