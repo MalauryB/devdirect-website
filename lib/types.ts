@@ -162,6 +162,12 @@ export interface Profile {
   siret: string
   avatar_url: string
   role: string
+  // Address fields
+  address?: string
+  postal_code?: string
+  city?: string
+  country?: string
+  vat_number?: string
   // Engineer-specific fields
   job_title: string
   bio: string
@@ -367,4 +373,34 @@ export interface ProjectMilestone {
   creator?: Profile
   assignees?: MilestoneAssignee[]
   subtasks?: MilestoneSubtask[]
+}
+
+// Project Contracts
+export type ContractType = 'service_agreement' | 'terms_of_sale' | 'amendment'
+export type ContractStatus = 'draft' | 'sent' | 'signed' | 'cancelled'
+
+export interface ProjectContract {
+  id: string
+  project_id: string
+  quote_id: string | null
+  type: ContractType
+  title: string
+  content: string
+  status: ContractStatus
+  sent_at: string | null
+  signed_at: string | null
+  valid_until: string | null
+  client_signature_url: string | null
+  provider_signature_url: string | null
+  pdf_url: string | null
+  created_by: string | null
+  updated_by: string | null
+  created_at: string
+  updated_at: string
+  version: number
+  parent_contract_id: string | null
+  // Relations (joined)
+  creator?: Profile
+  project?: Project
+  quote?: Quote
 }

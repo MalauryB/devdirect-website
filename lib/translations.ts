@@ -950,12 +950,55 @@ export const translations = {
         blocked: "Bloqué"
       }
     },
+    contracts: {
+      title: "Contrats",
+      subtitle: "Gérez les contrats du projet",
+      create: "Créer un contrat",
+      createFirst: "Créer le premier contrat",
+      edit: "Modifier le contrat",
+      noContracts: "Aucun contrat",
+      noContractsDescription: "Créez un contrat de prestation de services, des CGV ou un avenant pour ce projet.",
+      type: "Type de contrat",
+      types: {
+        serviceAgreement: "Contrat de prestation de services",
+        termsOfSale: "Conditions générales de vente",
+        amendment: "Avenant au contrat"
+      },
+      status: {
+        draft: "Brouillon",
+        sent: "Envoyé",
+        signed: "Signé",
+        cancelled: "Annulé"
+      },
+      linkedQuote: "Devis associé (optionnel)",
+      selectQuote: "Sélectionner un devis",
+      noQuote: "Aucun devis",
+      generateWithAI: "Générer avec l'IA",
+      generateHint: "Génère un brouillon basé sur les informations du projet",
+      titleLabel: "Titre du contrat",
+      titlePlaceholder: "Ex: Contrat de développement application mobile",
+      content: "Contenu du contrat",
+      contentPlaceholder: "Le contenu du contrat en HTML...",
+      contentHint: "Le contenu peut inclure des balises HTML pour le formatage (h2, h3, p, ul, li)",
+      validUntil: "Valide jusqu'au",
+      createdAt: "Créé le",
+      sentAt: "Envoyé le",
+      signedAt: "Signé le",
+      preview: "Aperçu",
+      exportPdf: "Exporter en PDF",
+      markAsSent: "Marquer comme envoyé",
+      markAsSigned: "Marquer comme signé",
+      markAsCancelled: "Annuler le contrat",
+      deleteConfirmTitle: "Supprimer le contrat ?",
+      deleteConfirmDescription: "Cette action est irréversible. Le contrat sera définitivement supprimé."
+    },
     common: {
       edit: "Modifier",
       delete: "Supprimer",
       save: "Enregistrer",
       cancel: "Annuler",
-      add: "Ajouter"
+      add: "Ajouter",
+      close: "Fermer"
     }
   },
   en: {
@@ -1909,12 +1952,55 @@ export const translations = {
         blocked: "Blocked"
       }
     },
+    contracts: {
+      title: "Contracts",
+      subtitle: "Manage project contracts",
+      create: "Create contract",
+      createFirst: "Create first contract",
+      edit: "Edit contract",
+      noContracts: "No contracts",
+      noContractsDescription: "Create a service agreement, terms of sale, or an amendment for this project.",
+      type: "Contract type",
+      types: {
+        serviceAgreement: "Service agreement",
+        termsOfSale: "Terms of sale",
+        amendment: "Contract amendment"
+      },
+      status: {
+        draft: "Draft",
+        sent: "Sent",
+        signed: "Signed",
+        cancelled: "Cancelled"
+      },
+      linkedQuote: "Linked quote (optional)",
+      selectQuote: "Select a quote",
+      noQuote: "No quote",
+      generateWithAI: "Generate with AI",
+      generateHint: "Generates a draft based on project information",
+      titleLabel: "Contract title",
+      titlePlaceholder: "E.g., Mobile app development contract",
+      content: "Contract content",
+      contentPlaceholder: "The contract content in HTML...",
+      contentHint: "Content can include HTML tags for formatting (h2, h3, p, ul, li)",
+      validUntil: "Valid until",
+      createdAt: "Created on",
+      sentAt: "Sent on",
+      signedAt: "Signed on",
+      preview: "Preview",
+      exportPdf: "Export to PDF",
+      markAsSent: "Mark as sent",
+      markAsSigned: "Mark as signed",
+      markAsCancelled: "Cancel contract",
+      deleteConfirmTitle: "Delete contract?",
+      deleteConfirmDescription: "This action cannot be undone. The contract will be permanently deleted."
+    },
     common: {
       edit: "Edit",
       delete: "Delete",
       save: "Save",
       cancel: "Cancel",
-      add: "Add"
+      add: "Add",
+      close: "Close"
     }
   }
 }

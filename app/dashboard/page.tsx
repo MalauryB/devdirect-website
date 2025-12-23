@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -41,6 +41,7 @@ import { getAllUnreadCounts, markMessagesAsRead } from "@/lib/messages"
 import { getAllAssignments, assignAction, unassignAction, getEngineers, ActionAssignment, ActionType } from "@/lib/assignments"
 import { TimeTracking } from "@/components/time-tracking"
 import { ProjectRoadmap } from "@/components/project-roadmap"
+import { ProjectContracts } from "@/components/project-contracts"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -187,7 +188,7 @@ export default function DashboardPage() {
   const [sendQuoteLoading, setSendQuoteLoading] = useState(false)
 
   // Project sub-section state (for cascading navigation)
-  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap'>('details')
+  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | 'contracts'>('details')
 
   // Engineer action tracking state
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({})
@@ -2578,6 +2579,18 @@ export default function DashboardPage() {
                           </span>
                         )}
                       </button>
+                      {/* Contracts */}
+                      <button
+                        onClick={() => setProjectSubSection('contracts')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'contracts'
+                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <FileSignature className="w-4 h-4" />
+                        {t('contracts.title')}
+                      </button>
                       {/* Documents */}
                       <button
                         onClick={() => setProjectSubSection('documents')}
@@ -3331,6 +3344,18 @@ export default function DashboardPage() {
                           }}
                           isEngineer={isEngineer}
                           engineers={engineers}
+                        />
+                      </div>
+                    )}
+
+                    {/* Contracts Section */}
+                    {projectSubSection === 'contracts' && (
+                      <div className="bg-white border border-neutral-200 rounded-xl p-6">
+                        <ProjectContracts
+                          project={selectedProject}
+                          quotes={quotes}
+                          client={selectedProject.profiles as Profile | undefined}
+                          isEngineer={isEngineer}
                         />
                       </div>
                     )}
