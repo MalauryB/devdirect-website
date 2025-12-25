@@ -1,14 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import puppeteer from 'puppeteer'
-import { generateContractPdfHtml } from '@/lib/contract-pdf-template'
-import { ProjectContract, Project, Profile } from '@/lib/types'
+import { generateContractPdfHtml, generateTimeAndMaterialsContractPdfHtml } from '@/lib/contract-pdf-template'
+import { ProjectContract, Project, Profile, Quote } from '@/lib/types'
 
 export async function POST(request: NextRequest) {
   try {
-    const { contract, project, client, provider } = await request.json() as {
+    const { contract, project, client, quote, provider } = await request.json() as {
       contract: ProjectContract
       project?: Project | null
       client?: Profile | null
+      quote?: Quote | null
       provider?: {
         name: string
         address: string
@@ -22,8 +23,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Contract data is required' }, { status: 400 })
     }
 
-    // Generate HTML from template
-    const html = generateContractPdfHtml({ contract, project, client, provider })
+    // Generate HTML from template based on contract type
+    const html = contract.type === 'time_and_materials'
+      ? generateTimeAndMaterialsContractPdfHtml({ contract, project, client, quote, provider })
+      : generateContractPdfHtml({ contract, project, client, quote, provider })
 
     // Launch Puppeteer and generate PDF
     const browser = await puppeteer.launch({

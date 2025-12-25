@@ -376,8 +376,18 @@ export interface ProjectMilestone {
 }
 
 // Project Contracts
-export type ContractType = 'service_agreement' | 'terms_of_sale' | 'amendment'
+export type ContractType = 'service_agreement' | 'time_and_materials' | 'terms_of_sale' | 'amendment'
 export type ContractStatus = 'draft' | 'sent' | 'signed' | 'cancelled'
+
+// Profile for time and materials contracts (multiple TJM rates)
+export interface ContractProfile {
+  id: string
+  contract_id: string
+  profile_name: string // e.g., "Développeur Senior", "Chef de projet", etc.
+  daily_rate: number // TJM en euros HT
+  estimated_days: number | null // Volume prévisionnel en jours (optional)
+  created_at: string
+}
 
 export interface ProjectContract {
   id: string
@@ -399,8 +409,17 @@ export interface ProjectContract {
   updated_at: string
   version: number
   parent_contract_id: string | null
+  // Contract settings (forfait)
+  delivery_delay: string | null // '1_month' | '2_months' | '3_months' | '6_months' | 'custom'
+  payment_schedule: string | null // '30-40-30' | '50-50' | '30-70' | '100'
+  // Contract settings (régie / time_and_materials)
+  work_location: string | null // 'client' | 'remote' | 'hybrid'
+  contract_duration: string | null // '3_months' | '6_months' | '12_months' | 'custom'
+  notice_period: string | null // '15_days' | '1_month'
+  billing_frequency: string | null // 'weekly' | 'monthly'
   // Relations (joined)
   creator?: Profile
   project?: Project
   quote?: Quote
+  profiles?: ContractProfile[] // Multiple profiles with different TJM rates
 }

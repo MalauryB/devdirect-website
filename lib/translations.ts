@@ -237,7 +237,12 @@ export const translations = {
       skills: "Compétences",
       skillsPlaceholder: "Ex: React, Node.js, TypeScript",
       addSkill: "Ajouter",
-      noSkills: "Aucune compétence ajoutée"
+      noSkills: "Aucune compétence ajoutée",
+      // Company settings for contracts
+      companySettings: "Paramètres entreprise (contrats)",
+      companySettingsDesc: "Ces informations apparaîtront sur les contrats générés",
+      fullAddress: "Adresse complète",
+      fullAddressPlaceholder: "123 rue Example, 75001 Paris"
     },
     dashboard: {
       loading: "Chargement...",
@@ -960,7 +965,8 @@ export const translations = {
       noContractsDescription: "Créez un contrat de prestation de services, des CGV ou un avenant pour ce projet.",
       type: "Type de contrat",
       types: {
-        serviceAgreement: "Contrat de prestation de services",
+        serviceAgreement: "Contrat de prestation au forfait",
+        timeAndMaterials: "Contrat de prestation en régie",
         termsOfSale: "Conditions générales de vente",
         amendment: "Avenant au contrat"
       },
@@ -970,16 +976,38 @@ export const translations = {
         signed: "Signé",
         cancelled: "Annulé"
       },
-      linkedQuote: "Devis associé (optionnel)",
+      linkedQuote: "Devis associé",
       selectQuote: "Sélectionner un devis",
       noQuote: "Aucun devis",
-      generateWithAI: "Générer avec l'IA",
-      generateHint: "Génère un brouillon basé sur les informations du projet",
+      noQuotesAvailable: "Aucun devis disponible. Créez d'abord un devis pour ce projet.",
+      quoteRequired: "Un devis est requis pour un contrat de prestation",
+      quoteSummary: "Récapitulatif du devis",
+      totalHT: "Total HT",
+      tva: "TVA (20%)",
+      totalTTC: "Total TTC",
+      totalDays: "Nombre de jours",
+      days: "jours",
       titleLabel: "Titre du contrat",
       titlePlaceholder: "Ex: Contrat de développement application mobile",
-      content: "Contenu du contrat",
-      contentPlaceholder: "Le contenu du contrat en HTML...",
-      contentHint: "Le contenu peut inclure des balises HTML pour le formatage (h2, h3, p, ul, li)",
+      deliveryDelay: "Délai de livraison",
+      delays: {
+        "1month": "1 mois",
+        "2months": "2 mois",
+        "3months": "3 mois",
+        "6months": "6 mois",
+        custom: "Personnalisé"
+      },
+      paymentSchedule: "Échéancier de paiement",
+      schedules: {
+        "30-40-30": "30% à la signature, 40% à la livraison, 30% à la recette",
+        "50-50": "50% à la signature, 50% à la livraison",
+        "30-70": "30% à la signature, 70% à la livraison",
+        "100": "100% à la livraison"
+      },
+      paymentScheduleHint: "Définit comment les paiements seront répartis",
+      specialConditions: "Conditions particulières (optionnel)",
+      specialConditionsPlaceholder: "Ajoutez des conditions spécifiques à ce contrat...",
+      specialConditionsHint: "Ces conditions seront ajoutées au contrat standard",
       validUntil: "Valide jusqu'au",
       createdAt: "Créé le",
       sentAt: "Envoyé le",
@@ -990,7 +1018,53 @@ export const translations = {
       markAsSigned: "Marquer comme signé",
       markAsCancelled: "Annuler le contrat",
       deleteConfirmTitle: "Supprimer le contrat ?",
-      deleteConfirmDescription: "Cette action est irréversible. Le contrat sera définitivement supprimé."
+      deleteConfirmDescription: "Cette action est irréversible. Le contrat sera définitivement supprimé.",
+      pdfInfo: "Le PDF sera généré automatiquement",
+      pdfInfoDetails: "Le contrat PDF complet (14 articles) sera généré avec les données du projet et du devis sélectionné.",
+      previewTitle: "Aperçu du contrat",
+      contractInfo: "Informations du contrat",
+      noSpecialConditions: "Aucune condition particulière",
+      generatingPdf: "Génération du PDF en cours...",
+      pdfError: "Erreur lors de la génération du PDF",
+      downloadPdf: "Télécharger",
+      // Time and materials specific
+      profiles: "Profils et tarification",
+      addProfile: "Ajouter un profil",
+      profileNumber: "Profil",
+      profileNamePlaceholder: "Ex: Dev Senior",
+      profileRequired: "Au moins un profil avec nom et TJM est requis",
+      estimatedTotal: "Estimation prévisionnelle",
+      estimatedTotalHint: "Montant indicatif basé sur le volume prévisionnel",
+      dailyRate: "Taux journalier (TJM)",
+      dailyRateHint: "Tarif journalier en euros HT",
+      estimatedDays: "Volume prévisionnel",
+      estimatedDaysHint: "Nombre de jours estimés (indicatif)",
+      workLocation: "Lieu d'exécution",
+      workLocations: {
+        client: "Dans les locaux du client",
+        remote: "À distance (télétravail)",
+        hybrid: "Mode hybride"
+      },
+      contractDuration: "Durée du contrat",
+      durations: {
+        "3months": "3 mois",
+        "6months": "6 mois",
+        "12months": "12 mois",
+        custom: "Personnalisé"
+      },
+      noticePeriod: "Préavis de résiliation",
+      noticePeriods: {
+        "15days": "15 jours",
+        "1month": "1 mois"
+      },
+      billingFrequency: "Fréquence de facturation",
+      billingFrequencies: {
+        weekly: "Hebdomadaire",
+        monthly: "Mensuelle"
+      },
+      obligationNote: "Obligation de moyens",
+      obligationNoteDesc: "Le prestataire s'engage à mettre à disposition ses compétences et son temps. La facturation est basée sur le temps effectivement passé.",
+      pdfInfoDetailsRegie: "Le contrat PDF en régie (14 articles) sera généré avec les modalités de facturation au temps passé."
     },
     common: {
       edit: "Modifier",
@@ -1239,7 +1313,12 @@ export const translations = {
       skills: "Skills",
       skillsPlaceholder: "E.g.: React, Node.js, TypeScript",
       addSkill: "Add",
-      noSkills: "No skills added"
+      noSkills: "No skills added",
+      // Company settings for contracts
+      companySettings: "Company settings (contracts)",
+      companySettingsDesc: "This information will appear on generated contracts",
+      fullAddress: "Full address",
+      fullAddressPlaceholder: "123 Example Street, 10001 New York"
     },
     dashboard: {
       loading: "Loading...",
@@ -1962,7 +2041,8 @@ export const translations = {
       noContractsDescription: "Create a service agreement, terms of sale, or an amendment for this project.",
       type: "Contract type",
       types: {
-        serviceAgreement: "Service agreement",
+        serviceAgreement: "Fixed-price service agreement",
+        timeAndMaterials: "Time and materials agreement",
         termsOfSale: "Terms of sale",
         amendment: "Contract amendment"
       },
@@ -1972,16 +2052,38 @@ export const translations = {
         signed: "Signed",
         cancelled: "Cancelled"
       },
-      linkedQuote: "Linked quote (optional)",
+      linkedQuote: "Linked quote",
       selectQuote: "Select a quote",
       noQuote: "No quote",
-      generateWithAI: "Generate with AI",
-      generateHint: "Generates a draft based on project information",
+      noQuotesAvailable: "No quotes available. Create a quote for this project first.",
+      quoteRequired: "A quote is required for a service agreement",
+      quoteSummary: "Quote summary",
+      totalHT: "Total excl. VAT",
+      tva: "VAT (20%)",
+      totalTTC: "Total incl. VAT",
+      totalDays: "Number of days",
+      days: "days",
       titleLabel: "Contract title",
       titlePlaceholder: "E.g., Mobile app development contract",
-      content: "Contract content",
-      contentPlaceholder: "The contract content in HTML...",
-      contentHint: "Content can include HTML tags for formatting (h2, h3, p, ul, li)",
+      deliveryDelay: "Delivery deadline",
+      delays: {
+        "1month": "1 month",
+        "2months": "2 months",
+        "3months": "3 months",
+        "6months": "6 months",
+        custom: "Custom"
+      },
+      paymentSchedule: "Payment schedule",
+      schedules: {
+        "30-40-30": "30% at signature, 40% at delivery, 30% at acceptance",
+        "50-50": "50% at signature, 50% at delivery",
+        "30-70": "30% at signature, 70% at delivery",
+        "100": "100% at delivery"
+      },
+      paymentScheduleHint: "Defines how payments will be distributed",
+      specialConditions: "Special conditions (optional)",
+      specialConditionsPlaceholder: "Add specific conditions for this contract...",
+      specialConditionsHint: "These conditions will be added to the standard contract",
       validUntil: "Valid until",
       createdAt: "Created on",
       sentAt: "Sent on",
@@ -1992,7 +2094,53 @@ export const translations = {
       markAsSigned: "Mark as signed",
       markAsCancelled: "Cancel contract",
       deleteConfirmTitle: "Delete contract?",
-      deleteConfirmDescription: "This action cannot be undone. The contract will be permanently deleted."
+      deleteConfirmDescription: "This action cannot be undone. The contract will be permanently deleted.",
+      pdfInfo: "PDF will be generated automatically",
+      pdfInfoDetails: "The complete PDF contract (14 articles) will be generated with the project and selected quote data.",
+      previewTitle: "Contract preview",
+      contractInfo: "Contract information",
+      noSpecialConditions: "No special conditions",
+      generatingPdf: "Generating PDF...",
+      pdfError: "Error generating PDF",
+      downloadPdf: "Download",
+      // Time and materials specific
+      profiles: "Profiles and pricing",
+      addProfile: "Add profile",
+      profileNumber: "Profile",
+      profileNamePlaceholder: "E.g., Senior Dev",
+      profileRequired: "At least one profile with name and daily rate is required",
+      estimatedTotal: "Estimated total",
+      estimatedTotalHint: "Indicative amount based on estimated volume",
+      dailyRate: "Daily rate",
+      dailyRateHint: "Daily rate in EUR excl. VAT",
+      estimatedDays: "Estimated volume",
+      estimatedDaysHint: "Estimated number of days (indicative)",
+      workLocation: "Work location",
+      workLocations: {
+        client: "On client premises",
+        remote: "Remote (telecommuting)",
+        hybrid: "Hybrid mode"
+      },
+      contractDuration: "Contract duration",
+      durations: {
+        "3months": "3 months",
+        "6months": "6 months",
+        "12months": "12 months",
+        custom: "Custom"
+      },
+      noticePeriod: "Notice period",
+      noticePeriods: {
+        "15days": "15 days",
+        "1month": "1 month"
+      },
+      billingFrequency: "Billing frequency",
+      billingFrequencies: {
+        weekly: "Weekly",
+        monthly: "Monthly"
+      },
+      obligationNote: "Best efforts obligation",
+      obligationNoteDesc: "The provider commits to providing their skills and time. Billing is based on actual time spent.",
+      pdfInfoDetailsRegie: "The time and materials PDF contract (14 articles) will be generated with hourly billing terms."
     },
     common: {
       edit: "Edit",
