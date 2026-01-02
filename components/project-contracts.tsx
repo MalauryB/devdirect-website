@@ -67,7 +67,8 @@ import {
   AlertCircle,
   Info,
   X,
-  Users
+  Users,
+  Undo2
 } from "lucide-react"
 
 interface ProjectContractsProps {
@@ -563,6 +564,15 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
                               <DropdownMenuItem onClick={() => handleStatusChange(contract, 'cancelled')}>
                                 <Trash2 className="w-3 h-3 mr-2" />
                                 {t('contracts.markAsCancelled')}
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                            </>
+                          )}
+                          {contract.status === 'signed' && (
+                            <>
+                              <DropdownMenuItem onClick={() => handleStatusChange(contract, 'sent')}>
+                                <Undo2 className="w-3 h-3 mr-2" />
+                                {t('contracts.unsign')}
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
                             </>

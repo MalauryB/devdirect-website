@@ -42,6 +42,8 @@ import { getAllAssignments, assignAction, unassignAction, getEngineers, ActionAs
 import { TimeTracking } from "@/components/time-tracking"
 import { ProjectRoadmap } from "@/components/project-roadmap"
 import { ProjectContracts } from "@/components/project-contracts"
+import { ProjectFinances } from "@/components/project-finances"
+import { GlobalFinances } from "@/components/global-finances"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -154,6 +156,14 @@ export default function DashboardPage() {
   const [skills, setSkills] = useState<string[]>([])
   const [newSkill, setNewSkill] = useState("")
 
+  // Company settings for contracts (engineers only)
+  const [companySettingsName, setCompanySettingsName] = useState("Memory Agency")
+  const [companySettingsAddress, setCompanySettingsAddress] = useState("")
+  const [companySettingsSiret, setCompanySettingsSiret] = useState("")
+  const [companySettingsEmail, setCompanySettingsEmail] = useState("contact@memory-agency.com")
+  const [companySettingsPhone, setCompanySettingsPhone] = useState("")
+  const [companySettingsVat, setCompanySettingsVat] = useState("")
+
   // Projects state
   const [projects, setProjects] = useState<Project[]>([])
   const [projectsLoading, setProjectsLoading] = useState(false)
@@ -188,7 +198,7 @@ export default function DashboardPage() {
   const [sendQuoteLoading, setSendQuoteLoading] = useState(false)
 
   // Project sub-section state (for cascading navigation)
-  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | 'contracts'>('details')
+  const [projectSubSection, setProjectSubSection] = useState<'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | 'contracts' | 'finances'>('details')
 
   // Engineer action tracking state
   const [unreadCounts, setUnreadCounts] = useState<Record<string, number>>({})
@@ -225,6 +235,26 @@ export default function DashboardPage() {
   useEffect(() => {
     setMounted(true)
   }, [])
+
+  // Load company settings from localStorage (engineers only)
+  useEffect(() => {
+    if (isEngineer && typeof window !== 'undefined') {
+      const savedSettings = localStorage.getItem('memory_company_settings')
+      if (savedSettings) {
+        try {
+          const settings = JSON.parse(savedSettings)
+          if (settings.name) setCompanySettingsName(settings.name)
+          if (settings.address) setCompanySettingsAddress(settings.address)
+          if (settings.siret) setCompanySettingsSiret(settings.siret)
+          if (settings.email) setCompanySettingsEmail(settings.email)
+          if (settings.phone) setCompanySettingsPhone(settings.phone)
+          if (settings.vat) setCompanySettingsVat(settings.vat)
+        } catch (e) {
+          console.error('Failed to parse company settings:', e)
+        }
+      }
+    }
+  }, [isEngineer])
 
   // Read URL params on mount and set state
   useEffect(() => {
@@ -557,6 +587,11 @@ export default function DashboardPage() {
       label: t('dashboard.menu.clients'),
     },
     {
+      id: "finances",
+      icon: Euro,
+      label: t('finances.globalTitle'),
+    },
+    {
       id: "profile",
       icon: User,
       label: t('dashboard.menu.profile'),
@@ -613,6 +648,18 @@ export default function DashboardPage() {
     if (updateError) {
       setProfileError(t('profile.error'))
     } else {
+      // Save company settings to localStorage (engineers only)
+      if (isEngineer) {
+        const companySettings = {
+          name: companySettingsName,
+          address: companySettingsAddress,
+          siret: companySettingsSiret,
+          email: companySettingsEmail,
+          phone: companySettingsPhone,
+          vat: companySettingsVat
+        }
+        localStorage.setItem('memory_company_settings', JSON.stringify(companySettings))
+      }
       setProfileSuccess(true)
       setTimeout(() => setProfileSuccess(false), 3000)
     }
@@ -1139,6 +1186,94 @@ export default function DashboardPage() {
                           ))}
                         </div>
                       )}
+                    </div>
+
+                    {/* Company Settings for Contracts */}
+                    <div className="space-y-4 pt-6 border-t border-neutral-200">
+                      <div>
+                        <h3 className="text-sm font-medium text-foreground">{t('profile.companySettings')}</h3>
+                        <p className="text-xs text-foreground/50 mt-1">{t('profile.companySettingsDesc')}</p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label htmlFor="companySettingsName" className="text-sm text-foreground/70">{t('profile.companyName')}</Label>
+                        <Input
+                          id="companySettingsName"
+                          type="text"
+                          placeholder="Memory Agency"
+                          value={companySettingsName}
+                          onChange={(e) => setCompanySettingsName(e.target.value)}
+                          disabled={saving}
+                          className="border-neutral-200 focus:border-gray-400"
+                        />
+                      </div>
+
+                      <div className="space-y-1">
+                        <Label htmlFor="companySettingsAddress" className="text-sm text-foreground/70">{t('profile.fullAddress')}</Label>
+                        <Input
+                          id="companySettingsAddress"
+                          type="text"
+                          placeholder={t('profile.fullAddressPlaceholder')}
+                          value={companySettingsAddress}
+                          onChange={(e) => setCompanySettingsAddress(e.target.value)}
+                          disabled={saving}
+                          className="border-neutral-200 focus:border-gray-400"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <Label htmlFor="companySettingsSiret" className="text-sm text-foreground/70">{t('profile.siret')}</Label>
+                          <Input
+                            id="companySettingsSiret"
+                            type="text"
+                            placeholder="XXX XXX XXX XXXXX"
+                            value={companySettingsSiret}
+                            onChange={(e) => setCompanySettingsSiret(e.target.value)}
+                            disabled={saving}
+                            className="border-neutral-200 focus:border-gray-400"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor="companySettingsVat" className="text-sm text-foreground/70">{t('profile.vatNumber')}</Label>
+                          <Input
+                            id="companySettingsVat"
+                            type="text"
+                            placeholder="FR XX XXX XXX XXX"
+                            value={companySettingsVat}
+                            onChange={(e) => setCompanySettingsVat(e.target.value)}
+                            disabled={saving}
+                            className="border-neutral-200 focus:border-gray-400"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                          <Label htmlFor="companySettingsEmail" className="text-sm text-foreground/70">{t('profile.email')}</Label>
+                          <Input
+                            id="companySettingsEmail"
+                            type="email"
+                            placeholder="contact@memory-agency.com"
+                            value={companySettingsEmail}
+                            onChange={(e) => setCompanySettingsEmail(e.target.value)}
+                            disabled={saving}
+                            className="border-neutral-200 focus:border-gray-400"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <Label htmlFor="companySettingsPhone" className="text-sm text-foreground/70">{t('profile.phone')}</Label>
+                          <Input
+                            id="companySettingsPhone"
+                            type="tel"
+                            placeholder="+33 1 23 45 67 89"
+                            value={companySettingsPhone}
+                            onChange={(e) => setCompanySettingsPhone(e.target.value)}
+                            disabled={saving}
+                            className="border-neutral-200 focus:border-gray-400"
+                          />
+                        </div>
+                      </div>
                     </div>
                   </>
                 ) : (
@@ -2555,6 +2690,18 @@ export default function DashboardPage() {
                         <Clock className="w-4 h-4" />
                         {t('timeTracking.title')}
                       </button>
+                      {/* Finances */}
+                      <button
+                        onClick={() => setProjectSubSection('finances')}
+                        className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
+                          projectSubSection === 'finances'
+                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            : 'text-foreground/70 hover:bg-white hover:text-foreground'
+                        }`}
+                      >
+                        <Euro className="w-4 h-4" />
+                        {t('finances.title')}
+                      </button>
                       {/* Quotes */}
                       <button
                         onClick={() => {
@@ -3356,6 +3503,29 @@ export default function DashboardPage() {
                           quotes={quotes}
                           client={selectedProject.profiles as Profile | undefined}
                           isEngineer={isEngineer}
+                          provider={{
+                            name: companySettingsName,
+                            address: companySettingsAddress,
+                            siret: companySettingsSiret,
+                            email: companySettingsEmail,
+                            phone: companySettingsPhone
+                          }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Finances Section */}
+                    {projectSubSection === 'finances' && (
+                      <div className="bg-white border border-neutral-200 rounded-xl p-6">
+                        <div className="flex items-center gap-2 mb-4">
+                          <Euro className="w-5 h-5 text-[#ea4c89]" />
+                          <h2 className="text-lg font-semibold text-foreground">{t('finances.title')}</h2>
+                        </div>
+                        <p className="text-sm text-foreground/50 mb-6">{t('finances.subtitle')}</p>
+                        <ProjectFinances
+                          project={selectedProject}
+                          isEngineer={isEngineer}
+                          onNavigateToContracts={() => setProjectSubSection('contracts')}
                         />
                       </div>
                     )}
@@ -3874,6 +4044,28 @@ export default function DashboardPage() {
                   </>
                 )
               })()}
+            </div>
+          )}
+
+          {/* Engineer Global Finances Section */}
+          {activeSection === "finances" && isEngineer && (
+            <div className="w-full">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-foreground">{t('finances.globalTitle')}</h2>
+                  <p className="text-foreground/60 text-sm">{t('finances.globalSubtitle')}</p>
+                </div>
+              </div>
+              <GlobalFinances
+                onSelectProject={(projectId) => {
+                  const project = allProjects.find(p => p.id === projectId)
+                  if (project) {
+                    setSelectedProject(project)
+                    setActiveSection('allProjects')
+                    setProjectSubSection('finances')
+                  }
+                }}
+              />
             </div>
           )}
         </main>
