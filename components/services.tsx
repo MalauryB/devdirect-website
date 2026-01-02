@@ -1,102 +1,138 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { Globe, Smartphone, Cpu, Palette, ArrowRight, PenTool } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { getPath } from "@/lib/utils-path"
-import { getImagePath } from "@/lib/assets"
 
 export function Services() {
   const { t } = useLanguage()
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
   const services = [
     {
-      icon: Globe,
-      title: t('services.webDev.title'),
-      description: t('services.webDev.description'),
-      image: "/webdev.jpg",
-    },
-    {
-      icon: Smartphone,
-      title: t('services.mobileDev.title'),
-      description: t('services.mobileDev.description'),
-      image: "/mobile.jpg",
-    },
-    {
-      icon: Cpu,
-      title: t('services.iot.title'),
-      description: t('services.iot.description'),
-      image: "/iot.jpg",
-    },
-    {
-      icon: Palette,
-      title: t('services.ai.title'),
-      description: t('services.ai.description'),
-      image: "/IA.jpg",
-    },
-    {
-      icon: PenTool,
+      number: "01",
       title: t('services.design.title'),
+      tags: ["Saas Platform", "Web Platform", "Mobile App"],
       description: t('services.design.description'),
-      image: "/maquettes.jpg",
+      slug: "design-maquettes",
+      color: "bg-[#f5e6e0]",
+    },
+    {
+      number: "02",
+      title: t('services.webDev.title'),
+      tags: ["React", "Next.js", "Node.js", "TypeScript"],
+      description: t('services.webDev.description'),
+      slug: "developpement-web",
+      color: "bg-[#e0f0e6]",
+    },
+    {
+      number: "03",
+      title: t('services.mobileDev.title'),
+      tags: ["React Native", "iOS", "Android", "Flutter"],
+      description: t('services.mobileDev.description'),
+      slug: "developpement-mobile",
+      color: "bg-[#e6e0f5]",
+    },
+    {
+      number: "04",
+      title: t('services.ai.title'),
+      tags: ["Machine Learning", "LLM", "Computer Vision", "NLP"],
+      description: t('services.ai.description'),
+      slug: "intelligence-artificielle",
+      color: "bg-[#f5f0e0]",
+    },
+    {
+      number: "05",
+      title: t('services.iot.title'),
+      tags: ["Embedded Systems", "Arduino", "Raspberry Pi", "Sensors"],
+      description: t('services.iot.description'),
+      slug: "iot-embarque",
+      color: "bg-[#e0e6f5]",
     },
   ]
-  return (
-    <section id="services" className="py-20 px-4 relative overflow-hidden bg-[#141414] rounded-3xl">
-      <div className="container mx-auto relative z-10">
-        <div className="max-w-4xl mx-auto">
-          <div className="mb-16">
-            <h2 className="text-2xl md:text-3xl font-semibold mb-4 text-white">
-              {t('services.title')}
-            </h2>
-            <p className="text-xl text-white/70 max-w-2xl">
-              {t('services.webDev.description')}
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <Card
-              key={index}
-              className="bg-white border-0 rounded-2xl shadow-lg group hover:shadow-xl transition-all duration-300 overflow-hidden p-0"
-            >
-              <div className="aspect-video bg-gray-100 rounded-t-2xl overflow-hidden">
-                <img
-                  src={getImagePath(service.image || "/placeholder.svg")}
-                  alt={service.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                />
-              </div>
-              <CardHeader className="pb-4 pt-0">
-                <CardTitle className="text-lg font-semibold text-[#38392c] mb-2">{service.title}</CardTitle>
-                <CardDescription className="text-[#7f7074] leading-relaxed text-sm">
-                  {service.description}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pt-0 pb-6">
-                <Button
-                  variant="ghost"
-                  className="text-[#38392c] hover:text-[#ba9fdf] hover:bg-[#ba9fdf]/10 p-0 h-auto font-medium group/btn"
-                  onClick={() => {
-                    const slugs: Record<number, string> = {
-                      0: "developpement-web",
-                      1: "developpement-mobile",
-                      2: "iot-embarque",
-                      3: "intelligence-artificielle",
-                      4: "design-maquettes"
-                    }
-                    window.location.href = getPath(`/services/${slugs[index]}`)
-                  }}
-                >
-                  {t('hero.moreDetails')}
-                  <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
-          </div>
+  return (
+    <section id="services" className="py-20 relative overflow-hidden bg-white">
+      {/* Title with container */}
+      <div className="container mx-auto px-4 mb-12">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-2xl md:text-3xl font-semibold text-[#141414]">
+            {t('services.title')}
+          </h2>
         </div>
+      </div>
+
+      {/* Full-width Accordion Services */}
+      <div className="border-t border-gray-200">
+        {services.map((service, index) => {
+          const isHovered = hoveredIndex === index
+
+          return (
+            <div
+              key={index}
+              className={`
+                border-b border-gray-200 transition-all duration-500 ease-out
+                ${isHovered ? service.color : 'bg-transparent'}
+              `}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              <div className="container mx-auto px-4">
+                <div className="max-w-4xl mx-auto py-8">
+                  <div className="flex items-start gap-8 md:gap-16">
+                    {/* Number */}
+                    <span className="text-sm text-gray-400 font-medium pt-2 min-w-[32px]">
+                      {service.number}
+                    </span>
+
+                    {/* Content */}
+                    <div className="flex-1">
+                      {/* Title */}
+                      <h3 className="text-2xl md:text-3xl font-medium text-[#141414] mb-3">
+                        {service.title}
+                      </h3>
+
+                      {/* Tags */}
+                      <div className="flex flex-wrap items-center gap-2 text-sm text-gray-500">
+                        {service.tags.map((tag, tagIndex) => (
+                          <span key={tagIndex} className="flex items-center gap-2">
+                            {tagIndex > 0 && <span className="text-gray-300">•</span>}
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Expanded Content */}
+                      <div
+                        className={`
+                          overflow-hidden transition-all duration-500 ease-out
+                          ${isHovered ? 'max-h-48 opacity-100 mt-6' : 'max-h-0 opacity-0 mt-0'}
+                        `}
+                      >
+                        <p className="text-gray-600 leading-relaxed max-w-2xl mb-6">
+                          {service.description}
+                        </p>
+
+                        <Button
+                          variant="outline"
+                          className="rounded-full border-[#141414] text-[#141414] hover:bg-[#141414] hover:text-white transition-colors"
+                          onClick={() => {
+                            window.location.href = getPath(`/services/${service.slug}`)
+                          }}
+                        >
+                          {t('hero.moreDetails')}
+                          <ArrowRight className="ml-2 w-4 h-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </section>
   )
