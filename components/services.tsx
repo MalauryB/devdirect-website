@@ -17,7 +17,6 @@ export function Services() {
       tags: ["Saas Platform", "Web Platform", "Mobile App"],
       description: t('services.design.description'),
       slug: "design-maquettes",
-      color: "bg-[#f5e6e0]",
     },
     {
       number: "02",
@@ -25,7 +24,6 @@ export function Services() {
       tags: ["React", "Next.js", "Node.js", "TypeScript"],
       description: t('services.webDev.description'),
       slug: "developpement-web",
-      color: "bg-[#e0f0e6]",
     },
     {
       number: "03",
@@ -33,7 +31,6 @@ export function Services() {
       tags: ["React Native", "iOS", "Android", "Flutter"],
       description: t('services.mobileDev.description'),
       slug: "developpement-mobile",
-      color: "bg-[#e6e0f5]",
     },
     {
       number: "04",
@@ -41,7 +38,6 @@ export function Services() {
       tags: ["Machine Learning", "LLM", "Computer Vision", "NLP"],
       description: t('services.ai.description'),
       slug: "intelligence-artificielle",
-      color: "bg-[#f5f0e0]",
     },
     {
       number: "05",
@@ -49,7 +45,6 @@ export function Services() {
       tags: ["Embedded Systems", "Arduino", "Raspberry Pi", "Sensors"],
       description: t('services.iot.description'),
       slug: "iot-embarque",
-      color: "bg-[#e0e6f5]",
     },
   ]
 
@@ -74,7 +69,7 @@ export function Services() {
               key={index}
               className={`
                 border-b border-gray-200 transition-all duration-500 ease-out
-                ${isHovered ? service.color : 'bg-transparent'}
+                ${isHovered ? 'bg-[#ea4c89]/10' : 'bg-transparent'}
               `}
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}

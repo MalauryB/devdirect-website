@@ -56,7 +56,7 @@ export function Process() {
                   </div>
                   <div
                     className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                    style={{ backgroundColor: "#7d7490" }}
+                    style={{ backgroundColor: "#ea4c89" }}
                   >
                     {index + 1}
                   </div>

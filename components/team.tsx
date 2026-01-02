@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Users, Award, Clock } from "lucide-react"
+import { Users, Award } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { getImagePath } from "@/lib/assets"
 
@@ -15,17 +15,12 @@ export function Team() {
     {
       icon: Users,
       value: "7",
-      label: t('team.title'),
+      label: "Experts",
     },
     {
       icon: Award,
       value: "38+",
       label: "Années d'expérience",
-    },
-    {
-      icon: Clock,
-      value: "100%",
-      label: "Projets livrés",
     },
   ]
   return (
@@ -41,7 +36,7 @@ export function Team() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 max-w-md mx-auto md:max-w-none">
           {stats.map((stat, index) => (
             <Card key={index} className="bg-white border border-primary/20 text-center group">
               <CardContent className="pt-8 pb-6">
@@ -58,7 +53,6 @@ export function Team() {
               <CardHeader className="text-center">
                 <CardTitle className="text-lg font-semibold leading-tight">{member.name}</CardTitle>
                 <div className="text-sm text-muted-foreground mb-1">{member.role}</div>
-                <div className="text-primary font-semibold text-sm">{member.description}</div>
               </CardHeader>
               <CardContent>
                 <div className="text-sm text-muted-foreground text-center">

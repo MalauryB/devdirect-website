@@ -9,7 +9,7 @@ export function Hero() {
   const { t } = useLanguage()
 
   return (
-    <section className="pt-8 pb-20 px-4 relative overflow-hidden bg-white">
+    <section className="pt-20 pb-20 px-4 relative overflow-hidden bg-white">
       <div className="container mx-auto relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-3xl md:text-5xl font-semibold mb-6 text-balance leading-tight">

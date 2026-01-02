@@ -20,8 +20,8 @@
   --card-foreground: 64 16% 20%;
   --popover: 48 50% 97%;
   --popover-foreground: 64 16% 20%;
-  /* Updated primary color to user's preferred lavender */
-  --primary: 270 52% 75%; /* User's preferred lavender as primary #ba9fdf */
+  /* Updated primary color to pink */
+  --primary: 340 81% 61%; /* Pink as primary #ea4c89 */
   --primary-foreground: 48 50% 97%;
   --secondary: 189 40% 58%; /* Moved turquoise to secondary #6cb1bb */
   --secondary-foreground: 64 16% 20%;
@@ -38,7 +38,7 @@
   /* Updated ring color to match action (pink) */
   --ring: 332 75% 61%;
   /* Updated chart colors to include new primary */
-  --chart-1: 270 52% 75%;
+  --chart-1: 340 81% 61%;
   --chart-2: 189 40% 58%;
   --chart-3: 57 35% 46%;
   --chart-4: 340 7% 47%;
@@ -47,13 +47,13 @@
   --sidebar: 48 50% 97%;
   --sidebar-foreground: 64 16% 20%;
   /* Updated sidebar primary to match new primary */
-  --sidebar-primary: 270 52% 75%;
+  --sidebar-primary: 340 81% 61%;
   --sidebar-primary-foreground: 48 50% 97%;
   --sidebar-accent: 189 40% 58%;
   --sidebar-accent-foreground: 64 16% 20%;
   --sidebar-border: 233 10% 82%;
   /* Updated sidebar ring to match new primary */
-  --sidebar-ring: 270 52% 75%;
+  --sidebar-ring: 340 81% 61%;
   --font-inter: "Inter", sans-serif; /* Added font configuration */
 }
 
@@ -66,7 +66,7 @@
   --popover: 64 16% 20%;
   --popover-foreground: 48 50% 97%;
   /* Updated dark mode primary color */
-  --primary: 270 52% 75%;
+  --primary: 340 81% 61%;
   --primary-foreground: 64 16% 20%;
   --secondary: 189 40% 58%;
   --secondary-foreground: 64 16% 20%;
@@ -83,7 +83,7 @@
   /* Updated dark mode ring color to match action (pink) */
   --ring: 332 75% 61%;
   /* Updated dark mode chart colors */
-  --chart-1: 270 52% 75%;
+  --chart-1: 340 81% 61%;
   --chart-2: 189 40% 58%;
   --chart-3: 57 35% 46%;
   --chart-4: 0 1% 61%;
@@ -91,13 +91,13 @@
   --sidebar: 64 16% 20%;
   --sidebar-foreground: 48 50% 97%;
   /* Updated dark mode sidebar primary */
-  --sidebar-primary: 270 52% 75%;
+  --sidebar-primary: 340 81% 61%;
   --sidebar-primary-foreground: 48 50% 97%;
   --sidebar-accent: 189 40% 58%;
   --sidebar-accent-foreground: 64 16% 20%;
   --sidebar-border: 340 7% 47%;
   /* Updated dark mode sidebar ring */
-  --sidebar-ring: 270 52% 75%;
+  --sidebar-ring: 340 81% 61%;
 }
 
 

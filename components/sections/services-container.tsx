@@ -15,7 +15,7 @@ export function ServicesContainer() {
             title="Nos"
             highlight="Services"
             description="De l'idée à la réalisation, nous maîtrisons toutes les technologies pour donner vie à vos projets digitaux."
-            className="text-white [&_p]:text-white/70 [&_span]:text-[#ba9fdf]"
+            className="text-white [&_p]:text-white/70 [&_span]:text-[#ea4c89]"
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
