@@ -1,6 +1,5 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { LanguageProvider } from "@/contexts/language-context"
@@ -9,12 +8,6 @@ import { AuthProvider } from "@/contexts/auth-context"
 import { ContactDialog } from "@/components/contact-dialog"
 import { AuthModal } from "@/components/auth-modal"
 import "./globals.css"
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-inter",
-})
 
 export const metadata: Metadata = {
   title: "Memo'ry - Experts en informatique, mathématiques et IA",
@@ -32,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className="font-sans">
         <LanguageProvider>
           <AuthProvider>
             <ContactProvider>

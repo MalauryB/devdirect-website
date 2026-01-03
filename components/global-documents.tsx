@@ -102,14 +102,28 @@ export function GlobalDocuments() {
 
   async function loadDocuments() {
     setLoading(true)
-    const { documents: docs } = await getGlobalDocuments()
-    setDocuments(docs)
+    try {
+      const { documents: docs, error } = await getGlobalDocuments()
+      if (error) {
+        console.error('Error loading global documents:', error)
+      }
+      setDocuments(docs)
+    } catch (err) {
+      console.error('Exception loading global documents:', err)
+    }
     setLoading(false)
   }
 
   async function loadCategories() {
-    const { categories: cats } = await getGlobalDocumentCategories()
-    setCategories(cats)
+    try {
+      const { categories: cats, error } = await getGlobalDocumentCategories()
+      if (error) {
+        console.error('Error loading categories:', error)
+      }
+      setCategories(cats)
+    } catch (err) {
+      console.error('Exception loading categories:', err)
+    }
   }
 
   // Filter documents
@@ -347,7 +361,7 @@ export function GlobalDocuments() {
           </Button>
         </div>
       ) : (
-        <div className="border rounded-xl overflow-hidden">
+        <div className="border rounded-xl overflow-visible">
           <Table>
             <TableHeader>
               <TableRow>
@@ -411,12 +425,10 @@ export function GlobalDocuments() {
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </Button>
+                      <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-gray-100">
+                        <MoreHorizontal className="w-4 h-4" />
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
+                      <DropdownMenuContent align="end" className="z-50">
                         <DropdownMenuItem onClick={() => handleDownload(doc)}>
                           <Download className="w-4 h-4 mr-2" />
                           {t('globalDocuments.download')}
