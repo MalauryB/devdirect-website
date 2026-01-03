@@ -44,6 +44,7 @@ import { ProjectRoadmap } from "@/components/project-roadmap"
 import { ProjectContracts } from "@/components/project-contracts"
 import { ProjectFinances } from "@/components/project-finances"
 import { GlobalFinances } from "@/components/global-finances"
+import { GlobalDocuments } from "@/components/global-documents"
 
 // Format currency helper
 const formatCurrency = (amount: number): string => {
@@ -590,6 +591,11 @@ export default function DashboardPage() {
       id: "finances",
       icon: Euro,
       label: t('finances.globalTitle'),
+    },
+    {
+      id: "globalDocuments",
+      icon: FolderOpen,
+      label: t('globalDocuments.title'),
     },
     {
       id: "profile",
@@ -4066,6 +4072,19 @@ export default function DashboardPage() {
                   }
                 }}
               />
+            </div>
+          )}
+
+          {/* Engineer Global Documents Section */}
+          {activeSection === "globalDocuments" && isEngineer && (
+            <div className="w-full">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-xl font-bold text-foreground">{t('globalDocuments.title')}</h2>
+                  <p className="text-foreground/60 text-sm">{t('globalDocuments.subtitle')}</p>
+                </div>
+              </div>
+              <GlobalDocuments />
             </div>
           )}
         </main>
