@@ -16,6 +16,9 @@ export interface UserMetadata {
   // Billing information
   client_type?: ClientType
   company_name?: string
+  legal_form?: string // Forme juridique (SAS, SARL, etc.)
+  professional_email?: string // Email professionnel
+  contact_position?: string // Poste du contact
   siret?: string
   vat_number?: string
   address?: string

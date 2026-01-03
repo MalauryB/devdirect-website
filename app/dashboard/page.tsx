@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -140,6 +140,9 @@ export default function DashboardPage() {
   const [phone, setPhone] = useState("")
   const [clientType, setClientType] = useState<ClientType>("individual")
   const [companyName, setCompanyName] = useState("")
+  const [legalForm, setLegalForm] = useState("")
+  const [professionalEmail, setProfessionalEmail] = useState("")
+  const [contactPosition, setContactPosition] = useState("")
   const [siret, setSiret] = useState("")
   const [vatNumber, setVatNumber] = useState("")
   const [address, setAddress] = useState("")
@@ -151,6 +154,7 @@ export default function DashboardPage() {
   const [saving, setSaving] = useState(false)
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [profileError, setProfileError] = useState("")
+  const [profileInitialized, setProfileInitialized] = useState(false)
   // Engineer-specific profile fields
   const [jobTitle, setJobTitle] = useState("")
   const [bio, setBio] = useState("")
@@ -318,12 +322,16 @@ export default function DashboardPage() {
   }, [mounted, activeSection, selectedProject, projectSubSection, selectedClientId, router])
 
   useEffect(() => {
-    if (user?.user_metadata) {
+    // Only initialize profile once to avoid resetting form values when user reference changes
+    if (user?.user_metadata && !profileInitialized) {
       setFirstName(user.user_metadata.first_name || "")
       setLastName(user.user_metadata.last_name || "")
       setPhone(user.user_metadata.phone || "")
       setClientType(user.user_metadata.client_type || "individual")
       setCompanyName(user.user_metadata.company_name || "")
+      setLegalForm(user.user_metadata.legal_form || "")
+      setProfessionalEmail(user.user_metadata.professional_email || "")
+      setContactPosition(user.user_metadata.contact_position || "")
       setSiret(user.user_metadata.siret || "")
       setVatNumber(user.user_metadata.vat_number || "")
       setAddress(user.user_metadata.address || "")
@@ -335,8 +343,9 @@ export default function DashboardPage() {
       setJobTitle(user.user_metadata.job_title || "")
       setBio(user.user_metadata.bio || "")
       setSkills(user.user_metadata.skills || [])
+      setProfileInitialized(true)
     }
-  }, [user])
+  }, [user, profileInitialized])
 
   useEffect(() => {
     if (mounted && !loading && !user) {
@@ -637,6 +646,9 @@ export default function DashboardPage() {
       phone: phone,
       client_type: clientType,
       company_name: companyName,
+      legal_form: legalForm,
+      professional_email: professionalEmail,
+      contact_position: contactPosition,
       siret: siret,
       vat_number: vatNumber,
       address: address,
@@ -1312,17 +1324,31 @@ export default function DashboardPage() {
                     {clientType === "company" && (
                       <div className="space-y-4">
                         <h3 className="text-sm font-medium text-foreground">{t('profile.companyInfo')}</h3>
-                        <div className="space-y-1">
-                          <Label htmlFor="companyName" className="text-sm text-foreground/70">{t('profile.companyName')}</Label>
-                          <Input
-                            id="companyName"
-                            type="text"
-                            placeholder={t('profile.companyNamePlaceholder')}
-                            value={companyName}
-                            onChange={(e) => setCompanyName(e.target.value)}
-                            disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
-                          />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <Label htmlFor="companyName" className="text-sm text-foreground/70">{t('profile.companyName')}</Label>
+                            <Input
+                              id="companyName"
+                              type="text"
+                              placeholder={t('profile.companyNamePlaceholder')}
+                              value={companyName}
+                              onChange={(e) => setCompanyName(e.target.value)}
+                              disabled={saving}
+                              className="border-neutral-200 focus:border-gray-400"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="legalForm" className="text-sm text-foreground/70">{t('profile.legalForm')}</Label>
+                            <Input
+                              id="legalForm"
+                              type="text"
+                              placeholder={t('profile.legalFormPlaceholder')}
+                              value={legalForm}
+                              onChange={(e) => setLegalForm(e.target.value)}
+                              disabled={saving}
+                              className="border-neutral-200 focus:border-gray-400"
+                            />
+                          </div>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div className="space-y-1">
@@ -1345,6 +1371,32 @@ export default function DashboardPage() {
                               placeholder={t('profile.vatNumberPlaceholder')}
                               value={vatNumber}
                               onChange={(e) => setVatNumber(e.target.value)}
+                              disabled={saving}
+                              className="border-neutral-200 focus:border-gray-400"
+                            />
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <Label htmlFor="professionalEmail" className="text-sm text-foreground/70">{t('profile.professionalEmail')}</Label>
+                            <Input
+                              id="professionalEmail"
+                              type="email"
+                              placeholder={t('profile.professionalEmailPlaceholder')}
+                              value={professionalEmail}
+                              onChange={(e) => setProfessionalEmail(e.target.value)}
+                              disabled={saving}
+                              className="border-neutral-200 focus:border-gray-400"
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <Label htmlFor="contactPosition" className="text-sm text-foreground/70">{t('profile.contactPosition')}</Label>
+                            <Input
+                              id="contactPosition"
+                              type="text"
+                              placeholder={t('profile.contactPositionPlaceholder')}
+                              value={contactPosition}
+                              onChange={(e) => setContactPosition(e.target.value)}
                               disabled={saving}
                               className="border-neutral-200 focus:border-gray-400"
                             />
@@ -1517,29 +1569,6 @@ export default function DashboardPage() {
                         )}
                       </button>
                     </nav>
-                    {/* Actions - only show for pending projects */}
-                    {selectedProject.status === 'pending' && (
-                      <div className="mt-auto p-4 border-t border-neutral-200 space-y-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={handleEditProject}
-                          className="w-full text-foreground/70 hover:text-foreground"
-                        >
-                          <Pencil className="w-4 h-4 mr-2" />
-                          {t('projects.actions.edit')}
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => setDeletingProject(selectedProject)}
-                          className="w-full text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
-                        >
-                          <Trash2 className="w-4 h-4 mr-2" />
-                          {t('projects.actions.delete')}
-                        </Button>
-                      </div>
-                    )}
                   </div>
 
                   {/* Main content area */}
@@ -1580,9 +1609,32 @@ export default function DashboardPage() {
                                 </p>
                               </div>
                             </div>
-                            <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
-                              {t(`projects.status.${selectedProject.status}`)}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
+                                {t(`projects.status.${selectedProject.status}`)}
+                              </span>
+                              {selectedProject.status === 'pending' && (
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-gray-100">
+                                    <MoreHorizontal className="w-4 h-4" />
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="end" className="z-50">
+                                    <DropdownMenuItem onClick={handleEditProject}>
+                                      <Pencil className="w-4 h-4 mr-2" />
+                                      {t('projects.actions.edit')}
+                                    </DropdownMenuItem>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem
+                                      onClick={() => setDeletingProject(selectedProject)}
+                                      className="text-red-600 focus:text-red-600"
+                                    >
+                                      <Trash2 className="w-4 h-4 mr-2" />
+                                      {t('projects.actions.delete')}
+                                    </DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -2821,6 +2873,19 @@ export default function DashboardPage() {
                     {projectSubSection === 'details' && (
                       <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
                         <div className="p-6 space-y-8">
+                          {/* Client Info for Engineer */}
+                          <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
+                            <div>
+                              <h3 className="text-sm font-medium text-foreground/50 mb-1">{t('projects.details.client')}</h3>
+                              <p className="font-medium text-foreground">
+                                {selectedProject.profiles?.company_name || `${selectedProject.profiles?.first_name || ''} ${selectedProject.profiles?.last_name || ''}`.trim() || t('projects.details.unknownClient')}
+                              </p>
+                              {selectedProject.profiles?.email && (
+                                <p className="text-sm text-foreground/60">{selectedProject.profiles.email}</p>
+                              )}
+                            </div>
+                          </div>
+
                           {/* Description */}
                           <div>
                             <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-3">
