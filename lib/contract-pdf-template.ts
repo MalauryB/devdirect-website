@@ -769,8 +769,8 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
     </div>
 
     <!-- Footer -->
-    <div class="page-footer" style="position: relative; margin-top: 30px;">
-      <span>Contrat n° ${contractNumber}</span>
+    <div style="display: flex; justify-content: space-between; margin-top: 30px; padding-top: 10px; border-top: 1px solid #e5e5e5; font-size: 8px; color: #999;">
+      <span>Contrat n&deg; ${contractNumber}</span>
       <span>${providerName}</span>
       <span>Page 4/4</span>
     </div>
@@ -796,6 +796,7 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
   // Client info
   const clientName = client?.company_name || `${client?.first_name || ''} ${client?.last_name || ''}`.trim() || 'Client'
   const clientAddress = client ? [client.address, client.postal_code, client.city].filter(Boolean).join(', ') : ''
+  const clientCity = client?.city || ''
   const clientSiret = client?.siret || ''
   const clientEmail = client?.email || ''
   const clientPhone = client?.phone || ''
@@ -803,6 +804,10 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
 
   // Project info
   const projectTitle = project?.title || contract.title || 'Assistance technique informatique'
+
+  // Signature location and date
+  const signatureLocation = clientCity || 'Paris'
+  const signatureDate = formatDate(new Date().toISOString())
 
   // Time and materials specific - Profiles
   const profiles = contract.profiles || []
@@ -1293,8 +1298,9 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
 
         <p class="article-subsection">3.2 Volume et planification</p>
         <p>Le Client commande un volume prévisionnel de :</p>
-        <p style="text-align: center; font-size: 14px; font-weight: 700; margin: 10px 0;">${totalEstimatedDays > 0 ? totalEstimatedDays + ' jours de prestation' : 'À définir selon les besoins'}</p>
-        <p>Ce volume est donné à titre indicatif et pourra être ajusté d'un commun accord. Le planning d'intervention sera défini conjointement et pourra évoluer en fonction des besoins du projet.</p>
+        <p style="text-align: center; font-size: 14px; font-weight: 700; margin: 10px 0;">${totalEstimatedDays > 0 ? totalEstimatedDays + ' jours de prestation' : 'À définir par bon de commande'}</p>
+        <p>Ce volume est donné à titre indicatif et pourra être ajusté d'un commun accord. Le planning d'intervention sera défini conjointement.</p>
+        <p><strong>Plafond mensuel :</strong> Sauf accord écrit préalable, le volume mensuel ne pourra excéder <strong>${totalEstimatedDays > 0 ? Math.ceil(totalEstimatedDays / 6) + ' jours' : '_____ jours'}</strong>.</p>
 
         <p class="article-subsection">3.3 Suivi des temps</p>
         <p>Le Prestataire établira un relevé des temps passés (feuille de temps / timesheet) sur une base ${billingLabel}, qui sera validé par le Client avant facturation.</p>
@@ -1331,10 +1337,17 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
           ` : ''}
         </table>
 
-        <p style="font-size: 9px; color: #666; margin-top: 8px;">Base journalière : 7 heures. Les montants estimés sont donnés à titre indicatif.</p>
+        ${profiles.length === 0 ? `
+        <p><strong>À défaut d'annexe tarifaire signée, le TJM applicable sera de __________ € HT.</strong></p>
+        ` : ''}
 
-        <p class="article-subsection">4.2 Frais annexes</p>
-        <p>Les frais de déplacement, d'hébergement et de repas engagés pour les besoins de la mission seront refacturés au réel sur justificatifs.</p>
+        <p style="font-size: 9px; color: #666; margin-top: 8px;">Base journalière : 7 heures de travail effectif. Les montants estimés sont donnés à titre indicatif et ne constituent pas un engagement ferme.</p>
+
+        <p class="article-subsection">4.2 Révision tarifaire</p>
+        <p>Les tarifs pourront être révisés annuellement, à la date anniversaire du contrat, après notification écrite avec un préavis de 30 jours.</p>
+
+        <p class="article-subsection">4.3 Frais annexes</p>
+        <p>Les frais de déplacement, d'hébergement et de repas engagés pour les besoins de la mission seront refacturés au réel sur justificatifs, après accord préalable du Client pour tout déplacement.</p>
       </div>
     </div>
 
@@ -1408,8 +1421,9 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
     <div class="article">
       <div class="article-title">Article 10 - Propriété intellectuelle</div>
       <div class="article-content">
-        <p>Les développements réalisés par le Prestataire dans le cadre des missions sont la propriété du Client, sous réserve du paiement des prestations correspondantes.</p>
-        <p>Le Prestataire conserve la propriété de ses outils, méthodes et composants génériques préexistants. Le Client bénéficie d'une licence d'utilisation non exclusive sur ces éléments intégrés aux livrables.</p>
+        <p>Les développements spécifiquement réalisés par le Prestataire dans le cadre des missions sont la propriété du Client, sous réserve du complet paiement des prestations correspondantes.</p>
+        <p>Le Prestataire conserve la propriété de ses outils, méthodes, frameworks et composants génériques préexistants ou développés indépendamment. Le Client bénéficie d'une licence d'utilisation non exclusive et perpétuelle sur ces éléments intégrés aux livrables.</p>
+        <p>Le Prestataire conserve le droit de réutiliser, pour d'autres clients, les savoir-faire, techniques et composants génériques développés dans le cadre des missions, à l'exclusion des éléments spécifiques au métier ou aux données du Client.</p>
       </div>
     </div>
 
@@ -1422,22 +1436,31 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       </div>
     </div>
 
-    <!-- ARTICLE 12 -->
+    <!-- ARTICLE 12 - RGPD -->
     <div class="article">
-      <div class="article-title">Article 12 - Responsabilité</div>
+      <div class="article-title">Article 12 - Protection des données personnelles (RGPD)</div>
       <div class="article-content">
-        <p>Le Prestataire étant soumis à une obligation de moyens, sa responsabilité ne pourra être engagée que s'il est démontré qu'il n'a pas mis en œuvre les diligences normalement attendues d'un professionnel.</p>
-        <p>En tout état de cause, la responsabilité du Prestataire est limitée au montant des sommes effectivement perçues au titre du présent contrat au cours des <strong>12 derniers mois</strong>.</p>
-        <p>Le Prestataire ne pourra être tenu responsable des dommages indirects (perte de données, manque à gagner, préjudice commercial).</p>
+        <p>Dans le cadre de l'exécution du présent contrat, le Prestataire peut être amené à traiter des données à caractère personnel pour le compte du Client.</p>
+        <p>Le Prestataire s'engage à :</p>
+        <ul>
+          <li>Traiter les données uniquement pour les finalités prévues au contrat</li>
+          <li>Ne pas transférer les données vers des pays tiers sans garanties appropriées</li>
+          <li>Mettre en œuvre les mesures techniques et organisationnelles appropriées</li>
+          <li>Assister le Client dans le respect de ses obligations RGPD</li>
+          <li>Supprimer ou restituer les données à l'issue du contrat selon les instructions du Client</li>
+          <li>Notifier le Client dans les 48h en cas de violation de données</li>
+        </ul>
+        <p>Le Client reste responsable de traitement et garantit la licéité des traitements confiés au Prestataire.</p>
       </div>
     </div>
 
     <!-- ARTICLE 13 -->
     <div class="article">
-      <div class="article-title">Article 13 - Résiliation</div>
+      <div class="article-title">Article 13 - Force majeure</div>
       <div class="article-content">
-        <p>Outre la résiliation avec préavis prévue à l'Article 6, chaque partie peut résilier le contrat de plein droit en cas de manquement grave de l'autre partie, 15 jours après mise en demeure restée sans effet.</p>
-        <p>En cas de résiliation, les prestations réalisées jusqu'à la date effective de fin de contrat restent dues.</p>
+        <p>Aucune des parties ne pourra être tenue responsable d'un manquement à ses obligations contractuelles si ce manquement résulte d'un cas de force majeure au sens de l'article 1218 du Code civil.</p>
+        <p>Sont notamment considérés comme cas de force majeure : catastrophes naturelles, guerres, grèves générales, épidémies, pannes majeures d'infrastructures (électricité, télécommunications, internet).</p>
+        <p>La partie affectée devra notifier l'autre partie dans les 48 heures. Si la force majeure perdure au-delà de <strong>30 jours</strong>, chaque partie pourra résilier le contrat sans indemnité.</p>
       </div>
     </div>
 
@@ -1448,7 +1471,42 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
   <div class="page">
     <!-- ARTICLE 14 -->
     <div class="article">
-      <div class="article-title">Article 14 - Loi applicable et litiges</div>
+      <div class="article-title">Article 14 - Responsabilité</div>
+      <div class="article-content">
+        <p>Le Prestataire étant soumis à une obligation de moyens, sa responsabilité ne pourra être engagée que s'il est démontré qu'il n'a pas mis en œuvre les diligences normalement attendues d'un professionnel.</p>
+        <p>En tout état de cause, la responsabilité du Prestataire est limitée au montant des sommes effectivement perçues au titre du présent contrat au cours des <strong>12 derniers mois</strong>.</p>
+        <p>Le Prestataire ne pourra être tenu responsable des dommages indirects (perte de données, manque à gagner, préjudice commercial).</p>
+      </div>
+    </div>
+
+    <!-- ARTICLE 15 -->
+    <div class="article">
+      <div class="article-title">Article 15 - Retards et pénalités</div>
+      <div class="article-content">
+        <p class="article-subsection">15.1 Retard du Client</p>
+        <p>Tout retard du Client dans la fourniture des éléments nécessaires, la validation des livrables ou le paiement des factures entraînera :</p>
+        <ul>
+          <li>Un décalage équivalent du calendrier d'intervention</li>
+          <li>La possibilité pour le Prestataire de suspendre ses prestations après mise en demeure de 8 jours</li>
+          <li>Le maintien de la facturation des jours prévus non réalisés du fait du Client</li>
+        </ul>
+        <p class="article-subsection">15.2 Retard de paiement</p>
+        <p>En cas de retard de paiement, des pénalités de retard au taux de 3 fois le taux d'intérêt légal seront appliquées de plein droit, ainsi qu'une indemnité forfaitaire de 40 € pour frais de recouvrement.</p>
+      </div>
+    </div>
+
+    <!-- ARTICLE 16 -->
+    <div class="article">
+      <div class="article-title">Article 16 - Résiliation</div>
+      <div class="article-content">
+        <p>Outre la résiliation avec préavis prévue à l'Article 6, chaque partie peut résilier le contrat de plein droit en cas de manquement grave de l'autre partie, 15 jours après mise en demeure restée sans effet.</p>
+        <p>En cas de résiliation, les prestations réalisées jusqu'à la date effective de fin de contrat restent dues.</p>
+      </div>
+    </div>
+
+    <!-- ARTICLE 17 -->
+    <div class="article">
+      <div class="article-title">Article 17 - Loi applicable et litiges</div>
       <div class="article-content">
         <p>Le présent contrat est soumis au droit français.</p>
         <p>En cas de litige, les parties rechercheront une solution amiable. À défaut d'accord dans un délai de 30 jours, le litige sera soumis aux tribunaux compétents de <strong>Paris</strong>.</p>
@@ -1458,7 +1516,7 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
     <!-- Signatures -->
     <div class="signatures-section">
       <div class="signatures-title">Signatures</div>
-      <p style="text-align: center; font-size: 10px; margin-bottom: 20px;">Fait en deux exemplaires originaux, à _________________, le ____________________</p>
+      <p style="text-align: center; font-size: 10px; margin-bottom: 20px;">Fait en deux exemplaires originaux, à <strong>${signatureLocation}</strong>, le <strong>${signatureDate}</strong></p>
 
       <div class="signatures-container">
         <div class="signature-box">
@@ -1481,7 +1539,7 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       <div class="article-title">Annexes</div>
       <div class="article-content">
         <ul>
-          <li>Annexe 1 : Description des compétences / profil du Prestataire</li>
+          <li>Annexe 1 : Grille tarifaire détaillée et profils intervenants</li>
           <li>Annexe 2 : Modèle de relevé de temps (timesheet)</li>
           <li>Annexe 3 : Conditions générales de prestation (le cas échéant)</li>
         </ul>
@@ -1489,8 +1547,8 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
     </div>
 
     <!-- Footer -->
-    <div class="page-footer" style="position: relative; margin-top: 30px;">
-      <span>Contrat n° ${contractNumber}</span>
+    <div style="display: flex; justify-content: space-between; margin-top: 30px; padding-top: 10px; border-top: 1px solid #e5e5e5; font-size: 8px; color: #999;">
+      <span>Contrat n&deg; ${contractNumber}</span>
       <span>${providerName}</span>
       <span>Page 4/4</span>
     </div>
