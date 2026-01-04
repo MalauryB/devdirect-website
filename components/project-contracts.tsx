@@ -167,7 +167,8 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
     setProjectDocuments(documents)
   }
 
-  // Get specification and planning documents for annexes
+  // Get documents for annexes
+  const signedQuoteDocument = projectDocuments.find(d => d.type === 'signed_quote') || null
   const specificationDocument = projectDocuments.find(d => d.type === 'specification') || null
   const planningDocument = projectDocuments.find(d => d.type === 'planning') || null
 
@@ -279,6 +280,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
         quote: contractQuote,
         provider,
         includeAnnexes: true,
+        signedQuoteDocument,
         specificationDocument,
         planningDocument
       })
@@ -411,6 +413,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
         quote: contractQuote,
         provider,
         includeAnnexes: true,
+        signedQuoteDocument,
         specificationDocument,
         planningDocument
       })

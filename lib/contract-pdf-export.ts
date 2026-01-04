@@ -4,7 +4,7 @@ interface ContractPdfParams {
   contract: ProjectContract
   project?: Project | null
   client?: Profile | null
-  quote?: Quote | null
+  quote?: Quote | null // Used for calculating amounts in the contract body
   provider?: {
     name: string
     address: string
@@ -13,6 +13,7 @@ interface ContractPdfParams {
     phone: string
   }
   includeAnnexes?: boolean
+  signedQuoteDocument?: ProjectDocument | null // Physical signed quote document for annex
   specificationDocument?: ProjectDocument | null
   planningDocument?: ProjectDocument | null
 }
@@ -28,6 +29,7 @@ export async function generateContractPdfUrl(
     quote,
     provider,
     includeAnnexes = true,
+    signedQuoteDocument,
     specificationDocument,
     planningDocument
   } = params
@@ -44,6 +46,7 @@ export async function generateContractPdfUrl(
       quote,
       provider,
       includeAnnexes,
+      signedQuoteDocument,
       specificationDocument,
       planningDocument
     }),
@@ -81,6 +84,7 @@ export async function exportContractToPdf(
     email: string
     phone: string
   },
+  signedQuoteDocument?: ProjectDocument | null,
   specificationDocument?: ProjectDocument | null,
   planningDocument?: ProjectDocument | null
 ): Promise<void> {
@@ -92,6 +96,7 @@ export async function exportContractToPdf(
       quote,
       provider,
       includeAnnexes: true,
+      signedQuoteDocument,
       specificationDocument,
       planningDocument
     })

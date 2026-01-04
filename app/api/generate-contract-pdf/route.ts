@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import puppeteer from 'puppeteer'
 import { generateContractPdfHtml, generateTimeAndMaterialsContractPdfHtml } from '@/lib/contract-pdf-template'
-import { generateQuotePdfHtml } from '@/lib/quote-pdf-template'
 import { ProjectContract, Project, Profile, Quote, ProjectDocument } from '@/lib/types'
 
 // Generate an annex cover page
@@ -38,18 +37,6 @@ function generateAnnexCoverPage(annexNumber: number, title: string, description:
   `
 }
 
-// Wrap quote HTML to fit as an annex (remove body styling, add page break)
-function wrapQuoteAsAnnex(quoteHtml: string): string {
-  // Extract just the body content and add annexe styling
-  const bodyMatch = quoteHtml.match(/<body[^>]*>([\s\S]*)<\/body>/i)
-  const bodyContent = bodyMatch ? bodyMatch[1] : quoteHtml
-
-  return `
-    <div class="annex-content" style="page-break-before: always;">
-      ${bodyContent}
-    </div>
-  `
-}
 
 // Generate placeholder page for external documents
 function generateExternalDocumentPlaceholder(annexNumber: number, title: string, documentInfo?: { name: string; version: number; date: string; fileType: string } | null): string {
@@ -80,6 +67,7 @@ export async function POST(request: NextRequest) {
       quote,
       provider,
       includeAnnexes = true,
+      signedQuoteDocument,
       specificationDocument,
       planningDocument
     } = await request.json() as {
@@ -95,6 +83,7 @@ export async function POST(request: NextRequest) {
         phone: string
       }
       includeAnnexes?: boolean
+      signedQuoteDocument?: ProjectDocument | null
       specificationDocument?: ProjectDocument | null
       planningDocument?: ProjectDocument | null
     }
@@ -104,8 +93,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate main contract HTML based on contract type
+    // Note: quote is used for calculating amounts in the contract body
     let fullHtml = contract.type === 'time_and_materials'
-      ? generateTimeAndMaterialsContractPdfHtml({ contract, project, client, quote, provider })
+      ? generateTimeAndMaterialsContractPdfHtml({ contract, project, client, provider })
       : generateContractPdfHtml({ contract, project, client, quote, provider })
 
     // Only add annexes for forfait contracts with includeAnnexes flag
@@ -113,32 +103,19 @@ export async function POST(request: NextRequest) {
       // Close the contract HTML body/html tags and we'll append annexes
       fullHtml = fullHtml.replace('</body></html>', '')
 
-      // Annexe 1: Devis (if linked)
-      if (quote) {
-        const quoteCoverPage = generateAnnexCoverPage(
-          1,
-          'Devis',
-          'Devis détaillé de la prestation.',
-          {
-            name: `Devis n° ${quote.id.slice(0, 8).toUpperCase()}`,
-            version: 1,
-            date: new Date(quote.created_at || Date.now()).toLocaleDateString('fr-FR')
-          }
-        )
-        fullHtml += quoteCoverPage
+      // Annexe 1: Devis signé (from project documents)
+      const signedQuoteInfo = signedQuoteDocument ? {
+        name: signedQuoteDocument.name,
+        version: signedQuoteDocument.version,
+        date: new Date(signedQuoteDocument.created_at).toLocaleDateString('fr-FR'),
+        fileType: signedQuoteDocument.file_type
+      } : null
 
-        // Generate quote HTML and add it
-        const quoteHtml = generateQuotePdfHtml({ quote, project, client })
-        fullHtml += wrapQuoteAsAnnex(quoteHtml)
-      } else {
-        // No quote linked - show placeholder
-        fullHtml += generateAnnexCoverPage(
-          1,
-          'Devis',
-          'Le devis détaillé de la prestation doit être joint au contrat.',
-          null
-        )
-      }
+      fullHtml += generateExternalDocumentPlaceholder(
+        1,
+        'Devis signé',
+        signedQuoteInfo
+      )
 
       // Annexe 2: Cahier des charges
       const specInfo = specificationDocument ? {
