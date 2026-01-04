@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature, MoreHorizontal } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Building, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature, MoreHorizontal, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -177,6 +177,7 @@ export default function DashboardPage() {
   const [editingProject, setEditingProject] = useState<Project | null>(null)
   const [deletingProject, setDeletingProject] = useState<Project | null>(null)
   const [deleteLoading, setDeleteLoading] = useState(false)
+  const [viewingClientProfile, setViewingClientProfile] = useState<Profile | null>(null)
 
   // Engineer-specific state
   const [allProjects, setAllProjects] = useState<Project[]>([])
@@ -2825,49 +2826,58 @@ export default function DashboardPage() {
 
                   {/* Main content area */}
                   <div className={`flex-1 flex flex-col ${projectSubSection === 'messages' ? 'overflow-hidden' : 'p-4 lg:p-6 overflow-auto'}`}>
-                    {/* Project Header - visible only in details section */}
-                    {projectSubSection === 'details' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden mb-6">
-                        <div className="p-6">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-start gap-4">
-                              {/* Client avatar or initials */}
-                              <div className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden">
-                                {selectedProject.profiles?.avatar_url ? (
-                                  <img
-                                    src={selectedProject.profiles.avatar_url}
-                                    alt={selectedProject.profiles.company_name || selectedProject.profiles.first_name || 'Client'}
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  <span className="text-xl font-bold text-white">
-                                    {(selectedProject.profiles?.company_name?.[0] || selectedProject.profiles?.first_name?.[0] || 'C').toUpperCase()}
+                    {/* Project Header - always visible */}
+                    <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden mb-6">
+                      <div className="p-6">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="flex items-start gap-4">
+                            {/* Client avatar or initials */}
+                            <button
+                              onClick={() => selectedProject.profiles && setViewingClientProfile(selectedProject.profiles as Profile)}
+                              className="shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden hover:ring-2 hover:ring-[#c48b8b] hover:ring-offset-2 transition-all cursor-pointer"
+                              title={t('projects.details.viewProfile')}
+                            >
+                              {selectedProject.profiles?.avatar_url ? (
+                                <img
+                                  src={selectedProject.profiles.avatar_url}
+                                  alt={selectedProject.profiles.company_name || selectedProject.profiles.first_name || 'Client'}
+                                  className="w-full h-full object-cover"
+                                />
+                              ) : (
+                                <span className="text-xl font-bold text-white">
+                                  {(selectedProject.profiles?.company_name?.[0] || selectedProject.profiles?.first_name?.[0] || 'C').toUpperCase()}
+                                </span>
+                              )}
+                            </button>
+                            <div>
+                              <h2 className="text-xl font-bold text-foreground mb-1">
+                                {selectedProject.title || t('projects.untitled')}
+                              </h2>
+                              <button
+                                onClick={() => selectedProject.profiles && setViewingClientProfile(selectedProject.profiles as Profile)}
+                                className="text-sm text-foreground/60 hover:text-foreground transition-colors mb-2 flex items-center gap-1"
+                              >
+                                <User className="w-3 h-3" />
+                                {selectedProject.profiles?.company_name || `${selectedProject.profiles?.first_name || ''} ${selectedProject.profiles?.last_name || ''}`.trim() || t('projects.details.unknownClient')}
+                              </button>
+                              <div className="flex flex-wrap gap-2 mb-2">
+                                {selectedProject.project_types?.map((type) => (
+                                  <span key={type} className="text-sm bg-neutral-100 text-foreground/70 px-3 py-1 rounded-full">
+                                    {t(`projects.types.${type}`)}
                                   </span>
-                                )}
+                                ))}
                               </div>
-                              <div>
-                                <h2 className="text-xl font-bold text-foreground mb-2">
-                                  {selectedProject.title || t('projects.untitled')}
-                                </h2>
-                                <div className="flex flex-wrap gap-2 mb-3">
-                                  {selectedProject.project_types?.map((type) => (
-                                    <span key={type} className="text-sm bg-neutral-100 text-foreground/70 px-3 py-1 rounded-full">
-                                      {t(`projects.types.${type}`)}
-                                    </span>
-                                  ))}
-                                </div>
-                                <p className="text-sm text-foreground/50">
-                                  {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
-                                </p>
-                              </div>
+                              <p className="text-sm text-foreground/50">
+                                {t('projects.details.createdAt')}: {new Date(selectedProject.created_at).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
+                              </p>
                             </div>
-                            <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
-                              {t(`projects.status.${selectedProject.status}`)}
-                            </span>
                           </div>
+                          <span className={`shrink-0 text-sm px-3 py-1.5 rounded-full font-medium ${getStatusBadgeClass(selectedProject.status)}`}>
+                            {t(`projects.status.${selectedProject.status}`)}
+                          </span>
                         </div>
                       </div>
-                    )}
+                    </div>
 
                     {/* Details Sub-Section */}
                     {projectSubSection === 'details' && (
@@ -2875,15 +2885,40 @@ export default function DashboardPage() {
                         <div className="p-6 space-y-8">
                           {/* Client Info for Engineer */}
                           <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
-                            <div>
-                              <h3 className="text-sm font-medium text-foreground/50 mb-1">{t('projects.details.client')}</h3>
-                              <p className="font-medium text-foreground">
-                                {selectedProject.profiles?.company_name || `${selectedProject.profiles?.first_name || ''} ${selectedProject.profiles?.last_name || ''}`.trim() || t('projects.details.unknownClient')}
-                              </p>
-                              {selectedProject.profiles?.email && (
-                                <p className="text-sm text-foreground/60">{selectedProject.profiles.email}</p>
-                              )}
+                            <div className="flex items-center gap-3">
+                              <div className="shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden">
+                                {selectedProject.profiles?.avatar_url ? (
+                                  <img
+                                    src={selectedProject.profiles.avatar_url}
+                                    alt={selectedProject.profiles.company_name || selectedProject.profiles.first_name || 'Client'}
+                                    className="w-full h-full object-cover"
+                                  />
+                                ) : (
+                                  <span className="text-sm font-bold text-white">
+                                    {(selectedProject.profiles?.company_name?.[0] || selectedProject.profiles?.first_name?.[0] || 'C').toUpperCase()}
+                                  </span>
+                                )}
+                              </div>
+                              <div>
+                                <h3 className="text-sm font-medium text-foreground/50 mb-0.5">{t('projects.details.client')}</h3>
+                                <p className="font-medium text-foreground">
+                                  {selectedProject.profiles?.company_name || `${selectedProject.profiles?.first_name || ''} ${selectedProject.profiles?.last_name || ''}`.trim() || t('projects.details.unknownClient')}
+                                </p>
+                                {selectedProject.profiles?.email && (
+                                  <p className="text-sm text-foreground/60">{selectedProject.profiles.email}</p>
+                                )}
+                              </div>
                             </div>
+                            {selectedProject.profiles && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => setViewingClientProfile(selectedProject.profiles as Profile)}
+                              >
+                                <User className="w-4 h-4 mr-2" />
+                                {t('projects.details.viewProfile')}
+                              </Button>
+                            )}
                           </div>
 
                           {/* Description */}
@@ -3841,6 +3876,16 @@ export default function DashboardPage() {
                   company_name: string
                   phone: string
                   avatar_url: string
+                  client_type: string
+                  legal_form: string
+                  professional_email: string
+                  contact_position: string
+                  siret: string
+                  vat_number: string
+                  address: string
+                  postal_code: string
+                  city: string
+                  country: string
                   project_count: number
                   projects: Project[]
                 }>()
@@ -3860,6 +3905,16 @@ export default function DashboardPage() {
                       company_name: profile?.company_name || '',
                       phone: profile?.phone || '',
                       avatar_url: profile?.avatar_url || '',
+                      client_type: profile?.client_type || 'individual',
+                      legal_form: profile?.legal_form || '',
+                      professional_email: profile?.professional_email || '',
+                      contact_position: profile?.contact_position || '',
+                      siret: profile?.siret || '',
+                      vat_number: profile?.vat_number || '',
+                      address: profile?.address || '',
+                      postal_code: profile?.postal_code || '',
+                      city: profile?.city || '',
+                      country: profile?.country || '',
                       project_count: 1,
                       projects: [project]
                     })
@@ -3921,6 +3976,7 @@ export default function DashboardPage() {
                               </p>
                             )}
 
+                            {/* Contact Info */}
                             <div className="mt-4 space-y-2">
                               <h3 className="text-sm font-semibold text-foreground mb-2">{t('dashboard.clients.contactInfo')}</h3>
                               {selectedClient.email && (
@@ -3931,6 +3987,15 @@ export default function DashboardPage() {
                                   </a>
                                 </div>
                               )}
+                              {selectedClient.professional_email && (
+                                <div className="flex items-center gap-2 text-sm text-foreground/70">
+                                  <Mail className="w-4 h-4 text-foreground/50" />
+                                  <a href={`mailto:${selectedClient.professional_email}`} className="hover:text-foreground">
+                                    {selectedClient.professional_email}
+                                  </a>
+                                  <span className="text-xs text-foreground/40">({t('profile.professionalEmail')})</span>
+                                </div>
+                              )}
                               {selectedClient.phone && (
                                 <div className="flex items-center gap-2 text-sm text-foreground/70">
                                   <Phone className="w-4 h-4 text-foreground/50" />
@@ -3939,14 +4004,61 @@ export default function DashboardPage() {
                                   </a>
                                 </div>
                               )}
-                              {selectedClient.company_name && (
+                              {selectedClient.contact_position && (
                                 <div className="flex items-center gap-2 text-sm text-foreground/70">
-                                  <Building2 className="w-4 h-4 text-foreground/50" />
-                                  {selectedClient.company_name}
+                                  <User className="w-4 h-4 text-foreground/50" />
+                                  {selectedClient.contact_position}
                                 </div>
                               )}
                             </div>
                           </div>
+                        </div>
+
+                        {/* Company Info - always show for companies or if any company info exists */}
+                        {(selectedClient.client_type === 'company' || selectedClient.company_name || selectedClient.legal_form || selectedClient.siret || selectedClient.vat_number) && (
+                          <div className="mt-6 pt-6 border-t border-neutral-200">
+                            <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                              <Building className="w-4 h-4 text-[#ba9fdf]" />
+                              {t('projects.details.companyInfo')}
+                            </h3>
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-1">{t('profile.companyName')}</p>
+                                <p className="text-sm text-foreground">{selectedClient.company_name || <span className="text-foreground/40 italic">{t('projects.details.noPhone')}</span>}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-1">{t('profile.legalForm')}</p>
+                                <p className="text-sm text-foreground">{selectedClient.legal_form || <span className="text-foreground/40 italic">{t('projects.details.noPhone')}</span>}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-1">{t('profile.siret')}</p>
+                                <p className="text-sm text-foreground">{selectedClient.siret || <span className="text-foreground/40 italic">{t('projects.details.noPhone')}</span>}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-foreground/50 mb-1">{t('profile.vatNumber')}</p>
+                                <p className="text-sm text-foreground">{selectedClient.vat_number || <span className="text-foreground/40 italic">{t('projects.details.noPhone')}</span>}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Billing Address - always show */}
+                        <div className="mt-6 pt-6 border-t border-neutral-200">
+                          <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-[#ea4c89]" />
+                            {t('projects.details.billingAddress')}
+                          </h3>
+                          {(selectedClient.address || selectedClient.city) ? (
+                            <p className="text-sm text-foreground/70">
+                              {selectedClient.address && <span>{selectedClient.address}<br /></span>}
+                              {(selectedClient.postal_code || selectedClient.city) && (
+                                <span>{selectedClient.postal_code} {selectedClient.city}<br /></span>
+                              )}
+                              {selectedClient.country && <span>{selectedClient.country}</span>}
+                            </p>
+                          ) : (
+                            <p className="text-sm text-foreground/40 italic">{t('projects.details.noAddress')}</p>
+                          )}
                         </div>
                       </div>
 
@@ -4181,6 +4293,142 @@ export default function DashboardPage() {
               >
                 {deleteLoading && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                 {t('projects.actions.delete')}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Client profile modal for engineers */}
+      {viewingClientProfile && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-foreground">
+                {t('projects.details.clientProfile')}
+              </h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setViewingClientProfile(null)}
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* Avatar and name */}
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e2b3f7] to-[#8b5fbf] flex items-center justify-center overflow-hidden">
+                {viewingClientProfile.avatar_url ? (
+                  <img
+                    src={viewingClientProfile.avatar_url}
+                    alt={`${viewingClientProfile.first_name} ${viewingClientProfile.last_name}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="w-8 h-8 text-white" />
+                )}
+              </div>
+              <div>
+                <p className="text-lg font-semibold text-foreground">
+                  {viewingClientProfile.company_name || `${viewingClientProfile.first_name || ''} ${viewingClientProfile.last_name || ''}`.trim() || t('projects.details.unknownClient')}
+                </p>
+                {viewingClientProfile.company_name && (viewingClientProfile.first_name || viewingClientProfile.last_name) && (
+                  <p className="text-sm text-foreground/60">
+                    {`${viewingClientProfile.first_name || ''} ${viewingClientProfile.last_name || ''}`.trim()}
+                    {viewingClientProfile.contact_position && ` - ${viewingClientProfile.contact_position}`}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Personal info */}
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                  <User className="w-4 h-4 text-[#6cb1bb]" />
+                  {t('projects.details.personalInfo')}
+                </h4>
+                <div className="bg-neutral-50 rounded-lg p-4 space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-foreground/60">{t('profile.email')}</span>
+                    <span className="text-sm font-medium text-foreground">{viewingClientProfile.email}</span>
+                  </div>
+                  {viewingClientProfile.professional_email && (
+                    <div className="flex justify-between">
+                      <span className="text-sm text-foreground/60">{t('profile.professionalEmail')}</span>
+                      <span className="text-sm font-medium text-foreground">{viewingClientProfile.professional_email}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-sm text-foreground/60">{t('profile.phone')}</span>
+                    <span className="text-sm font-medium text-foreground">{viewingClientProfile.phone || t('projects.details.noPhone')}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Company info (if company) */}
+              {viewingClientProfile.client_type === 'company' && (
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Building className="w-4 h-4 text-[#ba9fdf]" />
+                    {t('projects.details.companyInfo')}
+                  </h4>
+                  <div className="bg-neutral-50 rounded-lg p-4 space-y-2">
+                    {viewingClientProfile.company_name && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-foreground/60">{t('profile.companyName')}</span>
+                        <span className="text-sm font-medium text-foreground">{viewingClientProfile.company_name}</span>
+                      </div>
+                    )}
+                    {viewingClientProfile.legal_form && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-foreground/60">{t('profile.legalForm')}</span>
+                        <span className="text-sm font-medium text-foreground">{viewingClientProfile.legal_form}</span>
+                      </div>
+                    )}
+                    {viewingClientProfile.siret && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-foreground/60">{t('profile.siret')}</span>
+                        <span className="text-sm font-medium text-foreground">{viewingClientProfile.siret}</span>
+                      </div>
+                    )}
+                    {viewingClientProfile.vat_number && (
+                      <div className="flex justify-between">
+                        <span className="text-sm text-foreground/60">{t('profile.vatNumber')}</span>
+                        <span className="text-sm font-medium text-foreground">{viewingClientProfile.vat_number}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Billing address */}
+              {(viewingClientProfile.address || viewingClientProfile.city) && (
+                <div>
+                  <h4 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <MapPin className="w-4 h-4 text-[#ea4c89]" />
+                    {t('projects.details.billingAddress')}
+                  </h4>
+                  <div className="bg-neutral-50 rounded-lg p-4">
+                    <p className="text-sm text-foreground">
+                      {viewingClientProfile.address && <span>{viewingClientProfile.address}<br /></span>}
+                      {viewingClientProfile.postal_code && viewingClientProfile.city && (
+                        <span>{viewingClientProfile.postal_code} {viewingClientProfile.city}<br /></span>
+                      )}
+                      {viewingClientProfile.country && <span>{viewingClientProfile.country}</span>}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <Button
+                variant="outline"
+                onClick={() => setViewingClientProfile(null)}
+              >
+                {t('projects.form.cancel')}
               </Button>
             </div>
           </div>

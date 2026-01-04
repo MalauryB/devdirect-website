@@ -557,7 +557,16 @@ export const translations = {
         deadline: "Délai souhaité",
         needsDesign: "Besoin de design",
         additionalInfo: "Informations supplémentaires",
-        attachedFiles: "Fichiers joints"
+        attachedFiles: "Fichiers joints",
+        client: "Client",
+        unknownClient: "Client inconnu",
+        viewProfile: "Voir le profil",
+        clientProfile: "Profil du client",
+        personalInfo: "Informations personnelles",
+        companyInfo: "Informations entreprise",
+        billingAddress: "Adresse de facturation",
+        noPhone: "Non renseigné",
+        noAddress: "Adresse non renseignée"
       },
       subSections: {
         details: "Détails",
@@ -1723,7 +1732,16 @@ export const translations = {
         deadline: "Desired deadline",
         needsDesign: "Design needs",
         additionalInfo: "Additional information",
-        attachedFiles: "Attached files"
+        attachedFiles: "Attached files",
+        client: "Client",
+        unknownClient: "Unknown client",
+        viewProfile: "View profile",
+        clientProfile: "Client profile",
+        personalInfo: "Personal information",
+        companyInfo: "Company information",
+        billingAddress: "Billing address",
+        noPhone: "Not provided",
+        noAddress: "Address not provided"
       },
       subSections: {
         details: "Details",

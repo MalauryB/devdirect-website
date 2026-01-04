@@ -157,9 +157,13 @@ export interface Profile {
   first_name: string
   last_name: string
   company_name: string
+  legal_form?: string
+  professional_email?: string
+  contact_position?: string
   phone: string
   client_type: string
   siret: string
+  vat_number?: string
   avatar_url: string
   role: string
   // Address fields
@@ -167,7 +171,6 @@ export interface Profile {
   postal_code?: string
   city?: string
   country?: string
-  vat_number?: string
   // Engineer-specific fields
   job_title: string
   bio: string
