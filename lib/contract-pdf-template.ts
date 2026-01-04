@@ -749,6 +749,20 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       </div>
     </div>
 
+    <!-- Annexes -->
+    <div class="article">
+      <div class="article-title">Annexes</div>
+      <div class="article-content">
+        <p>Les documents suivants sont annexés au présent contrat et en font partie intégrante :</p>
+        <ul>
+          ${quote ? `<li><strong>Annexe 1 :</strong> Devis n° ${quote.id.slice(0, 8).toUpperCase()} du ${formatDate(quote.created_at)}</li>` : '<li><strong>Annexe 1 :</strong> Devis (à joindre)</li>'}
+          <li><strong>Annexe 2 :</strong> Cahier des charges / Spécifications fonctionnelles</li>
+          <li><strong>Annexe 3 :</strong> Planning prévisionnel de réalisation</li>
+        </ul>
+        <p style="font-size: 10px; color: #666; margin-top: 10px;"><em>Les parties reconnaissent avoir pris connaissance des annexes ci-dessus avant la signature du présent contrat.</em></p>
+      </div>
+    </div>
+
     <!-- Signatures -->
     <div class="signatures-section">
       <div class="signatures-title">Signatures</div>
