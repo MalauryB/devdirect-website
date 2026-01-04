@@ -163,12 +163,21 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
 
     .page {
       padding: 40px 50px;
-      min-height: 297mm;
       page-break-after: always;
+      position: relative;
     }
 
     .page:last-child {
       page-break-after: auto;
+    }
+
+    /* Prevent orphans and widows */
+    .article {
+      page-break-inside: avoid;
+    }
+
+    .signatures-section {
+      page-break-inside: avoid;
     }
 
     /* Header */
@@ -410,23 +419,17 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
 
     /* Footer */
     .page-footer {
-      position: absolute;
-      bottom: 20px;
-      left: 50px;
-      right: 50px;
       display: flex;
       justify-content: space-between;
       font-size: 8px;
       color: #999;
       border-top: 1px solid #e5e5e5;
       padding-top: 10px;
+      margin-top: 30px;
     }
 
     /* Paraph zone */
     .paraph-zone {
-      position: absolute;
-      bottom: 50px;
-      right: 50px;
       width: 80px;
       height: 40px;
       border: 1px dashed #ccc;
@@ -436,6 +439,8 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       justify-content: center;
       font-size: 7px;
       color: #ccc;
+      margin-left: auto;
+      margin-top: 20px;
     }
 
     /* Print styles */
@@ -874,12 +879,21 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
 
     .page {
       padding: 40px 50px;
-      min-height: 297mm;
       page-break-after: always;
+      position: relative;
     }
 
     .page:last-child {
       page-break-after: auto;
+    }
+
+    /* Prevent orphans and widows */
+    .article {
+      page-break-inside: avoid;
+    }
+
+    .signatures-section {
+      page-break-inside: avoid;
     }
 
     /* Header */
@@ -1166,23 +1180,17 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
 
     /* Footer */
     .page-footer {
-      position: absolute;
-      bottom: 20px;
-      left: 50px;
-      right: 50px;
       display: flex;
       justify-content: space-between;
       font-size: 8px;
       color: #999;
       border-top: 1px solid #e5e5e5;
       padding-top: 10px;
+      margin-top: 30px;
     }
 
     /* Paraph zone */
     .paraph-zone {
-      position: absolute;
-      bottom: 50px;
-      right: 50px;
       width: 80px;
       height: 40px;
       border: 1px dashed #ccc;
@@ -1192,6 +1200,8 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       justify-content: center;
       font-size: 7px;
       color: #ccc;
+      margin-left: auto;
+      margin-top: 20px;
     }
 
     /* Print styles */
