@@ -155,8 +155,8 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 10px;
-      line-height: 1.6;
+      font-size: 11px;
+      line-height: 1.5;
       color: #1a1a1a;
       background: #fff;
     }
@@ -182,33 +182,34 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       page-break-inside: avoid;
     }
 
-    /* Header */
+    /* Header - Style like quote */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #1a1a1a;
+      margin-bottom: 20px;
     }
 
     .title-section h1 {
-      font-size: 18px;
+      font-size: 48px;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
+      letter-spacing: -2px;
+      line-height: 1;
       margin-bottom: 8px;
-      text-transform: uppercase;
     }
 
-    .contract-ref {
-      font-size: 10px;
-      color: #666;
+    .contract-number {
+      display: inline-block;
+      background: #f5f5f5;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
     }
 
     .cube {
-      width: 50px;
-      height: 50px;
+      width: 70px;
+      height: 70px;
     }
 
     .cube svg {
@@ -216,133 +217,144 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       height: 100%;
     }
 
-    /* Parties section */
-    .parties-header {
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-      margin: 20px 0 15px 0;
-      text-transform: uppercase;
-      letter-spacing: 1px;
+    /* Meta info */
+    .meta-info {
+      margin-bottom: 20px;
     }
 
+    .meta-info p {
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .meta-info strong {
+      font-weight: 600;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: #1a1a1a;
+      margin: 20px 0;
+    }
+
+    /* Parties section */
     .parties-container {
       display: flex;
       justify-content: space-between;
-      gap: 30px;
       margin-bottom: 25px;
     }
 
     .party-box {
       flex: 1;
-      padding: 15px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      background: #fafafa;
+    }
+
+    .party-box.right {
+      text-align: right;
     }
 
     .party-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #ea4c89;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .party-name {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       margin-bottom: 6px;
     }
 
     .party-details {
-      font-size: 9px;
-      color: #444;
+      font-size: 11px;
+      color: #333;
       line-height: 1.5;
     }
 
     .party-details p {
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
     /* Preamble */
     .preamble {
-      margin-bottom: 20px;
-      padding: 12px 15px;
-      background: #f5f5f5;
-      border-radius: 6px;
-      font-size: 10px;
+      margin-bottom: 25px;
+      padding: 15px 20px;
+      background: #f8f8f8;
+      border-left: 3px solid #1a1a1a;
+      font-size: 11px;
       font-style: italic;
+      color: #444;
     }
 
     /* Articles */
     .article {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .article-title {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #e5e5e5;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1a1a1a;
       color: #1a1a1a;
     }
 
     .article-content {
-      font-size: 10px;
+      font-size: 11px;
       text-align: justify;
-      line-height: 1.65;
+      line-height: 1.6;
     }
 
     .article-content p {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .article-content ul, .article-content ol {
-      margin-left: 15px;
-      margin-bottom: 8px;
+      margin-left: 20px;
+      margin-bottom: 10px;
     }
 
     .article-content li {
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .article-subsection {
       font-weight: 600;
-      margin-top: 10px;
-      margin-bottom: 5px;
+      margin-top: 12px;
+      margin-bottom: 6px;
     }
 
     /* Pricing table */
     .pricing-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 12px 0;
-      font-size: 9px;
+      margin: 15px 0;
+      font-size: 11px;
     }
 
     .pricing-table th {
-      background: #1a1a1a;
-      color: #fff;
-      padding: 8px 10px;
+      background: #fff;
+      padding: 12px 15px;
       text-align: left;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #1a1a1a;
     }
 
     .pricing-table td {
-      padding: 8px 10px;
+      padding: 12px 15px;
       border-bottom: 1px solid #e5e5e5;
     }
 
     .pricing-table .total-row {
-      font-weight: 700;
-      background: #f5f5f5;
+      font-weight: 600;
     }
 
     .pricing-table .grand-total {
@@ -350,25 +362,63 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       color: #fff;
     }
 
+    .pricing-table .grand-total td {
+      border-bottom: none;
+      font-weight: 700;
+    }
+
+    /* Totals box */
+    .totals {
+      display: flex;
+      justify-content: flex-end;
+      margin: 20px 0;
+    }
+
+    .totals-box {
+      width: 280px;
+    }
+
+    .total-row-box {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 15px;
+      font-size: 12px;
+    }
+
+    .total-row-box.grand-total {
+      background: #1a1a1a;
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
     /* Signatures */
     .signatures-section {
       margin-top: 40px;
-      padding-top: 20px;
-      border-top: 2px solid #1a1a1a;
+      padding-top: 25px;
+      border-top: 1px solid #1a1a1a;
     }
 
     .signatures-title {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .signatures-date {
+      text-align: center;
+      font-size: 11px;
+      margin-bottom: 30px;
     }
 
     .signatures-container {
       display: flex;
       justify-content: space-between;
-      gap: 40px;
+      gap: 60px;
     }
 
     .signature-box {
@@ -377,49 +427,29 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
     }
 
     .signature-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       margin-bottom: 5px;
     }
 
     .signature-name {
-      font-size: 9px;
+      font-size: 10px;
       color: #666;
       margin-bottom: 8px;
     }
 
     .signature-mention {
-      font-size: 8px;
+      font-size: 9px;
       color: #888;
       margin-bottom: 15px;
       font-style: italic;
     }
 
     .signature-area {
-      height: 60px;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
+      height: 70px;
+      border-bottom: 1px solid #1a1a1a;
       margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ccc;
-      font-size: 8px;
     }
-
-    .signature-line {
-      width: 100%;
-      height: 1px;
-      background: #1a1a1a;
-      margin-top: 50px;
-    }
-
-    .signature-date {
-      font-size: 9px;
-      margin-top: 8px;
-    }
-
-
 
     @page {
       size: A4;
@@ -436,8 +466,8 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
     <!-- Header -->
     <div class="header">
       <div class="title-section">
-        <h1>${contractTypeLabel}</h1>
-        <p class="contract-ref">Contrat n° ${contractNumber} - ${contractDate}</p>
+        <h1>CONTRAT</h1>
+        <span class="contract-number">Contrat n°${contractNumber}</span>
       </div>
       <div class="cube">
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -447,8 +477,15 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       </div>
     </div>
 
+    <!-- Meta info -->
+    <div class="meta-info">
+      <p><strong>Type :</strong> ${contractTypeLabel}</p>
+      <p><strong>Date :</strong> ${contractDate}</p>
+    </div>
+
+    <div class="divider"></div>
+
     <!-- Parties -->
-    <div class="parties-header">Entre les soussignés</div>
     <div class="parties-container">
       <div class="party-box">
         <div class="party-label">Le Prestataire</div>
@@ -456,22 +493,23 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
         <div class="party-details">
           <p>${providerAddress}</p>
           <p>SIRET : ${providerSiret}</p>
-          <p>Email : ${providerEmail}</p>
-          <p>Tél : ${providerPhone}</p>
+          <p>${providerEmail}</p>
+          <p>${providerPhone}</p>
         </div>
       </div>
-      <div class="party-box">
+      <div class="party-box right">
         <div class="party-label">Le Client</div>
         <div class="party-name">${clientName}</div>
         <div class="party-details">
           ${clientAddress ? `<p>${clientAddress}</p>` : ''}
           ${clientSiret ? `<p>SIRET : ${clientSiret}</p>` : ''}
-          ${clientEmail ? `<p>Email : ${clientEmail}</p>` : ''}
-          ${clientPhone ? `<p>Tél : ${clientPhone}</p>` : ''}
-          ${clientRepresentative ? `<p>Représenté par : ${clientRepresentative}</p>` : ''}
+          ${clientEmail ? `<p>${clientEmail}</p>` : ''}
+          ${clientPhone ? `<p>${clientPhone}</p>` : ''}
         </div>
       </div>
     </div>
+
+    <div class="divider"></div>
 
     <!-- Preamble -->
     <div class="preamble">
@@ -824,8 +862,8 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
 
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 10px;
-      line-height: 1.6;
+      font-size: 11px;
+      line-height: 1.5;
       color: #1a1a1a;
       background: #fff;
     }
@@ -851,41 +889,34 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       page-break-inside: avoid;
     }
 
-    /* Header */
+    /* Header - Style like quote */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      margin-bottom: 25px;
-      padding-bottom: 15px;
-      border-bottom: 2px solid #2563eb;
+      margin-bottom: 20px;
     }
 
     .title-section h1 {
-      font-size: 18px;
+      font-size: 48px;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-      margin-bottom: 5px;
-      text-transform: uppercase;
-      color: #2563eb;
-    }
-
-    .title-section h2 {
-      font-size: 12px;
-      font-weight: 500;
-      color: #64748b;
+      letter-spacing: -2px;
+      line-height: 1;
       margin-bottom: 8px;
     }
 
-    .contract-ref {
-      font-size: 10px;
-      color: #666;
+    .contract-number {
+      display: inline-block;
+      background: #f5f5f5;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 500;
     }
 
     .cube {
-      width: 50px;
-      height: 50px;
+      width: 70px;
+      height: 70px;
     }
 
     .cube svg {
@@ -893,203 +924,202 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       height: 100%;
     }
 
+    /* Meta info */
+    .meta-info {
+      margin-bottom: 20px;
+    }
+
+    .meta-info p {
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .meta-info strong {
+      font-weight: 600;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: #1a1a1a;
+      margin: 20px 0;
+    }
+
     /* Warning box */
     .warning-box {
-      background: #fef3c7;
-      border: 1px solid #f59e0b;
-      border-radius: 6px;
-      padding: 12px 15px;
       margin-bottom: 20px;
+      padding: 15px 20px;
+      background: #f8f8f8;
+      border-left: 3px solid #1a1a1a;
     }
 
     .warning-box h3 {
       font-size: 11px;
       font-weight: 700;
-      color: #b45309;
       margin-bottom: 5px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
 
     .warning-box p {
-      font-size: 9px;
-      color: #92400e;
+      font-size: 10px;
+      color: #444;
       line-height: 1.5;
     }
 
     /* Parties section */
-    .parties-header {
-      font-size: 12px;
-      font-weight: 700;
-      text-align: center;
-      margin: 20px 0 15px 0;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #2563eb;
-    }
-
     .parties-container {
       display: flex;
       justify-content: space-between;
-      gap: 30px;
       margin-bottom: 25px;
     }
 
     .party-box {
       flex: 1;
-      padding: 15px;
-      border: 1px solid #e0e0e0;
-      border-radius: 6px;
-      background: #fafafa;
+    }
+
+    .party-box.right {
+      text-align: right;
     }
 
     .party-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      color: #2563eb;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .party-name {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 600;
       margin-bottom: 6px;
     }
 
     .party-details {
-      font-size: 9px;
-      color: #444;
+      font-size: 11px;
+      color: #333;
       line-height: 1.5;
     }
 
     .party-details p {
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
 
     /* Preamble */
     .preamble {
-      margin-bottom: 20px;
-      padding: 12px 15px;
-      background: #f5f5f5;
-      border-radius: 6px;
-      font-size: 10px;
+      margin-bottom: 25px;
+      padding: 15px 20px;
+      background: #f8f8f8;
+      border-left: 3px solid #1a1a1a;
+      font-size: 11px;
       font-style: italic;
+      color: #444;
     }
 
     /* Articles */
     .article {
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
 
     .article-title {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid #2563eb;
-      color: #2563eb;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid #1a1a1a;
+      color: #1a1a1a;
     }
 
     .article-content {
-      font-size: 10px;
+      font-size: 11px;
       text-align: justify;
-      line-height: 1.65;
+      line-height: 1.6;
     }
 
     .article-content p {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
 
     .article-content ul, .article-content ol {
-      margin-left: 15px;
-      margin-bottom: 8px;
+      margin-left: 20px;
+      margin-bottom: 10px;
     }
 
     .article-content li {
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .article-subsection {
       font-weight: 600;
-      margin-top: 10px;
-      margin-bottom: 5px;
+      margin-top: 12px;
+      margin-bottom: 6px;
     }
 
     /* Pricing table */
     .pricing-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 12px 0;
-      font-size: 9px;
+      margin: 15px 0;
+      font-size: 11px;
     }
 
     .pricing-table th {
-      background: #2563eb;
-      color: #fff;
-      padding: 8px 10px;
+      background: #fff;
+      padding: 12px 15px;
       text-align: left;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #1a1a1a;
     }
 
     .pricing-table td {
-      padding: 8px 10px;
+      padding: 12px 15px;
       border-bottom: 1px solid #e5e5e5;
     }
 
     .pricing-table .total-row {
+      font-weight: 600;
+    }
+
+    .pricing-table .grand-total {
+      background: #1a1a1a;
+      color: #fff;
+    }
+
+    .pricing-table .grand-total td {
+      border-bottom: none;
       font-weight: 700;
-      background: #f5f5f5;
-    }
-
-    /* Checkbox list */
-    .checkbox-list {
-      list-style: none;
-      margin-left: 0;
-    }
-
-    .checkbox-list li {
-      padding-left: 20px;
-      position: relative;
-    }
-
-    .checkbox-list li::before {
-      content: "☐";
-      position: absolute;
-      left: 0;
-    }
-
-    .checkbox-list li.checked::before {
-      content: "☑";
-      color: #2563eb;
     }
 
     /* Signatures */
     .signatures-section {
       margin-top: 40px;
-      padding-top: 20px;
-      border-top: 2px solid #2563eb;
+      padding-top: 25px;
+      border-top: 1px solid #1a1a1a;
     }
 
     .signatures-title {
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 25px;
+      margin-bottom: 10px;
       text-transform: uppercase;
-      color: #2563eb;
+      letter-spacing: 1px;
+    }
+
+    .signatures-date {
+      text-align: center;
+      font-size: 11px;
+      margin-bottom: 30px;
     }
 
     .signatures-container {
       display: flex;
       justify-content: space-between;
-      gap: 40px;
+      gap: 60px;
     }
 
     .signature-box {
@@ -1098,42 +1128,29 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
     }
 
     .signature-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       margin-bottom: 5px;
     }
 
     .signature-name {
-      font-size: 9px;
+      font-size: 10px;
       color: #666;
       margin-bottom: 8px;
     }
 
     .signature-mention {
-      font-size: 8px;
+      font-size: 9px;
       color: #888;
       margin-bottom: 15px;
       font-style: italic;
     }
 
     .signature-area {
-      height: 60px;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
+      height: 70px;
+      border-bottom: 1px solid #1a1a1a;
       margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ccc;
-      font-size: 8px;
     }
-
-    .signature-date {
-      font-size: 9px;
-      margin-top: 8px;
-    }
-
-
 
     @page {
       size: A4;
@@ -1150,27 +1167,32 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
     <!-- Header -->
     <div class="header">
       <div class="title-section">
-        <h1>CONTRAT DE PRESTATION INFORMATIQUE</h1>
-        <h2>En régie / Assistance technique</h2>
-        <p style="font-size: 9px; color: #64748b; font-style: italic;">(Obligation de moyens)</p>
-        <p class="contract-ref">Contrat n° ${contractNumber} - ${contractDate}</p>
+        <h1>CONTRAT</h1>
+        <span class="contract-number">Contrat n°${contractNumber}</span>
       </div>
       <div class="cube">
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M50 10L90 30V70L50 90L10 70V30L50 10Z" stroke="#2563eb" stroke-width="2" fill="none"/>
-          <path d="M50 10V50M50 50L90 30M50 50L10 30M50 50V90" stroke="#2563eb" stroke-width="2"/>
+          <path d="M50 10L90 30V70L50 90L10 70V30L50 10Z" stroke="#1a1a1a" stroke-width="2" fill="none"/>
+          <path d="M50 10V50M50 50L90 30M50 50L10 30M50 50V90" stroke="#1a1a1a" stroke-width="2"/>
         </svg>
       </div>
     </div>
 
+    <!-- Meta info -->
+    <div class="meta-info">
+      <p><strong>Type :</strong> Contrat de prestation en régie (Assistance technique)</p>
+      <p><strong>Date :</strong> ${contractDate}</p>
+    </div>
+
+    <div class="divider"></div>
+
     <!-- Warning box -->
     <div class="warning-box">
-      <h3>⚠️ NATURE DU CONTRAT</h3>
+      <h3>NATURE DU CONTRAT</h3>
       <p>Ce contrat est un contrat de prestation en régie. Le Prestataire s'engage à mettre à disposition ses compétences et son temps, mais <strong>n'est pas tenu à une obligation de résultat</strong>. La facturation est basée sur le temps effectivement passé.</p>
     </div>
 
     <!-- Parties -->
-    <div class="parties-header">Entre les soussignés</div>
     <div class="parties-container">
       <div class="party-box">
         <div class="party-label">Le Prestataire</div>
@@ -1178,22 +1200,23 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
         <div class="party-details">
           <p>${providerAddress}</p>
           <p>SIRET : ${providerSiret}</p>
-          <p>Email : ${providerEmail}</p>
-          <p>Tél : ${providerPhone}</p>
+          <p>${providerEmail}</p>
+          <p>${providerPhone}</p>
         </div>
       </div>
-      <div class="party-box">
+      <div class="party-box right">
         <div class="party-label">Le Client</div>
         <div class="party-name">${clientName}</div>
         <div class="party-details">
           ${clientAddress ? `<p>${clientAddress}</p>` : ''}
           ${clientSiret ? `<p>SIRET : ${clientSiret}</p>` : ''}
-          ${clientEmail ? `<p>Email : ${clientEmail}</p>` : ''}
-          ${clientPhone ? `<p>Tél : ${clientPhone}</p>` : ''}
-          ${clientRepresentative ? `<p>Représenté par : ${clientRepresentative}</p>` : ''}
+          ${clientEmail ? `<p>${clientEmail}</p>` : ''}
+          ${clientPhone ? `<p>${clientPhone}</p>` : ''}
         </div>
       </div>
     </div>
+
+    <div class="divider"></div>
 
     <!-- Preamble -->
     <div class="preamble">
