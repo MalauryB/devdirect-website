@@ -285,6 +285,7 @@ export type ProjectDocumentType =
   | 'steering_committee' // Comité de suivi
   | 'documentation'     // Documentation technique
   | 'specification'     // Cahier des charges
+  | 'planning'          // Planning prévisionnel
   | 'mockup'            // Maquette
   | 'deliverable'       // Livrable
   | 'other'             // Autre

@@ -1,4 +1,4 @@
-import { ProjectContract, Project, Profile, Quote } from './types'
+import { ProjectContract, Project, Profile, Quote, ProjectDocument } from './types'
 
 interface ContractPdfParams {
   contract: ProjectContract
@@ -12,20 +12,41 @@ interface ContractPdfParams {
     email: string
     phone: string
   }
+  includeAnnexes?: boolean
+  specificationDocument?: ProjectDocument | null
+  planningDocument?: ProjectDocument | null
 }
 
 // Generate PDF and return blob URL for preview
 export async function generateContractPdfUrl(
   params: ContractPdfParams
 ): Promise<string> {
-  const { contract, project, client, quote, provider } = params
+  const {
+    contract,
+    project,
+    client,
+    quote,
+    provider,
+    includeAnnexes = true,
+    specificationDocument,
+    planningDocument
+  } = params
 
   const response = await fetch('/api/generate-contract-pdf', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ contract, project, client, quote, provider }),
+    body: JSON.stringify({
+      contract,
+      project,
+      client,
+      quote,
+      provider,
+      includeAnnexes,
+      specificationDocument,
+      planningDocument
+    }),
   })
 
   if (!response.ok) {
@@ -59,10 +80,21 @@ export async function exportContractToPdf(
     siret: string
     email: string
     phone: string
-  }
+  },
+  specificationDocument?: ProjectDocument | null,
+  planningDocument?: ProjectDocument | null
 ): Promise<void> {
   try {
-    const url = await generateContractPdfUrl({ contract, project, client, quote, provider })
+    const url = await generateContractPdfUrl({
+      contract,
+      project,
+      client,
+      quote,
+      provider,
+      includeAnnexes: true,
+      specificationDocument,
+      planningDocument
+    })
     downloadContractPdf(url, contract.id)
     window.URL.revokeObjectURL(url)
   } catch (error) {

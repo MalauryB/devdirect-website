@@ -308,6 +308,7 @@ export const documentTypeLabels: Record<ProjectDocumentType, { fr: string; en: s
   steering_committee: { fr: 'Comité de suivi', en: 'Steering Committee' },
   documentation: { fr: 'Documentation', en: 'Documentation' },
   specification: { fr: 'Cahier des charges', en: 'Specification' },
+  planning: { fr: 'Planning prévisionnel', en: 'Project Planning' },
   mockup: { fr: 'Maquette', en: 'Mockup' },
   deliverable: { fr: 'Livrable', en: 'Deliverable' },
   other: { fr: 'Autre', en: 'Other' }

@@ -781,6 +781,7 @@ export const translations = {
         steering_committee: "Comité de suivi",
         documentation: "Documentation",
         specification: "Cahier des charges",
+        planning: "Planning prévisionnel",
         mockup: "Maquette",
         deliverable: "Livrable",
         other: "Autre"
@@ -1958,6 +1959,7 @@ export const translations = {
         steering_committee: "Steering committee",
         documentation: "Documentation",
         specification: "Specifications",
+        planning: "Project Planning",
         mockup: "Mockup",
         deliverable: "Deliverable",
         other: "Other"

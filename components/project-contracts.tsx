@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { useLanguage } from "@/contexts/language-context"
-import { Project, Quote, ProjectContract, ContractType, ContractStatus, Profile, ContractProfile } from "@/lib/types"
+import { Project, Quote, ProjectContract, ContractType, ContractStatus, Profile, ContractProfile, ProjectDocument } from "@/lib/types"
 import {
   getProjectContracts,
   createContract,
@@ -19,6 +19,7 @@ import {
 } from "@/lib/contracts"
 import { generateContractPdfUrl, downloadContractPdf } from "@/lib/contract-pdf-export"
 import { calculateQuoteData } from "@/lib/quote-export"
+import { getProjectDocuments } from "@/lib/documents"
 import {
   Select,
   SelectContent,
@@ -124,6 +125,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
   const [deletingContract, setDeletingContract] = useState<ProjectContract | null>(null)
   const [saving, setSaving] = useState(false)
   const [exporting, setExporting] = useState<string | null>(null)
+  const [projectDocuments, setProjectDocuments] = useState<ProjectDocument[]>([])
 
   // Form state
   const [formType, setFormType] = useState<ContractType>('service_agreement')
@@ -147,9 +149,10 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
   const selectedQuote = formQuoteId && formQuoteId !== 'none' ? quotes.find(q => q.id === formQuoteId) : null
   const quoteData = selectedQuote ? calculateQuoteData(selectedQuote) : null
 
-  // Load contracts
+  // Load contracts and documents
   useEffect(() => {
     loadContracts()
+    loadDocuments()
   }, [project.id])
 
   const loadContracts = async () => {
@@ -158,6 +161,15 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
     setContracts(data)
     setLoading(false)
   }
+
+  const loadDocuments = async () => {
+    const { documents } = await getProjectDocuments(project.id)
+    setProjectDocuments(documents)
+  }
+
+  // Get specification and planning documents for annexes
+  const specificationDocument = projectDocuments.find(d => d.type === 'specification') || null
+  const planningDocument = projectDocuments.find(d => d.type === 'planning') || null
 
   const resetForm = () => {
     setFormType('service_agreement')
@@ -265,7 +277,10 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
         project,
         client: client || project.profiles as Profile | undefined,
         quote: contractQuote,
-        provider
+        provider,
+        includeAnnexes: true,
+        specificationDocument,
+        planningDocument
       })
       setPreviewPdfUrl(url)
     } catch (error) {
@@ -394,7 +409,10 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
         project,
         client: client || project.profiles as Profile | undefined,
         quote: contractQuote,
-        provider
+        provider,
+        includeAnnexes: true,
+        specificationDocument,
+        planningDocument
       })
       downloadContractPdf(url, contract.id)
       window.URL.revokeObjectURL(url)
