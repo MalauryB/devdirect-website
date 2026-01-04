@@ -455,11 +455,15 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
         <div className="space-y-3">
           {contracts.map((contract) => {
             const statusConfig = STATUS_CONFIG[contract.status]
+            // Check if T&M contract is missing required profiles
+            const isIncomplete = contract.type === 'time_and_materials' &&
+              (!contract.profiles || contract.profiles.length === 0 ||
+               !contract.profiles.some(p => p.profile_name && p.daily_rate > 0))
 
             return (
               <div
                 key={contract.id}
-                className="bg-white border border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-colors"
+                className={`bg-white border rounded-xl p-4 hover:border-gray-300 transition-colors ${isIncomplete ? 'border-amber-300 bg-amber-50/30' : 'border-gray-200'}`}
               >
                 <div className="flex items-start gap-4">
                   {/* Icon */}
@@ -481,10 +485,26 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
                       </div>
 
                       {/* Status badge */}
-                      <span className={`shrink-0 text-xs px-2.5 py-1 rounded-full font-medium ${statusConfig.bgColor} ${statusConfig.color}`}>
-                        {getContractStatusLabel(contract.status, t)}
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        {isIncomplete && (
+                          <span className="text-xs px-2.5 py-1 rounded-full font-medium bg-amber-100 text-amber-700 flex items-center gap-1">
+                            <AlertCircle className="w-3 h-3" />
+                            {t('contracts.incomplete')}
+                          </span>
+                        )}
+                        <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${statusConfig.bgColor} ${statusConfig.color}`}>
+                          {getContractStatusLabel(contract.status, t)}
+                        </span>
+                      </div>
                     </div>
+
+                    {/* Incomplete warning */}
+                    {isIncomplete && (
+                      <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                        <span>{t('contracts.incompleteWarning')}</span>
+                      </div>
+                    )}
 
                     {/* Meta info */}
                     <div className="flex flex-wrap items-center gap-4 mt-3 text-xs text-foreground/50">

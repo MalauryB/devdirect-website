@@ -1163,7 +1163,9 @@ export const translations = {
       },
       obligationNote: "Obligation de moyens",
       obligationNoteDesc: "Le prestataire s'engage à mettre à disposition ses compétences et son temps. La facturation est basée sur le temps effectivement passé.",
-      pdfInfoDetailsRegie: "Le contrat PDF en régie (14 articles) sera généré avec les modalités de facturation au temps passé."
+      pdfInfoDetailsRegie: "Le contrat PDF en régie (14 articles) sera généré avec les modalités de facturation au temps passé.",
+      incomplete: "Incomplet",
+      incompleteWarning: "Ce contrat en régie n'a pas de profil ou TJM défini. Ajoutez au moins un profil avec un taux journalier avant l'export."
     },
     common: {
       edit: "Modifier",
@@ -2338,7 +2340,9 @@ export const translations = {
       },
       obligationNote: "Best efforts obligation",
       obligationNoteDesc: "The provider commits to providing their skills and time. Billing is based on actual time spent.",
-      pdfInfoDetailsRegie: "The time and materials PDF contract (14 articles) will be generated with hourly billing terms."
+      pdfInfoDetailsRegie: "The time and materials PDF contract (14 articles) will be generated with hourly billing terms.",
+      incomplete: "Incomplete",
+      incompleteWarning: "This time and materials contract has no profile or daily rate defined. Add at least one profile with a daily rate before exporting."
     },
     common: {
       edit: "Edit",
