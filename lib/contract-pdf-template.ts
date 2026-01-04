@@ -161,14 +161,8 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       background: #fff;
     }
 
-    .page {
-      padding: 40px 50px;
-      page-break-after: always;
-      position: relative;
-    }
-
-    .page:last-child {
-      page-break-after: auto;
+    .contract-content {
+      padding: 0;
     }
 
     /* Prevent orphans and widows */
@@ -177,6 +171,14 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
     }
 
     .signatures-section {
+      page-break-inside: avoid;
+    }
+
+    .party-box {
+      page-break-inside: avoid;
+    }
+
+    .pricing-table {
       page-break-inside: avoid;
     }
 
@@ -417,48 +419,20 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       margin-top: 8px;
     }
 
-    /* Footer */
-    .page-footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 8px;
-      color: #999;
-      border-top: 1px solid #e5e5e5;
-      padding-top: 10px;
-      margin-top: 30px;
-    }
 
-    /* Paraph zone */
-    .paraph-zone {
-      width: 80px;
-      height: 40px;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 7px;
-      color: #ccc;
-      margin-left: auto;
-      margin-top: 20px;
-    }
-
-    /* Print styles */
-    @media print {
-      .page {
-        padding: 15mm 20mm;
-      }
-    }
 
     @page {
       size: A4;
-      margin: 0;
+      margin: 15mm 20mm;
+    }
+
+    @page :first {
+      margin-top: 15mm;
     }
   </style>
 </head>
 <body>
-  <!-- PAGE 1 -->
-  <div class="page">
+  <div class="contract-content">
     <!-- Header -->
     <div class="header">
       <div class="title-section">
@@ -572,11 +546,6 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       </div>
     </div>
 
-    <div class="paraph-zone">Paraphe</div>
-  </div>
-
-  <!-- PAGE 2 -->
-  <div class="page">
     <!-- ARTICLE 4 -->
     <div class="article">
       <div class="article-title">Article 4 - Délais de réalisation</div>
@@ -644,11 +613,6 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       </div>
     </div>
 
-    <div class="paraph-zone">Paraphe</div>
-  </div>
-
-  <!-- PAGE 3 -->
-  <div class="page">
     <!-- ARTICLE 8 -->
     <div class="article">
       <div class="article-title">Article 8 - Propriété intellectuelle</div>
@@ -706,11 +670,6 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       </div>
     </div>
 
-    <div class="paraph-zone">Paraphe</div>
-  </div>
-
-  <!-- PAGE 4 -->
-  <div class="page">
     <!-- ARTICLE 12 -->
     <div class="article">
       <div class="article-title">Article 12 - Résiliation</div>
@@ -773,12 +732,6 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       </div>
     </div>
 
-    <!-- Footer -->
-    <div style="display: flex; justify-content: space-between; margin-top: 30px; padding-top: 10px; border-top: 1px solid #e5e5e5; font-size: 8px; color: #999;">
-      <span>Contrat n&deg; ${contractNumber}</span>
-      <span>${providerName}</span>
-      <span>Page 4/4</span>
-    </div>
   </div>
 </body>
 </html>`
@@ -877,14 +830,8 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       background: #fff;
     }
 
-    .page {
-      padding: 40px 50px;
-      page-break-after: always;
-      position: relative;
-    }
-
-    .page:last-child {
-      page-break-after: auto;
+    .contract-content {
+      padding: 0;
     }
 
     /* Prevent orphans and widows */
@@ -893,6 +840,14 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
     }
 
     .signatures-section {
+      page-break-inside: avoid;
+    }
+
+    .party-box {
+      page-break-inside: avoid;
+    }
+
+    .pricing-table {
       page-break-inside: avoid;
     }
 
@@ -1178,48 +1133,20 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       margin-top: 8px;
     }
 
-    /* Footer */
-    .page-footer {
-      display: flex;
-      justify-content: space-between;
-      font-size: 8px;
-      color: #999;
-      border-top: 1px solid #e5e5e5;
-      padding-top: 10px;
-      margin-top: 30px;
-    }
 
-    /* Paraph zone */
-    .paraph-zone {
-      width: 80px;
-      height: 40px;
-      border: 1px dashed #ccc;
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 7px;
-      color: #ccc;
-      margin-left: auto;
-      margin-top: 20px;
-    }
-
-    /* Print styles */
-    @media print {
-      .page {
-        padding: 15mm 20mm;
-      }
-    }
 
     @page {
       size: A4;
-      margin: 0;
+      margin: 15mm 20mm;
+    }
+
+    @page :first {
+      margin-top: 15mm;
     }
   </style>
 </head>
 <body>
-  <!-- PAGE 1 -->
-  <div class="page">
+  <div class="contract-content">
     <!-- Header -->
     <div class="header">
       <div class="title-section">
@@ -1317,11 +1244,6 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       </div>
     </div>
 
-    <div class="paraph-zone">Paraphe</div>
-  </div>
-
-  <!-- PAGE 2 -->
-  <div class="page">
     <!-- ARTICLE 4 -->
     <div class="article">
       <div class="article-title">Article 4 - Tarification</div>
@@ -1412,11 +1334,6 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       </div>
     </div>
 
-    <div class="paraph-zone">Paraphe</div>
-  </div>
-
-  <!-- PAGE 3 -->
-  <div class="page">
     <!-- ARTICLE 9 -->
     <div class="article">
       <div class="article-title">Article 9 - Indépendance du Prestataire</div>
@@ -1474,11 +1391,6 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       </div>
     </div>
 
-    <div class="paraph-zone">Paraphe</div>
-  </div>
-
-  <!-- PAGE 4 -->
-  <div class="page">
     <!-- ARTICLE 14 -->
     <div class="article">
       <div class="article-title">Article 14 - Responsabilité</div>
@@ -1556,12 +1468,6 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       </div>
     </div>
 
-    <!-- Footer -->
-    <div style="display: flex; justify-content: space-between; margin-top: 30px; padding-top: 10px; border-top: 1px solid #e5e5e5; font-size: 8px; color: #999;">
-      <span>Contrat n&deg; ${contractNumber}</span>
-      <span>${providerName}</span>
-      <span>Page 4/4</span>
-    </div>
   </div>
 </body>
 </html>`
