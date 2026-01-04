@@ -629,7 +629,7 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
           <li>Livrer un travail de qualité, exempt de vices et de bugs majeurs</li>
           <li>Fournir la documentation technique nécessaire à l'utilisation des livrables</li>
         </ul>
-        <p>Le Prestataire est tenu à une obligation de moyens renforcée pour la réalisation de la prestation.</p>
+        <p>Le Prestataire est tenu à une <strong>obligation de résultat</strong> pour la réalisation de la prestation, conformément aux spécifications convenues.</p>
       </div>
     </div>
 
