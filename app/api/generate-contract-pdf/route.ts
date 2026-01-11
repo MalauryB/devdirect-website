@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
-import puppeteer from 'puppeteer'
+import puppeteer, { Browser } from 'puppeteer'
+import { PDFDocument } from 'pdf-lib'
 import { generateContractPdfHtml, generateTimeAndMaterialsContractPdfHtml } from '@/lib/contract-pdf-template'
 import { ProjectContract, Project, Profile, Quote, ProjectDocument } from '@/lib/types'
+import { createClient } from '@supabase/supabase-js'
+
+// Initialize Supabase client for downloading files
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 // Generate an annex cover page
 function generateAnnexCoverPage(annexNumber: number, title: string, description: string, documentInfo?: { name: string; version: number; date: string } | null): string {
@@ -37,28 +44,59 @@ function generateAnnexCoverPage(annexNumber: number, title: string, description:
   `
 }
 
+// Download PDF from Supabase Storage
+async function downloadPdfFromStorage(filePath: string): Promise<Uint8Array | null> {
+  try {
+    const { data, error } = await supabase.storage
+      .from('project-documents')
+      .download(filePath)
 
-// Generate placeholder page for external documents
-function generateExternalDocumentPlaceholder(annexNumber: number, title: string, documentInfo?: { name: string; version: number; date: string; fileType: string } | null): string {
-  if (documentInfo && documentInfo.fileType === 'application/pdf') {
-    // For PDFs, we just show a cover page - the actual PDF will be merged separately
-    return generateAnnexCoverPage(
-      annexNumber,
-      title,
-      'Ce document est joint au présent contrat.',
-      documentInfo
-    )
+    if (error || !data) {
+      console.error('Error downloading PDF:', error)
+      return null
+    }
+
+    const arrayBuffer = await data.arrayBuffer()
+    return new Uint8Array(arrayBuffer)
+  } catch (error) {
+    console.error('Error downloading PDF from storage:', error)
+    return null
   }
+}
 
-  return generateAnnexCoverPage(
-    annexNumber,
-    title,
-    'Ce document doit être joint au présent contrat.',
-    documentInfo
-  )
+// Generate a single page PDF from HTML (for cover pages)
+async function generateCoverPagePdf(browser: Browser, html: string): Promise<Uint8Array> {
+  const page = await browser.newPage()
+  await page.setContent(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        @page { margin: 0; }
+        body { margin: 0; padding: 0; }
+      </style>
+    </head>
+    <body>
+      ${html}
+    </body>
+    </html>
+  `, { waitUntil: 'networkidle0' })
+
+  const pdfBuffer = await page.pdf({
+    format: 'A4',
+    printBackground: true,
+    margin: { top: '0', right: '0', bottom: '0', left: '0' }
+  })
+
+  await page.close()
+  return new Uint8Array(pdfBuffer)
 }
 
 export async function POST(request: NextRequest) {
+  let browser: Browser | null = null
+
   try {
     const {
       contract,
@@ -92,76 +130,21 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Contract data is required' }, { status: 400 })
     }
 
-    // Generate main contract HTML based on contract type
-    // Note: quote is used for calculating amounts in the contract body
-    let fullHtml = contract.type === 'time_and_materials'
-      ? generateTimeAndMaterialsContractPdfHtml({ contract, project, client, provider })
-      : generateContractPdfHtml({ contract, project, client, quote, provider })
-
-    // Only add annexes for forfait contracts with includeAnnexes flag
-    if (includeAnnexes && contract.type !== 'time_and_materials') {
-      // Close the contract HTML body/html tags and we'll append annexes
-      fullHtml = fullHtml.replace('</body></html>', '')
-
-      // Annexe 1: Devis signé (from project documents)
-      const signedQuoteInfo = signedQuoteDocument ? {
-        name: signedQuoteDocument.name,
-        version: signedQuoteDocument.version,
-        date: new Date(signedQuoteDocument.created_at).toLocaleDateString('fr-FR'),
-        fileType: signedQuoteDocument.file_type
-      } : null
-
-      fullHtml += generateExternalDocumentPlaceholder(
-        1,
-        'Devis signé',
-        signedQuoteInfo
-      )
-
-      // Annexe 2: Cahier des charges
-      const specInfo = specificationDocument ? {
-        name: specificationDocument.name,
-        version: specificationDocument.version,
-        date: new Date(specificationDocument.created_at).toLocaleDateString('fr-FR'),
-        fileType: specificationDocument.file_type
-      } : null
-
-      fullHtml += generateExternalDocumentPlaceholder(
-        2,
-        'Cahier des charges',
-        specInfo
-      )
-
-      // Annexe 3: Planning prévisionnel
-      const planningInfo = planningDocument ? {
-        name: planningDocument.name,
-        version: planningDocument.version,
-        date: new Date(planningDocument.created_at).toLocaleDateString('fr-FR'),
-        fileType: planningDocument.file_type
-      } : null
-
-      fullHtml += generateExternalDocumentPlaceholder(
-        3,
-        'Planning prévisionnel',
-        planningInfo
-      )
-
-      // Close HTML
-      fullHtml += '</body></html>'
-    }
-
-    // Launch Puppeteer and generate PDF
-    const browser = await puppeteer.launch({
+    // Launch browser once
+    browser = await puppeteer.launch({
       headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox']
     })
 
+    // Generate main contract HTML based on contract type
+    const contractHtml = contract.type === 'time_and_materials'
+      ? generateTimeAndMaterialsContractPdfHtml({ contract, project, client, provider })
+      : generateContractPdfHtml({ contract, project, client, quote, provider })
+
+    // Generate main contract PDF
     const page = await browser.newPage()
-
-    // Set content and wait for fonts to load
-    await page.setContent(fullHtml, { waitUntil: 'networkidle0' })
-
-    // Generate PDF
-    const pdfBuffer = await page.pdf({
+    await page.setContent(contractHtml, { waitUntil: 'networkidle0' })
+    const contractPdfBuffer = await page.pdf({
       format: 'A4',
       printBackground: true,
       margin: {
@@ -171,11 +154,81 @@ export async function POST(request: NextRequest) {
         left: '10mm'
       }
     })
+    await page.close()
 
+    // If no annexes needed or T&M contract, return just the contract
+    if (!includeAnnexes || contract.type === 'time_and_materials') {
+      await browser.close()
+      return new NextResponse(Buffer.from(contractPdfBuffer), {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename="contrat-${contract.id.slice(0, 8)}.pdf"`,
+        },
+      })
+    }
+
+    // Create merged PDF document
+    const mergedPdf = await PDFDocument.create()
+
+    // Add main contract
+    const contractPdf = await PDFDocument.load(contractPdfBuffer)
+    const contractPages = await mergedPdf.copyPages(contractPdf, contractPdf.getPageIndices())
+    contractPages.forEach(page => mergedPdf.addPage(page))
+
+    // Helper to add annex with cover page and PDF content
+    async function addAnnex(
+      annexNumber: number,
+      title: string,
+      document: ProjectDocument | null | undefined
+    ) {
+      const docInfo = document ? {
+        name: document.name,
+        version: document.version,
+        date: new Date(document.created_at).toLocaleDateString('fr-FR')
+      } : null
+
+      // Generate and add cover page
+      const coverHtml = generateAnnexCoverPage(
+        annexNumber,
+        title,
+        document ? 'Ce document est joint au présent contrat.' : 'Ce document doit être joint au présent contrat.',
+        docInfo
+      )
+      const coverPdfBytes = await generateCoverPagePdf(browser!, coverHtml)
+      const coverPdf = await PDFDocument.load(coverPdfBytes)
+      const coverPages = await mergedPdf.copyPages(coverPdf, coverPdf.getPageIndices())
+      coverPages.forEach(page => mergedPdf.addPage(page))
+
+      // If document exists and is a PDF, download and merge it
+      if (document && document.file_type === 'application/pdf' && document.file_path) {
+        const pdfBytes = await downloadPdfFromStorage(document.file_path)
+        if (pdfBytes) {
+          try {
+            const annexPdf = await PDFDocument.load(pdfBytes)
+            const annexPages = await mergedPdf.copyPages(annexPdf, annexPdf.getPageIndices())
+            annexPages.forEach(page => mergedPdf.addPage(page))
+          } catch (err) {
+            console.error(`Failed to load annex PDF for ${title}:`, err)
+            // Continue without the annex content - cover page already added
+          }
+        }
+      }
+    }
+
+    // Add annexes
+    await addAnnex(1, 'Devis signé', signedQuoteDocument)
+    await addAnnex(2, 'Cahier des charges', specificationDocument)
+    await addAnnex(3, 'Planning prévisionnel', planningDocument)
+
+    // Close browser
     await browser.close()
+    browser = null
 
-    // Return PDF as response
-    return new NextResponse(Buffer.from(pdfBuffer), {
+    // Save merged PDF
+    const mergedPdfBytes = await mergedPdf.save()
+
+    return new NextResponse(Buffer.from(mergedPdfBytes), {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',
@@ -184,6 +237,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('Error generating PDF:', error)
+    if (browser) {
+      await browser.close()
+    }
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to generate PDF' },
       { status: 500 }

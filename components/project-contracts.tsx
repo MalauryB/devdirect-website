@@ -144,6 +144,10 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
   const [formContractDuration, setFormContractDuration] = useState<string>('6_months')
   const [formNoticePeriod, setFormNoticePeriod] = useState<string>('1_month')
   const [formBillingFrequency, setFormBillingFrequency] = useState<string>('monthly')
+  // Annexes document selection (for forfait contracts)
+  const [formSignedQuoteId, setFormSignedQuoteId] = useState<string>('none')
+  const [formSpecificationId, setFormSpecificationId] = useState<string>('none')
+  const [formPlanningId, setFormPlanningId] = useState<string>('none')
 
   // Get selected quote data for preview
   const selectedQuote = formQuoteId && formQuoteId !== 'none' ? quotes.find(q => q.id === formQuoteId) : null
@@ -167,10 +171,21 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
     setProjectDocuments(documents)
   }
 
-  // Get documents for annexes
-  const signedQuoteDocument = projectDocuments.find(d => d.type === 'signed_quote') || null
-  const specificationDocument = projectDocuments.find(d => d.type === 'specification') || null
-  const planningDocument = projectDocuments.find(d => d.type === 'planning') || null
+  // Get documents by type for annexes selection
+  const signedQuoteDocuments = projectDocuments.filter(d => d.type === 'signed_quote')
+  const specificationDocuments = projectDocuments.filter(d => d.type === 'specification')
+  const planningDocuments = projectDocuments.filter(d => d.type === 'planning')
+
+  // Get selected documents for PDF generation
+  const selectedSignedQuote = formSignedQuoteId !== 'none'
+    ? projectDocuments.find(d => d.id === formSignedQuoteId) || null
+    : null
+  const selectedSpecification = formSpecificationId !== 'none'
+    ? projectDocuments.find(d => d.id === formSpecificationId) || null
+    : null
+  const selectedPlanning = formPlanningId !== 'none'
+    ? projectDocuments.find(d => d.id === formPlanningId) || null
+    : null
 
   const resetForm = () => {
     setFormType('service_agreement')
@@ -181,6 +196,10 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
     // Fixed-price
     setFormDeliveryDelay('3_months')
     setFormPaymentSchedule('30-40-30')
+    // Annexes
+    setFormSignedQuoteId('none')
+    setFormSpecificationId('none')
+    setFormPlanningId('none')
     // Time and materials - reset to single empty profile
     setFormProfiles([{ profile_name: '', daily_rate: 0, estimated_days: null }])
     setFormWorkLocation('remote')
@@ -273,6 +292,11 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
 
     try {
       const contractQuote = contract.quote_id ? quotes.find(q => q.id === contract.quote_id) : null
+      // Use latest documents by default for preview
+      const latestSignedQuote = signedQuoteDocuments.length > 0 ? signedQuoteDocuments[0] : null
+      const latestSpecification = specificationDocuments.length > 0 ? specificationDocuments[0] : null
+      const latestPlanning = planningDocuments.length > 0 ? planningDocuments[0] : null
+
       const url = await generateContractPdfUrl({
         contract,
         project,
@@ -280,9 +304,9 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
         quote: contractQuote,
         provider,
         includeAnnexes: true,
-        signedQuoteDocument,
-        specificationDocument,
-        planningDocument
+        signedQuoteDocument: latestSignedQuote,
+        specificationDocument: latestSpecification,
+        planningDocument: latestPlanning
       })
       setPreviewPdfUrl(url)
     } catch (error) {
@@ -406,6 +430,11 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
     try {
       // Find the quote associated with this contract
       const contractQuote = contract.quote_id ? quotes.find(q => q.id === contract.quote_id) : null
+      // Use latest documents by default for export
+      const latestSignedQuote = signedQuoteDocuments.length > 0 ? signedQuoteDocuments[0] : null
+      const latestSpecification = specificationDocuments.length > 0 ? specificationDocuments[0] : null
+      const latestPlanning = planningDocuments.length > 0 ? planningDocuments[0] : null
+
       const url = await generateContractPdfUrl({
         contract,
         project,
@@ -413,9 +442,9 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
         quote: contractQuote,
         provider,
         includeAnnexes: true,
-        signedQuoteDocument,
-        specificationDocument,
-        planningDocument
+        signedQuoteDocument: latestSignedQuote,
+        specificationDocument: latestSpecification,
+        planningDocument: latestPlanning
       })
       downloadContractPdf(url, contract.id)
       window.URL.revokeObjectURL(url)
@@ -780,6 +809,78 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
                     </SelectContent>
                   </Select>
                   <p className="text-xs text-foreground/50">{t('contracts.paymentScheduleHint')}</p>
+                </div>
+
+                {/* Annexes selection */}
+                <div className="space-y-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm font-medium text-blue-800">
+                    <FileText className="w-4 h-4" />
+                    {t('contracts.annexesSection')}
+                  </div>
+                  <p className="text-xs text-blue-600">{t('contracts.annexesSectionHint')}</p>
+
+                  {/* Annexe 1: Devis signé */}
+                  <div className="space-y-2">
+                    <Label className="text-sm">{t('contracts.annexe1SignedQuote')}</Label>
+                    <Select value={formSignedQuoteId} onValueChange={setFormSignedQuoteId}>
+                      <SelectTrigger className="bg-white">
+                        <SelectValue placeholder={t('contracts.selectDocument')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('contracts.noDocumentSelected')}</SelectItem>
+                        {signedQuoteDocuments.map((doc) => (
+                          <SelectItem key={doc.id} value={doc.id}>
+                            {doc.name} (v{doc.version}) - {new Date(doc.created_at).toLocaleDateString('fr-FR')}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {signedQuoteDocuments.length === 0 && (
+                      <p className="text-xs text-amber-600">{t('contracts.noSignedQuoteAvailable')}</p>
+                    )}
+                  </div>
+
+                  {/* Annexe 2: Cahier des charges */}
+                  <div className="space-y-2">
+                    <Label className="text-sm">{t('contracts.annexe2Specification')}</Label>
+                    <Select value={formSpecificationId} onValueChange={setFormSpecificationId}>
+                      <SelectTrigger className="bg-white">
+                        <SelectValue placeholder={t('contracts.selectDocument')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('contracts.noDocumentSelected')}</SelectItem>
+                        {specificationDocuments.map((doc) => (
+                          <SelectItem key={doc.id} value={doc.id}>
+                            {doc.name} (v{doc.version}) - {new Date(doc.created_at).toLocaleDateString('fr-FR')}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {specificationDocuments.length === 0 && (
+                      <p className="text-xs text-amber-600">{t('contracts.noSpecificationAvailable')}</p>
+                    )}
+                  </div>
+
+                  {/* Annexe 3: Planning */}
+                  <div className="space-y-2">
+                    <Label className="text-sm">{t('contracts.annexe3Planning')}</Label>
+                    <Select value={formPlanningId} onValueChange={setFormPlanningId}>
+                      <SelectTrigger className="bg-white">
+                        <SelectValue placeholder={t('contracts.selectDocument')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">{t('contracts.noDocumentSelected')}</SelectItem>
+                        {planningDocuments.map((doc) => (
+                          <SelectItem key={doc.id} value={doc.id}>
+                            {doc.name} (v{doc.version}) - {new Date(doc.created_at).toLocaleDateString('fr-FR')}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {planningDocuments.length === 0 && (
+                      <p className="text-xs text-amber-600">{t('contracts.noPlanningAvailable')}</p>
+                    )}
+                  </div>
                 </div>
               </>
             )}
