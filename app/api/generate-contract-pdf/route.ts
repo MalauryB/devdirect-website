@@ -47,15 +47,42 @@ function generateAnnexCoverPage(annexNumber: number, title: string, description:
 // Download PDF from Supabase Storage
 async function downloadPdfFromStorage(filePath: string): Promise<Uint8Array | null> {
   try {
+    console.log('Downloading PDF from path:', filePath)
+
+    // First try direct download
     const { data, error } = await supabase.storage
       .from('project-documents')
       .download(filePath)
 
-    if (error || !data) {
-      console.error('Error downloading PDF:', error)
+    if (error) {
+      console.error('Error downloading PDF via direct download:', error)
+
+      // Try with signed URL as fallback
+      const { data: signedUrlData, error: signedError } = await supabase.storage
+        .from('project-documents')
+        .createSignedUrl(filePath, 60) // 60 seconds
+
+      if (signedError || !signedUrlData?.signedUrl) {
+        console.error('Error creating signed URL:', signedError)
+        return null
+      }
+
+      console.log('Using signed URL to download')
+      const response = await fetch(signedUrlData.signedUrl)
+      if (!response.ok) {
+        console.error('Failed to fetch from signed URL:', response.status)
+        return null
+      }
+      const arrayBuffer = await response.arrayBuffer()
+      return new Uint8Array(arrayBuffer)
+    }
+
+    if (!data) {
+      console.error('No data returned from download')
       return null
     }
 
+    console.log('PDF downloaded successfully, size:', data.size)
     const arrayBuffer = await data.arrayBuffer()
     return new Uint8Array(arrayBuffer)
   } catch (error) {
@@ -182,6 +209,14 @@ export async function POST(request: NextRequest) {
       title: string,
       document: ProjectDocument | null | undefined
     ) {
+      console.log(`\n=== Adding Annex ${annexNumber}: ${title} ===`)
+      console.log('Document:', document ? {
+        id: document.id,
+        name: document.name,
+        file_path: document.file_path,
+        file_type: document.file_type
+      } : 'null')
+
       const docInfo = document ? {
         name: document.name,
         version: document.version,
@@ -199,20 +234,38 @@ export async function POST(request: NextRequest) {
       const coverPdf = await PDFDocument.load(coverPdfBytes)
       const coverPages = await mergedPdf.copyPages(coverPdf, coverPdf.getPageIndices())
       coverPages.forEach(page => mergedPdf.addPage(page))
+      console.log('Cover page added')
 
       // If document exists and is a PDF, download and merge it
-      if (document && document.file_type === 'application/pdf' && document.file_path) {
+      // Check for PDF file type (can be 'application/pdf' or start with 'application/pdf')
+      const isPdf = document?.file_type?.toLowerCase().includes('pdf') ||
+                    document?.file_path?.toLowerCase().endsWith('.pdf')
+
+      if (document && isPdf && document.file_path) {
+        console.log('Attempting to download and merge PDF...')
         const pdfBytes = await downloadPdfFromStorage(document.file_path)
         if (pdfBytes) {
+          console.log(`Downloaded ${pdfBytes.length} bytes`)
           try {
-            const annexPdf = await PDFDocument.load(pdfBytes)
+            const annexPdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true })
+            const pageCount = annexPdf.getPageCount()
+            console.log(`PDF loaded successfully with ${pageCount} pages`)
             const annexPages = await mergedPdf.copyPages(annexPdf, annexPdf.getPageIndices())
             annexPages.forEach(page => mergedPdf.addPage(page))
+            console.log(`Added ${annexPages.length} pages from annex`)
           } catch (err) {
             console.error(`Failed to load annex PDF for ${title}:`, err)
             // Continue without the annex content - cover page already added
           }
+        } else {
+          console.log('Failed to download PDF - no bytes returned')
         }
+      } else {
+        console.log('Skipping PDF merge:', {
+          hasDocument: !!document,
+          isPdf,
+          hasFilePath: !!document?.file_path
+        })
       }
     }
 
