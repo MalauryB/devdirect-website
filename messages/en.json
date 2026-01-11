@@ -1,7 +1,7 @@
 {
   "site": {
-    "name": "Memo'ry",
-    "title": "Memo'ry - Experts in computer science, mathematics and AI",
+    "name": "Nimli",
+    "title": "Nimli - Experts in computer science, mathematics and AI",
     "description": "Quality IT services at fair prices. Web, mobile, IoT applications. Team of experienced developers."
   },
   "navigation": {
@@ -46,7 +46,7 @@
   },
   "footer": {
     "description": "Your team of experienced developers for all your digital projects. No intermediaries, at fair prices.",
-    "email": "contact@memory.com",
+    "email": "contact@nimli.fr",
     "phone": "+33 1 23 45 67 89",
     "address": "Paris, France",
     "services": "Services",
@@ -63,7 +63,7 @@
       "process": "Process",
       "contact": "Contact"
     },
-    "copyright": "© 2024 Memo'ry. All rights reserved."
+    "copyright": "© 2024 Nimli. All rights reserved."
   },
   "cta": {
     "guarantee": "Response guaranteed within 24h • Free quote • No commitment"

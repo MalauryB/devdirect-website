@@ -10,11 +10,12 @@ import { AuthModal } from "@/components/auth-modal"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Memo'ry - Experts en informatique, mathématiques et IA",
+  title: "Nimli - Experts en informatique, mathématiques et IA",
   description: "Services informatiques de qualité à prix justes. Applications web, mobiles, IoT. Équipe de développeurs expérimentés.",
-  generator: "Memo'ry",
+  generator: "Nimli",
   icons: {
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 5L95 27.5V72.5L50 95L5 72.5V27.5L50 5Z' fill='%23d4a5a5'/><path d='M50 5L95 27.5L50 50L5 27.5L50 5Z' fill='%23e8c4c4'/><path d='M50 50V95L5 72.5V27.5L50 50Z' fill='%23c48b8b'/><path d='M50 50V95L95 72.5V27.5L50 50Z' fill='%23d4a5a5'/></svg>",
+    // Nimbus cloud logo
+    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><ellipse cx='50' cy='55' rx='35' ry='20' fill='%23a8d5e5'/><circle cx='35' cy='45' r='18' fill='%23c4e4f0'/><circle cx='55' cy='38' r='22' fill='%23d4ecf4'/><circle cx='70' cy='50' r='15' fill='%23b8dce8'/><ellipse cx='50' cy='55' rx='35' ry='20' fill='%23a8d5e5'/></svg>",
   },
 }
 

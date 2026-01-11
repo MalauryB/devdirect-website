@@ -3,12 +3,6 @@ import puppeteer, { Browser } from 'puppeteer'
 import { PDFDocument } from 'pdf-lib'
 import { generateContractPdfHtml, generateTimeAndMaterialsContractPdfHtml } from '@/lib/contract-pdf-template'
 import { ProjectContract, Project, Profile, Quote, ProjectDocument } from '@/lib/types'
-import { createClient } from '@supabase/supabase-js'
-
-// Initialize Supabase client for downloading files
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 // Generate an annex cover page
 function generateAnnexCoverPage(annexNumber: number, title: string, description: string, documentInfo?: { name: string; version: number; date: string } | null): string {
@@ -44,49 +38,22 @@ function generateAnnexCoverPage(annexNumber: number, title: string, description:
   `
 }
 
-// Download PDF from Supabase Storage
-async function downloadPdfFromStorage(filePath: string): Promise<Uint8Array | null> {
+// Download PDF from a signed URL
+async function downloadPdfFromSignedUrl(signedUrl: string): Promise<Uint8Array | null> {
   try {
-    console.log('Downloading PDF from path:', filePath)
+    console.log('Downloading PDF from signed URL...')
+    const response = await fetch(signedUrl)
 
-    // First try direct download
-    const { data, error } = await supabase.storage
-      .from('project-documents')
-      .download(filePath)
-
-    if (error) {
-      console.error('Error downloading PDF via direct download:', error)
-
-      // Try with signed URL as fallback
-      const { data: signedUrlData, error: signedError } = await supabase.storage
-        .from('project-documents')
-        .createSignedUrl(filePath, 60) // 60 seconds
-
-      if (signedError || !signedUrlData?.signedUrl) {
-        console.error('Error creating signed URL:', signedError)
-        return null
-      }
-
-      console.log('Using signed URL to download')
-      const response = await fetch(signedUrlData.signedUrl)
-      if (!response.ok) {
-        console.error('Failed to fetch from signed URL:', response.status)
-        return null
-      }
-      const arrayBuffer = await response.arrayBuffer()
-      return new Uint8Array(arrayBuffer)
-    }
-
-    if (!data) {
-      console.error('No data returned from download')
+    if (!response.ok) {
+      console.error('Failed to fetch from signed URL:', response.status, response.statusText)
       return null
     }
 
-    console.log('PDF downloaded successfully, size:', data.size)
-    const arrayBuffer = await data.arrayBuffer()
+    const arrayBuffer = await response.arrayBuffer()
+    console.log('PDF downloaded successfully, size:', arrayBuffer.byteLength)
     return new Uint8Array(arrayBuffer)
   } catch (error) {
-    console.error('Error downloading PDF from storage:', error)
+    console.error('Error downloading PDF from signed URL:', error)
     return null
   }
 }
@@ -134,7 +101,10 @@ export async function POST(request: NextRequest) {
       includeAnnexes = true,
       signedQuoteDocument,
       specificationDocument,
-      planningDocument
+      planningDocument,
+      signedQuoteUrl,
+      specificationUrl,
+      planningUrl
     } = await request.json() as {
       contract: ProjectContract
       project?: Project | null
@@ -151,6 +121,9 @@ export async function POST(request: NextRequest) {
       signedQuoteDocument?: ProjectDocument | null
       specificationDocument?: ProjectDocument | null
       planningDocument?: ProjectDocument | null
+      signedQuoteUrl?: string | null
+      specificationUrl?: string | null
+      planningUrl?: string | null
     }
 
     if (!contract) {
@@ -207,7 +180,8 @@ export async function POST(request: NextRequest) {
     async function addAnnex(
       annexNumber: number,
       title: string,
-      document: ProjectDocument | null | undefined
+      document: ProjectDocument | null | undefined,
+      signedUrl: string | null | undefined
     ) {
       console.log(`\n=== Adding Annex ${annexNumber}: ${title} ===`)
       console.log('Document:', document ? {
@@ -216,6 +190,7 @@ export async function POST(request: NextRequest) {
         file_path: document.file_path,
         file_type: document.file_type
       } : 'null')
+      console.log('Signed URL:', signedUrl ? 'provided' : 'not provided')
 
       const docInfo = document ? {
         name: document.name,
@@ -236,14 +211,10 @@ export async function POST(request: NextRequest) {
       coverPages.forEach(page => mergedPdf.addPage(page))
       console.log('Cover page added')
 
-      // If document exists and is a PDF, download and merge it
-      // Check for PDF file type (can be 'application/pdf' or start with 'application/pdf')
-      const isPdf = document?.file_type?.toLowerCase().includes('pdf') ||
-                    document?.file_path?.toLowerCase().endsWith('.pdf')
-
-      if (document && isPdf && document.file_path) {
-        console.log('Attempting to download and merge PDF...')
-        const pdfBytes = await downloadPdfFromStorage(document.file_path)
+      // If we have a signed URL, download and merge the PDF
+      if (signedUrl) {
+        console.log('Attempting to download and merge PDF from signed URL...')
+        const pdfBytes = await downloadPdfFromSignedUrl(signedUrl)
         if (pdfBytes) {
           console.log(`Downloaded ${pdfBytes.length} bytes`)
           try {
@@ -261,18 +232,14 @@ export async function POST(request: NextRequest) {
           console.log('Failed to download PDF - no bytes returned')
         }
       } else {
-        console.log('Skipping PDF merge:', {
-          hasDocument: !!document,
-          isPdf,
-          hasFilePath: !!document?.file_path
-        })
+        console.log('No signed URL provided, skipping PDF merge')
       }
     }
 
-    // Add annexes
-    await addAnnex(1, 'Devis signé', signedQuoteDocument)
-    await addAnnex(2, 'Cahier des charges', specificationDocument)
-    await addAnnex(3, 'Planning prévisionnel', planningDocument)
+    // Add annexes with their signed URLs
+    await addAnnex(1, 'Devis signé', signedQuoteDocument, signedQuoteUrl)
+    await addAnnex(2, 'Cahier des charges', specificationDocument, specificationUrl)
+    await addAnnex(3, 'Planning prévisionnel', planningDocument, planningUrl)
 
     // Close browser
     await browser.close()

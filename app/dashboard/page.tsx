@@ -162,10 +162,10 @@ export default function DashboardPage() {
   const [newSkill, setNewSkill] = useState("")
 
   // Company settings for contracts (engineers only)
-  const [companySettingsName, setCompanySettingsName] = useState("Memory Agency")
+  const [companySettingsName, setCompanySettingsName] = useState("Nimli")
   const [companySettingsAddress, setCompanySettingsAddress] = useState("")
   const [companySettingsSiret, setCompanySettingsSiret] = useState("")
-  const [companySettingsEmail, setCompanySettingsEmail] = useState("contact@memory-agency.com")
+  const [companySettingsEmail, setCompanySettingsEmail] = useState("contact@nimli.fr")
   const [companySettingsPhone, setCompanySettingsPhone] = useState("")
   const [companySettingsVat, setCompanySettingsVat] = useState("")
 
@@ -245,7 +245,7 @@ export default function DashboardPage() {
   // Load company settings from localStorage (engineers only)
   useEffect(() => {
     if (isEngineer && typeof window !== 'undefined') {
-      const savedSettings = localStorage.getItem('memory_company_settings')
+      const savedSettings = localStorage.getItem('nimli_company_settings')
       if (savedSettings) {
         try {
           const settings = JSON.parse(savedSettings)
@@ -677,7 +677,7 @@ export default function DashboardPage() {
           phone: companySettingsPhone,
           vat: companySettingsVat
         }
-        localStorage.setItem('memory_company_settings', JSON.stringify(companySettings))
+        localStorage.setItem('nimli_company_settings', JSON.stringify(companySettings))
       }
       setProfileSuccess(true)
       setTimeout(() => setProfileSuccess(false), 3000)
@@ -1219,7 +1219,7 @@ export default function DashboardPage() {
                         <Input
                           id="companySettingsName"
                           type="text"
-                          placeholder="Memory Agency"
+                          placeholder="Nimli"
                           value={companySettingsName}
                           onChange={(e) => setCompanySettingsName(e.target.value)}
                           disabled={saving}
@@ -1273,7 +1273,7 @@ export default function DashboardPage() {
                           <Input
                             id="companySettingsEmail"
                             type="email"
-                            placeholder="contact@memory-agency.com"
+                            placeholder="contact@nimli.fr"
                             value={companySettingsEmail}
                             onChange={(e) => setCompanySettingsEmail(e.target.value)}
                             disabled={saving}
@@ -4186,6 +4186,8 @@ export default function DashboardPage() {
                           <div
                             key={project.id}
                             onClick={() => {
+                              // Clear client selection first, then navigate to project
+                              setSelectedClientId(null)
                               setSelectedProject(project)
                               setActiveSection('allProjects')
                               setProjectSubSection('details')

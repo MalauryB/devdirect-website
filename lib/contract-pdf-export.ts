@@ -1,4 +1,5 @@
 import { ProjectContract, Project, Profile, Quote, ProjectDocument } from './types'
+import { supabase } from './supabase'
 
 interface ContractPdfParams {
   contract: ProjectContract
@@ -18,6 +19,33 @@ interface ContractPdfParams {
   planningDocument?: ProjectDocument | null
 }
 
+// Generate a signed URL for a document
+async function getSignedUrlForDocument(
+  document: ProjectDocument | null | undefined
+): Promise<string | null> {
+  if (!document?.file_path) return null
+
+  const isPdf = document.file_type?.toLowerCase().includes('pdf') ||
+                document.file_path?.toLowerCase().endsWith('.pdf')
+  if (!isPdf) return null
+
+  try {
+    const { data, error } = await supabase.storage
+      .from('project-documents')
+      .createSignedUrl(document.file_path, 300) // 5 minutes validity
+
+    if (error || !data?.signedUrl) {
+      console.error('Error creating signed URL:', error)
+      return null
+    }
+
+    return data.signedUrl
+  } catch (err) {
+    console.error('Error generating signed URL:', err)
+    return null
+  }
+}
+
 // Generate PDF and return blob URL for preview
 export async function generateContractPdfUrl(
   params: ContractPdfParams
@@ -34,6 +62,24 @@ export async function generateContractPdfUrl(
     planningDocument
   } = params
 
+  // Generate signed URLs for documents
+  let signedQuoteUrl: string | null = null
+  let specificationUrl: string | null = null
+  let planningUrl: string | null = null
+
+  if (includeAnnexes) {
+    [signedQuoteUrl, specificationUrl, planningUrl] = await Promise.all([
+      getSignedUrlForDocument(signedQuoteDocument),
+      getSignedUrlForDocument(specificationDocument),
+      getSignedUrlForDocument(planningDocument)
+    ])
+    console.log('Generated signed URLs:', {
+      signedQuoteUrl: signedQuoteUrl ? 'yes' : 'no',
+      specificationUrl: specificationUrl ? 'yes' : 'no',
+      planningUrl: planningUrl ? 'yes' : 'no'
+    })
+  }
+
   const response = await fetch('/api/generate-contract-pdf', {
     method: 'POST',
     headers: {
@@ -48,7 +94,11 @@ export async function generateContractPdfUrl(
       includeAnnexes,
       signedQuoteDocument,
       specificationDocument,
-      planningDocument
+      planningDocument,
+      // Pass signed URLs for server to download PDFs
+      signedQuoteUrl,
+      specificationUrl,
+      planningUrl
     }),
   })
 
@@ -107,3 +157,6 @@ export async function exportContractToPdf(
     throw error
   }
 }
+
+// Export type for external use
+export type { ContractPdfParams }

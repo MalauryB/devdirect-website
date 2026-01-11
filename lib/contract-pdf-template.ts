@@ -92,10 +92,10 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
   const today = new Date()
 
   // Provider info
-  const providerName = provider?.name || 'Memory Agency'
+  const providerName = provider?.name || 'Nimli'
   const providerAddress = provider?.address || '123 Rue de l\'Innovation, 75001 Paris'
   const providerSiret = provider?.siret || '123 456 789 00001'
-  const providerEmail = provider?.email || 'contact@memory-agency.com'
+  const providerEmail = provider?.email || 'contact@nimli.fr'
   const providerPhone = provider?.phone || '+33 1 23 45 67 89'
 
   // Client info
@@ -797,10 +797,10 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
   const contractDate = formatDate(contract.created_at)
 
   // Provider info
-  const providerName = provider?.name || 'Memory Agency'
+  const providerName = provider?.name || 'Nimli'
   const providerAddress = provider?.address || '123 Rue de l\'Innovation, 75001 Paris'
   const providerSiret = provider?.siret || '123 456 789 00001'
-  const providerEmail = provider?.email || 'contact@memory-agency.com'
+  const providerEmail = provider?.email || 'contact@nimli.fr'
   const providerPhone = provider?.phone || '+33 1 23 45 67 89'
 
   // Client info

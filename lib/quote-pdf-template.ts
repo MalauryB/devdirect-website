@@ -100,11 +100,11 @@ export function generateQuotePdfHtml(data: PdfData): string {
   }
 
   const engineerName = engineer
-    ? `${engineer.first_name || ''} ${engineer.last_name || ''}`.trim() || 'Memory Agency'
-    : 'Memory Agency'
+    ? `${engineer.first_name || ''} ${engineer.last_name || ''}`.trim() || 'Nimli'
+    : 'Nimli'
 
   const engineerPhone = engineer?.phone || ''
-  const engineerEmail = engineer?.email || 'contact@memory-agency.com'
+  const engineerEmail = engineer?.email || 'contact@nimli.fr'
 
   const clientName = client
     ? client.company_name || `${client.first_name || ''} ${client.last_name || ''}`.trim()

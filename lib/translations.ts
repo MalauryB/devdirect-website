@@ -1,6 +1,6 @@
 export const translations = {
   fr: {
-    name: "Memo'ry",
+    name: "Nimli",
     navigation: {
       accueil: "Accueil",
       services: "Services",
@@ -279,10 +279,10 @@ export const translations = {
         settings: "Paramètres",
         settingsDesc: "Configurez votre compte",
         about: "Nos services",
-        aboutDesc: "Découvrez ce que Memo'ry peut faire pour vous"
+        aboutDesc: "Découvrez ce que Nimli peut faire pour vous"
       },
       about: {
-        title: "À propos de Memo'ry",
+        title: "À propos de Nimli",
         intro: "Experts en informatique, mathématiques et IA, nous vous accompagnons dans tous vos projets numériques.",
         whyUs: "Pourquoi nous choisir ?",
         features: {
@@ -741,7 +741,7 @@ export const translations = {
       noProjects: "Vous n'avez pas encore de projet. Créez un projet pour commencer à échanger avec notre équipe.",
       selectProject: "Sélectionnez un projet",
       selectToView: "Sélectionnez un projet pour voir les messages",
-      conversationWith: "Conversation avec l'équipe Memo'ry",
+      conversationWith: "Conversation avec l'équipe Nimli",
       viewProject: "Voir le projet",
       startConversation: "Démarrez la conversation",
       placeholder: "Écrivez votre message...",
@@ -1188,7 +1188,7 @@ export const translations = {
     }
   },
   en: {
-    name: "Memo'ry",
+    name: "Nimli",
     navigation: {
       accueil: "Home",
       services: "Services",
@@ -1467,10 +1467,10 @@ export const translations = {
         settings: "Settings",
         settingsDesc: "Configure your account",
         about: "Our services",
-        aboutDesc: "Discover what Memo'ry can do for you"
+        aboutDesc: "Discover what Nimli can do for you"
       },
       about: {
-        title: "About Memo'ry",
+        title: "About Nimli",
         intro: "Experts in computer science, mathematics and AI, we support you in all your digital projects.",
         whyUs: "Why choose us?",
         features: {
@@ -1929,7 +1929,7 @@ export const translations = {
       noProjects: "You don't have any projects yet. Create a project to start exchanging with our team.",
       selectProject: "Select a project",
       selectToView: "Select a project to view messages",
-      conversationWith: "Conversation with Memo'ry team",
+      conversationWith: "Conversation with Nimli team",
       viewProject: "View project",
       startConversation: "Start the conversation",
       placeholder: "Write your message...",
