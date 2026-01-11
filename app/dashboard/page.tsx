@@ -1957,7 +1957,122 @@ export default function DashboardPage() {
                             <h3 className="font-semibold text-foreground">{t('documents.title')}</h3>
                             <p className="text-sm text-foreground/50">{t('documents.clientSubtitle')}</p>
                           </div>
+                          <Button
+                            onClick={() => setShowUploadModal(true)}
+                            className="bg-action hover:bg-action/90 text-white"
+                          >
+                            <Upload className="w-4 h-4 mr-2" />
+                            {t('documents.upload')}
+                          </Button>
                         </div>
+
+                        {/* Upload Modal for Client */}
+                        {showUploadModal && (
+                          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                            <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
+                              <div className="p-4 border-b border-neutral-200">
+                                <h3 className="font-semibold text-foreground">{t('documents.uploadModal.title')}</h3>
+                              </div>
+                              <form
+                                onSubmit={async (e) => {
+                                  e.preventDefault()
+                                  const form = e.target as HTMLFormElement
+                                  const formData = new FormData(form)
+                                  const name = formData.get('name') as string
+                                  const description = formData.get('description') as string
+                                  const type = formData.get('type') as ProjectDocumentType
+                                  const fileInput = form.querySelector('input[type="file"]') as HTMLInputElement
+                                  const file = fileInput?.files?.[0]
+
+                                  if (!file || !name || !type) return
+
+                                  setUploadingDocument(true)
+                                  const { error } = await uploadDocument(selectedProject.id, file, {
+                                    name,
+                                    description: description || undefined,
+                                    type
+                                  })
+                                  setUploadingDocument(false)
+
+                                  if (!error) {
+                                    setShowUploadModal(false)
+                                    loadDocuments(selectedProject.id)
+                                  }
+                                }}
+                                className="p-4 space-y-4"
+                              >
+                                <div>
+                                  <Label htmlFor="doc-name-client">{t('documents.uploadModal.name')}</Label>
+                                  <Input
+                                    id="doc-name-client"
+                                    name="name"
+                                    placeholder={t('documents.uploadModal.namePlaceholder')}
+                                    required
+                                    className="mt-1"
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="doc-description-client">{t('documents.uploadModal.description')}</Label>
+                                  <Textarea
+                                    id="doc-description-client"
+                                    name="description"
+                                    placeholder={t('documents.uploadModal.descriptionPlaceholder')}
+                                    className="mt-1"
+                                    rows={2}
+                                  />
+                                </div>
+                                <div>
+                                  <Label htmlFor="doc-type-client">{t('documents.uploadModal.type')}</Label>
+                                  <select
+                                    id="doc-type-client"
+                                    name="type"
+                                    required
+                                    className="mt-1 w-full bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+                                  >
+                                    <option value="specification">{t('documents.types.specification')}</option>
+                                    <option value="planning">{t('documents.types.planning')}</option>
+                                    <option value="mockup">{t('documents.types.mockup')}</option>
+                                    <option value="other">{t('documents.types.other')}</option>
+                                  </select>
+                                </div>
+                                <div>
+                                  <Label htmlFor="doc-file-client">{t('documents.uploadModal.file')}</Label>
+                                  <Input
+                                    id="doc-file-client"
+                                    name="file"
+                                    type="file"
+                                    required
+                                    className="mt-1"
+                                  />
+                                </div>
+                                <div className="flex gap-2 pt-2">
+                                  <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setShowUploadModal(false)}
+                                    className="flex-1"
+                                  >
+                                    {t('documents.uploadModal.cancel')}
+                                  </Button>
+                                  <Button
+                                    type="submit"
+                                    disabled={uploadingDocument}
+                                    className="flex-1 bg-action hover:bg-action/90 text-white"
+                                  >
+                                    {uploadingDocument ? (
+                                      <>
+                                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                        {t('documents.uploadModal.uploading')}
+                                      </>
+                                    ) : (
+                                      t('documents.uploadModal.submit')
+                                    )}
+                                  </Button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        )}
 
                         {/* Documents List */}
                         {documentsLoading ? (
