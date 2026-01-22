@@ -14,7 +14,7 @@ export const translations = {
     },
     hero: {
       title: "Développez vos projets avec des experts en informatique, mathématiques et IA.",
-      subtitle: "Services informatiques de qualité à prix justes. Applications web, mobiles, IoT.",
+      subtitle: "Solutions clés en main de qualité à prix justes. Applications web, mobiles, IoT livrées prêtes à l'emploi.",
       cta: "Devis Gratuit",
       moreDetails: "Plus de détails",
       features: {
@@ -29,6 +29,10 @@ export const translations = {
         fullSupport: {
           title: "Support complet",
           description: "Accompagnement de A à Z jusqu'à la mise en ligne"
+        },
+        turnkey: {
+          title: "Solutions clés en main",
+          description: "Projets livrés complets, testés et prêts à déployer"
         }
       }
     },

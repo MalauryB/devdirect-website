@@ -2,9 +2,11 @@
 
 import { Code2, Mail, Phone, MapPin } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
+import { useContact } from "@/contexts/contact-context"
 
 export function Footer() {
   const { t } = useLanguage()
+  const { openDialog } = useContact()
   return (
     <footer className="bg-white border-t border-border py-12 px-4">
       <div className="container mx-auto">
@@ -12,18 +14,12 @@ export function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-2">
-            <div className="mb-4 flex items-center gap-2">
-              {/* Nimbus cloud logo */}
-              <svg viewBox="0 0 100 100" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
-                <ellipse cx="50" cy="55" rx="35" ry="20" fill="#a8d5e5"/>
-                <circle cx="35" cy="45" r="18" fill="#c4e4f0"/>
-                <circle cx="55" cy="38" r="22" fill="#d4ecf4"/>
-                <circle cx="70" cy="50" r="15" fill="#b8dce8"/>
-                <ellipse cx="50" cy="55" rx="35" ry="20" fill="#a8d5e5"/>
-              </svg>
-              <span className="text-3xl font-bold text-black">
-                {t('name')}
-              </span>
+            <div className="mb-4">
+              <img
+                src="/nimli-logo.svg"
+                alt="Nimli"
+                className="h-16 w-auto"
+              />
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
               {t('footer.description')}
@@ -87,9 +83,12 @@ export function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-primary transition-colors">
+                <button
+                  onClick={openDialog}
+                  className="hover:text-primary transition-colors cursor-pointer"
+                >
                   {t('footer.contact')}
-                </a>
+                </button>
               </li>
             </ul>
           </div>

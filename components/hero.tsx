@@ -37,7 +37,7 @@ export function Hero() {
             </Button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="bg-white border border-border rounded-xl p-6">
               <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
               <h3 className="font-medium mb-2">{t('hero.features.freeMeeting.title')}</h3>
@@ -47,6 +47,11 @@ export function Hero() {
               <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
               <h3 className="font-medium mb-2">{t('hero.features.transparentQuote.title')}</h3>
               <p className="text-sm text-muted-foreground">{t('hero.features.transparentQuote.description')}</p>
+            </div>
+            <div className="bg-white border border-border rounded-xl p-6">
+              <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
+              <h3 className="font-medium mb-2">{t('hero.features.turnkey.title')}</h3>
+              <p className="text-sm text-muted-foreground">{t('hero.features.turnkey.description')}</p>
             </div>
             <div className="bg-white border border-border rounded-xl p-6">
               <CheckCircle className="w-6 h-6 text-primary mx-auto mb-3" />
