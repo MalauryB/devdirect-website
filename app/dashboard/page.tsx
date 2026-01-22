@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Building, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature, MoreHorizontal, MapPin } from "lucide-react"
@@ -134,6 +134,9 @@ export default function DashboardPage() {
   const [sidebarExpanded, setSidebarExpanded] = useState(false)
   const [activeSection, setActiveSection] = useState("")
 
+  // Ref to track programmatic navigation and skip URL restoration
+  const isNavigatingRef = useRef(false)
+
   // Profile form state
   const [firstName, setFirstName] = useState("")
   const [lastName, setLastName] = useState("")
@@ -264,6 +267,11 @@ export default function DashboardPage() {
 
   // Read URL params on mount and set state
   useEffect(() => {
+    // Skip if we're navigating programmatically
+    if (isNavigatingRef.current) {
+      return
+    }
+
     const section = searchParams.get("section")
     const projectId = searchParams.get("project")
     const subSection = searchParams.get("sub") as 'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | null
@@ -3907,8 +3915,12 @@ export default function DashboardPage() {
                                   <TableRow
                                     key={project.id}
                                     onClick={() => {
+                                      isNavigatingRef.current = true
                                       setSelectedProject(project)
                                       setProjectSubSection('details')
+                                      setTimeout(() => {
+                                        isNavigatingRef.current = false
+                                      }, 100)
                                     }}
                                     className="cursor-pointer hover:bg-neutral-50"
                                   >
@@ -4186,11 +4198,17 @@ export default function DashboardPage() {
                           <div
                             key={project.id}
                             onClick={() => {
+                              // Set flag to prevent URL restoration from interfering
+                              isNavigatingRef.current = true
                               // Clear client selection first, then navigate to project
                               setSelectedClientId(null)
                               setSelectedProject(project)
                               setActiveSection('allProjects')
                               setProjectSubSection('details')
+                              // Reset flag after navigation settles
+                              setTimeout(() => {
+                                isNavigatingRef.current = false
+                              }, 100)
                             }}
                             className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
                           >
