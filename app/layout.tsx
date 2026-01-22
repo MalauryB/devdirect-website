@@ -14,8 +14,8 @@ export const metadata: Metadata = {
   description: "Services informatiques de qualité à prix justes. Applications web, mobiles, IoT. Équipe de développeurs expérimentés.",
   generator: "Nimli",
   icons: {
-    // Nimbus cloud logo
-    icon: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><ellipse cx='50' cy='55' rx='35' ry='20' fill='%23a8d5e5'/><circle cx='35' cy='45' r='18' fill='%23c4e4f0'/><circle cx='55' cy='38' r='22' fill='%23d4ecf4'/><circle cx='70' cy='50' r='15' fill='%23b8dce8'/><ellipse cx='50' cy='55' rx='35' ry='20' fill='%23a8d5e5'/></svg>",
+    icon: "/nimli-favicon.svg",
+    apple: "/nimli-favicon.svg",
   },
 }
 

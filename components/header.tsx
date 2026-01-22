@@ -25,19 +25,13 @@ export function Header() {
       <div className="container mx-auto px-4 py-4">
         <div className="mx-auto" style={{ maxWidth: "83rem" }}>
           <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {/* Nimbus cloud logo */}
-            <svg viewBox="0 0 100 100" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
-              <ellipse cx="50" cy="55" rx="35" ry="20" fill="#a8d5e5"/>
-              <circle cx="35" cy="45" r="18" fill="#c4e4f0"/>
-              <circle cx="55" cy="38" r="22" fill="#d4ecf4"/>
-              <circle cx="70" cy="50" r="15" fill="#b8dce8"/>
-              <ellipse cx="50" cy="55" rx="35" ry="20" fill="#a8d5e5"/>
-            </svg>
-            <span className="text-3xl font-bold text-black">
-              {t('name')}
-            </span>
-          </div>
+          <Link href="/" className="flex items-center">
+            <img
+              src="/nimli-logo.svg"
+              alt="Nimli"
+              className="h-12 w-auto"
+            />
+          </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
