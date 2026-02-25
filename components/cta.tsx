@@ -34,7 +34,7 @@ export function CTA() {
             </div>
 
             <div className="text-sm text-muted-foreground">
-              {t('cta.description')}
+              {t('cta.guarantee')}
             </div>
           </CardContent>
           </Card>

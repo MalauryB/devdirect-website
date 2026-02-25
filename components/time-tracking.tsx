@@ -189,7 +189,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
       design: 'bg-pink-100 text-pink-700',
       testing: 'bg-orange-100 text-orange-700',
       support: 'bg-cyan-100 text-cyan-700',
-      other: 'bg-gray-100 text-gray-700',
+      other: 'bg-muted text-foreground/70',
     }
     return colors[category] || colors.other
   }
@@ -222,7 +222,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Total time */}
-          <div className="bg-gray-50 rounded-xl p-4">
+          <div className="bg-muted/50 rounded-xl p-4">
             <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
                 <Clock className="w-5 h-5 text-blue-600" />
@@ -238,7 +238,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
           </div>
 
           {/* By engineer */}
-          <div className="bg-gray-50 rounded-xl p-4">
+          <div className="bg-muted/50 rounded-xl p-4">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center">
                 <Users className="w-5 h-5 text-purple-600" />
@@ -260,7 +260,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
           </div>
 
           {/* By category */}
-          <div className="bg-gray-50 rounded-xl p-4">
+          <div className="bg-muted/50 rounded-xl p-4">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
                 <BarChart3 className="w-5 h-5 text-green-600" />
@@ -287,7 +287,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
 
       {/* Monthly breakdown */}
       {stats && stats.byMonth.length > 0 && (
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <h4 className="font-medium mb-3">{t('timeTracking.byMonth')}</h4>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {stats.byMonth.map((month) => (
@@ -305,7 +305,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
       <div>
         <h4 className="font-medium mb-3">{t('timeTracking.recentEntries')}</h4>
         {entries.length === 0 ? (
-          <div className="text-center py-12 bg-gray-50 rounded-xl">
+          <div className="text-center py-12 bg-muted/50 rounded-xl">
             <Clock className="w-12 h-12 mx-auto text-foreground/20 mb-3" />
             <p className="text-foreground/50">{t('timeTracking.noEntries')}</p>
             {isEngineer && (
@@ -326,7 +326,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
               return (
                 <div
                   key={entry.id}
-                  className="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4"
+                  className="bg-white border border-border rounded-lg p-4 flex items-center gap-4"
                 >
                   {/* Engineer avatar and name */}
                   <div className="flex items-center gap-2 min-w-[140px]">
@@ -378,7 +378,7 @@ export function TimeTracking({ projectId, currentUser, isEngineer }: TimeTrackin
                   {isOwn && isEngineer && (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <button className="p-1 hover:bg-gray-100 rounded">
+                        <button className="p-1 hover:bg-muted rounded">
                           <MoreVertical className="w-4 h-4 text-foreground/50" />
                         </button>
                       </DropdownMenuTrigger>

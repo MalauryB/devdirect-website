@@ -163,7 +163,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder={t('projects.form.titlePlaceholder')}
           disabled={loading}
-          className="border-gray-200 focus:border-gray-400"
+          className="border-border focus:border-primary"
         />
       </div>
 
@@ -179,15 +179,15 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               key={type.id}
               className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
                 formData.project_types.includes(type.id)
-                  ? 'border-gray-900'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-primary'
+                  : 'border-border hover:border-border'
               }`}
             >
               <Checkbox
                 checked={formData.project_types.includes(type.id)}
                 onCheckedChange={() => handleProjectTypeToggle(type.id)}
                 disabled={loading}
-                className="data-[state=checked]:bg-gray-900 data-[state=checked]:border-gray-900"
+                className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <span className="text-sm text-foreground">{type.label}</span>
             </label>
@@ -207,15 +207,15 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               key={service.id}
               className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
                 formData.services.includes(service.id)
-                  ? 'border-gray-900'
-                  : 'border-gray-200 hover:border-gray-300'
+                  ? 'border-primary'
+                  : 'border-border hover:border-border'
               }`}
             >
               <Checkbox
                 checked={formData.services.includes(service.id)}
                 onCheckedChange={() => handleServiceToggle(service.id)}
                 disabled={loading}
-                className="data-[state=checked]:bg-gray-900 data-[state=checked]:border-gray-900"
+                className="data-[state=checked]:bg-primary data-[state=checked]:border-primary"
               />
               <span className="text-sm text-foreground">{service.label}</span>
             </label>
@@ -235,8 +235,8 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               key={platform.id}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-full border cursor-pointer transition-colors ${
                 formData.platforms.includes(platform.id)
-                  ? 'border-gray-900 bg-gray-900 text-white'
-                  : 'border-gray-200 hover:border-gray-300 bg-white'
+                  ? 'border-primary bg-primary text-white'
+                  : 'border-border hover:border-border bg-white'
               }`}
             >
               <Checkbox
@@ -267,7 +267,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               placeholder={t('projects.form.descriptionPlaceholder')}
               rows={6}
               disabled={loading}
-              className="border-gray-200 focus:border-gray-400 resize-none"
+              className="border-border focus:border-primary resize-none"
             />
           </div>
           <div className="space-y-1.5">
@@ -279,7 +279,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               placeholder={t('projects.form.featuresPlaceholder')}
               rows={5}
               disabled={loading}
-              className="border-gray-200 focus:border-gray-400 resize-none"
+              className="border-border focus:border-primary resize-none"
             />
           </div>
           <div className="space-y-1.5">
@@ -290,7 +290,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               onChange={(e) => setFormData({ ...formData, target_audience: e.target.value })}
               placeholder={t('projects.form.targetAudiencePlaceholder')}
               disabled={loading}
-              className="border-gray-200 focus:border-gray-400"
+              className="border-border focus:border-primary"
             />
           </div>
         </div>
@@ -309,15 +309,15 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
           className="flex gap-4"
         >
           <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-            !formData.has_existing_project ? 'border-gray-900' : 'border-gray-200'
+            !formData.has_existing_project ? 'border-primary' : 'border-border'
           }`}>
-            <RadioGroupItem value="no" id="existing-no" className="border-gray-300" />
+            <RadioGroupItem value="no" id="existing-no" className="border-border" />
             <span className="text-sm">{t('projects.form.newProject')}</span>
           </label>
           <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-            formData.has_existing_project ? 'border-gray-900' : 'border-gray-200'
+            formData.has_existing_project ? 'border-primary' : 'border-border'
           }`}>
-            <RadioGroupItem value="yes" id="existing-yes" className="border-gray-300" />
+            <RadioGroupItem value="yes" id="existing-yes" className="border-border" />
             <span className="text-sm">{t('projects.form.hasExisting')}</span>
           </label>
         </RadioGroup>
@@ -331,7 +331,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               placeholder={t('projects.form.existingTechPlaceholder')}
               rows={2}
               disabled={loading}
-              className="border-gray-200 focus:border-gray-400 resize-none"
+              className="border-border focus:border-primary resize-none"
             />
           </div>
         )}
@@ -357,10 +357,10 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
             <label
               key={option.value}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-                formData.needs_design === option.value ? 'border-gray-900' : 'border-gray-200'
+                formData.needs_design === option.value ? 'border-primary' : 'border-border'
               }`}
             >
-              <RadioGroupItem value={option.value} className="border-gray-300" />
+              <RadioGroupItem value={option.value} className="border-border" />
               <span className="text-sm">{option.label}</span>
             </label>
           ))}
@@ -381,7 +381,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               onValueChange={(value) => setFormData({ ...formData, budget: value })}
               disabled={loading}
             >
-              <SelectTrigger className="border-gray-200 focus:border-gray-400">
+              <SelectTrigger className="border-border focus:border-primary">
                 <SelectValue placeholder={t('projects.form.budgetPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -400,7 +400,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
               onValueChange={(value) => setFormData({ ...formData, deadline: value })}
               disabled={loading}
             >
-              <SelectTrigger className="border-gray-200 focus:border-gray-400">
+              <SelectTrigger className="border-border focus:border-primary">
                 <SelectValue placeholder={t('projects.form.deadlinePlaceholder')} />
               </SelectTrigger>
               <SelectContent>
@@ -491,7 +491,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
           placeholder={t('projects.form.additionalPlaceholder')}
           rows={3}
           disabled={loading}
-          className="border-gray-200 focus:border-gray-400 resize-none"
+          className="border-border focus:border-primary resize-none"
         />
       </div>
 
@@ -513,7 +513,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
           <Button
             type="button"
             variant="outline"
-            className="flex-1 border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+            className="flex-1 border-border hover:bg-red-50 hover:text-red-600 hover:border-red-200"
             onClick={onCancel}
             disabled={loading}
           >
@@ -522,7 +522,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
         )}
         <Button
           type="submit"
-          className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+          className="flex-1 bg-primary hover:bg-primary/90 text-white"
           disabled={loading}
         >
           {loading ? (

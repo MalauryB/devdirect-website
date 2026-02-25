@@ -8,18 +8,14 @@ export function Footer() {
   const { t } = useLanguage()
   const { openDialog } = useContact()
   return (
-    <footer className="bg-white border-t border-border py-12 px-4">
+    <footer className="bg-background border-t border-border py-12 px-4">
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-2">
             <div className="mb-4">
-              <img
-                src="/nimli-logo.svg"
-                alt="Nimli"
-                className="h-16 w-auto"
-              />
+              <span className="logo-cubic text-3xl text-foreground">Nimli</span>
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
               {t('footer.description')}

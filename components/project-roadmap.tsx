@@ -96,8 +96,8 @@ interface ProjectRoadmapProps {
 const STATUS_CONFIG: Record<MilestoneStatus, { icon: React.ReactNode; color: string; bgColor: string; label: string }> = {
   pending: {
     icon: <Circle className="w-4 h-4" />,
-    color: 'text-gray-500',
-    bgColor: 'bg-gray-100',
+    color: 'text-muted-foreground',
+    bgColor: 'bg-muted',
     label: 'roadmap.status.pending'
   },
   in_progress: {
@@ -429,14 +429,14 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
 
       {/* Progress bar */}
       {stats && stats.total > 0 && (
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">{t('roadmap.progress')}</span>
             <span className="text-sm text-foreground/60">
               {stats.completed} / {stats.total} {t('roadmap.milestonesCompleted')}
             </span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-[#ea4c89] transition-all duration-500"
               style={{ width: `${stats.progress}%` }}
@@ -447,8 +447,8 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
 
       {/* Milestones list */}
       {milestones.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-xl">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+        <div className="text-center py-12 bg-muted/50 rounded-xl">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
             <ChevronRight className="w-8 h-8 text-foreground/20" />
           </div>
           <h4 className="text-lg font-medium mb-2">{t('roadmap.noMilestones')}</h4>
@@ -485,7 +485,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
               <div
                 key={milestone.id}
                 className={`bg-white border rounded-xl transition-all ${
-                  milestone.status === 'completed' ? 'border-[#ea4c89]/30 bg-[#ea4c89]/5' : 'border-gray-200'
+                  milestone.status === 'completed' ? 'border-[#ea4c89]/30 bg-[#ea4c89]/5' : 'border-border'
                 } ${overdue ? 'border-red-200' : ''}`}
               >
                 <div className="p-4">
@@ -493,7 +493,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                     {/* Expand/collapse button */}
                     <button
                       onClick={() => toggleMilestoneExpanded(milestone.id)}
-                      className="mt-0.5 p-1 hover:bg-gray-100 rounded flex-shrink-0"
+                      className="mt-0.5 p-1 hover:bg-muted rounded flex-shrink-0"
                     >
                       {isExpanded ? (
                         <ChevronDown className="w-4 h-4 text-foreground/50" />
@@ -509,7 +509,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                       className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                         milestone.status === 'completed'
                           ? 'bg-[#ea4c89] text-white'
-                          : 'border-2 border-gray-300 hover:border-[#ea4c89]'
+                          : 'border-2 border-border hover:border-[#ea4c89]'
                       } ${!isEngineer ? 'cursor-default' : 'cursor-pointer'}`}
                     >
                       {milestone.status === 'completed' && <Check className="w-4 h-4" />}
@@ -533,7 +533,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                         {isEngineer && engineers.length > 0 && (
                           <Popover>
                             <PopoverTrigger asChild>
-                              <button className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-gray-100 flex-shrink-0">
+                              <button className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-muted flex-shrink-0">
                                 {milestone.assignees && milestone.assignees.length > 0 ? (
                                   <div className="flex -space-x-2">
                                     {milestone.assignees.slice(0, 3).map((a) => (
@@ -556,7 +556,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                                       </div>
                                     ))}
                                     {milestone.assignees.length > 3 && (
-                                      <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center border-2 border-white">
+                                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center border-2 border-white">
                                         <span className="text-[10px] font-medium text-foreground/70">
                                           +{milestone.assignees.length - 3}
                                         </span>
@@ -584,7 +584,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                                         }
                                       }}
                                       className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-left text-sm transition-colors ${
-                                        isAssigned ? 'bg-[#ea4c89]/10 text-[#ea4c89]' : 'hover:bg-gray-100'
+                                        isAssigned ? 'bg-[#ea4c89]/10 text-[#ea4c89]' : 'hover:bg-muted'
                                       }`}
                                     >
                                       <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
@@ -610,7 +610,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                         {isEngineer && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className="p-1 hover:bg-gray-100 rounded flex-shrink-0">
+                              <button className="p-1 hover:bg-muted rounded flex-shrink-0">
                                 <MoreVertical className="w-4 h-4 text-foreground/50" />
                               </button>
                             </DropdownMenuTrigger>
@@ -715,7 +715,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
 
                 {/* Expanded content: Subtasks */}
                 {isExpanded && (
-                  <div className="border-t border-gray-100 px-4 py-3 bg-gray-50/50">
+                  <div className="border-t border-muted px-4 py-3 bg-muted/50">
                     <div className="ml-12">
                       {/* Subtasks list */}
                       {hasSubtasks && (
@@ -731,7 +731,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                                 className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors border-2 ${
                                   subtask.is_completed
                                     ? 'bg-[#ea4c89] border-[#ea4c89] text-white'
-                                    : 'border-gray-300 hover:border-[#ea4c89]'
+                                    : 'border-border hover:border-[#ea4c89]'
                                 } ${!isEngineer ? 'cursor-default' : 'cursor-pointer'}`}
                               >
                                 {subtask.is_completed && <Check className="w-3 h-3" />}
@@ -742,7 +742,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
                               {isEngineer && (
                                 <button
                                   onClick={() => handleDeleteSubtask(subtask.id)}
-                                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-200 rounded transition-opacity"
+                                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-muted rounded transition-opacity"
                                 >
                                   <X className="w-3 h-3 text-foreground/50" />
                                 </button>

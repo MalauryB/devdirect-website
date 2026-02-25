@@ -282,7 +282,7 @@ export function GlobalDocuments() {
         <div className="flex flex-1 gap-3">
           {/* Search */}
           <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder={t('globalDocuments.search')}
               value={searchQuery}
@@ -348,11 +348,11 @@ export function GlobalDocuments() {
       {/* Documents table */}
       {filteredDocuments.length === 0 ? (
         <div className="text-center py-12 border rounded-xl">
-          <FileText className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
+          <FileText className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-foreground mb-2">
             {t('globalDocuments.noDocuments')}
           </h3>
-          <p className="text-gray-500 max-w-md mx-auto mb-4">
+          <p className="text-muted-foreground max-w-md mx-auto mb-4">
             {t('globalDocuments.noDocumentsDescription')}
           </p>
           <Button onClick={() => setUploadDialogOpen(true)} variant="outline">
@@ -386,13 +386,13 @@ export function GlobalDocuments() {
                     <div>
                       <p className="font-medium">{doc.name}</p>
                       {doc.description && (
-                        <p className="text-xs text-gray-500 truncate max-w-[200px]">{doc.description}</p>
+                        <p className="text-xs text-muted-foreground truncate max-w-[200px]">{doc.description}</p>
                       )}
-                      <p className="text-xs text-gray-400">{doc.file_name}</p>
+                      <p className="text-xs text-muted-foreground">{doc.file_name}</p>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground/70">
                       {globalDocumentTypeLabels[doc.type][language]}
                     </span>
                   </TableCell>
@@ -402,14 +402,14 @@ export function GlobalDocuments() {
                         {doc.category}
                       </span>
                     ) : (
-                      <span className="text-gray-400">-</span>
+                      <span className="text-muted-foreground">-</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-gray-500">
+                  <TableCell className="text-muted-foreground">
                     {formatFileSize(doc.file_size)}
                   </TableCell>
                   <TableCell>
-                    <span className="text-gray-500">v{doc.version}</span>
+                    <span className="text-muted-foreground">v{doc.version}</span>
                   </TableCell>
                   <TableCell>
                     {doc.uploader ? (
@@ -417,15 +417,15 @@ export function GlobalDocuments() {
                         {doc.uploader.first_name} {doc.uploader.last_name}
                       </span>
                     ) : (
-                      <span className="text-gray-400">-</span>
+                      <span className="text-muted-foreground">-</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-gray-500 text-sm">
+                  <TableCell className="text-muted-foreground text-sm">
                     {new Date(doc.created_at).toLocaleDateString(language === 'fr' ? 'fr-FR' : 'en-US')}
                   </TableCell>
                   <TableCell>
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-gray-100">
+                      <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-muted">
                         <MoreHorizontal className="w-4 h-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="z-50">
@@ -478,13 +478,13 @@ export function GlobalDocuments() {
                   <span className="text-3xl">{getFileIcon(selectedFile.type)}</span>
                   <div className="text-left">
                     <p className="font-medium">{selectedFile.name}</p>
-                    <p className="text-sm text-gray-500">{formatFileSize(selectedFile.size)}</p>
+                    <p className="text-sm text-muted-foreground">{formatFileSize(selectedFile.size)}</p>
                   </div>
                 </div>
               ) : (
                 <>
-                  <Upload className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                  <p className="text-sm text-gray-500">{t('globalDocuments.dropOrClick')}</p>
+                  <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+                  <p className="text-sm text-muted-foreground">{t('globalDocuments.dropOrClick')}</p>
                 </>
               )}
             </div>

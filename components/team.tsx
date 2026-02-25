@@ -15,16 +15,16 @@ export function Team() {
     {
       icon: Users,
       value: "7",
-      label: "Experts",
+      label: t('team.stats.experts'),
     },
     {
       icon: Award,
       value: "38+",
-      label: "Années d'expérience",
+      label: t('team.stats.experience'),
     },
   ]
   return (
-    <section id="team" className="py-20 px-4 relative overflow-hidden bg-white">
+    <section id="team" className="py-20 px-4 relative overflow-hidden bg-background">
       <div className="container mx-auto relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-16">
@@ -32,13 +32,13 @@ export function Team() {
               {t('team.title')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl">
-              Une équipe soudée de professionnels expérimentés, passionnés par les nouvelles technologies.
+              {t('team.subtitle')}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16 max-w-md mx-auto md:max-w-none">
           {stats.map((stat, index) => (
-            <Card key={index} className="bg-white border border-primary/20 text-center group">
+            <Card key={index} className="bg-white text-center group">
               <CardContent className="pt-8 pb-6">
                 <div className="text-4xl font-bold text-primary mb-2">{stat.value}</div>
                 <div className="text-muted-foreground font-medium">{stat.label}</div>
@@ -49,7 +49,7 @@ export function Team() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {teamMembers.map((member: any, index: number) => (
-            <Card key={index} className="bg-white border border-primary/20 group">
+            <Card key={index} className="bg-white group">
               <CardHeader className="text-center">
                 <CardTitle className="text-lg font-semibold leading-tight">{member.name}</CardTitle>
                 <div className="text-sm text-muted-foreground mb-1">{member.role}</div>

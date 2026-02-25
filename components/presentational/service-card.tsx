@@ -16,7 +16,7 @@ export function ServiceCard({ service, onDetailsClick, className = "" }: Service
   return (
     <Card className={`bg-white border-0 rounded-2xl shadow-lg group hover:shadow-xl transition-all duration-300 overflow-hidden ${className}`}>
       <div className="aspect-video bg-white rounded-t-2xl px-3 pt-4">
-        <div className="w-full h-full bg-gray-100 rounded-t-xl overflow-hidden">
+        <div className="w-full h-full bg-muted rounded-t-xl overflow-hidden">
           <img
             src={getImagePath(service.image)}
             alt={`Illustration pour ${service.title}`}

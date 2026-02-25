@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
-import { User, FileText, MessageSquare, Menu, X, Home, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Building, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature, MoreHorizontal, MapPin } from "lucide-react"
+import { User, FileText, MessageSquare, Menu, X, LogOut, Loader2, Check, Plus, Calendar, Euro, Info, Globe, Smartphone, Cpu, Palette, PenTool, Video, FileCheck, HeartHandshake, ArrowLeft, Clock, Target, Wrench, Monitor, Layers, MessageCircle, Pencil, Trash2, Camera, Download, Paperclip, Image as ImageIcon, BarChart3, Users, Filter, ChevronRight, ChevronDown, Mail, Phone, Building2, Building, Receipt, Send, FileSpreadsheet, FolderOpen, Upload, File, History, UploadCloud, Flag, Search, FileSignature, MoreHorizontal, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -114,7 +114,7 @@ const getRowUrgencyColor = (urgency: UrgencyLevel): string => {
     case 'critical': return 'bg-red-50/50 hover:bg-red-50'
     case 'high': return 'bg-orange-50/50 hover:bg-orange-50'
     case 'medium': return 'bg-yellow-50/30 hover:bg-yellow-50/50'
-    case 'low': return 'hover:bg-neutral-50'
+    case 'low': return 'hover:bg-muted/50'
   }
 }
 
@@ -560,8 +560,8 @@ export default function DashboardPage() {
       case 'won': return 'bg-green-100 text-green-800'
       case 'lost': return 'bg-red-100 text-red-800'
       case 'cancelled': return 'bg-orange-100 text-orange-800'
-      case 'closed': return 'bg-neutral-100 text-gray-800'
-      default: return 'bg-neutral-100 text-gray-800'
+      case 'closed': return 'bg-muted text-foreground'
+      default: return 'bg-muted text-foreground'
     }
   }
 
@@ -737,12 +737,12 @@ export default function DashboardPage() {
 
   const getQuoteStatusBadgeClass = (status: string) => {
     switch (status) {
-      case 'draft': return 'bg-neutral-100 text-gray-800'
+      case 'draft': return 'bg-muted text-foreground'
       case 'sent': return 'bg-blue-100 text-blue-800'
       case 'accepted': return 'bg-green-100 text-green-800'
       case 'rejected': return 'bg-red-100 text-red-800'
       case 'expired': return 'bg-orange-100 text-orange-800'
-      default: return 'bg-neutral-100 text-gray-800'
+      default: return 'bg-muted text-foreground'
     }
   }
 
@@ -766,8 +766,8 @@ export default function DashboardPage() {
     }
 
     return (
-      <div className="flex items-center gap-3 p-3 bg-neutral-100/50 border border-neutral-200 rounded-lg">
-        <div className="w-10 h-10 rounded bg-neutral-100 flex items-center justify-center flex-shrink-0">
+      <div className="flex items-center gap-3 p-3 bg-muted/50 border border-border rounded-lg">
+        <div className="w-10 h-10 rounded bg-muted flex items-center justify-center flex-shrink-0">
           <FileText className="w-5 h-5 text-foreground/50" />
         </div>
         <div className="flex-1 min-w-0">
@@ -777,7 +777,7 @@ export default function DashboardPage() {
         <button
           onClick={handleDownload}
           disabled={loading}
-          className="p-2 hover:bg-gray-200 rounded transition-colors disabled:opacity-50"
+          className="p-2 hover:bg-muted rounded transition-colors disabled:opacity-50"
         >
           {loading ? (
             <Loader2 className="w-4 h-4 animate-spin text-foreground/50" />
@@ -812,7 +812,7 @@ export default function DashboardPage() {
     return (
       <div
         onClick={handleOpen}
-        className="aspect-square rounded-lg overflow-hidden bg-neutral-100 border border-neutral-200 cursor-pointer hover:border-neutral-300 transition-colors relative"
+        className="aspect-square rounded-lg overflow-hidden bg-muted border border-border cursor-pointer hover:border-primary/30 transition-colors relative"
       >
         {loading ? (
           <div className="absolute inset-0 flex items-center justify-center">
@@ -884,23 +884,23 @@ export default function DashboardPage() {
       <aside
         onMouseEnter={() => setSidebarExpanded(true)}
         onMouseLeave={() => setSidebarExpanded(false)}
-        className={`fixed lg:fixed inset-y-0 left-0 z-50 bg-white border-r border-neutral-200 transform transition-all duration-200 ease-in-out ${
+        className={`fixed lg:fixed inset-y-0 left-0 z-50 bg-white border-r border-border transform transition-all duration-200 ease-in-out ${
           sidebarOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0"
         } ${sidebarExpanded ? "lg:w-64" : "lg:w-16"}`}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar header */}
-          <div className={`p-4 border-b border-neutral-200 ${!sidebarExpanded && !sidebarOpen ? "lg:px-3" : ""}`}>
-            <div className="flex items-center justify-between">
-              <Link href="/" className={`text-xl font-bold logo-cubic text-black transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : ""}`}>
+          <div className={`px-4 h-14 border-b border-border flex items-center ${!sidebarExpanded && !sidebarOpen ? "lg:px-3" : ""}`}>
+            <div className="flex items-center justify-between w-full">
+              <Link href="/" className={`text-xl font-bold logo-cubic text-foreground transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : ""}`}>
                 {t('name')}
               </Link>
               {/* Logo icon when collapsed */}
               <div className={`hidden ${!sidebarExpanded && !sidebarOpen ? "lg:flex" : "lg:hidden"} items-center justify-center w-10 h-10`}>
-                <span className="text-xl font-bold logo-cubic text-black">M</span>
+                <span className="text-xl font-bold logo-cubic text-foreground">M</span>
               </div>
               <button
-                className="lg:hidden p-2 hover:bg-neutral-100 rounded-lg"
+                className="lg:hidden p-2 hover:bg-muted rounded-lg"
                 onClick={() => setSidebarOpen(false)}
               >
                 <X className="w-5 h-5" />
@@ -945,10 +945,10 @@ export default function DashboardPage() {
                     !sidebarExpanded && !sidebarOpen ? "lg:justify-center lg:px-0" : ""
                   } ${
                     activeSection === item.id
-                      ? "bg-neutral-100 text-neutral-900 font-medium"
+                      ? "bg-muted text-foreground font-medium"
                       : isDisabled
-                      ? "opacity-50 cursor-not-allowed text-neutral-400"
-                      : "hover:bg-neutral-50 text-neutral-600"
+                      ? "opacity-50 cursor-not-allowed text-muted-foreground"
+                      : "hover:bg-muted/50 text-muted-foreground"
                   }`}
                 >
                   <div className="relative">
@@ -964,7 +964,7 @@ export default function DashboardPage() {
                     </span>
                   )}
                   {isDisabled && (sidebarExpanded || sidebarOpen) && (
-                    <span className="text-xs text-neutral-400">
+                    <span className="text-xs text-muted-foreground">
                       {t('dashboard.comingSoon')}
                     </span>
                   )}
@@ -981,9 +981,9 @@ export default function DashboardPage() {
       {/* Main content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top header bar */}
-        <div className="sticky top-0 z-30 bg-white border-b border-neutral-200 px-4 py-3 flex items-center justify-between">
+        <div className="sticky top-0 z-30 bg-white border-b border-border px-4 h-14 flex items-center justify-between">
           <button
-            className="lg:hidden p-2 hover:bg-neutral-100 rounded-md"
+            className="lg:hidden p-2 hover:bg-muted rounded-md"
             onClick={() => setSidebarOpen(true)}
           >
             <Menu className="w-5 h-5" />
@@ -993,7 +993,7 @@ export default function DashboardPage() {
           {/* User account dropdown */}
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
-              <button className="w-8 h-8 rounded-full bg-neutral-100 text-neutral-600 flex items-center justify-center hover:bg-neutral-200 transition-colors focus:outline-none overflow-hidden">
+              <button className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center hover:bg-muted transition-colors focus:outline-none overflow-hidden">
                 {avatarUrl ? (
                   <img
                     src={avatarUrl}
@@ -1007,27 +1007,21 @@ export default function DashboardPage() {
                 )}
               </button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-white border border-neutral-200 shadow-sm">
-              <div className="px-3 py-2 border-b border-neutral-100">
-                <p className="text-sm font-medium text-neutral-900 truncate">{displayName}</p>
-                <p className="text-xs text-neutral-500 truncate">{user.email}</p>
+            <DropdownMenuContent align="end" className="w-56 bg-white border border-border shadow-sm">
+              <div className="px-3 py-2 border-b border-muted">
+                <p className="text-sm font-medium text-foreground truncate">{displayName}</p>
+                <p className="text-xs text-muted-foreground truncate">{user.email}</p>
               </div>
               <DropdownMenuItem
-                className="cursor-pointer hover:bg-neutral-50 focus:bg-neutral-50 py-2 flex items-center text-neutral-700"
+                className="cursor-pointer hover:bg-muted/50 focus:bg-muted/50 py-2 flex items-center text-muted-foreground"
                 onClick={() => setActiveSection("profile")}
               >
                 <User className="w-4 h-4 mr-3 flex-shrink-0" />
                 <span>{t('navigation.profile')}</span>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer hover:bg-neutral-50 focus:bg-neutral-50 py-2 flex items-center text-neutral-700">
-                <Link href="/">
-                  <Home className="w-4 h-4 mr-3 flex-shrink-0" />
-                  <span>{t('navigation.accueil')}</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator className="bg-neutral-100" />
+              <DropdownMenuSeparator className="bg-muted" />
               <DropdownMenuItem
-                className="cursor-pointer hover:bg-neutral-50 focus:bg-neutral-50 py-2 text-neutral-700 flex items-center"
+                className="cursor-pointer hover:bg-muted/50 focus:bg-muted/50 py-2 text-muted-foreground flex items-center"
                 onClick={handleSignOut}
               >
                 <LogOut className="w-4 h-4 mr-3 flex-shrink-0" />
@@ -1048,7 +1042,7 @@ export default function DashboardPage() {
                   <h3 className="text-sm font-medium text-foreground">{t('profile.avatar')}</h3>
                   <div className="flex items-center gap-6">
                     <div className="relative">
-                      <div className="w-24 h-24 rounded-full bg-neutral-100 flex items-center justify-center overflow-hidden border-2 border-neutral-200 flex-shrink-0">
+                      <div className="w-24 h-24 rounded-full bg-muted flex items-center justify-center overflow-hidden border-2 border-border flex-shrink-0">
                         {avatarUrl ? (
                           <img
                             src={avatarUrl}
@@ -1057,10 +1051,10 @@ export default function DashboardPage() {
                             style={{ objectPosition: 'center' }}
                           />
                         ) : (
-                          <User className="w-10 h-10 text-neutral-400" />
+                          <User className="w-10 h-10 text-muted-foreground" />
                         )}
                       </div>
-                      <label className="absolute bottom-0 right-0 w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-800 transition-colors">
+                      <label className="absolute bottom-0 right-0 w-8 h-8 bg-primary rounded-full flex items-center justify-center cursor-pointer hover:bg-primary/90 transition-colors">
                         {avatarUploading ? (
                           <Loader2 className="w-4 h-4 text-white animate-spin" />
                         ) : (
@@ -1095,7 +1089,7 @@ export default function DashboardPage() {
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
                         disabled={saving}
-                        className="border-neutral-200 focus:border-gray-400"
+                        className="border-border focus:border-primary"
                       />
                     </div>
                     <div className="space-y-1">
@@ -1107,7 +1101,7 @@ export default function DashboardPage() {
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                         disabled={saving}
-                        className="border-neutral-200 focus:border-gray-400"
+                        className="border-border focus:border-primary"
                       />
                     </div>
                   </div>
@@ -1120,7 +1114,7 @@ export default function DashboardPage() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       disabled={saving}
-                      className="border-neutral-200 focus:border-gray-400"
+                      className="border-border focus:border-primary"
                     />
                   </div>
                 </div>
@@ -1138,7 +1132,7 @@ export default function DashboardPage() {
                         value={jobTitle}
                         onChange={(e) => setJobTitle(e.target.value)}
                         disabled={saving}
-                        className="border-neutral-200 focus:border-gray-400"
+                        className="border-border focus:border-primary"
                       />
                     </div>
 
@@ -1152,7 +1146,7 @@ export default function DashboardPage() {
                         onChange={(e) => setBio(e.target.value)}
                         disabled={saving}
                         rows={4}
-                        className="border-neutral-200 focus:border-gray-400 resize-none bg-white"
+                        className="border-border focus:border-primary resize-none bg-white"
                       />
                     </div>
 
@@ -1166,7 +1160,7 @@ export default function DashboardPage() {
                           value={newSkill}
                           onChange={(e) => setNewSkill(e.target.value)}
                           disabled={saving}
-                          className="flex-1 border-neutral-200 focus:border-gray-400"
+                          className="flex-1 border-border focus:border-primary"
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
                               e.preventDefault()
@@ -1198,7 +1192,7 @@ export default function DashboardPage() {
                           {skills.map((skill, index) => (
                             <span
                               key={index}
-                              className="inline-flex items-center gap-1 px-3 py-1 bg-neutral-100 text-foreground rounded-full text-sm"
+                              className="inline-flex items-center gap-1 px-3 py-1 bg-muted text-foreground rounded-full text-sm"
                             >
                               {skill}
                               <button
@@ -1216,7 +1210,7 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Company Settings for Contracts */}
-                    <div className="space-y-4 pt-6 border-t border-neutral-200">
+                    <div className="space-y-4 pt-6 border-t border-border">
                       <div>
                         <h3 className="text-sm font-medium text-foreground">{t('profile.companySettings')}</h3>
                         <p className="text-xs text-foreground/50 mt-1">{t('profile.companySettingsDesc')}</p>
@@ -1231,7 +1225,7 @@ export default function DashboardPage() {
                           value={companySettingsName}
                           onChange={(e) => setCompanySettingsName(e.target.value)}
                           disabled={saving}
-                          className="border-neutral-200 focus:border-gray-400"
+                          className="border-border focus:border-primary"
                         />
                       </div>
 
@@ -1244,7 +1238,7 @@ export default function DashboardPage() {
                           value={companySettingsAddress}
                           onChange={(e) => setCompanySettingsAddress(e.target.value)}
                           disabled={saving}
-                          className="border-neutral-200 focus:border-gray-400"
+                          className="border-border focus:border-primary"
                         />
                       </div>
 
@@ -1258,7 +1252,7 @@ export default function DashboardPage() {
                             value={companySettingsSiret}
                             onChange={(e) => setCompanySettingsSiret(e.target.value)}
                             disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
+                            className="border-border focus:border-primary"
                           />
                         </div>
                         <div className="space-y-1">
@@ -1270,7 +1264,7 @@ export default function DashboardPage() {
                             value={companySettingsVat}
                             onChange={(e) => setCompanySettingsVat(e.target.value)}
                             disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
+                            className="border-border focus:border-primary"
                           />
                         </div>
                       </div>
@@ -1285,7 +1279,7 @@ export default function DashboardPage() {
                             value={companySettingsEmail}
                             onChange={(e) => setCompanySettingsEmail(e.target.value)}
                             disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
+                            className="border-border focus:border-primary"
                           />
                         </div>
                         <div className="space-y-1">
@@ -1297,7 +1291,7 @@ export default function DashboardPage() {
                             value={companySettingsPhone}
                             onChange={(e) => setCompanySettingsPhone(e.target.value)}
                             disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
+                            className="border-border focus:border-primary"
                           />
                         </div>
                       </div>
@@ -1315,15 +1309,15 @@ export default function DashboardPage() {
                         className="flex gap-4"
                       >
                         <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-                          clientType === "individual" ? 'border-gray-900' : 'border-neutral-200'
+                          clientType === "individual" ? 'border-primary' : 'border-border'
                         }`}>
-                          <RadioGroupItem value="individual" className="border-gray-300" />
+                          <RadioGroupItem value="individual" className="border-border" />
                           <span className="text-sm">{t('profile.individual')}</span>
                         </label>
                         <label className={`flex items-center gap-2 px-4 py-2 rounded-lg border cursor-pointer transition-colors bg-white ${
-                          clientType === "company" ? 'border-gray-900' : 'border-neutral-200'
+                          clientType === "company" ? 'border-primary' : 'border-border'
                         }`}>
-                          <RadioGroupItem value="company" className="border-gray-300" />
+                          <RadioGroupItem value="company" className="border-border" />
                           <span className="text-sm">{t('profile.company')}</span>
                         </label>
                       </RadioGroup>
@@ -1343,7 +1337,7 @@ export default function DashboardPage() {
                               value={companyName}
                               onChange={(e) => setCompanyName(e.target.value)}
                               disabled={saving}
-                              className="border-neutral-200 focus:border-gray-400"
+                              className="border-border focus:border-primary"
                             />
                           </div>
                           <div className="space-y-1">
@@ -1355,7 +1349,7 @@ export default function DashboardPage() {
                               value={legalForm}
                               onChange={(e) => setLegalForm(e.target.value)}
                               disabled={saving}
-                              className="border-neutral-200 focus:border-gray-400"
+                              className="border-border focus:border-primary"
                             />
                           </div>
                         </div>
@@ -1369,7 +1363,7 @@ export default function DashboardPage() {
                               value={siret}
                               onChange={(e) => setSiret(e.target.value)}
                               disabled={saving}
-                              className="border-neutral-200 focus:border-gray-400"
+                              className="border-border focus:border-primary"
                             />
                           </div>
                           <div className="space-y-1">
@@ -1381,7 +1375,7 @@ export default function DashboardPage() {
                               value={vatNumber}
                               onChange={(e) => setVatNumber(e.target.value)}
                               disabled={saving}
-                              className="border-neutral-200 focus:border-gray-400"
+                              className="border-border focus:border-primary"
                             />
                           </div>
                         </div>
@@ -1395,7 +1389,7 @@ export default function DashboardPage() {
                               value={professionalEmail}
                               onChange={(e) => setProfessionalEmail(e.target.value)}
                               disabled={saving}
-                              className="border-neutral-200 focus:border-gray-400"
+                              className="border-border focus:border-primary"
                             />
                           </div>
                           <div className="space-y-1">
@@ -1407,7 +1401,7 @@ export default function DashboardPage() {
                               value={contactPosition}
                               onChange={(e) => setContactPosition(e.target.value)}
                               disabled={saving}
-                              className="border-neutral-200 focus:border-gray-400"
+                              className="border-border focus:border-primary"
                             />
                           </div>
                         </div>
@@ -1426,7 +1420,7 @@ export default function DashboardPage() {
                           value={address}
                           onChange={(e) => setAddress(e.target.value)}
                           disabled={saving}
-                          className="border-neutral-200 focus:border-gray-400"
+                          className="border-border focus:border-primary"
                         />
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -1439,7 +1433,7 @@ export default function DashboardPage() {
                             value={postalCode}
                             onChange={(e) => setPostalCode(e.target.value)}
                             disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
+                            className="border-border focus:border-primary"
                           />
                         </div>
                         <div className="space-y-1">
@@ -1451,7 +1445,7 @@ export default function DashboardPage() {
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
                             disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
+                            className="border-border focus:border-primary"
                           />
                         </div>
                         <div className="space-y-1 col-span-2 md:col-span-1">
@@ -1463,7 +1457,7 @@ export default function DashboardPage() {
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}
                             disabled={saving}
-                            className="border-neutral-200 focus:border-gray-400"
+                            className="border-border focus:border-primary"
                           />
                         </div>
                       </div>
@@ -1486,7 +1480,7 @@ export default function DashboardPage() {
 
                 <Button
                   type="submit"
-                  className="w-full bg-gray-900 hover:bg-gray-800 text-white"
+                  className="w-full bg-primary hover:bg-primary/90 text-white"
                   disabled={saving}
                 >
                   {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
@@ -1502,8 +1496,8 @@ export default function DashboardPage() {
               {selectedProject ? (
                 <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
                   {/* Secondary sidebar for project sub-sections */}
-                  <div className="w-48 bg-neutral-100/50 border-r border-neutral-200 flex-shrink-0 flex flex-col">
-                    <div className="p-4 border-b border-neutral-200">
+                  <div className="w-48 bg-muted/50 border-r border-border flex-shrink-0 flex flex-col">
+                    <div className="p-4 border-b border-border">
                       <button
                         onClick={() => setSelectedProject(null)}
                         className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
@@ -1517,7 +1511,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('details')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
                           projectSubSection === 'details'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -1528,14 +1522,14 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('quotes')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'quotes'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
                         <Receipt className="w-4 h-4" />
                         {t('projects.subSections.quotes')}
                         {quotes.length > 0 && (
-                          <span className="ml-auto text-xs bg-gray-200 text-foreground/70 px-1.5 py-0.5 rounded">
+                          <span className="ml-auto text-xs bg-muted text-foreground/70 px-1.5 py-0.5 rounded">
                             {quotes.length}
                           </span>
                         )}
@@ -1544,7 +1538,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('messages')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'messages'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -1565,14 +1559,14 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('documents')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'documents'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
                         <FolderOpen className="w-4 h-4" />
                         {t('documents.title')}
                         {documents.length > 0 && (
-                          <span className="ml-auto text-xs bg-gray-200 text-foreground/70 px-1.5 py-0.5 rounded">
+                          <span className="ml-auto text-xs bg-muted text-foreground/70 px-1.5 py-0.5 rounded">
                             {documents.length}
                           </span>
                         )}
@@ -1584,7 +1578,7 @@ export default function DashboardPage() {
                   <div className={`flex-1 flex flex-col ${projectSubSection === 'messages' ? 'overflow-hidden' : 'p-4 lg:p-6 overflow-auto'}`}>
                     {/* Project Header - visible only in details section */}
                     {projectSubSection === 'details' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden mb-6">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden mb-6">
                         <div className="p-6">
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex items-start gap-4">
@@ -1608,7 +1602,7 @@ export default function DashboardPage() {
                                 </h2>
                                 <div className="flex flex-wrap gap-2 mb-3">
                                   {selectedProject.project_types?.map((type) => (
-                                    <span key={type} className="text-sm bg-neutral-100 text-foreground/70 px-3 py-1 rounded-full">
+                                    <span key={type} className="text-sm bg-muted text-foreground/70 px-3 py-1 rounded-full">
                                       {t(`projects.types.${type}`)}
                                     </span>
                                   ))}
@@ -1624,7 +1618,7 @@ export default function DashboardPage() {
                               </span>
                               {selectedProject.status === 'pending' && (
                                 <DropdownMenu>
-                                  <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-gray-100">
+                                  <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-muted">
                                     <MoreHorizontal className="w-4 h-4" />
                                   </DropdownMenuTrigger>
                                   <DropdownMenuContent align="end" className="z-50">
@@ -1651,7 +1645,7 @@ export default function DashboardPage() {
 
                     {/* Details Sub-Section */}
                     {projectSubSection === 'details' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
                         <div className="p-6 space-y-8">
                           {/* Description */}
                           <div>
@@ -1693,7 +1687,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.services.map((service) => (
-                                  <span key={service} className="text-sm bg-neutral-100/50 border border-neutral-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={service} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {t(`projects.services.${service}`)}
                                   </span>
                                 ))}
@@ -1710,7 +1704,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.platforms.map((platform) => (
-                                  <span key={platform} className="text-sm bg-neutral-100/50 border border-neutral-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={platform} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {platform}
                                   </span>
                                 ))}
@@ -1732,7 +1726,7 @@ export default function DashboardPage() {
                           {/* Budget & Deadline */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {selectedProject.budget && (
-                              <div className="bg-neutral-100/50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Euro className="w-4 h-4 text-[#9c984d]" />
                                   {t('projects.details.budget')}
@@ -1741,7 +1735,7 @@ export default function DashboardPage() {
                               </div>
                             )}
                             {selectedProject.deadline && (
-                              <div className="bg-neutral-100/50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Clock className="w-4 h-4 text-[#ea4c89]" />
                                   {t('projects.details.deadline')}
@@ -1862,7 +1856,7 @@ export default function DashboardPage() {
                             <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                           </div>
                         ) : quotes.length === 0 ? (
-                          <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <Receipt className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('quotes.noQuotes')}</p>
                             <p className="text-foreground/50 text-sm mt-1">{t('quotes.noQuotesClientDesc')}</p>
@@ -1874,14 +1868,14 @@ export default function DashboardPage() {
                               return (
                                 <div
                                   key={quote.id}
-                                  className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors"
+                                  className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors"
                                 >
                                   <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
                                       <div className="flex items-center gap-2 mb-2">
                                         <h4 className="font-semibold text-foreground">{quote.name}</h4>
                                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                                          quote.status === 'draft' ? 'bg-neutral-100 text-gray-700' :
+                                          quote.status === 'draft' ? 'bg-muted text-foreground/70' :
                                           quote.status === 'sent' ? 'bg-blue-100 text-blue-700' :
                                           quote.status === 'accepted' ? 'bg-green-100 text-green-700' :
                                           'bg-red-100 text-red-700'
@@ -1934,14 +1928,14 @@ export default function DashboardPage() {
                     {projectSubSection === 'messages' && (
                       <>
                         {/* Header */}
-                        <div className="p-4 border-b border-neutral-200 bg-white flex items-center justify-between flex-shrink-0">
+                        <div className="p-4 border-b border-border bg-white flex items-center justify-between flex-shrink-0">
                           <div>
                             <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
                             <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
                           </div>
                         </div>
                         {/* Message thread */}
-                        <div className="flex-1 bg-neutral-100/50 overflow-hidden">
+                        <div className="flex-1 bg-muted/50 overflow-hidden">
                           <MessageThread
                             projectId={selectedProject.id}
                             currentUser={{
@@ -1978,7 +1972,7 @@ export default function DashboardPage() {
                         {showUploadModal && (
                           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                             <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
-                              <div className="p-4 border-b border-neutral-200">
+                              <div className="p-4 border-b border-border">
                                 <h3 className="font-semibold text-foreground">{t('documents.uploadModal.title')}</h3>
                               </div>
                               <form
@@ -2035,7 +2029,7 @@ export default function DashboardPage() {
                                     id="doc-type-client"
                                     name="type"
                                     required
-                                    className="mt-1 w-full bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+                                    className="mt-1 w-full bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
                                   >
                                     <option value="specification">{t('documents.types.specification')}</option>
                                     <option value="planning">{t('documents.types.planning')}</option>
@@ -2088,7 +2082,7 @@ export default function DashboardPage() {
                             <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                           </div>
                         ) : documents.length === 0 ? (
-                          <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <FolderOpen className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('documents.empty')}</p>
                             <p className="text-foreground/50 text-sm mt-1">{t('documents.emptyClientDescription')}</p>
@@ -2098,10 +2092,10 @@ export default function DashboardPage() {
                             {documents.map((doc) => (
                               <div
                                 key={doc.id}
-                                className="bg-white border border-neutral-200 rounded-xl p-4 hover:border-neutral-300 transition-colors"
+                                className="bg-white border border-border rounded-xl p-4 hover:border-primary/30 transition-colors"
                               >
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-xl flex-shrink-0">
+                                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-xl flex-shrink-0">
                                     {getFileIcon(doc.file_type)}
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -2109,11 +2103,11 @@ export default function DashboardPage() {
                                       <div>
                                         <div className="flex items-center gap-2">
                                           <h4 className="font-medium text-foreground truncate">{doc.name}</h4>
-                                          <span className="text-xs bg-neutral-100 text-neutral-900 px-1.5 py-0.5 rounded font-medium">
+                                          <span className="text-xs bg-muted text-foreground px-1.5 py-0.5 rounded font-medium">
                                             v{doc.version}
                                           </span>
                                         </div>
-                                        <span className="inline-block text-xs bg-neutral-100 text-foreground/70 px-2 py-0.5 rounded mt-1">
+                                        <span className="inline-block text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded mt-1">
                                           {t(`documents.types.${doc.type}`)}
                                         </span>
                                       </div>
@@ -2157,7 +2151,7 @@ export default function DashboardPage() {
                     {!showProjectForm && (
                       <Button
                         onClick={() => setShowProjectForm(true)}
-                        className="bg-gray-900 hover:bg-gray-800 text-white"
+                        className="bg-primary hover:bg-primary/90 text-white"
                       >
                         <Plus className="w-4 h-4 mr-2" />
                         {t('projects.newProject')}
@@ -2166,7 +2160,7 @@ export default function DashboardPage() {
                   </div>
 
                   {showProjectForm && (
-                    <div className="bg-white border border-neutral-200 rounded-xl p-6 mb-6 min-h-[600px]">
+                    <div className="bg-white border border-border rounded-xl p-6 mb-6 min-h-[600px]">
                       <ProjectFormWizard
                         project={editingProject}
                         onSuccess={() => {
@@ -2187,7 +2181,7 @@ export default function DashboardPage() {
                       <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                     </div>
                   ) : projects.length === 0 ? (
-                    <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                    <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                       <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                       <p className="text-foreground/70 font-medium">{t('projects.noProjects')}</p>
                       <p className="text-foreground/50 text-sm mt-1">{t('projects.noProjectsDesc')}</p>
@@ -2201,7 +2195,7 @@ export default function DashboardPage() {
                             setSelectedProject(project)
                             setProjectSubSection('details')
                           }}
-                          className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
+                          className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors cursor-pointer"
                         >
                           <div className="flex items-start justify-between gap-4">
                             <div className="flex-1 min-w-0">
@@ -2210,7 +2204,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2 mb-2">
                                 {project.project_types?.map((type) => (
-                                  <span key={type} className="text-xs bg-neutral-100 text-foreground/70 px-2 py-0.5 rounded">
+                                  <span key={type} className="text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded">
                                     {t(`projects.types.${type}`)}
                                   </span>
                                 ))}
@@ -2326,8 +2320,8 @@ export default function DashboardPage() {
           {activeSection === "messages" && !isEngineer && (
             <div className="flex gap-0 -m-4 lg:-m-6 h-[calc(100vh-65px)]">
               {/* Secondary sidebar for projects */}
-              <div className="w-56 bg-neutral-100/50 border-r border-neutral-200 flex-shrink-0 flex flex-col">
-                <div className="p-4 border-b border-neutral-200">
+              <div className="w-56 bg-muted/50 border-r border-border flex-shrink-0 flex flex-col">
+                <div className="p-4 border-b border-border">
                   <h2 className="font-semibold text-foreground">{t('messages.title')}</h2>
                   <p className="text-xs text-foreground/50 mt-1">{t('messages.sectionDescription')}</p>
                 </div>
@@ -2342,7 +2336,7 @@ export default function DashboardPage() {
                     <Button
                       onClick={() => setActiveSection('projects')}
                       size="sm"
-                      className="bg-gray-900 hover:bg-gray-800 text-white"
+                      className="bg-primary hover:bg-primary/90 text-white"
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       {t('projects.newProject')}
@@ -2362,7 +2356,7 @@ export default function DashboardPage() {
                         }}
                         className={`w-full flex items-start gap-2 px-3 py-2.5 rounded-lg text-left text-sm transition-colors mb-1 ${
                           selectedProject?.id === project.id
-                            ? 'bg-white border border-neutral-200 text-foreground'
+                            ? 'bg-white border border-border text-foreground'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2388,7 +2382,7 @@ export default function DashboardPage() {
                 {selectedProject ? (
                   <>
                     {/* Header */}
-                    <div className="p-4 border-b border-neutral-200 bg-white flex items-center justify-between">
+                    <div className="p-4 border-b border-border bg-white flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
                         <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
@@ -2407,7 +2401,7 @@ export default function DashboardPage() {
                       </Button>
                     </div>
                     {/* Message thread */}
-                    <div className="flex-1 bg-neutral-100/50 overflow-hidden">
+                    <div className="flex-1 bg-muted/50 overflow-hidden">
                       <MessageThread
                         projectId={selectedProject.id}
                         currentUser={{
@@ -2422,7 +2416,7 @@ export default function DashboardPage() {
                     </div>
                   </>
                 ) : (
-                  <div className="flex-1 flex items-center justify-center bg-neutral-100/50">
+                  <div className="flex-1 flex items-center justify-center bg-muted/50">
                     <div className="text-center">
                       <MessageSquare className="w-12 h-12 text-foreground/20 mx-auto mb-4" />
                       <p className="text-foreground/50">{t('messages.selectToView')}</p>
@@ -2588,11 +2582,11 @@ export default function DashboardPage() {
                         const uniqueClients = [...new Set(actionItems.map(i => i.clientName))].filter(c => c !== '-')
 
                         return (
-                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
-                        <div className="p-4 border-b border-neutral-200 flex flex-col gap-3">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
+                        <div className="p-4 border-b border-border flex flex-col gap-3">
                           <div className="flex items-center justify-between">
                             <h3 className="font-semibold text-foreground">{t('dashboard.engineer.actions.title')}</h3>
-                            <div className="flex items-center gap-2 text-xs text-neutral-500">
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
                               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-400"></span> {t('dashboard.engineer.actions.urgencyCritical')}</span>
                               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-orange-400"></span> {t('dashboard.engineer.actions.urgencyHigh')}</span>
                               <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-400"></span> {t('dashboard.engineer.actions.urgencyMedium')}</span>
@@ -2602,12 +2596,12 @@ export default function DashboardPage() {
                           {/* Filters row */}
                           <div className="flex flex-wrap items-center gap-2">
                             <div className="flex items-center gap-1">
-                              <Filter className="w-4 h-4 text-neutral-400" />
+                              <Filter className="w-4 h-4 text-muted-foreground" />
                             </div>
                             <select
                               value={actionTypeFilter}
                               onChange={(e) => setActionTypeFilter(e.target.value as 'all' | 'message' | 'quote' | 'send')}
-                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300"
+                              className="text-sm border border-border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-primary/30"
                             >
                               <option value="all">{t('dashboard.engineer.actions.filterAll')}</option>
                               <option value="message">{t('dashboard.engineer.actions.filterMessages')}</option>
@@ -2619,7 +2613,7 @@ export default function DashboardPage() {
                               placeholder={t('dashboard.engineer.actions.filterByProject')}
                               value={projectFilter}
                               onChange={(e) => setProjectFilter(e.target.value)}
-                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300 w-32"
+                              className="text-sm border border-border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-primary/30 w-32"
                               list="project-suggestions"
                             />
                             <datalist id="project-suggestions">
@@ -2630,7 +2624,7 @@ export default function DashboardPage() {
                               placeholder={t('dashboard.engineer.actions.filterByClient')}
                               value={clientFilter}
                               onChange={(e) => setClientFilter(e.target.value)}
-                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300 w-32"
+                              className="text-sm border border-border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-primary/30 w-32"
                               list="client-suggestions"
                             />
                             <datalist id="client-suggestions">
@@ -2639,7 +2633,7 @@ export default function DashboardPage() {
                             <select
                               value={urgencyFilter}
                               onChange={(e) => setUrgencyFilter(e.target.value as 'all' | 'critical' | 'high' | 'medium' | 'low')}
-                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300"
+                              className="text-sm border border-border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-primary/30"
                             >
                               <option value="all">{t('dashboard.engineer.actions.filterUrgencyAll')}</option>
                               <option value="critical">{t('dashboard.engineer.actions.urgencyCritical')}</option>
@@ -2650,7 +2644,7 @@ export default function DashboardPage() {
                             <select
                               value={assigneeFilter}
                               onChange={(e) => setAssigneeFilter(e.target.value)}
-                              className="text-sm border border-neutral-200 rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300"
+                              className="text-sm border border-border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-primary/30"
                             >
                               <option value="all">{t('dashboard.engineer.actions.filterAssigneeAll')}</option>
                               <option value="unassigned">{t('dashboard.engineer.actions.filterUnassigned')}</option>
@@ -2670,7 +2664,7 @@ export default function DashboardPage() {
                                   setUrgencyFilter('all')
                                   setAssigneeFilter('all')
                                 }}
-                                className="text-xs text-neutral-500 hover:text-neutral-700 underline"
+                                className="text-xs text-muted-foreground hover:text-muted-foreground underline"
                               >
                                 {t('dashboard.engineer.actions.clearFilters')}
                               </button>
@@ -2693,7 +2687,7 @@ export default function DashboardPage() {
                           <TableBody>
                             {filteredItems.length === 0 ? (
                               <TableRow>
-                                <TableCell colSpan={8} className="text-center py-8 text-neutral-500">
+                                <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                                   {t('dashboard.engineer.actions.noResults')}
                                 </TableCell>
                               </TableRow>
@@ -2711,7 +2705,7 @@ export default function DashboardPage() {
                                 className={`cursor-pointer ${getRowUrgencyColor(item.urgency)}`}
                               >
                                 <TableCell>
-                                  {item.type === 'message' && <MessageCircle className="w-4 h-4 text-neutral-500" />}
+                                  {item.type === 'message' && <MessageCircle className="w-4 h-4 text-muted-foreground" />}
                                   {item.type === 'quote' && <Receipt className="w-4 h-4 text-[#ea4c89]" />}
                                   {item.type === 'send' && <Send className="w-4 h-4 text-slate-500" />}
                                 </TableCell>
@@ -2720,8 +2714,8 @@ export default function DashboardPage() {
                                   {item.type === 'quote' && t('dashboard.engineer.actions.createQuote')}
                                   {item.type === 'send' && t('dashboard.engineer.actions.sendQuote')}
                                 </TableCell>
-                                <TableCell className="text-neutral-600">{item.projectName}</TableCell>
-                                <TableCell className="text-neutral-600">{item.clientName}</TableCell>
+                                <TableCell className="text-muted-foreground">{item.projectName}</TableCell>
+                                <TableCell className="text-muted-foreground">{item.clientName}</TableCell>
                                 <TableCell onClick={(e) => e.stopPropagation()}>
                                   <select
                                     value={item.assignedTo || ''}
@@ -2735,11 +2729,11 @@ export default function DashboardPage() {
                                       )
                                     }}
                                     disabled={assigningAction === `${item.type}-${item.project?.id || ''}-${item.quote?.id || ''}`}
-                                    className={`text-xs border rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-neutral-300 min-w-[100px] ${
+                                    className={`text-xs border rounded px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-primary/30 min-w-[100px] ${
                                       assigningAction === `${item.type}-${item.project?.id || ''}-${item.quote?.id || ''}`
                                         ? 'opacity-50 cursor-wait'
                                         : 'cursor-pointer'
-                                    } ${item.assignedTo ? 'border-primary/30 text-primary' : 'border-neutral-200 text-neutral-400'}`}
+                                    } ${item.assignedTo ? 'border-primary/30 text-primary' : 'border-border text-muted-foreground'}`}
                                   >
                                     <option value="">{t('dashboard.engineer.actions.unassigned')}</option>
                                     {engineers.map(eng => (
@@ -2751,7 +2745,7 @@ export default function DashboardPage() {
                                     ))}
                                   </select>
                                 </TableCell>
-                                <TableCell className="text-neutral-500 text-sm">
+                                <TableCell className="text-muted-foreground text-sm">
                                   {item.notificationDate ? formatDate(item.notificationDate) : '-'}
                                 </TableCell>
                                 <TableCell>
@@ -2763,7 +2757,7 @@ export default function DashboardPage() {
                                 </TableCell>
                                 <TableCell className="text-right">
                                   {item.type === 'message' && (
-                                    <span className="text-xs bg-neutral-200 text-neutral-700 px-2 py-1 rounded-full">
+                                    <span className="text-xs bg-muted text-muted-foreground px-2 py-1 rounded-full">
                                       {unreadCounts[item.project?.id || '']} msg
                                     </span>
                                   )}
@@ -2786,7 +2780,7 @@ export default function DashboardPage() {
                         )
                       })()
                     ) : (
-                      <div className="bg-white border border-neutral-200 rounded-xl p-8 text-center">
+                      <div className="bg-white border border-border rounded-xl p-8 text-center">
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                           <Check className="w-8 h-8 text-green-600" />
                         </div>
@@ -2815,8 +2809,8 @@ export default function DashboardPage() {
                 // Project detail view with cascading navigation
                 <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
                   {/* Secondary sidebar for project sub-sections */}
-                  <div className="w-48 bg-neutral-100/50 border-r border-neutral-200 flex-shrink-0 flex flex-col">
-                    <div className="p-4 border-b border-neutral-200">
+                  <div className="w-48 bg-muted/50 border-r border-border flex-shrink-0 flex flex-col">
+                    <div className="p-4 border-b border-border">
                       <button
                         onClick={() => setSelectedProject(null)}
                         className="flex items-center gap-2 text-sm text-foreground/60 hover:text-foreground transition-colors"
@@ -2831,7 +2825,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('messages')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors ${
                           projectSubSection === 'messages'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2853,7 +2847,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('roadmap')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'roadmap'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2865,7 +2859,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('time')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'time'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2877,7 +2871,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('finances')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'finances'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2896,14 +2890,14 @@ export default function DashboardPage() {
                         }}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'quotes'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
                         <Receipt className="w-4 h-4" />
                         {t('projects.subSections.quotes')}
                         {quotes.length > 0 && (
-                          <span className="ml-auto text-xs bg-gray-200 text-foreground/70 px-1.5 py-0.5 rounded">
+                          <span className="ml-auto text-xs bg-muted text-foreground/70 px-1.5 py-0.5 rounded">
                             {quotes.length}
                           </span>
                         )}
@@ -2913,7 +2907,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('contracts')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'contracts'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2925,7 +2919,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('documents')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'documents'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2937,7 +2931,7 @@ export default function DashboardPage() {
                         onClick={() => setProjectSubSection('details')}
                         className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-left text-sm transition-colors mt-1 ${
                           projectSubSection === 'details'
-                            ? 'bg-white border border-neutral-200 text-foreground font-medium shadow-sm'
+                            ? 'bg-white border border-border text-foreground font-medium shadow-sm'
                             : 'text-foreground/70 hover:bg-white hover:text-foreground'
                         }`}
                       >
@@ -2950,7 +2944,7 @@ export default function DashboardPage() {
                   {/* Main content area */}
                   <div className={`flex-1 flex flex-col ${projectSubSection === 'messages' ? 'overflow-hidden' : 'p-4 lg:p-6 overflow-auto'}`}>
                     {/* Project Header - always visible */}
-                    <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden mb-6">
+                    <div className="bg-white border border-border rounded-xl overflow-hidden mb-6">
                       <div className="p-6">
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex items-start gap-4">
@@ -2985,7 +2979,7 @@ export default function DashboardPage() {
                               </button>
                               <div className="flex flex-wrap gap-2 mb-2">
                                 {selectedProject.project_types?.map((type) => (
-                                  <span key={type} className="text-sm bg-neutral-100 text-foreground/70 px-3 py-1 rounded-full">
+                                  <span key={type} className="text-sm bg-muted text-foreground/70 px-3 py-1 rounded-full">
                                     {t(`projects.types.${type}`)}
                                   </span>
                                 ))}
@@ -3004,10 +2998,10 @@ export default function DashboardPage() {
 
                     {/* Details Sub-Section */}
                     {projectSubSection === 'details' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
                         <div className="p-6 space-y-8">
                           {/* Client Info for Engineer */}
-                          <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
+                          <div className="flex items-center justify-between pb-4 border-b border-muted">
                             <div className="flex items-center gap-3">
                               <div className="shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shadow-sm overflow-hidden">
                                 {selectedProject.profiles?.avatar_url ? (
@@ -3084,7 +3078,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.services.map((service) => (
-                                  <span key={service} className="text-sm bg-neutral-100/50 border border-neutral-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={service} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {t(`projects.services.${service}`)}
                                   </span>
                                 ))}
@@ -3101,7 +3095,7 @@ export default function DashboardPage() {
                               </h3>
                               <div className="flex flex-wrap gap-2">
                                 {selectedProject.platforms.map((platform) => (
-                                  <span key={platform} className="text-sm bg-neutral-100/50 border border-neutral-200 text-foreground/70 px-3 py-1 rounded-lg">
+                                  <span key={platform} className="text-sm bg-muted/50 border border-border text-foreground/70 px-3 py-1 rounded-lg">
                                     {platform}
                                   </span>
                                 ))}
@@ -3112,7 +3106,7 @@ export default function DashboardPage() {
                           {/* Budget & Deadline */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {selectedProject.budget && (
-                              <div className="bg-neutral-100/50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Euro className="w-4 h-4 text-[#9c984d]" />
                                   {t('projects.details.budget')}
@@ -3121,7 +3115,7 @@ export default function DashboardPage() {
                               </div>
                             )}
                             {selectedProject.deadline && (
-                              <div className="bg-neutral-100/50 rounded-xl p-4">
+                              <div className="bg-muted/50 rounded-xl p-4">
                                 <h3 className="flex items-center gap-2 text-sm font-semibold text-foreground mb-2">
                                   <Clock className="w-4 h-4 text-[#ea4c89]" />
                                   {t('projects.details.deadline')}
@@ -3209,8 +3203,8 @@ export default function DashboardPage() {
 
                     {/* Quotes Sub-Section */}
                     {projectSubSection === 'quotes' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-neutral-200">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-border">
                           <h3 className="flex items-center gap-2 font-semibold text-foreground">
                             <Receipt className="w-5 h-5 text-[#9c984d]" />
                             {showQuoteForm
@@ -3237,7 +3231,7 @@ export default function DashboardPage() {
                                 setEditingQuote(null)
                                 setShowQuoteForm(true)
                               }}
-                              className="bg-gray-900 hover:bg-gray-800 text-white"
+                              className="bg-primary hover:bg-primary/90 text-white"
                             >
                               <Plus className="w-4 h-4 mr-2" />
                               {t('quotes.newQuote')}
@@ -3246,7 +3240,7 @@ export default function DashboardPage() {
                         </div>
 
                         {showQuoteForm && (
-                          <div className="p-4 border-b border-neutral-200 bg-neutral-100/50">
+                          <div className="p-4 border-b border-border bg-muted/50">
                             <QuoteForm
                               projectId={selectedProject.id}
                               project={selectedProject}
@@ -3275,11 +3269,11 @@ export default function DashboardPage() {
                               <p className="text-foreground/50">{t('quotes.noQuotes')}</p>
                             </div>
                           ) : (
-                            <div className="divide-y divide-neutral-200">
+                            <div className="divide-y divide-border">
                               {quotes.map((quote) => {
                                 const quoteData = calculateQuoteData(quote)
                                 return (
-                                <div key={quote.id} className="p-4 hover:bg-neutral-50 transition-colors">
+                                <div key={quote.id} className="p-4 hover:bg-muted/50 transition-colors">
                                   <div className="flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-3">
                                       <span className="font-medium text-foreground">
@@ -3348,14 +3342,14 @@ export default function DashboardPage() {
                     {projectSubSection === 'messages' && (
                       <>
                         {/* Header */}
-                        <div className="p-4 border-b border-neutral-200 bg-white flex items-center justify-between flex-shrink-0">
+                        <div className="p-4 border-b border-border bg-white flex items-center justify-between flex-shrink-0">
                           <div>
                             <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
                             <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
                           </div>
                         </div>
                         {/* Message thread */}
-                        <div className="flex-1 bg-neutral-100/50 overflow-hidden">
+                        <div className="flex-1 bg-muted/50 overflow-hidden">
                           <MessageThread
                             projectId={selectedProject.id}
                             currentUser={{
@@ -3395,7 +3389,7 @@ export default function DashboardPage() {
                         {showUploadModal && (
                           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
                             <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
-                              <div className="p-4 border-b border-neutral-200">
+                              <div className="p-4 border-b border-border">
                                 <h3 className="font-semibold text-foreground">{t('documents.uploadModal.title')}</h3>
                               </div>
                               <form
@@ -3452,7 +3446,7 @@ export default function DashboardPage() {
                                     id="doc-type"
                                     name="type"
                                     required
-                                    className="mt-1 w-full bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+                                    className="mt-1 w-full bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
                                   >
                                     <option value="signed_quote">{t('documents.types.signed_quote')}</option>
                                     <option value="contract">{t('documents.types.contract')}</option>
@@ -3511,7 +3505,7 @@ export default function DashboardPage() {
                             <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                           </div>
                         ) : documents.length === 0 ? (
-                          <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <FolderOpen className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('documents.empty')}</p>
                             <p className="text-foreground/50 text-sm mt-1">{t('documents.emptyDescription')}</p>
@@ -3521,10 +3515,10 @@ export default function DashboardPage() {
                             {documents.map((doc) => (
                               <div
                                 key={doc.id}
-                                className="bg-white border border-neutral-200 rounded-xl p-4 hover:border-neutral-300 transition-colors"
+                                className="bg-white border border-border rounded-xl p-4 hover:border-primary/30 transition-colors"
                               >
                                 <div className="flex items-start gap-4">
-                                  <div className="w-10 h-10 rounded-lg bg-neutral-100 flex items-center justify-center text-xl flex-shrink-0">
+                                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-xl flex-shrink-0">
                                     {getFileIcon(doc.file_type)}
                                   </div>
                                   <div className="flex-1 min-w-0">
@@ -3532,11 +3526,11 @@ export default function DashboardPage() {
                                       <div>
                                         <div className="flex items-center gap-2">
                                           <h4 className="font-medium text-foreground truncate">{doc.name}</h4>
-                                          <span className="text-xs bg-neutral-100 text-neutral-900 px-1.5 py-0.5 rounded font-medium">
+                                          <span className="text-xs bg-muted text-foreground px-1.5 py-0.5 rounded font-medium">
                                             v{doc.version}
                                           </span>
                                         </div>
-                                        <span className="inline-block text-xs bg-neutral-100 text-foreground/70 px-2 py-0.5 rounded mt-1">
+                                        <span className="inline-block text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded mt-1">
                                           {t(`documents.types.${doc.type}`)}
                                         </span>
                                       </div>
@@ -3643,7 +3637,7 @@ export default function DashboardPage() {
                                             setDocumentVersions(versions)
                                           }
                                         }}
-                                        className="flex items-center gap-1 mt-3 text-xs text-neutral-900 hover:text-neutral-900/80 transition-colors"
+                                        className="flex items-center gap-1 mt-3 text-xs text-foreground hover:text-foreground/80 transition-colors"
                                       >
                                         <History className="w-3 h-3" />
                                         {expandedVersionsId === doc.id ? t('documents.hideVersions') : t('documents.viewVersions')}
@@ -3656,11 +3650,11 @@ export default function DashboardPage() {
                                     )}
                                     {/* Version history list */}
                                     {expandedVersionsId === doc.id && documentVersions.length > 0 && (
-                                      <div className="mt-3 pl-3 border-l-2 border-neutral-200 space-y-2">
+                                      <div className="mt-3 pl-3 border-l-2 border-border space-y-2">
                                         {documentVersions.filter(v => v.id !== doc.id).map((version) => (
                                           <div key={version.id} className="flex items-center justify-between text-xs text-foreground/60">
                                             <div className="flex items-center gap-2">
-                                              <span className="bg-neutral-100 px-1.5 py-0.5 rounded">v{version.version}</span>
+                                              <span className="bg-muted px-1.5 py-0.5 rounded">v{version.version}</span>
                                               <span>{version.file_name}</span>
                                               <span>({formatFileSize(version.file_size)})</span>
                                               <span>{new Date(version.created_at).toLocaleDateString()}</span>
@@ -3693,7 +3687,7 @@ export default function DashboardPage() {
 
                     {/* Time Tracking Section */}
                     {projectSubSection === 'time' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl p-6">
+                      <div className="bg-white border border-border rounded-xl p-6">
                         <TimeTracking
                           projectId={selectedProject.id}
                           currentUser={{
@@ -3709,7 +3703,7 @@ export default function DashboardPage() {
 
                     {/* Roadmap Section */}
                     {projectSubSection === 'roadmap' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl p-6">
+                      <div className="bg-white border border-border rounded-xl p-6">
                         <ProjectRoadmap
                           project={selectedProject}
                           currentUser={{
@@ -3726,7 +3720,7 @@ export default function DashboardPage() {
 
                     {/* Contracts Section */}
                     {projectSubSection === 'contracts' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl p-6">
+                      <div className="bg-white border border-border rounded-xl p-6">
                         <ProjectContracts
                           project={selectedProject}
                           quotes={quotes}
@@ -3745,7 +3739,7 @@ export default function DashboardPage() {
 
                     {/* Finances Section */}
                     {projectSubSection === 'finances' && (
-                      <div className="bg-white border border-neutral-200 rounded-xl p-6">
+                      <div className="bg-white border border-border rounded-xl p-6">
                         <div className="flex items-center gap-2 mb-4">
                           <Euro className="w-5 h-5 text-[#ea4c89]" />
                           <h2 className="text-lg font-semibold text-foreground">{t('finances.title')}</h2>
@@ -3808,7 +3802,7 @@ export default function DashboardPage() {
                         </div>
 
                         {/* Search and Filters */}
-                        <div className="bg-white border border-neutral-200 rounded-xl p-4 mb-4">
+                        <div className="bg-white border border-border rounded-xl p-4 mb-4">
                           <div className="flex flex-wrap items-center gap-3">
                             {/* Search */}
                             <div className="relative flex-1 min-w-[200px]">
@@ -3825,7 +3819,7 @@ export default function DashboardPage() {
                             <select
                               value={projectStatusFilter}
                               onChange={(e) => setProjectStatusFilter(e.target.value)}
-                              className="bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400 h-9"
+                              className="bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary h-9"
                             >
                               <option value="all">{t('projects.grid.allStatuses')}</option>
                               <option value="pending">{t('projects.status.pending')}</option>
@@ -3841,7 +3835,7 @@ export default function DashboardPage() {
                             <select
                               value={projectTypeFilter}
                               onChange={(e) => setProjectTypeFilter(e.target.value)}
-                              className="bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400 h-9"
+                              className="bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary h-9"
                             >
                               <option value="all">{t('projects.grid.allTypes')}</option>
                               {uniqueTypes.map(type => (
@@ -3853,7 +3847,7 @@ export default function DashboardPage() {
                             <select
                               value={projectClientFilter}
                               onChange={(e) => setProjectClientFilter(e.target.value)}
-                              className="bg-white border border-neutral-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400 h-9"
+                              className="bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary h-9"
                             >
                               <option value="all">{t('projects.grid.allClients')}</option>
                               {uniqueClients.map(client => (
@@ -3886,18 +3880,18 @@ export default function DashboardPage() {
                             <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
                           </div>
                         ) : allProjects.length === 0 ? (
-                          <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <FileText className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('dashboard.engineer.noProjects')}</p>
                           </div>
                         ) : filteredProjects.length === 0 ? (
-                          <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                          <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                             <Search className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                             <p className="text-foreground/70 font-medium">{t('projects.grid.noResults')}</p>
                             <p className="text-foreground/50 text-sm mt-1">{t('projects.grid.noResultsDesc')}</p>
                           </div>
                         ) : (
-                          <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
+                          <div className="bg-white border border-border rounded-xl overflow-hidden">
                             <Table>
                               <TableHeader>
                                 <TableRow className="hover:bg-transparent">
@@ -3922,7 +3916,7 @@ export default function DashboardPage() {
                                         isNavigatingRef.current = false
                                       }, 100)
                                     }}
-                                    className="cursor-pointer hover:bg-neutral-50"
+                                    className="cursor-pointer hover:bg-muted/50"
                                   >
                                     <TableCell className="max-w-[250px]">
                                       <div className="font-medium text-foreground truncate">
@@ -3953,7 +3947,7 @@ export default function DashboardPage() {
                                     <TableCell>
                                       <div className="flex flex-wrap gap-1">
                                         {project.project_types?.slice(0, 2).map((type) => (
-                                          <span key={type} className="text-xs bg-neutral-100 text-foreground/70 px-2 py-0.5 rounded">
+                                          <span key={type} className="text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded">
                                             {t(`projects.types.${type}`)}
                                           </span>
                                         ))}
@@ -4078,7 +4072,7 @@ export default function DashboardPage() {
                       </button>
 
                       {/* Client Info Card */}
-                      <div className="bg-white border border-neutral-200 rounded-xl p-6 mb-6">
+                      <div className="bg-white border border-border rounded-xl p-6 mb-6">
                         <div className="flex items-start gap-4">
                           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center shrink-0 overflow-hidden">
                             {selectedClient.avatar_url ? (
@@ -4143,7 +4137,7 @@ export default function DashboardPage() {
 
                         {/* Company Info - always show for companies or if any company info exists */}
                         {(selectedClient.client_type === 'company' || selectedClient.company_name || selectedClient.legal_form || selectedClient.siret || selectedClient.vat_number) && (
-                          <div className="mt-6 pt-6 border-t border-neutral-200">
+                          <div className="mt-6 pt-6 border-t border-border">
                             <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                               <Building className="w-4 h-4 text-[#ba9fdf]" />
                               {t('projects.details.companyInfo')}
@@ -4170,7 +4164,7 @@ export default function DashboardPage() {
                         )}
 
                         {/* Billing Address - always show */}
-                        <div className="mt-6 pt-6 border-t border-neutral-200">
+                        <div className="mt-6 pt-6 border-t border-border">
                           <h3 className="text-sm font-semibold text-foreground mb-3 flex items-center gap-2">
                             <MapPin className="w-4 h-4 text-[#ea4c89]" />
                             {t('projects.details.billingAddress')}
@@ -4210,7 +4204,7 @@ export default function DashboardPage() {
                                 isNavigatingRef.current = false
                               }, 100)
                             }}
-                            className="bg-white border border-neutral-200 rounded-xl p-5 hover:border-neutral-300 transition-colors cursor-pointer"
+                            className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors cursor-pointer"
                           >
                             <div className="flex items-start justify-between gap-4">
                               <div className="flex-1 min-w-0">
@@ -4219,7 +4213,7 @@ export default function DashboardPage() {
                                 </h4>
                                 <div className="flex flex-wrap gap-2 mb-2">
                                   {project.project_types?.map((type) => (
-                                    <span key={type} className="text-xs bg-neutral-100 text-foreground/70 px-2 py-0.5 rounded">
+                                    <span key={type} className="text-xs bg-muted text-foreground/70 px-2 py-0.5 rounded">
                                       {t(`projects.types.${type}`)}
                                     </span>
                                   ))}
@@ -4260,7 +4254,7 @@ export default function DashboardPage() {
                     </div>
 
                     {/* Search */}
-                    <div className="bg-white border border-neutral-200 rounded-xl p-4 mb-4">
+                    <div className="bg-white border border-border rounded-xl p-4 mb-4">
                       <div className="flex items-center gap-3">
                         <div className="relative flex-1 max-w-md">
                           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
@@ -4286,18 +4280,18 @@ export default function DashboardPage() {
                     </div>
 
                     {clients.length === 0 ? (
-                      <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                      <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                         <Users className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                         <p className="text-foreground/70 font-medium">{t('dashboard.clients.noClients')}</p>
                       </div>
                     ) : filteredClients.length === 0 ? (
-                      <div className="text-center py-12 bg-neutral-100/50 border border-neutral-200 rounded-xl">
+                      <div className="text-center py-12 bg-muted/50 border border-border rounded-xl">
                         <Search className="w-12 h-12 mx-auto text-foreground/30 mb-4" />
                         <p className="text-foreground/70 font-medium">{t('dashboard.clients.grid.noResults')}</p>
                         <p className="text-foreground/50 text-sm mt-1">{t('dashboard.clients.grid.noResultsDesc')}</p>
                       </div>
                     ) : (
-                      <div className="bg-white border border-neutral-200 rounded-xl overflow-hidden">
+                      <div className="bg-white border border-border rounded-xl overflow-hidden">
                         <Table>
                           <TableHeader>
                             <TableRow className="hover:bg-transparent">
@@ -4312,7 +4306,7 @@ export default function DashboardPage() {
                               <TableRow
                                 key={client.user_id}
                                 onClick={() => setSelectedClientId(client.user_id)}
-                                className="cursor-pointer hover:bg-neutral-50"
+                                className="cursor-pointer hover:bg-muted/50"
                               >
                                 <TableCell>
                                   <div className="flex items-center gap-3">
@@ -4484,7 +4478,7 @@ export default function DashboardPage() {
                   <User className="w-4 h-4 text-[#6cb1bb]" />
                   {t('projects.details.personalInfo')}
                 </h4>
-                <div className="bg-neutral-50 rounded-lg p-4 space-y-2">
+                <div className="bg-muted/50 rounded-lg p-4 space-y-2">
                   <div className="flex justify-between">
                     <span className="text-sm text-foreground/60">{t('profile.email')}</span>
                     <span className="text-sm font-medium text-foreground">{viewingClientProfile.email}</span>
@@ -4509,7 +4503,7 @@ export default function DashboardPage() {
                     <Building className="w-4 h-4 text-[#ba9fdf]" />
                     {t('projects.details.companyInfo')}
                   </h4>
-                  <div className="bg-neutral-50 rounded-lg p-4 space-y-2">
+                  <div className="bg-muted/50 rounded-lg p-4 space-y-2">
                     {viewingClientProfile.company_name && (
                       <div className="flex justify-between">
                         <span className="text-sm text-foreground/60">{t('profile.companyName')}</span>
@@ -4545,7 +4539,7 @@ export default function DashboardPage() {
                     <MapPin className="w-4 h-4 text-[#ea4c89]" />
                     {t('projects.details.billingAddress')}
                   </h4>
-                  <div className="bg-neutral-50 rounded-lg p-4">
+                  <div className="bg-muted/50 rounded-lg p-4">
                     <p className="text-sm text-foreground">
                       {viewingClientProfile.address && <span>{viewingClientProfile.address}<br /></span>}
                       {viewingClientProfile.postal_code && viewingClientProfile.city && (

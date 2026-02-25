@@ -351,11 +351,11 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
             <div key={groupIndex}>
               {/* Date separator */}
               <div className="flex items-center gap-4 my-4">
-                <div className="flex-1 h-px bg-gray-200" />
+                <div className="flex-1 h-px bg-muted" />
                 <span className="text-xs text-foreground/40 font-medium">
                   {formatDate(group.date)}
                 </span>
-                <div className="flex-1 h-px bg-gray-200" />
+                <div className="flex-1 h-px bg-muted" />
               </div>
 
               {/* Messages for this date */}
@@ -397,7 +397,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
                         {isOwn && !isDeleted && !isEditing && (
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <button className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-gray-200 rounded ${isOwn ? 'order-0' : 'order-3'}`}>
+                              <button className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded ${isOwn ? 'order-0' : 'order-3'}`}>
                                 <MoreVertical className="w-3 h-3 text-foreground/50" />
                               </button>
                             </DropdownMenuTrigger>
@@ -421,10 +421,10 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
                       <div
                         className={`rounded-2xl px-4 py-2 ${
                           isDeleted
-                            ? 'bg-gray-100 text-foreground/40'
+                            ? 'bg-muted text-foreground/40'
                             : isOwn
                               ? 'bg-[rgb(239,239,239)] text-foreground rounded-tr-sm'
-                              : 'bg-gray-100 text-foreground rounded-tl-sm'
+                              : 'bg-muted text-foreground rounded-tl-sm'
                         }`}
                       >
                         {isEditing ? (
@@ -452,7 +452,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
 
                         {/* Attachment */}
                         {message.attachment && (
-                          <div className={`mt-2 ${message.content ? 'pt-2 border-t border-gray-300' : ''}`}>
+                          <div className={`mt-2 ${message.content ? 'pt-2 border-t border-border' : ''}`}>
                             {isImage(message.attachment.type) ? (
                               <a
                                 href={message.attachment.url}
@@ -472,7 +472,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className={`flex items-center gap-2 p-2 rounded-lg ${
-                                  isOwn ? 'bg-gray-300 hover:bg-gray-400' : 'bg-gray-200 hover:bg-gray-300'
+                                  isOwn ? 'bg-muted hover:bg-muted' : 'bg-muted hover:bg-muted'
                                 } transition-colors`}
                               >
                                 <FileText className="w-4 h-4" />
@@ -494,14 +494,14 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
       </div>
 
       {/* Input area */}
-      <div className="border-t border-gray-200 p-4">
+      <div className="border-t border-border p-4">
         {error && (
           <p className="text-sm text-red-600 mb-2">{error}</p>
         )}
 
         {/* Attachment preview */}
         {attachment && (
-          <div className="flex items-center gap-2 mb-2 p-2 bg-gray-100 rounded-lg">
+          <div className="flex items-center gap-2 mb-2 p-2 bg-muted rounded-lg">
             {isImage(attachment.type) ? (
               <ImageIcon className="w-4 h-4 text-foreground/50" />
             ) : (
@@ -510,7 +510,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
             <span className="text-sm text-foreground/70 truncate flex-1">{attachment.name}</span>
             <button
               onClick={removeAttachment}
-              className="p-1 hover:bg-gray-200 rounded"
+              className="p-1 hover:bg-muted rounded"
             >
               <X className="w-4 h-4 text-foreground/50" />
             </button>
@@ -557,7 +557,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
           <Button
             onClick={handleSend}
             disabled={sending || (!newMessage.trim() && !attachment)}
-            className="shrink-0 bg-gray-900 hover:bg-gray-800"
+            className="shrink-0 bg-primary hover:bg-primary/90"
           >
             {sending ? (
               <Loader2 className="w-4 h-4 animate-spin" />

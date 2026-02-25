@@ -428,7 +428,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
   const renderStepIndicator = () => (
     <div className="mb-6">
       {/* Desktop: horizontal tabs */}
-      <div className="hidden md:flex items-center border-b border-gray-200">
+      <div className="hidden md:flex items-center border-b border-border">
         {stepNames.map(({ step, key }, index) => (
           <button
             key={step}
@@ -436,8 +436,8 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             onClick={() => goToStep(step)}
             className={`relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap ${
               step === currentStep
-                ? "text-gray-900 border-b-2 border-gray-900 -mb-px"
-                : "text-gray-400 hover:text-gray-600"
+                ? "text-foreground border-b-2 border-primary -mb-px"
+                : "text-muted-foreground hover:text-muted-foreground"
             }`}
           >
             <span>{t(`quotes.form.${key}`)}</span>
@@ -463,10 +463,10 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
               onClick={() => goToStep(step)}
               className={`flex-1 h-1.5 rounded-full transition-colors ${
                 step === currentStep
-                  ? "bg-gray-900"
+                  ? "bg-primary"
                   : step < currentStep
-                  ? "bg-gray-400"
-                  : "bg-gray-200"
+                  ? "bg-muted-foreground"
+                  : "bg-muted"
               }`}
             />
           ))}
@@ -493,7 +493,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder={t("quotes.form.namePlaceholder")}
           disabled={loading}
-          className="bg-white border-gray-200 focus:border-gray-400"
+          className="bg-white border-border focus:border-primary"
         />
       </div>
 
@@ -506,7 +506,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             value={formData.start_date}
             onChange={(e) => setFormData({ ...formData, start_date: e.target.value })}
             disabled={loading}
-            className="bg-white border-gray-200 focus:border-gray-400"
+            className="bg-white border-border focus:border-primary"
           />
         </div>
         <div className="space-y-2">
@@ -516,7 +516,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             value={formData.end_date}
             onChange={(e) => setFormData({ ...formData, end_date: e.target.value })}
             disabled={loading}
-            className="bg-white border-gray-200 focus:border-gray-400"
+            className="bg-white border-border focus:border-primary"
           />
         </div>
       </div>
@@ -528,7 +528,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           value={formData.status}
           onChange={(e) => setFormData({ ...formData, status: e.target.value as QuoteStatus })}
           disabled={loading}
-          className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-gray-400"
+          className="w-full bg-white border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary"
         >
           <option value="draft">{t("quotes.status.draft")}</option>
           <option value="sent">{t("quotes.status.sent")}</option>
@@ -547,12 +547,12 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           placeholder={t("quotes.form.commentPlaceholder")}
           rows={3}
           disabled={loading}
-          className="bg-white border-gray-200 focus:border-gray-400 resize-none"
+          className="bg-white border-border focus:border-primary resize-none"
         />
       </div>
 
       {/* Profiles Section */}
-      <div className="space-y-3 pt-4 border-t border-gray-100">
+      <div className="space-y-3 pt-4 border-t border-muted">
         <div>
           <h4 className="text-sm font-medium text-foreground">{t("quotes.form.profiles")} *</h4>
           <p className="text-xs text-foreground/50">{t("quotes.form.profilesDesc")}</p>
@@ -560,7 +560,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
 
         <div className="space-y-3">
           {formData.profiles.map((profile, index) => (
-            <div key={index} className="flex items-end gap-3 p-3 bg-gray-50 rounded-lg">
+            <div key={index} className="flex items-end gap-3 p-3 bg-muted/50 rounded-lg">
               <div className="flex-1">
                 <Label className="text-xs text-foreground/70">{t("quotes.form.profileName")}</Label>
                 <Input
@@ -568,7 +568,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                   onChange={(e) => updateProfile(index, "name", e.target.value)}
                   placeholder={t("quotes.form.profileNamePlaceholder")}
                   disabled={loading}
-                  className="bg-white border-gray-200 focus:border-gray-400"
+                  className="bg-white border-border focus:border-primary"
                 />
               </div>
               <div className="w-32">
@@ -579,7 +579,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                   value={profile.daily_rate}
                   onChange={(e) => updateProfile(index, "daily_rate", e.target.value)}
                   disabled={loading}
-                  className="bg-white border-gray-200 focus:border-gray-400"
+                  className="bg-white border-border focus:border-primary"
                 />
               </div>
               {formData.profiles.length > 1 && (
@@ -602,7 +602,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             variant="outline"
             onClick={addProfile}
             disabled={loading}
-            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
+            className="w-full bg-white border-dashed border-border hover:border-primary/30 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addProfile")}
@@ -643,7 +643,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
 
           {/* Abaques list */}
           {formData.abaques.map((abaque, index) => (
-            <div key={index} className="p-3 bg-gray-50 rounded-lg space-y-3 md:space-y-0 md:grid md:grid-cols-[1fr_140px_repeat(5,60px)_40px] md:gap-2 md:items-center">
+            <div key={index} className="p-3 bg-muted/50 rounded-lg space-y-3 md:space-y-0 md:grid md:grid-cols-[1fr_140px_repeat(5,60px)_40px] md:gap-2 md:items-center">
               {/* Component name */}
               <div>
                 <Label className="text-xs text-foreground/70 md:hidden">{t("quotes.form.componentName")}</Label>
@@ -652,7 +652,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                   onChange={(e) => updateAbaque(index, "component_name", e.target.value)}
                   placeholder={t("quotes.form.componentNamePlaceholder")}
                   disabled={loading}
-                  className="bg-white border-gray-200 focus:border-gray-400"
+                  className="bg-white border-border focus:border-primary"
                 />
               </div>
 
@@ -663,7 +663,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                   value={abaque.profile_name}
                   onChange={(e) => updateAbaque(index, "profile_name", e.target.value)}
                   disabled={loading}
-                  className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                  className="w-full bg-white border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-primary"
                 >
                   <option value="">{t("quotes.form.selectProfile")}</option>
                   {validProfiles.map((profile, pIndex) => (
@@ -688,7 +688,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                       value={abaque[field]}
                       onChange={(e) => updateAbaque(index, field, e.target.value)}
                       disabled={loading}
-                      className="bg-white border-gray-200 focus:border-gray-400 text-center px-1"
+                      className="bg-white border-border focus:border-primary text-center px-1"
                     />
                   </div>
                 ))}
@@ -716,7 +716,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             variant="outline"
             onClick={addAbaque}
             disabled={loading}
-            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
+            className="w-full bg-white border-dashed border-border hover:border-primary/30 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addAbaque")}
@@ -742,11 +742,11 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
         <div className="space-y-6">
           {/* Levels */}
           {formData.transverse_levels.map((level, levelIndex) => (
-            <div key={levelIndex} className="border border-gray-200 rounded-lg overflow-hidden">
+            <div key={levelIndex} className="border border-border rounded-lg overflow-hidden">
               {/* Level header */}
-              <div className="flex items-center justify-between p-3 bg-gray-50 border-b border-gray-200">
+              <div className="flex items-center justify-between p-3 bg-muted/50 border-b border-border">
                 <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 rounded-full bg-gray-900 text-white flex items-center justify-center text-sm font-medium">
+                  <span className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
                     {level.level}
                   </span>
                   <div>
@@ -784,7 +784,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                     </div>
 
                     {level.activities.map((activity, activityIndex) => (
-                      <div key={activityIndex} className="p-3 bg-gray-50 rounded-lg space-y-3 md:space-y-0 md:grid md:grid-cols-[1fr_140px_100px_100px_40px] md:gap-2 md:items-center">
+                      <div key={activityIndex} className="p-3 bg-muted/50 rounded-lg space-y-3 md:space-y-0 md:grid md:grid-cols-[1fr_140px_100px_100px_40px] md:gap-2 md:items-center">
                         {/* Activity name */}
                         <div>
                           <Label className="text-xs text-foreground/70 md:hidden">{t("quotes.form.activityName")}</Label>
@@ -793,7 +793,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "name", e.target.value)}
                             placeholder={t("quotes.form.activityNamePlaceholder")}
                             disabled={loading}
-                            className="bg-white border-gray-200 focus:border-gray-400"
+                            className="bg-white border-border focus:border-primary"
                           />
                         </div>
 
@@ -804,7 +804,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                             value={activity.profile_name}
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "profile_name", e.target.value)}
                             disabled={loading}
-                            className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                            className="w-full bg-white border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-primary"
                           >
                             <option value="">{t("quotes.form.selectProfile")}</option>
                             {validProfiles.map((profile, pIndex) => (
@@ -822,7 +822,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                             value={activity.type}
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "type", e.target.value)}
                             disabled={loading}
-                            className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                            className="w-full bg-white border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-primary"
                           >
                             <option value="fixed">{t("quotes.form.typeFixed")}</option>
                             <option value="rate">{t("quotes.form.typeRate")}</option>
@@ -839,7 +839,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                             value={activity.value}
                             onChange={(e) => updateActivity(levelIndex, activityIndex, "value", e.target.value)}
                             disabled={loading}
-                            className="bg-white border-gray-200 focus:border-gray-400 text-center"
+                            className="bg-white border-border focus:border-primary text-center"
                           />
                           <span className="text-xs text-foreground/50 whitespace-nowrap">
                             {activity.type === "rate" ? t("quotes.form.valuePercent") : t("quotes.form.valueDays")}
@@ -871,7 +871,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                   size="sm"
                   onClick={() => addActivity(levelIndex)}
                   disabled={loading}
-                  className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
+                  className="w-full bg-white border-dashed border-border hover:border-primary/30 hover:bg-pink-50"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {t("quotes.form.addActivity")}
@@ -886,7 +886,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             variant="outline"
             onClick={addLevel}
             disabled={loading}
-            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
+            className="w-full bg-white border-dashed border-border hover:border-primary/30 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addLevel")}
@@ -912,15 +912,15 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
         <div className="space-y-6">
           {/* Categories */}
           {formData.costing_categories.map((category, categoryIndex) => (
-            <div key={categoryIndex} className="border border-gray-200 rounded-lg overflow-hidden">
+            <div key={categoryIndex} className="border border-border rounded-lg overflow-hidden">
               {/* Category header */}
-              <div className="flex items-center gap-3 p-3 bg-gray-100 border-b border-gray-200">
+              <div className="flex items-center gap-3 p-3 bg-muted border-b border-border">
                 <Input
                   value={category.name}
                   onChange={(e) => updateCategory(categoryIndex, e.target.value)}
                   placeholder={t("quotes.form.categoryNamePlaceholder")}
                   disabled={loading}
-                  className="flex-1 border-gray-200 focus:border-gray-400 bg-white"
+                  className="flex-1 border-border focus:border-primary bg-white"
                 />
                 <Button
                   type="button"
@@ -937,22 +937,22 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
               {/* Activities */}
               <div className="p-3 space-y-4">
                 {category.activities.map((activity, activityIndex) => (
-                  <div key={activityIndex} className="border border-gray-100 rounded-lg overflow-hidden">
+                  <div key={activityIndex} className="border border-muted rounded-lg overflow-hidden">
                     {/* Activity header */}
-                    <div className="flex items-center gap-3 p-2 bg-gray-50">
+                    <div className="flex items-center gap-3 p-2 bg-muted/50">
                       <input
                         type="checkbox"
                         checked={activity.active}
                         onChange={(e) => updateCostingActivity(categoryIndex, activityIndex, "active", e.target.checked)}
                         disabled={loading}
-                        className="w-4 h-4 rounded border-gray-300"
+                        className="w-4 h-4 rounded border-border"
                       />
                       <Input
                         value={activity.name}
                         onChange={(e) => updateCostingActivity(categoryIndex, activityIndex, "name", e.target.value)}
                         placeholder={t("quotes.form.costingActivityNamePlaceholder")}
                         disabled={loading}
-                        className="flex-1 border-gray-200 focus:border-gray-400 text-sm"
+                        className="flex-1 border-border focus:border-primary text-sm"
                       />
                       <Button
                         type="button"
@@ -979,7 +979,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                       )}
 
                       {activity.components.map((component, componentIndex) => (
-                        <div key={componentIndex} className="p-2 bg-white border border-gray-100 rounded space-y-2 md:space-y-0 md:grid md:grid-cols-[60px_1fr_100px_1fr_40px] md:gap-2 md:items-center">
+                        <div key={componentIndex} className="p-2 bg-white border border-muted rounded space-y-2 md:space-y-0 md:grid md:grid-cols-[60px_1fr_100px_1fr_40px] md:gap-2 md:items-center">
                           {/* Coefficient */}
                           <div>
                             <Label className="text-xs text-foreground/70 md:hidden">{t("quotes.form.coefficient")}</Label>
@@ -990,7 +990,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                               value={component.coefficient}
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "coefficient", e.target.value)}
                               disabled={loading}
-                              className="bg-white border-gray-200 focus:border-gray-400 text-center text-sm"
+                              className="bg-white border-border focus:border-primary text-center text-sm"
                             />
                           </div>
 
@@ -1001,7 +1001,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                               value={component.component_name}
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "component_name", e.target.value)}
                               disabled={loading}
-                              className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                              className="w-full bg-white border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-primary"
                             >
                               <option value="">{t("quotes.form.selectComponent")}</option>
                               {formData.abaques.map((abaque, aIndex) => (
@@ -1019,7 +1019,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                               value={component.complexity}
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "complexity", e.target.value)}
                               disabled={loading}
-                              className="w-full bg-white border border-gray-200 rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-gray-400"
+                              className="w-full bg-white border border-border rounded-lg px-2 py-2 text-sm focus:outline-none focus:border-primary"
                             >
                               <option value="ts">{t("quotes.form.complexity_ts_short")} - {t("quotes.form.complexity_ts_full")}</option>
                               <option value="s">{t("quotes.form.complexity_s_short")} - {t("quotes.form.complexity_s_full")}</option>
@@ -1037,7 +1037,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                               onChange={(e) => updateCostingComponent(categoryIndex, activityIndex, componentIndex, "comment", e.target.value)}
                               placeholder={t("quotes.form.componentCommentPlaceholder")}
                               disabled={loading}
-                              className="bg-white border-gray-200 focus:border-gray-400 text-sm"
+                              className="bg-white border-border focus:border-primary text-sm"
                             />
                           </div>
 
@@ -1064,7 +1064,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                         size="sm"
                         onClick={() => addCostingComponent(categoryIndex, activityIndex)}
                         disabled={loading}
-                        className="w-full bg-white border-dashed border-gray-200 hover:border-gray-300 hover:bg-pink-50 text-xs"
+                        className="w-full bg-white border-dashed border-border hover:border-border hover:bg-pink-50 text-xs"
                       >
                         <Plus className="w-3 h-3 mr-1" />
                         {t("quotes.form.addComponent")}
@@ -1080,7 +1080,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
                   size="sm"
                   onClick={() => addCostingActivity(categoryIndex)}
                   disabled={loading}
-                  className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
+                  className="w-full bg-white border-dashed border-border hover:border-primary/30 hover:bg-pink-50"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {t("quotes.form.addCostingActivity")}
@@ -1095,7 +1095,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
             variant="outline"
             onClick={addCategory}
             disabled={loading}
-            className="w-full bg-white border-dashed border-gray-300 hover:border-gray-400 hover:bg-pink-50"
+            className="w-full bg-white border-dashed border-border hover:border-primary/30 hover:bg-pink-50"
           >
             <Plus className="w-4 h-4 mr-2" />
             {t("quotes.form.addCategory")}
@@ -1122,7 +1122,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           value={formData.validity_days}
           onChange={(e) => setFormData({ ...formData, validity_days: Number(e.target.value) || 30 })}
           disabled={loading}
-          className="w-32 bg-white border-gray-200 focus:border-gray-400"
+          className="w-32 bg-white border-border focus:border-primary"
         />
       </div>
 
@@ -1134,7 +1134,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           onChange={(e) => setFormData({ ...formData, payment_terms: e.target.value })}
           placeholder={t("quotes.form.paymentTermsPlaceholder")}
           disabled={loading}
-          className="bg-white border-gray-200 focus:border-gray-400"
+          className="bg-white border-border focus:border-primary"
         />
       </div>
 
@@ -1147,7 +1147,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           placeholder={t("quotes.form.notesPlaceholder")}
           rows={4}
           disabled={loading}
-          className="bg-white border-gray-200 focus:border-gray-400 resize-none"
+          className="bg-white border-border focus:border-primary resize-none"
         />
       </div>
     </div>
@@ -1208,12 +1208,12 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
         )}
 
         {/* Navigation Buttons */}
-        <div className="flex gap-3 pt-4 border-t border-gray-100">
+        <div className="flex gap-3 pt-4 border-t border-muted">
           {onCancel && currentStep === 1 && (
             <Button
               type="button"
               variant="outline"
-              className="flex-1 border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200"
+              className="flex-1 border-border hover:bg-red-50 hover:text-red-600 hover:border-red-200"
               onClick={onCancel}
               disabled={loading}
             >
@@ -1227,7 +1227,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
               variant="outline"
               onClick={goToPreviousStep}
               disabled={loading}
-              className="flex-1 border-gray-200"
+              className="flex-1 border-border"
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
               {t("quotes.form.previous")}
@@ -1239,7 +1239,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
               type="button"
               onClick={goToNextStep}
               disabled={loading}
-              className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+              className="flex-1 bg-primary hover:bg-primary/90 text-white"
             >
               {t("quotes.form.next")}
               <ChevronRight className="w-4 h-4 ml-2" />
@@ -1247,7 +1247,7 @@ export function QuoteForm({ projectId, project, quote, onSuccess, onCancel }: Qu
           ) : (
             <Button
               type="submit"
-              className="flex-1 bg-gray-900 hover:bg-gray-800 text-white"
+              className="flex-1 bg-primary hover:bg-primary/90 text-white"
               disabled={loading}
             >
               {loading ? (

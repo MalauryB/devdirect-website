@@ -110,21 +110,6 @@
   }
 }
 
-/* Updated services section background to darker black */
-.services-dark-section {
-  background-color: #141414;
-}
-
-/* Added subtle blue gradient background for sections after the dark section */
-.subtle-blue-gradient {
-  background: linear-gradient(135deg, #faf8f2 0%, #f0f4f8 50%, #e8f2f6 100%);
-}
-
-/* Alternative subtle gradient with more blue tint */
-.light-blue-gradient {
-  background: linear-gradient(to bottom, #faf8f2 0%, #f8fafc 30%, #f1f5f9 70%, #e2e8f0 100%);
-}
-
 /* Logo avec police Cubic */
 .logo-cubic {
   font-family: 'Cubic', sans-serif;

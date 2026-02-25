@@ -135,11 +135,11 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
   if (!financeData || !financeData.hasData) {
     return (
       <div className="text-center py-12">
-        <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
+        <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+        <h3 className="text-lg font-medium text-foreground mb-2">
           {t('finances.noData')}
         </h3>
-        <p className="text-gray-500 max-w-md mx-auto">
+        <p className="text-muted-foreground max-w-md mx-auto">
           {t('finances.noDataDescription')}
         </p>
       </div>
@@ -174,17 +174,17 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Budget Total TTC */}
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#ea4c89]/10 flex items-center justify-center">
               <Euro className="w-5 h-5 text-[#ea4c89]" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-500">{t('finances.totalBudgetTTC')}</p>
-              <p className="text-xl font-semibold text-gray-900 mt-1">
+              <p className="text-sm text-muted-foreground">{t('finances.totalBudgetTTC')}</p>
+              <p className="text-xl font-semibold text-foreground mt-1">
                 {formatCurrency(financeData.totalBudgetTTC)}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {formatCurrency(financeData.totalBudgetHT)} HT
               </p>
             </div>
@@ -192,17 +192,17 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
         </div>
 
         {/* Temps consommé */}
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-indigo-100 flex items-center justify-center">
               <Clock className="w-5 h-5 text-indigo-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-500">{t('finances.timeConsumed')}</p>
-              <p className="text-xl font-semibold text-gray-900 mt-1">
+              <p className="text-sm text-muted-foreground">{t('finances.timeConsumed')}</p>
+              <p className="text-xl font-semibold text-foreground mt-1">
                 {financeData.consumedDays.toFixed(1)} {t('finances.days')}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {financeData.consumedHours.toFixed(1)} {t('finances.hours')}
               </p>
             </div>
@@ -210,17 +210,17 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
         </div>
 
         {/* Taux de consommation */}
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <div className="flex items-start gap-3">
             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${getConsumptionBgColor(financeData.consumptionPercent)}`}>
               <Target className={`w-5 h-5 ${getConsumptionColor(financeData.consumptionPercent)}`} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-500">{t('finances.consumptionRate')}</p>
+              <p className="text-sm text-muted-foreground">{t('finances.consumptionRate')}</p>
               <p className={`text-xl font-semibold mt-1 ${getConsumptionColor(financeData.consumptionPercent)}`}>
                 {financeData.consumptionPercent.toFixed(0)}%
               </p>
-              <div className="w-full bg-gray-200 rounded-full h-1.5 mt-2">
+              <div className="w-full bg-muted rounded-full h-1.5 mt-2">
                 <div
                   className={`h-1.5 rounded-full ${financeData.consumptionPercent >= 90 ? 'bg-red-500' : financeData.consumptionPercent >= 75 ? 'bg-amber-500' : 'bg-[#ea4c89]'}`}
                   style={{ width: `${Math.min(100, financeData.consumptionPercent)}%` }}
@@ -231,17 +231,17 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
         </div>
 
         {/* Jours restants */}
-        <div className="bg-gray-50 rounded-xl p-4">
+        <div className="bg-muted/50 rounded-xl p-4">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-green-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-500">{t('finances.remainingDays')}</p>
-              <p className="text-xl font-semibold text-gray-900 mt-1">
+              <p className="text-sm text-muted-foreground">{t('finances.remainingDays')}</p>
+              <p className="text-xl font-semibold text-foreground mt-1">
                 {financeData.remainingDays.toFixed(1)} {t('finances.days')}
               </p>
-              <p className="text-xs text-gray-400 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {formatCurrency(financeData.remainingValueHT)} HT
               </p>
             </div>
@@ -280,7 +280,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
       )}
 
       {/* Source data info */}
-      <div className="flex gap-4 text-sm text-gray-500">
+      <div className="flex gap-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-2">
           <FileCheck className="w-4 h-4 text-[#ea4c89]" />
           <span>{financeData.acceptedQuotesCount} {t('finances.acceptedQuotes')}</span>
@@ -296,7 +296,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
         {/* Budget vs Consumed by Profile */}
         {profileChartData.length > 0 && (
           <div className="bg-white border rounded-xl p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
+            <h3 className="text-lg font-medium text-foreground mb-4">
               {t('finances.budgetVsConsumed')}
             </h3>
             <div className="h-64">
@@ -322,7 +322,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
                                 className="w-2 h-2 rounded-full"
                                 style={{ backgroundColor: item.fill }}
                               />
-                              <span className="text-gray-600">{item.name}:</span>
+                              <span className="text-muted-foreground">{item.name}:</span>
                               <span className="font-medium">{item.value?.toFixed(1)} jours</span>
                             </p>
                           ))}
@@ -352,7 +352,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
         {/* Category Breakdown (Pie) */}
         {categoryChartData.length > 0 && (
           <div className="bg-white border rounded-xl p-6">
-            <h3 className="text-lg font-medium text-gray-900 mb-4">
+            <h3 className="text-lg font-medium text-foreground mb-4">
               {t('finances.categoryBreakdown')}
             </h3>
             <div className="h-64">
@@ -380,7 +380,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
                       return (
                         <div className="bg-white border rounded-lg shadow-lg p-3 text-sm">
                           <p className="font-medium">{data.name}</p>
-                          <p className="text-gray-600">
+                          <p className="text-muted-foreground">
                             {data.value.toFixed(1)} jours ({data.percent.toFixed(0)}%)
                           </p>
                         </div>
@@ -397,7 +397,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
       {/* Monthly Evolution Chart */}
       {monthlyChartData.length > 0 && (
         <div className="bg-white border rounded-xl p-6">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">
+          <h3 className="text-lg font-medium text-foreground mb-4">
             {t('finances.monthlyEvolution')}
           </h3>
           <div className="h-64">
@@ -418,7 +418,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
                               className="w-2 h-2 rounded-full"
                               style={{ backgroundColor: item.stroke }}
                             />
-                            <span className="text-gray-600">{item.name}:</span>
+                            <span className="text-muted-foreground">{item.name}:</span>
                             <span className="font-medium">
                               {item.dataKey === 'percent'
                                 ? `${item.value?.toFixed(0)}%`
@@ -458,7 +458,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
       {financeData.profileBreakdown.length > 0 && (
         <div className="bg-white border rounded-xl overflow-hidden">
           <div className="px-6 py-4 border-b">
-            <h3 className="text-lg font-medium text-gray-900">
+            <h3 className="text-lg font-medium text-foreground">
               {t('finances.profileBreakdown')}
             </h3>
           </div>
@@ -495,7 +495,7 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
                 </TableRow>
               ))}
               {/* Total row */}
-              <TableRow className="bg-gray-50 font-medium">
+              <TableRow className="bg-muted/50 font-medium">
                 <TableCell>Total</TableCell>
                 <TableCell className="text-right">-</TableCell>
                 <TableCell className="text-right">{financeData.totalBudgetDays.toFixed(1)}</TableCell>

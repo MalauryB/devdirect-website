@@ -126,6 +126,7 @@ export function AuthModal() {
             <Input
               id="email"
               type="email"
+              autoComplete="email"
               placeholder={t('auth.emailPlaceholder')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -140,6 +141,7 @@ export function AuthModal() {
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
+                  autoComplete={mode === "register" ? "new-password" : "current-password"}
                   placeholder={t('auth.passwordPlaceholder')}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -164,6 +166,7 @@ export function AuthModal() {
                 <Input
                   id="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
                   placeholder={t('auth.confirmPasswordPlaceholder')}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}

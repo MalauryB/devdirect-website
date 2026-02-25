@@ -157,7 +157,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
 
   // Panneau fixe sur le côté droit de l'écran
   return (
-    <div className={`fixed top-0 right-0 h-screen bg-white border-l border-gray-200 flex flex-col transition-all duration-300 z-40 ${
+    <div className={`fixed top-0 right-0 h-screen bg-white border-l border-border flex flex-col transition-all duration-300 z-40 ${
       isOpen ? 'w-[380px]' : 'w-0 overflow-hidden'
     }`}>
       {isOpen && (
@@ -191,14 +191,14 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
                 className={`flex gap-2 ${message.role === 'user' ? 'flex-row-reverse' : ''}`}
               >
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  message.role === 'user' ? 'bg-gray-900 text-white' : 'bg-action/10 text-action'
+                  message.role === 'user' ? 'bg-primary text-white' : 'bg-action/10 text-action'
                 }`}>
                   {message.role === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
                 </div>
                 <div className={`max-w-[85%] rounded-xl px-3 py-2 ${
                   message.role === 'user'
-                    ? 'bg-gray-900 text-white rounded-tr-sm'
-                    : 'bg-gray-100 text-foreground rounded-tl-sm'
+                    ? 'bg-primary text-white rounded-tr-sm'
+                    : 'bg-muted text-foreground rounded-tl-sm'
                 }`}>
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                 </div>
@@ -210,11 +210,11 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
                 <div className="w-7 h-7 rounded-full bg-action/10 text-action flex items-center justify-center flex-shrink-0">
                   <Bot className="w-3.5 h-3.5" />
                 </div>
-                <div className="bg-gray-100 rounded-xl rounded-tl-sm px-3 py-2.5">
+                <div className="bg-muted rounded-xl rounded-tl-sm px-3 py-2.5">
                   <div className="flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               </div>
@@ -246,7 +246,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
                       className={`text-xs px-2.5 py-1 rounded-full transition-colors ${
                         isGenerateFullSuggestion
                           ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600'
-                          : 'bg-gray-100 text-gray-900 hover:bg-gray-200'
+                          : 'bg-muted text-foreground hover:bg-muted'
                       }`}
                     >
                       {isGenerateFullSuggestion && <Sparkles className="w-3 h-3 inline mr-1" />}
@@ -269,7 +269,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
           )}
 
           {/* Input */}
-          <div className="p-3 border-t border-gray-100 flex-shrink-0">
+          <div className="p-3 border-t border-border flex-shrink-0">
             <div className="flex gap-2">
               <Textarea
                 ref={inputRef}
@@ -277,7 +277,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('quoteAI.placeholder')}
-                className="resize-none min-h-[40px] max-h-[100px] border-gray-200 focus:border-action rounded-lg text-sm"
+                className="resize-none min-h-[40px] max-h-[100px] border-border focus:border-action rounded-lg text-sm"
                 rows={1}
                 disabled={loading}
               />

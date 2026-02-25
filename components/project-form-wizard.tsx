@@ -286,12 +286,12 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                   onClick={() => setTechLevel(option.value as TechLevel)}
                   className={`flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all ${
                     techLevel === option.value
-                      ? 'border-gray-900 bg-gray-50'
-                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                      ? 'border-primary bg-muted/50'
+                      : 'border-border hover:border-border bg-white'
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    techLevel === option.value ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                    techLevel === option.value ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
                   }`}>
                     <option.icon className="w-6 h-6" />
                   </div>
@@ -320,7 +320,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder={t('projects.form.titlePlaceholder')}
-                className="border-gray-200 focus:border-gray-400"
+                className="border-border focus:border-primary"
               />
               {techLevel === 'beginner' && (
                 <p className="text-xs text-foreground/50">{t('projectWizard.projectType.titleHint')}</p>
@@ -338,12 +338,12 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onClick={() => handleProjectTypeToggle(type.id)}
                     className={`flex items-start gap-3 p-4 rounded-xl border-2 text-left transition-all ${
                       formData.project_types.includes(type.id)
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                        ? 'border-primary bg-muted/50'
+                        : 'border-border hover:border-border bg-white'
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      formData.project_types.includes(type.id) ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                      formData.project_types.includes(type.id) ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
                     }`}>
                       <type.icon className="w-5 h-5" />
                     </div>
@@ -381,8 +381,8 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                       onClick={() => handlePlatformToggle(platform.id)}
                       className={`px-4 py-2 rounded-full border transition-all ${
                         formData.platforms.includes(platform.id)
-                          ? 'border-gray-900 bg-gray-900 text-white'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-border hover:border-border bg-white'
                       }`}
                     >
                       {platform.label}
@@ -412,7 +412,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">1</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">1</span>
                     {t('projectWizard.description.whatIsIt')} *
                   </Label>
                   <Textarea
@@ -420,13 +420,13 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, whatIsIt: e.target.value })}
                     placeholder={t('projectWizard.description.whatIsItPlaceholder')}
                     rows={3}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">2</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">2</span>
                     {t('projectWizard.description.whoIsItFor')}
                   </Label>
                   <Textarea
@@ -434,13 +434,13 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, whoIsItFor: e.target.value })}
                     placeholder={t('projectWizard.description.whoIsItForPlaceholder')}
                     rows={2}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">3</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">3</span>
                     {t('projectWizard.description.mainFeatures')}
                   </Label>
                   <Textarea
@@ -448,13 +448,13 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, mainFeatures: e.target.value })}
                     placeholder={t('projectWizard.description.mainFeaturesPlaceholder')}
                     rows={3}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">4</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">4</span>
                     {t('projectWizard.description.inspiration')}
                   </Label>
                   <Textarea
@@ -462,7 +462,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, inspiration: e.target.value })}
                     placeholder={t('projectWizard.description.inspirationPlaceholder')}
                     rows={2}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
               </div>
@@ -476,7 +476,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder={t('projects.form.descriptionPlaceholder')}
                     rows={6}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
@@ -487,7 +487,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onChange={(e) => setFormData({ ...formData, features: e.target.value })}
                     placeholder={t('projects.form.featuresPlaceholder')}
                     rows={4}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
@@ -497,7 +497,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     value={formData.target_audience}
                     onChange={(e) => setFormData({ ...formData, target_audience: e.target.value })}
                     placeholder={t('projects.form.targetAudiencePlaceholder')}
-                    className="border-gray-200 focus:border-gray-400"
+                    className="border-border focus:border-primary"
                   />
                 </div>
 
@@ -510,8 +510,8 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                       onClick={() => setFormData({ ...formData, has_existing_project: false })}
                       className={`px-4 py-2 rounded-lg border transition-all ${
                         !formData.has_existing_project
-                          ? 'border-gray-900 bg-gray-900 text-white'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-border hover:border-border bg-white'
                       }`}
                     >
                       {t('projects.form.newProject')}
@@ -521,8 +521,8 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                       onClick={() => setFormData({ ...formData, has_existing_project: true })}
                       className={`px-4 py-2 rounded-lg border transition-all ${
                         formData.has_existing_project
-                          ? 'border-gray-900 bg-gray-900 text-white'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-border hover:border-border bg-white'
                       }`}
                     >
                       {t('projects.form.hasExisting')}
@@ -534,7 +534,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                       onChange={(e) => setFormData({ ...formData, existing_technologies: e.target.value })}
                       placeholder={t('projects.form.existingTechPlaceholder')}
                       rows={2}
-                      className="border-gray-200 focus:border-gray-400 resize-none mt-2"
+                      className="border-border focus:border-primary resize-none mt-2"
                     />
                   )}
                 </div>
@@ -565,12 +565,12 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                     onClick={() => setFormData({ ...formData, needs_design: option.value })}
                     className={`flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all ${
                       formData.needs_design === option.value
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                        ? 'border-primary bg-muted/50'
+                        : 'border-border hover:border-border bg-white'
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                      formData.needs_design === option.value ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                      formData.needs_design === option.value ? 'border-primary bg-primary' : 'border-border'
                     }`}>
                       {formData.needs_design === option.value && (
                         <Check className="w-3 h-3 text-white" />
@@ -599,8 +599,8 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                       onClick={() => handleServiceToggle(service.id)}
                       className={`px-4 py-2 rounded-full border transition-all ${
                         formData.services.includes(service.id)
-                          ? 'border-gray-900 bg-gray-900 text-white'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-border hover:border-border bg-white'
                       }`}
                     >
                       {service.label}
@@ -640,8 +640,8 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                       onClick={() => setFormData({ ...formData, budget: option.value })}
                       className={`flex items-center justify-between p-4 rounded-xl border-2 text-left transition-all ${
                         formData.budget === option.value
-                          ? 'border-gray-900 bg-gray-50'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-muted/50'
+                          : 'border-border hover:border-border bg-white'
                       }`}
                     >
                       <span className="font-medium text-foreground">{option.label}</span>
@@ -672,8 +672,8 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
                       onClick={() => setFormData({ ...formData, deadline: option.value })}
                       className={`p-4 rounded-xl border-2 text-left transition-all ${
                         formData.deadline === option.value
-                          ? 'border-gray-900 bg-gray-50'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-muted/50'
+                          : 'border-border hover:border-border bg-white'
                       }`}
                     >
                       <span className="font-medium text-foreground">{option.label}</span>
@@ -736,7 +736,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
               <p className="text-foreground/60">{t('projectWizard.summary.subtitle')}</p>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+            <div className="bg-muted/50 rounded-xl p-6 space-y-4">
               <div>
                 <h3 className="text-sm font-medium text-foreground/50">{t('projects.form.title')}</h3>
                 <p className="font-semibold text-foreground">{formData.title || '-'}</p>
@@ -815,10 +815,10 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
               <div
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium transition-colors ${
                   index < currentStep
-                    ? 'bg-gray-900 text-white'
+                    ? 'bg-primary text-white'
                     : index === currentStep
-                    ? 'bg-gray-900 text-white'
-                    : 'bg-gray-200 text-gray-500'
+                    ? 'bg-primary text-white'
+                    : 'bg-muted text-muted-foreground'
                 }`}
               >
                 {index < currentStep ? (
@@ -829,7 +829,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
               </div>
               {index < steps.length - 1 && (
                 <div className={`w-full h-1 mx-2 rounded ${
-                  index < currentStep ? 'bg-gray-900' : 'bg-gray-200'
+                  index < currentStep ? 'bg-primary' : 'bg-muted'
                 }`} style={{ width: '40px' }} />
               )}
             </div>
@@ -884,7 +884,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
               type="button"
               onClick={nextStep}
               disabled={!canProceed() || loading}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-primary hover:bg-primary/90"
             >
               {t('projectWizard.next')}
               <ChevronRight className="w-4 h-4 ml-2" />
@@ -894,7 +894,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
               type="button"
               onClick={handleSubmit}
               disabled={loading}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-primary hover:bg-primary/90"
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />

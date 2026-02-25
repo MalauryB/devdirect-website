@@ -117,10 +117,10 @@ export function FileUpload({
           {files.map((file, index) => (
             <div
               key={file.path || index}
-              className="flex items-center gap-3 p-3 bg-gray-50 border border-gray-200 rounded-lg"
+              className="flex items-center gap-3 p-3 bg-muted/50 border border-border rounded-lg"
             >
               {isImage(file.type) ? (
-                <div className="w-10 h-10 rounded overflow-hidden bg-gray-100 flex-shrink-0">
+                <div className="w-10 h-10 rounded overflow-hidden bg-muted flex-shrink-0">
                   <img
                     src={file.url}
                     alt={file.name}
@@ -128,7 +128,7 @@ export function FileUpload({
                   />
                 </div>
               ) : (
-                <div className="w-10 h-10 rounded bg-gray-100 flex items-center justify-center flex-shrink-0">
+                <div className="w-10 h-10 rounded bg-muted flex items-center justify-center flex-shrink-0">
                   <FileText className="w-5 h-5 text-foreground/50" />
                 </div>
               )}
@@ -140,7 +140,7 @@ export function FileUpload({
                 <button
                   type="button"
                   onClick={() => handleRemove(file)}
-                  className="p-1 hover:bg-gray-200 rounded transition-colors"
+                  className="p-1 hover:bg-muted rounded transition-colors"
                 >
                   <X className="w-4 h-4 text-foreground/50" />
                 </button>
@@ -166,7 +166,7 @@ export function FileUpload({
             type="button"
             onClick={() => inputRef.current?.click()}
             disabled={uploading || disabled}
-            className="w-full border-2 border-dashed border-gray-200 rounded-lg p-4 hover:border-gray-300 hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full border-2 border-dashed border-border rounded-lg p-4 hover:border-border hover:bg-muted/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="flex flex-col items-center gap-2">
               {uploading ? (

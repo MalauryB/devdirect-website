@@ -12,25 +12,25 @@ export function Process() {
       icon: MessageCircle,
       title: t('process.analysis.title'),
       description: t('process.analysis.description'),
-      duration: "2-3 jours",
+      duration: t('process.analysis.duration'),
     },
     {
       icon: FileText,
       title: t('process.development.title'),
       description: t('process.development.description'),
-      duration: "Selon le projet",
+      duration: t('process.development.duration'),
     },
     {
       icon: Code,
       title: t('process.testing.title'),
       description: t('process.testing.description'),
-      duration: "Variable",
+      duration: t('process.testing.duration'),
     },
     {
       icon: Rocket,
       title: t('process.deployment.title'),
       description: t('process.deployment.description'),
-      duration: "1-2 jours",
+      duration: t('process.deployment.duration'),
     },
   ]
   return (
@@ -42,7 +42,7 @@ export function Process() {
               {t('process.title')}
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl">
-              {t('process.analysis.description')}
+              {t('process.subtitle')}
             </p>
           </div>
 
@@ -51,12 +51,11 @@ export function Process() {
             <div key={index} className="relative">
               <Card className="h-full bg-white">
                 <CardHeader className="text-center">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <step.icon className="w-8 h-8 text-gray-500" />
+                  <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                    <step.icon className="w-8 h-8 text-muted-foreground" />
                   </div>
                   <div
-                    className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                    style={{ backgroundColor: "#ea4c89" }}
+                    className="absolute -top-3 -left-3 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm bg-primary"
                   >
                     {index + 1}
                   </div>

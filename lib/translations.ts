@@ -13,26 +13,26 @@ export const translations = {
       dashboard: "Tableau de bord"
     },
     hero: {
-      title: "Développez vos projets avec des experts en informatique, mathématiques et IA.",
-      subtitle: "Solutions clés en main de qualité à prix justes. Applications web, mobiles, IoT livrées prêtes à l'emploi.",
+      title: "Votre équipe tech full-stack, boostée par l'IA.",
+      subtitle: "Design, développement, data et déploiement : tout en interne. L'IA dans notre workflow = ~30% moins cher que les tarifs classiques du marché.",
       cta: "Devis Gratuit",
       moreDetails: "Plus de détails",
       features: {
         freeMeeting: {
           title: "Rencontre gratuite",
-          description: "Première consultation gratuite pour analyser vos besoins"
+          description: "Première consultation offerte pour cadrer votre besoin"
         },
         transparentQuote: {
           title: "Devis transparent",
-          description: "Prix clairs et détaillés sans surprise"
+          description: "Prix clairs et détaillés, sans surprise"
         },
         fullSupport: {
-          title: "Support complet",
-          description: "Accompagnement de A à Z jusqu'à la mise en ligne"
+          title: "~30% moins cher",
+          description: "L'IA dans notre workflow réduit les coûts et les délais de développement"
         },
         turnkey: {
-          title: "Solutions clés en main",
-          description: "Projets livrés complets, testés et prêts à déployer"
+          title: "Équipe complète",
+          description: "Design, dev, data, DevOps : zéro sous-traitance"
         }
       }
     },
@@ -40,77 +40,69 @@ export const translations = {
       title: "Nos Services",
       webDev: {
         title: "Développement Web",
-        description: "Applications web modernes et performantes avec les dernières technologies."
+        description: "Applications web performantes en React, Next.js, Node.js. Architecture scalable, code maintenable, déploiement continu."
       },
       mobileDev: {
         title: "Développement Mobile",
-        description: "Applications natives et cross-platform pour iOS et Android."
+        description: "Apps natives iOS/Android et cross-platform Flutter. De l'app bancaire à 10M d'utilisateurs à votre MVP."
       },
       iot: {
         title: "IoT & Embarqué",
-        description: "Solutions connectées et systèmes embarqués innovants."
+        description: "Systèmes embarqués, capteurs connectés, traitement temps réel. Du prototype à la production."
       },
       ai: {
         title: "Intelligence Artificielle",
-        description: "Intégration d'IA et solutions d'apprentissage automatique."
+        description: "Intégration de LLMs, computer vision et NLP dans vos produits. Des solutions IA sur mesure, pas des gadgets."
       },
       consulting: {
         title: "Conseil Technique",
-        description: "Expertise et accompagnement dans vos projets technologiques."
+        description: "Audit, choix d'architecture et accompagnement technique pour vos projets."
       },
       maintenance: {
         title: "Maintenance & Support",
-        description: "Support technique et maintenance de vos applications."
+        description: "Monitoring, mises à jour et support technique pour vos applications en production."
       },
       design: {
         title: "Maquettes & Design",
-        description: "Création de maquettes et prototypes pour visualiser votre projet avant développement."
+        description: "Recherche utilisateur, prototypes Figma et interfaces qui convertissent. Livrées avec design system complet."
       }
     },
     process: {
       title: "Notre Processus",
+      subtitle: "Un process rodé, accéléré par l'IA à chaque étape.",
       analysis: {
-        title: "Analyse",
-        description: "Nous analysons vos besoins et définissons la solution optimale."
+        title: "Cadrage",
+        description: "On analyse votre besoin, on choisit la stack optimale et on produit un cahier des charges précis.",
+        duration: "2-3 jours"
       },
       development: {
         title: "Développement",
-        description: "Développement agile avec des livraisons régulières."
+        description: "Développement agile assisté par IA. Livraisons régulières, code review systématique.",
+        duration: "Selon le projet"
       },
       testing: {
-        title: "Tests",
-        description: "Tests complets pour garantir la qualité et la fiabilité."
+        title: "Tests & QA",
+        description: "Tests automatisés, revue qualité et validation fonctionnelle avant chaque livraison.",
+        duration: "Continu"
       },
       deployment: {
         title: "Déploiement",
-        description: "Mise en production et formation de vos équipes."
+        description: "Mise en production, monitoring et formation. Vous êtes autonomes dès la livraison.",
+        duration: "1-2 jours"
       }
     },
     team: {
       title: "Notre Équipe",
+      subtitle: "7 profils complémentaires qui couvrent toute la chaîne : design, développement, mobile, DevOps, data science et IA. Zéro sous-traitance.",
+      stats: {
+        experts: "Experts",
+        experience: "Années d'expérience"
+      },
       members: [
         {
-          name: "Malaury",
-          role: "Développeuse Full Stack",
-          description: "Ingénieure en informatique avec 6+ ans d'expérience, spécialisée en développement web et mobile. Expertise en React, Angular, Java, Node.js, Flutter et gestion de projet Agile.",
-          image: "/nobody.jpg"
-        },
-        {
-          name: "Alexandre",
-          role: "Développeur Full Stack & DevOps",
-          description: "Développeur passionné avec 5+ ans d'expérience, spécialisé en architecture moderne et environnements Linux. Expert en développement full stack, gestion de serveurs, DevOps et infrastructure cloud (Kubernetes, Docker, CI/CD).",
-          image: "/nobody.jpg"
-        },
-        {
-          name: "Thomas",
-          role: "Développeur Mobile iOS & Android",
-          description: "Ingénieur INSA Lyon avec 5+ ans d'expérience en développement mobile. Spécialisé en iOS natif (Swift, SwiftUI) et Flutter. Expertise en applications bancaires (+10M utilisateurs), billettique NFC et intégration native/Flutter.",
-          image: "/nobody.jpg"
-        },
-        {
-          name: "Luc",
-          role: "Chercheur en IA & Machine Learning",
-          description: "Chercheur spécialisé en intelligence artificielle avec 2+ ans d'expérience. Expert en traitement du langage naturel, LLMs, logique formelle et apprentissage automatique.",
+          name: "Victor",
+          role: "Technical Leader .NET/Java",
+          description: "Technical Leader avec 12+ ans d'expérience en développement full-stack (.NET/Java, Angular, Android/Kotlin). Expert en architecture logicielle, modernisation de systèmes d'information et pilotage technique d'équipes projets complexes.",
           image: "/nobody.jpg"
         },
         {
@@ -120,26 +112,45 @@ export const translations = {
           image: "/nobody.jpg"
         },
         {
+          name: "Malaury",
+          role: "Développeuse Full Stack",
+          description: "Ingénieure en informatique avec 6+ ans d'expérience, spécialisée en développement web et mobile. Expertise en React, Angular, Java, Node.js, Flutter et gestion de projet Agile.",
+          image: "/nobody.jpg"
+        },
+        {
+          name: "Thomas",
+          role: "Développeur Mobile iOS & Android",
+          description: "Ingénieur INSA Lyon avec 5+ ans d'expérience en développement mobile. Spécialisé en iOS natif (Swift, SwiftUI) et Flutter. Expertise en applications bancaires (+10M utilisateurs), billettique NFC et intégration native/Flutter.",
+          image: "/nobody.jpg"
+        },
+        {
+          name: "Alexandre",
+          role: "Développeur Full Stack & DevOps",
+          description: "Développeur passionné avec 5+ ans d'expérience, spécialisé en architecture moderne et environnements Linux. Expert en développement full stack, gestion de serveurs, DevOps et infrastructure cloud (Kubernetes, Docker, CI/CD).",
+          image: "/nobody.jpg"
+        },
+        {
           name: "Alex",
           role: "Data Scientist & Statisticien",
           description: "Doctorant en statistique avec 3+ ans d'expérience en modélisation des risques. Spécialisé en machine learning, théorie des valeurs extrêmes (EVT) et analyse de données massives. Expert en Python, R, PyTorch et modélisation statistique avancée.",
           image: "/nobody.jpg"
         },
         {
-          name: "Victor",
-          role: "Technical Leader .NET/Java",
-          description: "Technical Leader avec 12+ ans d'expérience en développement full-stack (.NET/Java, Angular, Android/Kotlin). Expert en architecture logicielle, modernisation de systèmes d'information et pilotage technique d'équipes projets complexes.",
+          name: "Luc",
+          role: "Chercheur en IA & Machine Learning",
+          description: "Chercheur spécialisé en intelligence artificielle avec 2+ ans d'expérience. Expert en traitement du langage naturel, LLMs, logique formelle et apprentissage automatique.",
           image: "/nobody.jpg"
         }
       ]
     },
     cta: {
-      title: "Prêt à démarrer votre projet ?",
-      description: "Contactez-nous pour un devis gratuit et personnalisé.",
-      button: "Obtenir un devis"
+      title: "Un projet en tête ?",
+      description: "Décrivez-nous votre besoin, on vous répond sous 24h avec une première estimation.",
+      button: "Obtenir un devis",
+      guarantee: "~30% sous les prix du marché • Réponse sous 24h • Devis gratuit"
     },
     footer: {
-      description: "Experts en informatique, mathématiques et IA.",
+      description: "Équipe tech full-stack boostée par l'IA. On livre vite, bien et à prix justes.",
       services: "Services",
       company: "Entreprise",
       about: "À propos",
@@ -163,6 +174,7 @@ export const translations = {
       },
       login: {
         title: "Connexion",
+        subtitle: "Pour envoyer votre demande et suivre son avancement",
         button: "Se connecter",
         noAccount: "Pas encore de compte ?",
         createAccount: "Créer un compte",
@@ -170,12 +182,14 @@ export const translations = {
       },
       register: {
         title: "Créer un compte",
+        subtitle: "Créez un compte pour envoyer votre demande",
         button: "S'inscrire",
         hasAccount: "Déjà un compte ?",
         login: "Se connecter"
       },
       forgot: {
         title: "Mot de passe oublié",
+        subtitle: "Entrez votre email pour recevoir un lien de réinitialisation",
         button: "Envoyer le lien",
         rememberPassword: "Vous vous souvenez ?",
         backToLogin: "Retour à la connexion"
@@ -807,8 +821,12 @@ export const translations = {
       stepOf: "Étape {current} sur {total}",
       previous: "Précédent",
       next: "Suivant",
+      continue: "Continuer",
       submit: "Envoyer ma demande",
+      backToForm: "Retour au formulaire",
       success: "Projet créé !",
+      projectSent: "Projet envoyé !",
+      redirecting: "Redirection vers votre tableau de bord...",
       steps: {
         techLevel: "Votre profil",
         projectType: "Type de projet",
@@ -1189,6 +1207,479 @@ export const translations = {
       cancel: "Annuler",
       add: "Ajouter",
       close: "Fermer"
+    },
+    serviceDetail: {
+      common: {
+        getQuote: "Obtenir un devis",
+        contactUs: "Nous contacter",
+        whatWeOffer: "Ce que nous proposons",
+        technologies: "Technologies",
+        ourProcess: "Notre processus",
+        pricing: "Tarification indicative",
+        pricingBadge: "-30% grâce à notre maîtrise de l'IA",
+        pricingDisclaimer: "Nos tarifs intègrent déjà nos gains de productivité liés à l'IA (~30% de moins que les tarifs classiques du marché). Prix indicatifs — contactez-nous pour un devis précis.",
+        faq: "Questions fréquentes",
+        ctaTitle: "Un projet en tête ?",
+        ctaDescription: "Décrivez-nous votre besoin, on vous répond sous 24h avec une première estimation.",
+        ctaQuote: "Demander un devis",
+        ctaSpeakExpert: "Parler à un expert"
+      },
+      "developpement-web": {
+        title: "Développement Web",
+        subtitle: "Applications web modernes, développées avec l'IA dans notre workflow",
+        description: "On conçoit des applications web sur mesure en React, Next.js et Node.js. Notre équipe couvre design, développement, DevOps et déploiement — zéro sous-traitance. L'IA dans notre workflow de développement nous permet de livrer plus vite sans sacrifier la qualité.",
+        image: "/webdev.jpg",
+        whatWeOffer: [
+          "Sites vitrine et portfolios professionnels",
+          "Applications web complexes (SaaS, plateformes métier)",
+          "E-commerce et marketplaces",
+          "Tableaux de bord et outils de gestion internes",
+          "Progressive Web Apps (PWA)",
+          "API REST et GraphQL"
+        ],
+        technologies: [
+          { name: "Frontend", items: ["React", "Next.js", "Vue.js", "Angular", "TypeScript", "Tailwind CSS"] },
+          { name: "Backend", items: ["Node.js", "Python", "Java", "Spring Boot", "Express", "NestJS"] },
+          { name: "Bases de données", items: ["PostgreSQL", "MongoDB", "MySQL", "Redis", "Supabase"] },
+          { name: "Cloud & DevOps", items: ["AWS", "Azure", "Docker", "Kubernetes", "CI/CD", "Vercel"] }
+        ],
+        process: [
+          {
+            title: "Cadrage & Architecture",
+            description: "Analyse de vos besoins, choix de la stack optimale, architecture de la solution et cahier des charges précis.",
+            duration: "1-2 semaines"
+          },
+          {
+            title: "Design & Prototypage",
+            description: "Maquettes UX/UI par notre designer, validation du parcours utilisateur, prototype interactif.",
+            duration: "2-3 semaines"
+          },
+          {
+            title: "Développement",
+            description: "Développement agile assisté par IA, sprints de 2 semaines, livraisons régulières et code review systématique.",
+            duration: "Selon le projet"
+          },
+          {
+            title: "Tests & QA",
+            description: "Tests automatisés, tests d'intégration, tests de performance et validation fonctionnelle.",
+            duration: "Continu"
+          },
+          {
+            title: "Déploiement & Formation",
+            description: "Mise en production, configuration du monitoring, formation de vos équipes. Vous êtes autonomes.",
+            duration: "1 semaine"
+          },
+          {
+            title: "Maintenance & Support",
+            description: "Monitoring, corrections, mises à jour de sécurité et évolutions fonctionnelles.",
+            duration: "Continu"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Site Vitrine",
+            marketPrice: "3 000€ - 8 000€",
+            price: "2 000€ - 5 500€",
+            features: ["5-10 pages", "Design responsive", "CMS intégré", "SEO de base", "Formulaire de contact"]
+          },
+          medium: {
+            title: "Application Standard",
+            marketPrice: "15 000€ - 50 000€",
+            price: "10 500€ - 35 000€",
+            features: ["Interface admin", "Gestion utilisateurs", "Base de données", "API REST", "Tests automatisés", "Déploiement CI/CD"]
+          },
+          large: {
+            title: "Plateforme Complexe",
+            marketPrice: "50 000€+",
+            price: "35 000€+",
+            features: ["Architecture microservices", "Haute disponibilité", "Scalabilité", "Sécurité avancée", "DevOps complet", "Support dédié"]
+          }
+        },
+        faqs: [
+          {
+            question: "Combien de temps pour développer une application web ?",
+            answer: "Un site vitrine prend 4-6 semaines. Une application standard 2-4 mois. Une plateforme complexe 4-8 mois. On livre en version progressive pour que vous puissiez tester rapidement."
+          },
+          {
+            question: "Comment l'IA accélère-t-elle votre développement ?",
+            answer: "On utilise l'IA pour la génération de code, les revues automatiques, les tests et la documentation. Ça nous permet de nous concentrer sur l'architecture et la logique métier — les parties qui comptent vraiment."
+          },
+          {
+            question: "Proposez-vous la maintenance après le développement ?",
+            answer: "Oui. On propose des contrats de maintenance incluant monitoring, corrections, mises à jour de sécurité et évolutions fonctionnelles."
+          },
+          {
+            question: "Peut-on ajuster le projet en cours de route ?",
+            answer: "Absolument. On travaille en méthodologie Agile avec des sprints courts. Des revues régulières permettent d'ajuster les priorités à chaque itération."
+          }
+        ]
+      },
+      "developpement-mobile": {
+        title: "Développement Mobile",
+        subtitle: "Apps iOS & Android, du design à la publication sur les stores",
+        description: "On développe des applications mobiles natives et cross-platform, livrées clés en main. Notre développeur mobile a livré des apps à plus de 10 millions d'utilisateurs. Du design Figma à la publication App Store — la même équipe gère tout.",
+        image: "/mobile.jpg",
+        whatWeOffer: [
+          "Applications iOS natives (Swift, SwiftUI)",
+          "Applications Android natives (Kotlin)",
+          "Applications cross-platform (Flutter, React Native)",
+          "Intégration API et services backend",
+          "Publication App Store et Google Play",
+          "Notifications push et mode offline",
+          "Maintenance et mises à jour continues"
+        ],
+        technologies: [
+          { name: "iOS", items: ["Swift", "SwiftUI", "UIKit", "Xcode", "TestFlight"] },
+          { name: "Android", items: ["Kotlin", "Jetpack Compose", "Android Studio"] },
+          { name: "Cross-platform", items: ["Flutter", "React Native", "Dart"] },
+          { name: "Backend & Cloud", items: ["Firebase", "Supabase", "AWS Amplify", "REST APIs"] }
+        ],
+        process: [
+          {
+            title: "Cadrage & Choix technique",
+            description: "Analyse des besoins, choix natif vs cross-platform, architecture technique et planning.",
+            duration: "1-2 semaines"
+          },
+          {
+            title: "Design Mobile",
+            description: "Maquettes iOS et Android, respect des guidelines Apple/Google, prototype interactif.",
+            duration: "2-3 semaines"
+          },
+          {
+            title: "Développement",
+            description: "Développement itératif assisté par IA, tests sur devices réels, intégration backend.",
+            duration: "Selon le projet"
+          },
+          {
+            title: "Tests & QA",
+            description: "Tests sur multiples devices et versions OS, tests de performance et de batterie.",
+            duration: "Continu"
+          },
+          {
+            title: "Publication & Lancement",
+            description: "Soumission App Store et Google Play, gestion des reviews, configuration analytics.",
+            duration: "1-2 semaines"
+          },
+          {
+            title: "Support & Évolution",
+            description: "Maintenance, mises à jour OS, nouvelles fonctionnalités, support technique.",
+            duration: "Continu"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "App Simple",
+            marketPrice: "8 000€ - 20 000€",
+            price: "5 500€ - 14 000€",
+            features: ["Cross-platform Flutter", "5-8 écrans", "Design responsive", "Backend simple", "Publication stores"]
+          },
+          medium: {
+            title: "App Standard",
+            marketPrice: "20 000€ - 50 000€",
+            price: "14 000€ - 35 000€",
+            features: ["Fonctionnalités avancées", "Paiements in-app", "Notifications push", "Mode offline", "Analytics"]
+          },
+          large: {
+            title: "App Complexe",
+            marketPrice: "50 000€+",
+            price: "35 000€+",
+            features: ["Architecture complexe", "Haute performance", "Intégrations multiples", "Backend scalable", "Support dédié"]
+          }
+        },
+        faqs: [
+          {
+            question: "Native ou cross-platform : que choisir ?",
+            answer: "Le natif (Swift/Kotlin) offre les meilleures performances, idéal pour les apps complexes. Flutter permet un développement plus rapide avec une base de code unique — parfait pour la majorité des projets. On vous conseille selon votre cas."
+          },
+          {
+            question: "Combien de temps pour une app mobile ?",
+            answer: "Une app simple : 2-3 mois. Standard : 3-5 mois. Complexe : 5-10 mois. On livre en version progressive pour que vous testiez rapidement."
+          },
+          {
+            question: "Gérez-vous la publication sur les stores ?",
+            answer: "Oui, on s'occupe de tout : comptes développeur, assets, soumission et gestion des éventuels rejets jusqu'à validation."
+          },
+          {
+            question: "Et la maintenance après le lancement ?",
+            answer: "On propose des contrats de maintenance incluant corrections, mises à jour pour les nouvelles versions iOS/Android et évolutions fonctionnelles."
+          }
+        ]
+      },
+      "iot-embarque": {
+        title: "IoT & Systèmes Embarqués",
+        subtitle: "Du capteur au cloud, tout en interne",
+        description: "On conçoit des solutions IoT complètes : firmware embarqué, plateformes cloud, dashboards de visualisation. Notre force : une équipe qui maîtrise toute la chaîne, du microcontrôleur au machine learning en edge. Pas besoin de coordonner 3 prestataires.",
+        image: "/iot.jpg",
+        whatWeOffer: [
+          "Firmware embarqué sur mesure (C/C++, MicroPython, Rust)",
+          "Objets connectés et capteurs intelligents",
+          "Solutions industrielles IoT (monitoring, contrôle)",
+          "Plateformes de gestion de devices",
+          "Intégration cloud (AWS IoT, Azure IoT, MQTT)",
+          "Traitement de données et ML en edge",
+          "Optimisation de la consommation énergétique"
+        ],
+        technologies: [
+          { name: "Microcontrôleurs", items: ["ESP32", "STM32", "Arduino", "Raspberry Pi", "nRF52"] },
+          { name: "Protocoles", items: ["MQTT", "LoRaWAN", "Bluetooth LE", "Zigbee", "WiFi", "NB-IoT"] },
+          { name: "Cloud & Backend", items: ["AWS IoT Core", "Azure IoT Hub", "Node-RED", "InfluxDB", "Grafana"] },
+          { name: "Langages", items: ["C/C++", "MicroPython", "Rust", "Python", "ESP-IDF"] }
+        ],
+        process: [
+          {
+            title: "Conception & Architecture",
+            description: "Analyse technique, choix du matériel, architecture système, contraintes énergétiques et protocoles.",
+            duration: "2-3 semaines"
+          },
+          {
+            title: "Prototypage",
+            description: "Prototype fonctionnel, tests de faisabilité, validation des capteurs et premières mesures.",
+            duration: "3-4 semaines"
+          },
+          {
+            title: "Développement Firmware",
+            description: "Firmware optimisé, gestion de l'énergie, protocoles robustes, mode veille et récupération d'erreurs.",
+            duration: "Selon le projet"
+          },
+          {
+            title: "Backend & Cloud",
+            description: "Plateforme de gestion, APIs, stockage des données, dashboards de visualisation, alertes.",
+            duration: "4-8 semaines"
+          },
+          {
+            title: "Tests & Validation",
+            description: "Tests d'endurance, tests environnementaux, validation de la consommation, tests longue distance.",
+            duration: "2-4 semaines"
+          },
+          {
+            title: "Industrialisation",
+            description: "Documentation complète, préparation production série, certifications si nécessaire.",
+            duration: "Variable"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Prototype",
+            marketPrice: "5 000€ - 15 000€",
+            price: "3 500€ - 10 500€",
+            features: ["Prototype fonctionnel", "1-2 capteurs", "Communication de base", "Dashboard simple"]
+          },
+          medium: {
+            title: "Solution Standard",
+            marketPrice: "15 000€ - 40 000€",
+            price: "10 500€ - 28 000€",
+            features: ["Firmware optimisé", "Multiple capteurs", "Intégration cloud", "Consommation optimisée", "Documentation"]
+          },
+          large: {
+            title: "Solution Industrielle",
+            marketPrice: "40 000€+",
+            price: "28 000€+",
+            features: ["Production série", "Haute fiabilité", "Sécurité avancée", "Mises à jour OTA", "Support long terme"]
+          }
+        },
+        faqs: [
+          {
+            question: "Quels protocoles de communication supportez-vous ?",
+            answer: "MQTT, LoRaWAN, Bluetooth LE, Zigbee, WiFi, NB-IoT. On choisit le protocole adapté à votre cas d'usage (portée, consommation, débit)."
+          },
+          {
+            question: "Comment gérez-vous la consommation énergétique ?",
+            answer: "On optimise chaque aspect : choix du microcontrôleur, modes veille profonds, protocoles économes, stratégies de transmission. On vise des mois à des années d'autonomie sur batterie."
+          },
+          {
+            question: "Vous développez aussi le dashboard et le cloud ?",
+            answer: "Oui, c'est notre force. On fait le firmware ET la plateforme cloud ET le dashboard. Une seule équipe, zéro coordination entre prestataires."
+          },
+          {
+            question: "Peut-on passer en production série après le prototype ?",
+            answer: "On conçoit dès le départ avec l'industrialisation en vue. On fournit toute la documentation technique et on accompagne le passage en production."
+          }
+        ]
+      },
+      "intelligence-artificielle": {
+        title: "Intelligence Artificielle",
+        subtitle: "Des chercheurs et data scientists dans l'équipe, pas juste des wrappers d'API",
+        description: "On intègre l'IA dans vos produits et processus : LLMs, computer vision, NLP, modèles de ML personnalisés. Notre différence : un data scientist doctorant et un chercheur en IA dans l'équipe. On ne fait pas que brancher des APIs — on construit des solutions IA de production.",
+        image: "/IA.jpg",
+        whatWeOffer: [
+          "Intégration de LLMs (GPT, Claude, Mistral, Llama)",
+          "Chatbots et assistants intelligents",
+          "Traitement du langage naturel (NLP)",
+          "Vision par ordinateur et reconnaissance d'images",
+          "Modèles de Machine Learning personnalisés",
+          "RAG (Retrieval Augmented Generation)",
+          "Fine-tuning et optimisation de modèles",
+          "Automatisation intelligente de processus"
+        ],
+        technologies: [
+          { name: "LLMs & Frameworks", items: ["OpenAI GPT-4", "Anthropic Claude", "LangChain", "LlamaIndex", "Hugging Face"] },
+          { name: "Machine Learning", items: ["PyTorch", "TensorFlow", "Scikit-learn", "XGBoost", "R"] },
+          { name: "Computer Vision", items: ["OpenCV", "YOLO", "Detectron2", "Roboflow"] },
+          { name: "Infrastructure", items: ["Pinecone", "Weaviate", "MLflow", "AWS SageMaker", "Azure ML"] }
+        ],
+        process: [
+          {
+            title: "Analyse & Cas d'usage",
+            description: "Identification des cas à forte valeur, étude de faisabilité, définition des KPIs, analyse des données disponibles.",
+            duration: "1-2 semaines"
+          },
+          {
+            title: "Préparation des Données",
+            description: "Collecte, nettoyage et enrichissement des données, création des datasets d'entraînement et de test.",
+            duration: "2-4 semaines"
+          },
+          {
+            title: "Développement & Entraînement",
+            description: "Sélection des modèles, entraînement, fine-tuning, optimisation des performances.",
+            duration: "4-8 semaines"
+          },
+          {
+            title: "Intégration & API",
+            description: "Développement des APIs, intégration dans vos systèmes, pipeline MLOps, monitoring.",
+            duration: "3-6 semaines"
+          },
+          {
+            title: "Tests & Validation",
+            description: "Tests d'accuracy et de robustesse, validation métier, tests de charge.",
+            duration: "2-3 semaines"
+          },
+          {
+            title: "Déploiement & Monitoring",
+            description: "Mise en production, monitoring continu, réentraînement périodique, optimisations.",
+            duration: "Continu"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Intégration LLM",
+            marketPrice: "5 000€ - 15 000€",
+            price: "3 500€ - 10 500€",
+            features: ["Chatbot intelligent", "Intégration GPT/Claude", "RAG simple", "Interface utilisateur"]
+          },
+          medium: {
+            title: "ML Custom",
+            marketPrice: "20 000€ - 60 000€",
+            price: "14 000€ - 42 000€",
+            features: ["Modèle personnalisé", "Entraînement sur vos données", "API dédiée", "Fine-tuning", "Dashboard analytics"]
+          },
+          large: {
+            title: "Plateforme IA",
+            marketPrice: "60 000€+",
+            price: "42 000€+",
+            features: ["Multiple modèles", "Pipeline MLOps complet", "Auto-scaling", "Monitoring avancé", "Réentraînement automatique"]
+          }
+        },
+        faqs: [
+          {
+            question: "API LLM existante ou modèle custom ?",
+            answer: "Les APIs (GPT-4, Claude) sont parfaites pour les cas généraux : chatbots, résumés, génération de texte. Un modèle custom est pertinent quand vous avez des données spécifiques, des contraintes de confidentialité ou besoin de performances optimales sur une tâche précise."
+          },
+          {
+            question: "Combien de données faut-il pour entraîner un modèle ?",
+            answer: "Pour du fine-tuning LLM, quelques centaines d'exemples peuvent suffire. Pour du ML classique, plusieurs milliers. On peut aussi utiliser la data augmentation pour compenser un dataset limité."
+          },
+          {
+            question: "Comment garantissez-vous la confidentialité ?",
+            answer: "On peut déployer sur votre infrastructure privée, utiliser des modèles open-source auto-hébergés, ou configurer des APIs avec confidentialité renforcée. Vos données ne sont jamais utilisées pour réentraîner des modèles publics."
+          },
+          {
+            question: "Quelle est votre expertise en data science ?",
+            answer: "On a un doctorant en statistique spécialisé en modélisation des risques et un chercheur en IA expert en NLP et logique formelle. C'est de la vraie expertise scientifique, pas juste de l'intégration d'APIs."
+          }
+        ]
+      },
+      "design-maquettes": {
+        title: "Design & Maquettes",
+        subtitle: "Une designer avec background dev — des designs toujours buildables",
+        description: "On crée des interfaces intuitives qui convertissent. Notre designer a une formation en développement : les maquettes sont toujours réalistes et buildables. Du wireframe au design system complet, livrés avec tous les assets pour le développement.",
+        image: "/maquettes.jpg",
+        whatWeOffer: [
+          "Recherche utilisateur et personas",
+          "Architecture de l'information",
+          "Wireframes et prototypes basse-fidélité",
+          "Design UI haute-fidélité",
+          "Design systems et composants réutilisables",
+          "Prototypes interactifs cliquables",
+          "Responsive design (mobile, tablet, desktop)",
+          "Export développeur et documentation"
+        ],
+        technologies: [
+          { name: "Design & Prototypage", items: ["Figma", "Adobe XD", "Framer", "Sketch"] },
+          { name: "Illustrations", items: ["Adobe Illustrator", "Procreate", "Blender 3D"] },
+          { name: "Animation", items: ["Principle", "After Effects", "Lottie"] },
+          { name: "Collaboration", items: ["FigJam", "Miro", "Notion", "Zeplin"] }
+        ],
+        process: [
+          {
+            title: "Recherche Utilisateur",
+            description: "Interviews, analyse concurrence, personas, parcours utilisateur, audit UX si existant.",
+            duration: "1-2 semaines"
+          },
+          {
+            title: "Architecture de l'Information",
+            description: "Organisation du contenu, arborescence, flows utilisateurs, interactions clés.",
+            duration: "1 semaine"
+          },
+          {
+            title: "Wireframes",
+            description: "Maquettes basse-fidélité, validation UX, tests utilisateurs préliminaires.",
+            duration: "1-2 semaines"
+          },
+          {
+            title: "Design Visuel",
+            description: "Direction artistique, charte graphique, design haute-fidélité de tous les écrans et états.",
+            duration: "3-5 semaines"
+          },
+          {
+            title: "Prototypage Interactif",
+            description: "Prototype cliquable, animations, micro-interactions, tests utilisateurs finaux.",
+            duration: "1-2 semaines"
+          },
+          {
+            title: "Livraison & Support",
+            description: "Export des assets, design system, documentation développeur, support pendant l'implémentation.",
+            duration: "1 semaine"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Design Simple",
+            marketPrice: "2 000€ - 5 000€",
+            price: "1 400€ - 3 500€",
+            features: ["5-10 écrans", "Wireframes", "Design UI", "Responsive mobile", "Exports développeur"]
+          },
+          medium: {
+            title: "Design Complet",
+            marketPrice: "5 000€ - 15 000€",
+            price: "3 500€ - 10 500€",
+            features: ["20-30 écrans", "Recherche UX", "Prototype interactif", "Design system light", "Tests utilisateurs"]
+          },
+          large: {
+            title: "Design System",
+            marketPrice: "15 000€+",
+            price: "10 500€+",
+            features: ["Design system complet", "Bibliothèque composants", "Guidelines détaillées", "Multiple plateformes", "Formation équipe"]
+          }
+        },
+        faqs: [
+          {
+            question: "Quelle est la différence entre UX et UI ?",
+            answer: "L'UX concerne l'expérience globale : facilité d'utilisation, parcours, architecture de l'information. L'UI est la couche visuelle : couleurs, typo, boutons, layouts. On fait les deux."
+          },
+          {
+            question: "Livrez-vous un design system ?",
+            answer: "Oui. On crée un design system Figma avec tous les composants réutilisables, les variants et états, et la documentation. Ça accélère le développement et assure la cohérence."
+          },
+          {
+            question: "Le design sera-t-il réaliste pour le développement ?",
+            answer: "C'est notre force. Notre designer a un background en développement — les maquettes prennent toujours en compte les contraintes techniques. Zéro surprise à l'implémentation."
+          },
+          {
+            question: "Faites-vous des tests utilisateurs ?",
+            answer: "Oui, on recommande toujours des tests sur les wireframes et le prototype final. C'est le meilleur moyen de valider les choix UX avant de coder."
+          }
+        ]
+      }
     }
   },
   en: {
@@ -1205,22 +1696,26 @@ export const translations = {
       dashboard: "Dashboard"
     },
     hero: {
-      title: "Develop your projects with experts in computer science, mathematics and AI.",
-      subtitle: "Quality IT services at fair prices. Web, mobile, IoT applications.",
+      title: "Your full-stack tech team, powered by AI.",
+      subtitle: "Design, development, data and deployment — all in-house. AI in our workflow = ~30% below standard market rates.",
       cta: "Free Quote",
       moreDetails: "More details",
       features: {
         freeMeeting: {
           title: "Free meeting",
-          description: "Free initial consultation to analyze your needs"
+          description: "First consultation free to scope your needs"
         },
         transparentQuote: {
           title: "Transparent quote",
-          description: "Clear and detailed pricing with no surprises"
+          description: "Clear and detailed pricing, no surprises"
         },
         fullSupport: {
-          title: "Full support",
-          description: "End-to-end support until deployment"
+          title: "~30% cheaper",
+          description: "AI in our workflow cuts development costs and timelines"
+        },
+        turnkey: {
+          title: "Complete team",
+          description: "Design, dev, data, DevOps: zero outsourcing"
         }
       }
     },
@@ -1228,77 +1723,69 @@ export const translations = {
       title: "Our Services",
       webDev: {
         title: "Web Development",
-        description: "Modern and performant web applications with latest technologies."
+        description: "High-performance web apps in React, Next.js, Node.js. Scalable architecture, maintainable code, continuous deployment."
       },
       mobileDev: {
         title: "Mobile Development",
-        description: "Native and cross-platform applications for iOS and Android."
+        description: "Native iOS/Android and cross-platform Flutter apps. From banking apps with 10M+ users to your MVP."
       },
       iot: {
         title: "IoT & Embedded",
-        description: "Connected solutions and innovative embedded systems."
+        description: "Embedded systems, connected sensors, real-time processing. From prototype to production."
       },
       ai: {
         title: "Artificial Intelligence",
-        description: "AI integration and machine learning solutions."
+        description: "LLM integration, computer vision and NLP in your products. Custom AI solutions, not gimmicks."
       },
       consulting: {
         title: "Technical Consulting",
-        description: "Expertise and support for your technology projects."
+        description: "Architecture audits, tech stack selection and technical guidance for your projects."
       },
       maintenance: {
         title: "Maintenance & Support",
-        description: "Technical support and maintenance for your applications."
+        description: "Monitoring, updates and technical support for your applications in production."
       },
       design: {
         title: "Mockups & Design",
-        description: "Creation of mockups and prototypes to visualize your project before development."
+        description: "User research, Figma prototypes and interfaces that convert. Delivered with a complete design system."
       }
     },
     process: {
       title: "Our Process",
+      subtitle: "A proven process, accelerated by AI at every step.",
       analysis: {
-        title: "Analysis",
-        description: "We analyze your needs and define the optimal solution."
+        title: "Scoping",
+        description: "We analyze your needs, choose the optimal stack and produce a precise specification.",
+        duration: "2-3 days"
       },
       development: {
         title: "Development",
-        description: "Agile development with regular deliveries."
+        description: "AI-assisted agile development. Regular deliveries, systematic code review.",
+        duration: "Depends on project"
       },
       testing: {
-        title: "Testing",
-        description: "Comprehensive testing to ensure quality and reliability."
+        title: "Testing & QA",
+        description: "Automated testing, quality review and functional validation before each delivery.",
+        duration: "Continuous"
       },
       deployment: {
         title: "Deployment",
-        description: "Production deployment and team training."
+        description: "Production deployment, monitoring and training. You're autonomous from day one.",
+        duration: "1-2 days"
       }
     },
     team: {
       title: "Our Team",
+      subtitle: "7 complementary profiles covering the full chain: design, development, mobile, DevOps, data science and AI. Zero outsourcing.",
+      stats: {
+        experts: "Experts",
+        experience: "Years of experience"
+      },
       members: [
         {
-          name: "Malaury",
-          role: "Full Stack Developer",
-          description: "Computer engineer with 6+ years of experience, specialized in web and mobile development. Expertise in React, Angular, Java, Node.js, Flutter and Agile project management.",
-          image: "/nobody.jpg"
-        },
-        {
-          name: "Alexandre",
-          role: "Full Stack Developer & DevOps",
-          description: "Passionate developer with 5+ years of experience, specialized in modern architecture and Linux environments. Expert in full stack development, server management, DevOps and cloud infrastructure (Kubernetes, Docker, CI/CD).",
-          image: "/nobody.jpg"
-        },
-        {
-          name: "Thomas",
-          role: "iOS & Android Mobile Developer",
-          description: "INSA Lyon engineer with 5+ years of mobile development experience. Specialized in native iOS (Swift, SwiftUI) and Flutter. Expertise in banking apps (+10M users), NFC contactless technology and native/Flutter integration.",
-          image: "/nobody.jpg"
-        },
-        {
-          name: "Luc",
-          role: "AI & Machine Learning Researcher",
-          description: "Researcher specialized in artificial intelligence with 2+ years of experience. Expert in natural language processing, LLMs, formal logic and machine learning.",
+          name: "Victor",
+          role: "Technical Leader .NET/Java",
+          description: "Technical Leader with 12+ years of full-stack development experience (.NET/Java, Angular, Android/Kotlin). Expert in software architecture, information systems modernization and technical leadership of complex project teams.",
           image: "/nobody.jpg"
         },
         {
@@ -1308,26 +1795,45 @@ export const translations = {
           image: "/nobody.jpg"
         },
         {
+          name: "Malaury",
+          role: "Full Stack Developer",
+          description: "Computer engineer with 6+ years of experience, specialized in web and mobile development. Expertise in React, Angular, Java, Node.js, Flutter and Agile project management.",
+          image: "/nobody.jpg"
+        },
+        {
+          name: "Thomas",
+          role: "iOS & Android Mobile Developer",
+          description: "INSA Lyon engineer with 5+ years of mobile development experience. Specialized in native iOS (Swift, SwiftUI) and Flutter. Expertise in banking apps (+10M users), NFC contactless technology and native/Flutter integration.",
+          image: "/nobody.jpg"
+        },
+        {
+          name: "Alexandre",
+          role: "Full Stack Developer & DevOps",
+          description: "Passionate developer with 5+ years of experience, specialized in modern architecture and Linux environments. Expert in full stack development, server management, DevOps and cloud infrastructure (Kubernetes, Docker, CI/CD).",
+          image: "/nobody.jpg"
+        },
+        {
           name: "Alex",
           role: "Data Scientist & Statistician",
           description: "PhD candidate in statistics with 3+ years of experience in risk modeling. Specialized in machine learning, extreme value theory (EVT) and big data analysis. Expert in Python, R, PyTorch and advanced statistical modeling.",
           image: "/nobody.jpg"
         },
         {
-          name: "Victor",
-          role: "Technical Leader .NET/Java",
-          description: "Technical Leader with 12+ years of full-stack development experience (.NET/Java, Angular, Android/Kotlin). Expert in software architecture, information systems modernization and technical leadership of complex project teams.",
+          name: "Luc",
+          role: "AI & Machine Learning Researcher",
+          description: "Researcher specialized in artificial intelligence with 2+ years of experience. Expert in natural language processing, LLMs, formal logic and machine learning.",
           image: "/nobody.jpg"
         }
       ]
     },
     cta: {
-      title: "Ready to start your project?",
-      description: "Contact us for a free and personalized quote.",
-      button: "Get a quote"
+      title: "Got a project in mind?",
+      description: "Tell us about your needs — we'll get back to you within 24h with an initial estimate.",
+      button: "Get a quote",
+      guarantee: "~30% below market rates • Response within 24h • Free quote"
     },
     footer: {
-      description: "Experts in computer science, mathematics and AI.",
+      description: "Full-stack tech team powered by AI. We deliver fast, right, and at fair prices.",
       services: "Services",
       company: "Company",
       about: "About",
@@ -1351,6 +1857,7 @@ export const translations = {
       },
       login: {
         title: "Login",
+        subtitle: "To send your request and track its progress",
         button: "Sign in",
         noAccount: "Don't have an account?",
         createAccount: "Create an account",
@@ -1358,12 +1865,14 @@ export const translations = {
       },
       register: {
         title: "Create an account",
+        subtitle: "Create an account to send your request",
         button: "Sign up",
         hasAccount: "Already have an account?",
         login: "Sign in"
       },
       forgot: {
         title: "Forgot password",
+        subtitle: "Enter your email to receive a reset link",
         button: "Send reset link",
         rememberPassword: "Remember your password?",
         backToLogin: "Back to login"
@@ -1995,8 +2504,12 @@ export const translations = {
       stepOf: "Step {current} of {total}",
       previous: "Previous",
       next: "Next",
+      continue: "Continue",
       submit: "Submit my request",
+      backToForm: "Back to form",
       success: "Project created!",
+      projectSent: "Project sent!",
+      redirecting: "Redirecting to your dashboard...",
       steps: {
         techLevel: "Your profile",
         projectType: "Project type",
@@ -2377,6 +2890,479 @@ export const translations = {
       cancel: "Cancel",
       add: "Add",
       close: "Close"
+    },
+    serviceDetail: {
+      common: {
+        getQuote: "Get a quote",
+        contactUs: "Contact us",
+        whatWeOffer: "What we offer",
+        technologies: "Technologies",
+        ourProcess: "Our process",
+        pricing: "Indicative pricing",
+        pricingBadge: "-30% thanks to our AI expertise",
+        pricingDisclaimer: "Our prices already factor in our AI-driven productivity gains (~30% below standard market rates). Indicative prices — contact us for an accurate quote.",
+        faq: "Frequently asked questions",
+        ctaTitle: "Got a project in mind?",
+        ctaDescription: "Tell us about your needs — we'll get back to you within 24h with an initial estimate.",
+        ctaQuote: "Request a quote",
+        ctaSpeakExpert: "Talk to an expert"
+      },
+      "developpement-web": {
+        title: "Web Development",
+        subtitle: "Modern web apps, built with AI in our workflow",
+        description: "We build custom web applications in React, Next.js and Node.js. Our team covers design, development, DevOps and deployment — zero outsourcing. AI in our development workflow lets us deliver faster without sacrificing quality.",
+        image: "/webdev.jpg",
+        whatWeOffer: [
+          "Professional showcase sites and portfolios",
+          "Complex web applications (SaaS, business platforms)",
+          "E-commerce and marketplaces",
+          "Dashboards and internal management tools",
+          "Progressive Web Apps (PWA)",
+          "REST and GraphQL APIs"
+        ],
+        technologies: [
+          { name: "Frontend", items: ["React", "Next.js", "Vue.js", "Angular", "TypeScript", "Tailwind CSS"] },
+          { name: "Backend", items: ["Node.js", "Python", "Java", "Spring Boot", "Express", "NestJS"] },
+          { name: "Databases", items: ["PostgreSQL", "MongoDB", "MySQL", "Redis", "Supabase"] },
+          { name: "Cloud & DevOps", items: ["AWS", "Azure", "Docker", "Kubernetes", "CI/CD", "Vercel"] }
+        ],
+        process: [
+          {
+            title: "Scoping & Architecture",
+            description: "Needs analysis, optimal stack selection, solution architecture and precise specification.",
+            duration: "1-2 weeks"
+          },
+          {
+            title: "Design & Prototyping",
+            description: "UX/UI mockups by our designer, user journey validation, interactive prototype.",
+            duration: "2-3 weeks"
+          },
+          {
+            title: "Development",
+            description: "AI-assisted agile development, 2-week sprints, regular deliveries and systematic code review.",
+            duration: "Depends on project"
+          },
+          {
+            title: "Testing & QA",
+            description: "Automated tests, integration tests, performance tests and functional validation.",
+            duration: "Continuous"
+          },
+          {
+            title: "Deployment & Training",
+            description: "Production deployment, monitoring setup, team training. You're autonomous.",
+            duration: "1 week"
+          },
+          {
+            title: "Maintenance & Support",
+            description: "Monitoring, fixes, security updates and feature evolution.",
+            duration: "Ongoing"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Showcase Site",
+            marketPrice: "€3,000 - €8,000",
+            price: "€2,000 - €5,500",
+            features: ["5-10 pages", "Responsive design", "Integrated CMS", "Basic SEO", "Contact form"]
+          },
+          medium: {
+            title: "Standard Application",
+            marketPrice: "€15,000 - €50,000",
+            price: "€10,500 - €35,000",
+            features: ["Admin interface", "User management", "Database", "REST API", "Automated tests", "CI/CD deployment"]
+          },
+          large: {
+            title: "Complex Platform",
+            marketPrice: "€50,000+",
+            price: "€35,000+",
+            features: ["Microservices architecture", "High availability", "Scalability", "Advanced security", "Full DevOps", "Dedicated support"]
+          }
+        },
+        faqs: [
+          {
+            question: "How long does it take to build a web application?",
+            answer: "A showcase site takes 4-6 weeks. A standard application 2-4 months. A complex platform 4-8 months. We deliver progressively so you can test quickly."
+          },
+          {
+            question: "How does AI speed up your development?",
+            answer: "We use AI for code generation, automated reviews, testing and documentation. This lets us focus on architecture and business logic — the parts that really matter."
+          },
+          {
+            question: "Do you offer maintenance after development?",
+            answer: "Yes. We offer maintenance contracts including monitoring, bug fixes, security updates and feature evolution."
+          },
+          {
+            question: "Can we adjust the project along the way?",
+            answer: "Absolutely. We work in Agile with short sprints. Regular reviews allow us to adjust priorities at each iteration."
+          }
+        ]
+      },
+      "developpement-mobile": {
+        title: "Mobile Development",
+        subtitle: "iOS & Android apps, from design to store publication",
+        description: "We develop native and cross-platform mobile apps, delivered turnkey. Our mobile developer has shipped apps to over 10 million users. From Figma design to App Store publication — the same team handles everything.",
+        image: "/mobile.jpg",
+        whatWeOffer: [
+          "Native iOS applications (Swift, SwiftUI)",
+          "Native Android applications (Kotlin)",
+          "Cross-platform applications (Flutter, React Native)",
+          "API integration and backend services",
+          "App Store and Google Play publication",
+          "Push notifications and offline mode",
+          "Continuous maintenance and updates"
+        ],
+        technologies: [
+          { name: "iOS", items: ["Swift", "SwiftUI", "UIKit", "Xcode", "TestFlight"] },
+          { name: "Android", items: ["Kotlin", "Jetpack Compose", "Android Studio"] },
+          { name: "Cross-platform", items: ["Flutter", "React Native", "Dart"] },
+          { name: "Backend & Cloud", items: ["Firebase", "Supabase", "AWS Amplify", "REST APIs"] }
+        ],
+        process: [
+          {
+            title: "Scoping & Tech Choice",
+            description: "Needs analysis, native vs cross-platform decision, technical architecture and planning.",
+            duration: "1-2 weeks"
+          },
+          {
+            title: "Mobile Design",
+            description: "iOS and Android mockups, Apple/Google guidelines compliance, interactive prototype.",
+            duration: "2-3 weeks"
+          },
+          {
+            title: "Development",
+            description: "AI-assisted iterative development, real device testing, backend integration.",
+            duration: "Depends on project"
+          },
+          {
+            title: "Testing & QA",
+            description: "Testing on multiple devices and OS versions, performance and battery tests.",
+            duration: "Continuous"
+          },
+          {
+            title: "Publication & Launch",
+            description: "App Store and Google Play submission, review management, analytics setup.",
+            duration: "1-2 weeks"
+          },
+          {
+            title: "Support & Evolution",
+            description: "Maintenance, OS updates, new features, technical support.",
+            duration: "Ongoing"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Simple App",
+            marketPrice: "€8,000 - €20,000",
+            price: "€5,500 - €14,000",
+            features: ["Cross-platform Flutter", "5-8 screens", "Responsive design", "Simple backend", "Store publication"]
+          },
+          medium: {
+            title: "Standard App",
+            marketPrice: "€20,000 - €50,000",
+            price: "€14,000 - €35,000",
+            features: ["Advanced features", "In-app payments", "Push notifications", "Offline mode", "Analytics"]
+          },
+          large: {
+            title: "Complex App",
+            marketPrice: "€50,000+",
+            price: "€35,000+",
+            features: ["Complex architecture", "High performance", "Multiple integrations", "Scalable backend", "Dedicated support"]
+          }
+        },
+        faqs: [
+          {
+            question: "Native or cross-platform: which to choose?",
+            answer: "Native (Swift/Kotlin) offers the best performance, ideal for complex apps. Flutter enables faster development with a single codebase — perfect for most projects. We advise based on your specific case."
+          },
+          {
+            question: "How long for a mobile app?",
+            answer: "Simple app: 2-3 months. Standard: 3-5 months. Complex: 5-10 months. We deliver progressively so you can test quickly."
+          },
+          {
+            question: "Do you handle store publication?",
+            answer: "Yes, we handle everything: developer accounts, assets, submission and managing any rejections until validation."
+          },
+          {
+            question: "What about maintenance after launch?",
+            answer: "We offer maintenance contracts including bug fixes, updates for new iOS/Android versions and feature evolution."
+          }
+        ]
+      },
+      "iot-embarque": {
+        title: "IoT & Embedded Systems",
+        subtitle: "From sensor to cloud, all in-house",
+        description: "We build complete IoT solutions: embedded firmware, cloud platforms, visualization dashboards. Our strength: a team that masters the entire chain, from microcontroller to edge machine learning. No need to coordinate 3 vendors.",
+        image: "/iot.jpg",
+        whatWeOffer: [
+          "Custom embedded firmware (C/C++, MicroPython, Rust)",
+          "Connected objects and smart sensors",
+          "Industrial IoT solutions (monitoring, control)",
+          "Device management platforms",
+          "Cloud integration (AWS IoT, Azure IoT, MQTT)",
+          "Edge data processing and ML",
+          "Power consumption optimization"
+        ],
+        technologies: [
+          { name: "Microcontrollers", items: ["ESP32", "STM32", "Arduino", "Raspberry Pi", "nRF52"] },
+          { name: "Protocols", items: ["MQTT", "LoRaWAN", "Bluetooth LE", "Zigbee", "WiFi", "NB-IoT"] },
+          { name: "Cloud & Backend", items: ["AWS IoT Core", "Azure IoT Hub", "Node-RED", "InfluxDB", "Grafana"] },
+          { name: "Languages", items: ["C/C++", "MicroPython", "Rust", "Python", "ESP-IDF"] }
+        ],
+        process: [
+          {
+            title: "Design & Architecture",
+            description: "Technical analysis, hardware selection, system architecture, power constraints and protocols.",
+            duration: "2-3 weeks"
+          },
+          {
+            title: "Prototyping",
+            description: "Functional prototype, feasibility tests, sensor validation and first measurements.",
+            duration: "3-4 weeks"
+          },
+          {
+            title: "Firmware Development",
+            description: "Optimized firmware, power management, robust protocols, sleep modes and error recovery.",
+            duration: "Depends on project"
+          },
+          {
+            title: "Backend & Cloud",
+            description: "Management platform, APIs, data storage, visualization dashboards, alerts.",
+            duration: "4-8 weeks"
+          },
+          {
+            title: "Testing & Validation",
+            description: "Endurance tests, environmental tests, power validation, long-range communication tests.",
+            duration: "2-4 weeks"
+          },
+          {
+            title: "Industrialization",
+            description: "Complete documentation, production preparation, certifications if needed.",
+            duration: "Variable"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Prototype",
+            marketPrice: "€5,000 - €15,000",
+            price: "€3,500 - €10,500",
+            features: ["Functional prototype", "1-2 sensors", "Basic communication", "Simple dashboard"]
+          },
+          medium: {
+            title: "Standard Solution",
+            marketPrice: "€15,000 - €40,000",
+            price: "€10,500 - €28,000",
+            features: ["Optimized firmware", "Multiple sensors", "Cloud integration", "Power optimized", "Documentation"]
+          },
+          large: {
+            title: "Industrial Solution",
+            marketPrice: "€40,000+",
+            price: "€28,000+",
+            features: ["Series production", "High reliability", "Advanced security", "OTA updates", "Long-term support"]
+          }
+        },
+        faqs: [
+          {
+            question: "Which communication protocols do you support?",
+            answer: "MQTT, LoRaWAN, Bluetooth LE, Zigbee, WiFi, NB-IoT. We choose the right protocol for your use case (range, power, throughput)."
+          },
+          {
+            question: "How do you handle power consumption?",
+            answer: "We optimize every aspect: microcontroller selection, deep sleep modes, efficient protocols, transmission strategies. We aim for months to years of battery life."
+          },
+          {
+            question: "Do you also build the dashboard and cloud?",
+            answer: "Yes, that's our strength. We build the firmware AND the cloud platform AND the dashboard. One team, zero coordination between vendors."
+          },
+          {
+            question: "Can we go to series production after the prototype?",
+            answer: "We design from the start with industrialization in mind. We provide all technical documentation and support the transition to production."
+          }
+        ]
+      },
+      "intelligence-artificielle": {
+        title: "Artificial Intelligence",
+        subtitle: "Researchers and data scientists on staff, not just API wrappers",
+        description: "We integrate AI into your products and processes: LLMs, computer vision, NLP, custom ML models. Our difference: a PhD data scientist and an AI researcher on the team. We don't just plug APIs — we build production-grade AI solutions.",
+        image: "/IA.jpg",
+        whatWeOffer: [
+          "LLM integration (GPT, Claude, Mistral, Llama)",
+          "Smart chatbots and assistants",
+          "Natural Language Processing (NLP)",
+          "Computer vision and image recognition",
+          "Custom Machine Learning models",
+          "RAG (Retrieval Augmented Generation)",
+          "Model fine-tuning and optimization",
+          "Intelligent process automation"
+        ],
+        technologies: [
+          { name: "LLMs & Frameworks", items: ["OpenAI GPT-4", "Anthropic Claude", "LangChain", "LlamaIndex", "Hugging Face"] },
+          { name: "Machine Learning", items: ["PyTorch", "TensorFlow", "Scikit-learn", "XGBoost", "R"] },
+          { name: "Computer Vision", items: ["OpenCV", "YOLO", "Detectron2", "Roboflow"] },
+          { name: "Infrastructure", items: ["Pinecone", "Weaviate", "MLflow", "AWS SageMaker", "Azure ML"] }
+        ],
+        process: [
+          {
+            title: "Analysis & Use Cases",
+            description: "Identifying high-value use cases, feasibility study, KPI definition, available data analysis.",
+            duration: "1-2 weeks"
+          },
+          {
+            title: "Data Preparation",
+            description: "Data collection, cleaning and enrichment, training and test dataset creation.",
+            duration: "2-4 weeks"
+          },
+          {
+            title: "Development & Training",
+            description: "Model selection, training, fine-tuning, performance optimization.",
+            duration: "4-8 weeks"
+          },
+          {
+            title: "Integration & API",
+            description: "API development, integration into your systems, MLOps pipeline, monitoring.",
+            duration: "3-6 weeks"
+          },
+          {
+            title: "Testing & Validation",
+            description: "Accuracy and robustness tests, business validation, load tests.",
+            duration: "2-3 weeks"
+          },
+          {
+            title: "Deployment & Monitoring",
+            description: "Production deployment, continuous monitoring, periodic retraining, optimizations.",
+            duration: "Ongoing"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "LLM Integration",
+            marketPrice: "€5,000 - €15,000",
+            price: "€3,500 - €10,500",
+            features: ["Smart chatbot", "GPT/Claude integration", "Simple RAG", "User interface"]
+          },
+          medium: {
+            title: "Custom ML",
+            marketPrice: "€20,000 - €60,000",
+            price: "€14,000 - €42,000",
+            features: ["Custom model", "Training on your data", "Dedicated API", "Fine-tuning", "Analytics dashboard"]
+          },
+          large: {
+            title: "AI Platform",
+            marketPrice: "€60,000+",
+            price: "€42,000+",
+            features: ["Multiple models", "Complete MLOps pipeline", "Auto-scaling", "Advanced monitoring", "Automatic retraining"]
+          }
+        },
+        faqs: [
+          {
+            question: "Existing LLM API or custom model?",
+            answer: "LLM APIs (GPT-4, Claude) are perfect for general use cases: chatbots, summaries, text generation. A custom model is relevant when you have specific data, confidentiality constraints or need optimal performance on a precise task."
+          },
+          {
+            question: "How much data is needed to train a model?",
+            answer: "For LLM fine-tuning, a few hundred examples can suffice. For classic ML, several thousand. We can also use data augmentation to compensate for a limited dataset."
+          },
+          {
+            question: "How do you ensure data confidentiality?",
+            answer: "We can deploy on your private infrastructure, use self-hosted open-source models, or configure APIs with enhanced confidentiality. Your data is never used to retrain public models."
+          },
+          {
+            question: "What's your data science expertise?",
+            answer: "We have a PhD candidate in statistics specialized in risk modeling and an AI researcher expert in NLP and formal logic. This is real scientific expertise, not just API integration."
+          }
+        ]
+      },
+      "design-maquettes": {
+        title: "Design & Mockups",
+        subtitle: "A designer with a dev background — designs that are always buildable",
+        description: "We create intuitive interfaces that convert. Our designer has a development background: mockups are always realistic and buildable. From wireframe to complete design system, delivered with all assets for development.",
+        image: "/maquettes.jpg",
+        whatWeOffer: [
+          "User research and personas",
+          "Information architecture",
+          "Wireframes and low-fidelity prototypes",
+          "High-fidelity UI design",
+          "Design systems and reusable components",
+          "Interactive clickable prototypes",
+          "Responsive design (mobile, tablet, desktop)",
+          "Developer export and documentation"
+        ],
+        technologies: [
+          { name: "Design & Prototyping", items: ["Figma", "Adobe XD", "Framer", "Sketch"] },
+          { name: "Illustrations", items: ["Adobe Illustrator", "Procreate", "Blender 3D"] },
+          { name: "Animation", items: ["Principle", "After Effects", "Lottie"] },
+          { name: "Collaboration", items: ["FigJam", "Miro", "Notion", "Zeplin"] }
+        ],
+        process: [
+          {
+            title: "User Research",
+            description: "Interviews, competitive analysis, personas, user journeys, UX audit if existing.",
+            duration: "1-2 weeks"
+          },
+          {
+            title: "Information Architecture",
+            description: "Content organization, sitemap, user flows, key interactions.",
+            duration: "1 week"
+          },
+          {
+            title: "Wireframes",
+            description: "Low-fidelity mockups, UX validation, preliminary user tests.",
+            duration: "1-2 weeks"
+          },
+          {
+            title: "Visual Design",
+            description: "Art direction, brand guidelines, high-fidelity design for all screens and states.",
+            duration: "3-5 weeks"
+          },
+          {
+            title: "Interactive Prototyping",
+            description: "Clickable prototype, animations, micro-interactions, final user tests.",
+            duration: "1-2 weeks"
+          },
+          {
+            title: "Delivery & Support",
+            description: "Asset export, design system, developer documentation, support during implementation.",
+            duration: "1 week"
+          }
+        ],
+        pricing: {
+          small: {
+            title: "Simple Design",
+            marketPrice: "€2,000 - €5,000",
+            price: "€1,400 - €3,500",
+            features: ["5-10 screens", "Wireframes", "UI design", "Mobile responsive", "Developer exports"]
+          },
+          medium: {
+            title: "Complete Design",
+            marketPrice: "€5,000 - €15,000",
+            price: "€3,500 - €10,500",
+            features: ["20-30 screens", "UX research", "Interactive prototype", "Light design system", "User tests"]
+          },
+          large: {
+            title: "Design System",
+            marketPrice: "€15,000+",
+            price: "€10,500+",
+            features: ["Complete design system", "Component library", "Detailed guidelines", "Multiple platforms", "Team training"]
+          }
+        },
+        faqs: [
+          {
+            question: "What's the difference between UX and UI?",
+            answer: "UX is about the overall experience: ease of use, journeys, information architecture. UI is the visual layer: colors, typography, buttons, layouts. We do both."
+          },
+          {
+            question: "Do you deliver a design system?",
+            answer: "Yes. We create a Figma design system with all reusable components, variants and states, and documentation. It accelerates development and ensures consistency."
+          },
+          {
+            question: "Will the design be realistic for development?",
+            answer: "That's our strength. Our designer has a development background — mockups always account for technical constraints. Zero surprises during implementation."
+          },
+          {
+            question: "Do you run user tests?",
+            answer: "Yes, we always recommend testing on wireframes and the final prototype. It's the best way to validate UX choices before coding."
+          }
+        ]
+      }
     }
   }
 }

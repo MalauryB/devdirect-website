@@ -88,8 +88,8 @@ interface ProjectContractsProps {
 
 const STATUS_CONFIG: Record<ContractStatus, { color: string; bgColor: string }> = {
   draft: {
-    color: 'text-gray-700',
-    bgColor: 'bg-gray-100'
+    color: 'text-foreground/70',
+    bgColor: 'bg-muted'
   },
   sent: {
     color: 'text-blue-700',
@@ -486,8 +486,8 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
 
       {/* Contracts list */}
       {contracts.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-xl">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+        <div className="text-center py-12 bg-muted/50 rounded-xl">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-muted flex items-center justify-center">
             <FileSignature className="w-8 h-8 text-foreground/20" />
           </div>
           <h4 className="text-lg font-medium mb-2">{t('contracts.noContracts')}</h4>
@@ -513,11 +513,11 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
             return (
               <div
                 key={contract.id}
-                className={`bg-white border rounded-xl p-4 hover:border-gray-300 transition-colors ${isIncomplete ? 'border-amber-300 bg-amber-50/30' : 'border-gray-200'}`}
+                className={`bg-white border rounded-xl p-4 hover:border-border transition-colors ${isIncomplete ? 'border-amber-300 bg-amber-50/30' : 'border-border'}`}
               >
                 <div className="flex items-start gap-4">
                   {/* Icon */}
-                  <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0">
                     {TYPE_ICONS[contract.type]}
                   </div>
 
@@ -607,7 +607,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
                     {isEngineer && (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className="p-2 hover:bg-gray-100 rounded-lg">
+                          <button className="p-2 hover:bg-muted rounded-lg">
                             <MoreVertical className="w-4 h-4 text-foreground/50" />
                           </button>
                         </DropdownMenuTrigger>
@@ -739,7 +739,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
 
             {/* Quote summary when selected (forfait only) */}
             {formType === 'service_agreement' && selectedQuote && quoteData && (
-              <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+              <div className="p-4 bg-muted/50 rounded-lg border border-border space-y-3">
                 <div className="flex items-center gap-2 text-sm font-medium text-foreground">
                   <Info className="w-4 h-4 text-blue-500" />
                   {t('contracts.quoteSummary')}
@@ -910,7 +910,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
 
                   <div className="space-y-3">
                     {formProfiles.map((profile, index) => (
-                      <div key={index} className="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-3">
+                      <div key={index} className="p-3 bg-muted/50 rounded-lg border border-border space-y-3">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-medium text-foreground/60">
                             {t('contracts.profileNumber')} {index + 1}
@@ -985,7 +985,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
 
                 {/* Estimated total preview */}
                 {profilesTotalEstimate > 0 && (
-                  <div className="p-4 bg-gray-50 rounded-lg border border-gray-200 space-y-2">
+                  <div className="p-4 bg-muted/50 rounded-lg border border-border space-y-2">
                     <p className="text-sm font-medium text-foreground">{t('contracts.estimatedTotal')}</p>
                     <div className="grid grid-cols-3 gap-4 text-sm">
                       <div>
@@ -1137,7 +1137,7 @@ export function ProjectContracts({ project, quotes, client, isEngineer, provider
             </DialogTitle>
           </DialogHeader>
 
-          <div className="flex-1 overflow-hidden bg-gray-100">
+          <div className="flex-1 overflow-hidden bg-muted">
             {previewLoading ? (
               <div className="flex flex-col items-center justify-center h-full gap-4">
                 <Loader2 className="w-8 h-8 animate-spin text-action" />

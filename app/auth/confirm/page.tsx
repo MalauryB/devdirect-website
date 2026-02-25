@@ -53,16 +53,16 @@ export default function ConfirmPage() {
   }, [searchParams, router])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="max-w-md w-full text-center">
-        <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+        <div className="bg-white rounded-2xl p-8 shadow-sm border border-border">
           {status === 'loading' && (
             <>
-              <Loader2 className="w-12 h-12 animate-spin text-gray-400 mx-auto mb-4" />
-              <h1 className="text-xl font-semibold text-gray-900 mb-2">
+              <Loader2 className="w-12 h-12 animate-spin text-muted-foreground mx-auto mb-4" />
+              <h1 className="text-xl font-semibold text-foreground mb-2">
                 Confirmation en cours...
               </h1>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 Veuillez patienter pendant que nous vérifions votre email.
               </p>
             </>
@@ -73,10 +73,10 @@ export default function ConfirmPage() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
-              <h1 className="text-xl font-semibold text-gray-900 mb-2">
+              <h1 className="text-xl font-semibold text-foreground mb-2">
                 Email confirmé !
               </h1>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 {message}
               </p>
             </>
@@ -87,10 +87,10 @@ export default function ConfirmPage() {
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">!</span>
               </div>
-              <h1 className="text-xl font-semibold text-gray-900 mb-2">
+              <h1 className="text-xl font-semibold text-foreground mb-2">
                 Erreur
               </h1>
-              <p className="text-gray-500">
+              <p className="text-muted-foreground">
                 {message}
               </p>
             </>

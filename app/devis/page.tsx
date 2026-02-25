@@ -227,7 +227,7 @@ export default function DevisPage() {
         if (error) {
           setError(error.message)
         } else if (data?.user && !data.user.identities?.length) {
-          setError("Un compte existe déjà avec cet email")
+          setError(t('auth.errors.generic'))
         } else if (data?.session) {
           // User is automatically logged in
         } else {
@@ -341,12 +341,12 @@ export default function DevisPage() {
                   onClick={() => setTechLevel(option.value as TechLevel)}
                   className={`flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all ${
                     techLevel === option.value
-                      ? 'border-gray-900 bg-gray-50'
-                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                      ? 'border-primary bg-primary/5'
+                      : 'border-border hover:border-primary/30 bg-white'
                   }`}
                 >
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                    techLevel === option.value ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                    techLevel === option.value ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
                   }`}>
                     <option.icon className="w-6 h-6" />
                   </div>
@@ -374,7 +374,7 @@ export default function DevisPage() {
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder={t('projects.form.titlePlaceholder')}
-                className="border-gray-200 focus:border-gray-400"
+                className="border-border focus:border-primary"
               />
               {techLevel === 'beginner' && (
                 <p className="text-xs text-foreground/50">{t('projectWizard.projectType.titleHint')}</p>
@@ -391,12 +391,12 @@ export default function DevisPage() {
                     onClick={() => handleProjectTypeToggle(type.id)}
                     className={`flex flex-col items-center gap-2 p-3 rounded-lg border-2 text-center transition-all ${
                       formData.project_types.includes(type.id)
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:border-primary/30 bg-white'
                     }`}
                   >
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                      formData.project_types.includes(type.id) ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-600'
+                      formData.project_types.includes(type.id) ? 'bg-primary text-white' : 'bg-muted text-muted-foreground'
                     }`}>
                       <type.icon className="w-4 h-4" />
                     </div>
@@ -428,8 +428,8 @@ export default function DevisPage() {
                       onClick={() => handlePlatformToggle(platform.id)}
                       className={`px-4 py-2 rounded-full border transition-all ${
                         formData.platforms.includes(platform.id)
-                          ? 'border-gray-900 bg-gray-900 text-white'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-border hover:border-primary/30 bg-white'
                       }`}
                     >
                       {platform.label}
@@ -458,7 +458,7 @@ export default function DevisPage() {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">1</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">1</span>
                     {t('projectWizard.description.whatIsIt')} *
                   </Label>
                   <Textarea
@@ -466,13 +466,13 @@ export default function DevisPage() {
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, whatIsIt: e.target.value })}
                     placeholder={t('projectWizard.description.whatIsItPlaceholder')}
                     rows={3}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">2</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">2</span>
                     {t('projectWizard.description.whoIsItFor')}
                   </Label>
                   <Textarea
@@ -480,13 +480,13 @@ export default function DevisPage() {
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, whoIsItFor: e.target.value })}
                     placeholder={t('projectWizard.description.whoIsItForPlaceholder')}
                     rows={2}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">3</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">3</span>
                     {t('projectWizard.description.mainFeatures')}
                   </Label>
                   <Textarea
@@ -494,13 +494,13 @@ export default function DevisPage() {
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, mainFeatures: e.target.value })}
                     placeholder={t('projectWizard.description.mainFeaturesPlaceholder')}
                     rows={3}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium flex items-center gap-2">
-                    <span className="w-6 h-6 rounded-full bg-gray-900 text-white text-xs flex items-center justify-center">4</span>
+                    <span className="w-6 h-6 rounded-full bg-primary text-white text-xs flex items-center justify-center">4</span>
                     {t('projectWizard.description.inspiration')}
                   </Label>
                   <Textarea
@@ -508,7 +508,7 @@ export default function DevisPage() {
                     onChange={(e) => setGuidedDescription({ ...guidedDescription, inspiration: e.target.value })}
                     placeholder={t('projectWizard.description.inspirationPlaceholder')}
                     rows={2}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
               </div>
@@ -521,7 +521,7 @@ export default function DevisPage() {
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder={t('projects.form.descriptionPlaceholder')}
                     rows={5}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
@@ -532,7 +532,7 @@ export default function DevisPage() {
                     onChange={(e) => setFormData({ ...formData, features: e.target.value })}
                     placeholder={t('projects.form.featuresPlaceholder')}
                     rows={3}
-                    className="border-gray-200 focus:border-gray-400 resize-none"
+                    className="border-border focus:border-primary resize-none"
                   />
                 </div>
 
@@ -542,7 +542,7 @@ export default function DevisPage() {
                     value={formData.target_audience}
                     onChange={(e) => setFormData({ ...formData, target_audience: e.target.value })}
                     placeholder={t('projects.form.targetAudiencePlaceholder')}
-                    className="border-gray-200 focus:border-gray-400"
+                    className="border-border focus:border-primary"
                   />
                 </div>
               </div>
@@ -572,12 +572,12 @@ export default function DevisPage() {
                     onClick={() => setFormData({ ...formData, needs_design: option.value })}
                     className={`flex items-start gap-4 p-4 rounded-xl border-2 text-left transition-all ${
                       formData.needs_design === option.value
-                        ? 'border-gray-900 bg-gray-50'
-                        : 'border-gray-200 hover:border-gray-300 bg-white'
+                        ? 'border-primary bg-primary/5'
+                        : 'border-border hover:border-primary/30 bg-white'
                     }`}
                   >
                     <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5 ${
-                      formData.needs_design === option.value ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
+                      formData.needs_design === option.value ? 'border-primary bg-primary' : 'border-border'
                     }`}>
                       {formData.needs_design === option.value && (
                         <Check className="w-3 h-3 text-white" />
@@ -605,8 +605,8 @@ export default function DevisPage() {
                       onClick={() => handleServiceToggle(service.id)}
                       className={`px-4 py-2 rounded-full border transition-all ${
                         formData.services.includes(service.id)
-                          ? 'border-gray-900 bg-gray-900 text-white'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary text-white'
+                          : 'border-border hover:border-primary/30 bg-white'
                       }`}
                     >
                       {service.label}
@@ -646,8 +646,8 @@ export default function DevisPage() {
                       onClick={() => setFormData({ ...formData, budget: option.value })}
                       className={`flex items-center justify-between p-4 rounded-xl border-2 text-left transition-all ${
                         formData.budget === option.value
-                          ? 'border-gray-900 bg-gray-50'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:border-primary/30 bg-white'
                       }`}
                     >
                       <span className="font-medium text-foreground">{option.label}</span>
@@ -678,8 +678,8 @@ export default function DevisPage() {
                       onClick={() => setFormData({ ...formData, deadline: option.value })}
                       className={`p-4 rounded-xl border-2 text-left transition-all ${
                         formData.deadline === option.value
-                          ? 'border-gray-900 bg-gray-50'
-                          : 'border-gray-200 hover:border-gray-300 bg-white'
+                          ? 'border-primary bg-primary/5'
+                          : 'border-border hover:border-primary/30 bg-white'
                       }`}
                     >
                       <span className="font-medium text-foreground">{option.label}</span>
@@ -700,7 +700,7 @@ export default function DevisPage() {
               <p className="text-foreground/60">{t('projectWizard.summary.subtitle')}</p>
             </div>
 
-            <div className="bg-gray-50 rounded-xl p-6 space-y-4">
+            <div className="bg-muted rounded-xl p-6 space-y-4">
               <div>
                 <h3 className="text-sm font-medium text-foreground/50">{t('projects.form.title')}</h3>
                 <p className="font-semibold text-foreground">{formData.title || '-'}</p>
@@ -770,9 +770,9 @@ export default function DevisPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 bg-white border-b border-gray-200 z-50">
+      <header className="sticky top-0 bg-background/80 backdrop-blur-sm border-b border-border z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between max-w-4xl mx-auto">
             <Button
@@ -786,12 +786,12 @@ export default function DevisPage() {
                   router.push("/")
                 }
               }}
-              className="flex items-center gap-2 hover:bg-gray-50"
+              className="flex items-center gap-2 hover:bg-muted"
             >
               <ArrowLeft className="w-4 h-4" />
-              {mainStep === 2 ? "Retour au formulaire" : wizardStep === 0 ? "Retour à l'accueil" : "Précédent"}
+              {mainStep === 2 ? t('projectWizard.backToForm') : wizardStep === 0 ? t('navigation.accueil') : t('projectWizard.previous')}
             </Button>
-            <h1 className="text-base md:text-3xl font-bold logo-cubic text-black">{t('name')}</h1>
+            <h1 className="text-base md:text-3xl font-bold logo-cubic text-foreground">{t('name')}</h1>
           </div>
         </div>
       </header>
@@ -809,7 +809,7 @@ export default function DevisPage() {
                     <div
                       key={index}
                       className={`h-1 flex-1 rounded-full transition-colors ${
-                        index <= wizardStep ? 'bg-gray-900' : 'bg-gray-200'
+                        index <= wizardStep ? 'bg-primary' : 'bg-muted'
                       }`}
                     />
                   ))}
@@ -852,7 +852,7 @@ export default function DevisPage() {
                       type="button"
                       onClick={nextWizardStep}
                       disabled={!canProceedWizard()}
-                      className="bg-gray-900 hover:bg-gray-800"
+                      className="bg-primary hover:bg-primary/90"
                     >
                       {t('projectWizard.next')}
                       <ChevronRight className="w-4 h-4 ml-2" />
@@ -861,10 +861,10 @@ export default function DevisPage() {
                     <Button
                       type="button"
                       onClick={handleProjectSubmit}
-                      className="bg-gray-900 hover:bg-gray-800"
+                      className="bg-primary hover:bg-primary/90"
                     >
                       <Rocket className="w-4 h-4 mr-2" />
-                      Continuer
+                      {t('projectWizard.continue')}
                     </Button>
                   )}
                 </div>
@@ -880,22 +880,17 @@ export default function DevisPage() {
                   <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Check className="w-8 h-8 text-green-600" />
                   </div>
-                  <h2 className="text-2xl font-bold text-foreground mb-2">Projet envoyé !</h2>
-                  <p className="text-foreground/60">Redirection vers votre tableau de bord...</p>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">{t('projectWizard.projectSent')}</h2>
+                  <p className="text-foreground/60">{t('projectWizard.redirecting')}</p>
                 </div>
               ) : (
                 <>
                   <div className="mb-10 text-center">
                     <h1 className="text-3xl font-bold mb-3">
-                      {authMode === "login" ? "Connectez-vous" : authMode === "register" ? "Créez votre compte" : "Mot de passe oublié"}
+                      {t(`auth.${authMode}.title`)}
                     </h1>
                     <p className="text-foreground/60">
-                      {authMode === "login"
-                        ? "Pour envoyer votre demande et suivre son avancement"
-                        : authMode === "register"
-                        ? "Créez un compte pour envoyer votre demande"
-                        : "Entrez votre email pour recevoir un lien de réinitialisation"
-                      }
+                      {t(`auth.${authMode}.subtitle`)}
                     </p>
                   </div>
 
@@ -905,26 +900,28 @@ export default function DevisPage() {
                       <Input
                         id="email"
                         type="email"
+                        autoComplete="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="votre@email.com"
+                        placeholder={t('auth.emailPlaceholder')}
                         disabled={loading}
-                        className="border-gray-200 focus:border-gray-400"
+                        className="border-border focus:border-primary"
                       />
                     </div>
 
                     {authMode !== "forgot" && (
                       <div className="space-y-1.5">
-                        <Label htmlFor="password">Mot de passe</Label>
+                        <Label htmlFor="password">{t('auth.password')}</Label>
                         <div className="relative">
                           <Input
                             id="password"
                             type={showPassword ? "text" : "password"}
+                            autoComplete={authMode === "register" ? "new-password" : "current-password"}
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="••••••••"
                             disabled={loading}
-                            className="border-gray-200 focus:border-gray-400 pr-10"
+                            className="border-border focus:border-primary pr-10"
                           />
                           <button
                             type="button"
@@ -939,16 +936,17 @@ export default function DevisPage() {
 
                     {authMode === "register" && (
                       <div className="space-y-1.5">
-                        <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+                        <Label htmlFor="confirmPassword">{t('auth.confirmPassword')}</Label>
                         <div className="relative">
                           <Input
                             id="confirmPassword"
                             type={showConfirmPassword ? "text" : "password"}
+                            autoComplete="new-password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             placeholder="••••••••"
                             disabled={loading}
-                            className="border-gray-200 focus:border-gray-400 pr-10"
+                            className="border-border focus:border-primary pr-10"
                           />
                           <button
                             type="button"
@@ -972,17 +970,12 @@ export default function DevisPage() {
                     <Button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-gray-900 hover:bg-gray-800"
+                      className="w-full bg-primary hover:bg-primary/90"
                     >
                       {loading ? (
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                       ) : null}
-                      {authMode === "login"
-                        ? "Se connecter"
-                        : authMode === "register"
-                        ? "Créer mon compte"
-                        : "Envoyer le lien"
-                      }
+                      {t(`auth.${authMode}.button`)}
                     </Button>
 
                     <div className="text-center space-y-2">
@@ -993,29 +986,29 @@ export default function DevisPage() {
                             onClick={() => setAuthMode("forgot")}
                             className="text-sm text-foreground/60 hover:text-foreground"
                           >
-                            Mot de passe oublié ?
+                            {t('auth.login.forgotPassword')}
                           </button>
                           <p className="text-sm text-foreground/60">
-                            Pas encore de compte ?{" "}
+                            {t('auth.login.noAccount')}{" "}
                             <button
                               type="button"
                               onClick={() => setAuthMode("register")}
                               className="text-foreground font-medium hover:underline"
                             >
-                              Créer un compte
+                              {t('auth.login.createAccount')}
                             </button>
                           </p>
                         </>
                       )}
                       {authMode === "register" && (
                         <p className="text-sm text-foreground/60">
-                          Déjà un compte ?{" "}
+                          {t('auth.register.hasAccount')}{" "}
                           <button
                             type="button"
                             onClick={() => setAuthMode("login")}
                             className="text-foreground font-medium hover:underline"
                           >
-                            Se connecter
+                            {t('auth.register.login')}
                           </button>
                         </p>
                       )}
@@ -1025,7 +1018,7 @@ export default function DevisPage() {
                           onClick={() => setAuthMode("login")}
                           className="text-sm text-foreground/60 hover:text-foreground"
                         >
-                          Retour à la connexion
+                          {t('auth.forgot.backToLogin')}
                         </button>
                       )}
                     </div>

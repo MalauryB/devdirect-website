@@ -21,37 +21,33 @@ export function Header() {
   const { user, openAuthModal, signOut } = useAuth()
 
   return (
-    <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-primary/20 z-50">
+    <header className="fixed top-0 w-full bg-background/95 backdrop-blur-sm border-b border-primary/20 z-50">
       <div className="container mx-auto px-4 py-3">
-        <div className="mx-auto" style={{ maxWidth: "83rem" }}>
+        <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <img
-              src="/nimli-logo.svg"
-              alt="Nimli"
-              className="h-16 w-auto"
-            />
+            <span className="logo-cubic text-3xl text-foreground">Nimli</span>
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
             <a
-              href="#services"
+              href="/#services"
               className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
             >
               {t('navigation.services')}
             </a>
+            <a href="/#team" className="text-foreground hover:text-primary transition-colors duration-300 font-medium">
+              {t('navigation.equipe')}
+            </a>
             <a
-              href="#process"
+              href="/#process"
               className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
             >
               {t('navigation.processus')}
             </a>
-            <a href="#team" className="text-foreground hover:text-primary transition-colors duration-300 font-medium">
-              {t('navigation.equipe')}
-            </a>
             <a
-              href="#contact"
+              href="/#contact"
               className="text-foreground hover:text-primary transition-colors duration-300 font-medium"
             >
               {t('navigation.contact')}
@@ -99,7 +95,7 @@ export function Header() {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
+                className="flex items-center gap-2 border-primary/30"
                 onClick={openAuthModal}
               >
                 <User className="w-4 h-4" />
@@ -110,7 +106,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden bg-white w-10 h-10 rounded-lg flex items-center justify-center border border-primary/30"
+            className="md:hidden bg-background w-10 h-10 rounded-lg flex items-center justify-center border border-primary/30"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -120,16 +116,16 @@ export function Header() {
           {isMenuOpen && (
           <nav className="md:hidden mt-4 pb-4 border-t border-primary/20 pt-4">
             <div className="flex flex-col space-y-4">
-              <a href="#services" className="text-foreground hover:text-primary transition-colors font-medium">
+              <a href="/#services" className="text-foreground hover:text-primary transition-colors font-medium">
                 {t('navigation.services')}
               </a>
-              <a href="#process" className="text-foreground hover:text-primary transition-colors font-medium">
-                {t('navigation.processus')}
-              </a>
-              <a href="#team" className="text-foreground hover:text-primary transition-colors font-medium">
+              <a href="/#team" className="text-foreground hover:text-primary transition-colors font-medium">
                 {t('navigation.equipe')}
               </a>
-              <a href="#contact" className="text-foreground hover:text-primary transition-colors font-medium">
+              <a href="/#process" className="text-foreground hover:text-primary transition-colors font-medium">
+                {t('navigation.processus')}
+              </a>
+              <a href="/#contact" className="text-foreground hover:text-primary transition-colors font-medium">
                 {t('navigation.contact')}
               </a>
               <div className="flex flex-col items-center gap-4 pt-4">
@@ -147,7 +143,7 @@ export function Header() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex items-center justify-center gap-2 bg-white border-primary/20 hover:bg-primary/5 w-full"
+                      className="flex items-center justify-center gap-2 border-primary/20 w-full"
                       asChild
                     >
                       <Link href="/dashboard">
@@ -158,7 +154,7 @@ export function Header() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex items-center justify-center gap-2 bg-white border-primary/20 hover:bg-primary/5 w-full"
+                      className="flex items-center justify-center gap-2 border-primary/20 w-full"
                       asChild
                     >
                       <Link href="/profile">
@@ -169,7 +165,7 @@ export function Header() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex items-center justify-center gap-2 bg-white border-primary/20 hover:bg-primary/5 w-full"
+                      className="flex items-center justify-center gap-2 border-primary/20 w-full"
                       onClick={() => signOut()}
                     >
                       <LogOut className="w-4 h-4 text-foreground flex-shrink-0" />
@@ -180,7 +176,7 @@ export function Header() {
                   <Button
                     variant="outline"
                     size="sm"
-                    className="flex items-center gap-2 bg-white border-primary/30 hover:bg-primary/5"
+                    className="flex items-center gap-2 border-primary/30"
                     onClick={openAuthModal}
                   >
                     <User className="w-4 h-4" />

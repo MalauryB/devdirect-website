@@ -27,7 +27,7 @@ export function LanguageSwitcher() {
       </button>
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-50">
+        <div className="absolute top-full right-0 mt-1 w-40 bg-white border border-border rounded-md shadow-lg z-50">
           {locales.map((locale) => (
             <button
               key={locale.code}
@@ -35,8 +35,8 @@ export function LanguageSwitcher() {
                 setLanguage(locale.code)
                 setIsOpen(false)
               }}
-              className={`w-full px-3 py-2 text-left hover:bg-gray-50 transition-colors ${
-                language === locale.code ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+              className={`w-full px-3 py-2 text-left hover:bg-muted/50 transition-colors ${
+                language === locale.code ? 'bg-blue-50 text-blue-700' : 'text-foreground/70'
               }`}
             >
               <span className="text-sm font-medium">{locale.name}</span>

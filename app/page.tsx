@@ -15,8 +15,8 @@ export default function HomePage() {
       <main className="pt-20">
         <Hero />
         <Services />
-        <Process />
         <Team />
+        <Process />
         <CTA />
       </main>
       <Footer />
