@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \":*)",
+      "Bash(node:*)",
+      "Bash(wc -l /d/projets/memory-website/components/*.tsx)",
+      "Bash(wc -l /d/projets/memory-website/lib/*.ts)",
+      "Bash(git diff --unified=1 app/dashboard/page.tsx)",
+      "Bash(npx vitest run)"
+    ],
+    "additionalDirectories": [
+      "d:\\projets\\memory-website\\components"
+    ]
+  }
+}

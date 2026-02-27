@@ -24,7 +24,8 @@ export function useDashboardData({
   // Projects
   const [projects, setProjects] = useState<Project[]>([])
   const [allProjects, setAllProjects] = useState<Project[]>([])
-  const [projectsLoading, setProjectsLoading] = useState(false)
+  const [userProjectsLoading, setUserProjectsLoading] = useState(false)
+  const [allProjectsLoading, setAllProjectsLoading] = useState(false)
 
   // Quotes
   const [quotes, setQuotes] = useState<Quote[]>([])
@@ -41,49 +42,76 @@ export function useDashboardData({
   const [assignments, setAssignments] = useState<ActionAssignment[]>([])
   const [engineers, setEngineers] = useState<Partial<Profile>[]>([])
 
+  // Backward-compatible combined loading state
+  const projectsLoading = userProjectsLoading || allProjectsLoading
+
   // --- Loaders ---
 
   const loadProjects = useCallback(async () => {
     if (!user) return
-    setProjectsLoading(true)
-    const { projects: userProjects } = await getUserProjects()
-    setProjects(userProjects)
-    setProjectsLoading(false)
+    setUserProjectsLoading(true)
+    try {
+      const { projects: userProjects } = await getUserProjects()
+      setProjects(userProjects)
+    } catch (error) {
+      console.error('Error loading user projects:', error)
+    } finally {
+      setUserProjectsLoading(false)
+    }
   }, [user])
 
   const loadAllProjects = useCallback(async () => {
     if (!user) return
-    setProjectsLoading(true)
-    const { projects: fetchedProjects } = await getAllProjects('all')
-    setAllProjects(fetchedProjects)
-    setProjectsLoading(false)
+    setAllProjectsLoading(true)
+    try {
+      const { projects: fetchedProjects } = await getAllProjects('all')
+      setAllProjects(fetchedProjects)
+    } catch (error) {
+      console.error('Error loading all projects:', error)
+    } finally {
+      setAllProjectsLoading(false)
+    }
   }, [user])
 
   const loadQuotes = useCallback(async (projectId: string) => {
     setQuotesLoading(true)
-    const { quotes: fetchedQuotes } = await getQuotesByProject(projectId)
-    setQuotes(fetchedQuotes)
-    setQuotesLoading(false)
+    try {
+      const { quotes: fetchedQuotes } = await getQuotesByProject(projectId)
+      setQuotes(fetchedQuotes)
+    } catch (error) {
+      console.error('Error loading quotes:', error)
+    } finally {
+      setQuotesLoading(false)
+    }
   }, [])
 
   const loadDocuments = useCallback(async (projectId: string) => {
     setDocumentsLoading(true)
-    const { documents: fetchedDocuments } = await getProjectDocuments(projectId)
-    setDocuments(fetchedDocuments)
-    setDocumentsLoading(false)
+    try {
+      const { documents: fetchedDocuments } = await getProjectDocuments(projectId)
+      setDocuments(fetchedDocuments)
+    } catch (error) {
+      console.error('Error loading documents:', error)
+    } finally {
+      setDocumentsLoading(false)
+    }
   }, [])
 
   const loadEngineerOverviewData = useCallback(async () => {
     if (!user) return
-    const { counts, oldestDates } = await getAllUnreadCounts(user.id)
-    setUnreadCounts(counts)
-    setUnreadOldestDates(oldestDates)
-    const { quotes: fetchedQuotes } = await getAllQuotes()
-    setAllQuotes(fetchedQuotes)
-    const { assignments: fetchedAssignments } = await getAllAssignments()
-    setAssignments(fetchedAssignments)
-    const { engineers: fetchedEngineers } = await getEngineers()
-    setEngineers(fetchedEngineers)
+    try {
+      const { counts, oldestDates } = await getAllUnreadCounts(user.id)
+      setUnreadCounts(counts)
+      setUnreadOldestDates(oldestDates)
+      const { quotes: fetchedQuotes } = await getAllQuotes()
+      setAllQuotes(fetchedQuotes)
+      const { assignments: fetchedAssignments } = await getAllAssignments()
+      setAssignments(fetchedAssignments)
+      const { engineers: fetchedEngineers } = await getEngineers()
+      setEngineers(fetchedEngineers)
+    } catch (error) {
+      console.error('Error loading engineer overview data:', error)
+    }
   }, [user])
 
   // --- Actions ---
@@ -124,65 +152,122 @@ export function useDashboardData({
 
   // Load client projects
   useEffect(() => {
-    if (user && (activeSection === "projects" || activeSection === "messages")) {
-      loadProjects()
+    let cancelled = false
+    const load = async () => {
+      if (user && (activeSection === "projects" || activeSection === "messages")) {
+        if (!cancelled) {
+          loadProjects()
+        }
+      }
     }
+    load()
+    return () => { cancelled = true }
   }, [user, activeSection, loadProjects])
 
   // Load all projects (engineer)
   useEffect(() => {
-    if (user && (activeSection === "allProjects" || activeSection === "overview" || activeSection === "clients")) {
-      loadAllProjects()
+    let cancelled = false
+    const load = async () => {
+      if (user && (activeSection === "allProjects" || activeSection === "overview" || activeSection === "clients")) {
+        if (!cancelled) {
+          loadAllProjects()
+        }
+      }
     }
+    load()
+    return () => { cancelled = true }
   }, [user, activeSection, loadAllProjects])
 
   // Load engineer overview data
   useEffect(() => {
-    if (user && isEngineer && activeSection === "overview") {
-      loadEngineerOverviewData()
+    let cancelled = false
+    const load = async () => {
+      if (user && isEngineer && activeSection === "overview") {
+        if (!cancelled) {
+          loadEngineerOverviewData()
+        }
+      }
     }
+    load()
+    return () => { cancelled = true }
   }, [user, isEngineer, activeSection, loadEngineerOverviewData])
 
   // Load unread counts for clients (badge)
   useEffect(() => {
-    const loadClientUnreadCounts = async () => {
+    let cancelled = false
+    const load = async () => {
       if (user && !isEngineer) {
-        const { counts } = await getAllUnreadCounts(user.id)
-        setUnreadCounts(counts)
+        try {
+          const { counts } = await getAllUnreadCounts(user.id)
+          if (!cancelled) {
+            setUnreadCounts(counts)
+          }
+        } catch (error) {
+          console.error('Error loading client unread counts:', error)
+        }
       }
     }
-    loadClientUnreadCounts()
+    load()
+    return () => { cancelled = true }
   }, [user, isEngineer])
 
   // Load engineer action counts at startup (badge)
   useEffect(() => {
-    const loadEngineerActionCounts = async () => {
+    let cancelled = false
+    const load = async () => {
       if (user && isEngineer) {
-        const { counts } = await getAllUnreadCounts(user.id)
-        setUnreadCounts(counts)
-        const { quotes: fetchedQuotes } = await getAllQuotes()
-        setAllQuotes(fetchedQuotes)
+        try {
+          const { counts } = await getAllUnreadCounts(user.id)
+          if (!cancelled) {
+            setUnreadCounts(counts)
+          }
+          const { quotes: fetchedQuotes } = await getAllQuotes()
+          if (!cancelled) {
+            setAllQuotes(fetchedQuotes)
+          }
+        } catch (error) {
+          console.error('Error loading engineer action counts:', error)
+        }
       }
     }
-    loadEngineerActionCounts()
+    load()
+    return () => { cancelled = true }
   }, [user, isEngineer])
 
   // Load quotes when project selected
   useEffect(() => {
-    if (selectedProject && isEngineer && activeSection === "allProjects") {
-      loadQuotes(selectedProject.id)
-    } else if (selectedProject && !isEngineer && activeSection === "projects") {
-      loadQuotes(selectedProject.id)
-    } else {
-      setQuotes([])
+    let cancelled = false
+    const load = async () => {
+      if (selectedProject && isEngineer && activeSection === "allProjects") {
+        if (!cancelled) {
+          loadQuotes(selectedProject.id)
+        }
+      } else if (selectedProject && !isEngineer && activeSection === "projects") {
+        if (!cancelled) {
+          loadQuotes(selectedProject.id)
+        }
+      } else {
+        if (!cancelled) {
+          setQuotes([])
+        }
+      }
     }
+    load()
+    return () => { cancelled = true }
   }, [selectedProject, isEngineer, activeSection, loadQuotes])
 
   // Load documents when entering documents section
   useEffect(() => {
-    if (selectedProject && projectSubSection === 'documents') {
-      loadDocuments(selectedProject.id)
+    let cancelled = false
+    const load = async () => {
+      if (selectedProject && projectSubSection === 'documents') {
+        if (!cancelled) {
+          loadDocuments(selectedProject.id)
+        }
+      }
     }
+    load()
+    return () => { cancelled = true }
   }, [selectedProject, projectSubSection, loadDocuments])
 
   return {

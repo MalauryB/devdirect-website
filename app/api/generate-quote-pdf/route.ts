@@ -57,10 +57,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Error generating PDF:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to generate PDF' },
-      { status: 500 }
-    )
+    console.error('Generate quote PDF error:', error)
+    return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }

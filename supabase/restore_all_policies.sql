@@ -881,5 +881,63 @@ WHERE schemaname = 'public'
 ORDER BY tablename, policyname;
 
 -- =====================================================
+-- SECURITY: REMOVE ROLE SYNC FROM handle_user_update()
+-- =====================================================
+-- Recreate handle_user_update without syncing 'role' from
+-- raw_user_meta_data to prevent role escalation via
+-- supabase.auth.updateUser({ data: { role: 'engineer' } })
+-- =====================================================
+
+CREATE OR REPLACE FUNCTION public.handle_user_update()
+RETURNS TRIGGER AS $$
+BEGIN
+  UPDATE public.profiles
+  SET
+    email = NEW.email,
+    first_name = COALESCE(NEW.raw_user_meta_data->>'first_name', first_name),
+    last_name = COALESCE(NEW.raw_user_meta_data->>'last_name', last_name),
+    company_name = COALESCE(NEW.raw_user_meta_data->>'company_name', company_name),
+    legal_form = COALESCE(NEW.raw_user_meta_data->>'legal_form', legal_form),
+    professional_email = COALESCE(NEW.raw_user_meta_data->>'professional_email', professional_email),
+    contact_position = COALESCE(NEW.raw_user_meta_data->>'contact_position', contact_position),
+    phone = COALESCE(NEW.raw_user_meta_data->>'phone', phone),
+    client_type = COALESCE(NEW.raw_user_meta_data->>'client_type', client_type),
+    siret = COALESCE(NEW.raw_user_meta_data->>'siret', siret),
+    vat_number = COALESCE(NEW.raw_user_meta_data->>'vat_number', vat_number),
+    address = COALESCE(NEW.raw_user_meta_data->>'address', address),
+    postal_code = COALESCE(NEW.raw_user_meta_data->>'postal_code', postal_code),
+    city = COALESCE(NEW.raw_user_meta_data->>'city', city),
+    country = COALESCE(NEW.raw_user_meta_data->>'country', country),
+    updated_at = NOW()
+  WHERE id = NEW.id;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- =====================================================
+-- SECURITY: PREVENT ROLE SELF-CHANGE TRIGGER
+-- =====================================================
+-- This trigger prevents users from changing their own role
+-- via direct profile updates. Role changes should only be
+-- performed by database administrators.
+-- =====================================================
+
+CREATE OR REPLACE FUNCTION prevent_role_self_change()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.role IS DISTINCT FROM OLD.role THEN
+    RAISE EXCEPTION 'Cannot change role directly';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+DROP TRIGGER IF EXISTS prevent_role_change ON profiles;
+CREATE TRIGGER prevent_role_change
+  BEFORE UPDATE ON profiles
+  FOR EACH ROW
+  EXECUTE FUNCTION prevent_role_self_change();
+
+-- =====================================================
 -- FIN DU SCRIPT
 -- =====================================================

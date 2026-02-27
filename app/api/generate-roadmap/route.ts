@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { Project } from '@/lib/types'
-import { requireAuth } from '@/lib/auth'
+import { requireEngineer } from '@/lib/auth'
+import { parseAIJsonResponse } from '@/lib/ai-helpers'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -14,7 +15,7 @@ interface GeneratedMilestone {
 }
 
 export async function POST(request: NextRequest) {
-  const { user, error: authError } = await requireAuth(request)
+  const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
 
   try {
@@ -44,12 +45,9 @@ export async function POST(request: NextRequest) {
     const responseText = message.content[0].type === 'text' ? message.content[0].text : ''
 
     // Parse the JSON response from Claude
-    const jsonMatch = responseText.match(/```json\n?([\s\S]*?)\n?```/)
-    const jsonString = jsonMatch ? jsonMatch[1] : responseText
-
     let milestones: GeneratedMilestone[]
     try {
-      const parsed = JSON.parse(jsonString)
+      const parsed = parseAIJsonResponse(responseText)
       milestones = parsed.milestones || parsed
     } catch {
       console.error('Failed to parse Claude response:', responseText)
@@ -58,11 +56,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ milestones })
   } catch (error) {
-    console.error('Error generating roadmap:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to generate roadmap' },
-      { status: 500 }
-    )
+    console.error('Generate roadmap error:', error)
+    return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }
 

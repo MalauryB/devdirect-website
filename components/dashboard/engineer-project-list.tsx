@@ -221,7 +221,14 @@ export function EngineerProjectList({
               {filteredProjects.map((project) => (
                 <TableRow
                   key={project.id}
+                  tabIndex={0}
                   onClick={() => onSelectProject(project)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault()
+                      onSelectProject(project)
+                    }
+                  }}
                   className="cursor-pointer hover:bg-muted/50"
                 >
                   <TableCell className="max-w-[250px]">

@@ -155,14 +155,16 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
       {/* Titre du projet */}
       <div className="space-y-3">
         <div>
-          <h3 className="text-sm font-medium text-foreground">{t('projects.form.title')} *</h3>
+          <Label htmlFor="project-title" className="text-sm font-medium text-foreground">{t('projects.form.title')} *</Label>
           <p className="text-xs text-foreground/50 mt-0.5">{t('projects.form.titleDesc')}</p>
         </div>
         <Input
+          id="project-title"
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           placeholder={t('projects.form.titlePlaceholder')}
           disabled={loading}
+          aria-required="true"
           className="border-border focus:border-primary"
         />
       </div>

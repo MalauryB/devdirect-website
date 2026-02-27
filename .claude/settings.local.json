@@ -16,9 +16,22 @@
       "Bash(git commit:*)",
       "Bash(npm uninstall:*)",
       "Bash(pnpm add:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm cache clean:*)",
+      "Bash(npx next build)",
+      "Bash(node -e \"const fs=require\\(''fs''\\); fs.writeFileSync\\(''d:/projets/memory-website/gen.js'', ''console.log\\(123\\)'', ''utf8''\\); console.log\\(''ok''\\)\")",
+      "Bash(node -e \":*)",
+      "Bash(node -e \"const fs=require\\(''fs''\\); const b=''InVzZSBjbGllbnQi''; console.log\\(Buffer.from\\(b,''base64''\\).toString\\(\\)\\); console.log\\(''test ok''\\)\")",
+      "Bash(node -e \"const fs=require\\(''fs''\\);fs.writeFileSync\\(''/tmp/gen.js'',''''\\);console.log\\(''ok''\\)\")",
+      "Bash(echo $TEMP)",
+      "Bash(node -e \"const fs=require\\(''fs''\\);fs.writeFileSync\\(''d:/projets/memory-website/components/dashboard/tmp/test.txt'',''hello''\\);console.log\\(''ok''\\)\")",
+      "Bash(node \"d:/projets/memory-website/components/dashboard/tmp/gen2.js\")"
     ],
     "deny": [],
-    "ask": []
+    "ask": [],
+    "additionalDirectories": [
+      "\\tmp"
+    ]
   }
 }

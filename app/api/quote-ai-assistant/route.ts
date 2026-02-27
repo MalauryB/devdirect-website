@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { QuoteFormData } from '@/lib/types'
-import { requireAuth } from '@/lib/auth'
+import { requireEngineer } from '@/lib/auth'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -20,7 +20,7 @@ interface RequestBody {
 }
 
 export async function POST(request: NextRequest) {
-  const { user, error: authError } = await requireAuth(request)
+  const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
 
   try {
@@ -34,14 +34,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'API key not configured' }, { status: 500 })
     }
 
+    // Validate and sanitize conversation history
+    const MAX_HISTORY = 20
+    const MAX_MESSAGE_LENGTH = 10000
+    const sanitizedHistory = (conversationHistory || [])
+      .slice(-MAX_HISTORY)
+      .filter((msg: any) => ['user', 'assistant'].includes(msg.role))
+      .map((msg: any) => ({
+        role: msg.role as 'user' | 'assistant',
+        content: String(msg.content).slice(0, MAX_MESSAGE_LENGTH)
+      }))
+
     const systemPrompt = buildSystemPrompt(quoteData, projectDescription)
 
     // Build messages array with conversation history
     const messages: { role: "user" | "assistant", content: string }[] = [
-      ...conversationHistory.map(msg => ({
-        role: msg.role as "user" | "assistant",
-        content: msg.content
-      })),
+      ...sanitizedHistory,
       { role: "user" as const, content: message }
     ]
 
@@ -112,11 +120,8 @@ export async function POST(request: NextRequest) {
       modifications
     })
   } catch (error) {
-    console.error('Error in quote AI assistant:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to process request' },
-      { status: 500 }
-    )
+    console.error('Quote AI assistant error:', error)
+    return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }
 

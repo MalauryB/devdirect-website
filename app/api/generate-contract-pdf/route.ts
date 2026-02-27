@@ -3,7 +3,9 @@ import puppeteer, { Browser } from 'puppeteer'
 import { PDFDocument } from 'pdf-lib'
 import { generateContractPdfHtml, generateTimeAndMaterialsContractPdfHtml } from '@/lib/contract-pdf-template'
 import { ProjectContract, Project, Profile, Quote, ProjectDocument } from '@/lib/types'
-import { requireAuth } from '@/lib/auth'
+import { requireEngineer } from '@/lib/auth'
+import { isValidSupabaseStorageUrl } from '@/lib/validate-url'
+import { escapeHtml } from '@/lib/sanitize'
 
 // Generate an annex cover page
 function generateAnnexCoverPage(annexNumber: number, title: string, description: string, documentInfo?: { name: string; version: number; date: string } | null): string {
@@ -19,14 +21,14 @@ function generateAnnexCoverPage(annexNumber: number, title: string, description:
         Annexe ${annexNumber}
       </div>
       <h1 style="font-size: 36px; font-weight: 700; margin-bottom: 20px; color: #1a1a1a;">
-        ${title}
+        ${escapeHtml(title)}
       </h1>
       <p style="font-size: 14px; color: #666; max-width: 400px; line-height: 1.6;">
-        ${description}
+        ${escapeHtml(description)}
       </p>
       ${documentInfo ? `
         <div style="margin-top: 40px; padding: 20px 30px; background: #f8f8f8; border-radius: 8px;">
-          <p style="font-size: 12px; color: #333; margin-bottom: 5px;"><strong>Document :</strong> ${documentInfo.name}</p>
+          <p style="font-size: 12px; color: #333; margin-bottom: 5px;"><strong>Document :</strong> ${escapeHtml(documentInfo.name)}</p>
           <p style="font-size: 11px; color: #666;">Version ${documentInfo.version} - ${documentInfo.date}</p>
         </div>
       ` : `
@@ -90,7 +92,7 @@ async function generateCoverPagePdf(browser: Browser, html: string): Promise<Uin
 }
 
 export async function POST(request: NextRequest) {
-  const { user, error: authError } = await requireAuth(request)
+  const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
 
   let browser: Browser | null = null
@@ -132,6 +134,21 @@ export async function POST(request: NextRequest) {
 
     if (!contract) {
       return NextResponse.json({ error: 'Contract data is required' }, { status: 400 })
+    }
+
+    // Validate all provided URLs to prevent SSRF attacks
+    const urlsToValidate = [
+      { url: signedQuoteUrl, name: 'signedQuoteUrl' },
+      { url: specificationUrl, name: 'specificationUrl' },
+      { url: planningUrl, name: 'planningUrl' },
+    ]
+    for (const { url, name } of urlsToValidate) {
+      if (url && !isValidSupabaseStorageUrl(url)) {
+        return NextResponse.json(
+          { error: `Invalid URL provided for ${name}` },
+          { status: 400 }
+        )
+      }
     }
 
     // Launch browser once
@@ -260,13 +277,10 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Error generating PDF:', error)
+    console.error('Generate contract PDF error:', error)
     if (browser) {
       await browser.close()
     }
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to generate PDF' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }

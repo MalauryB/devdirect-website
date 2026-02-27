@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import dynamic from "next/dynamic"
 import { User, FileText, MessageSquare, Euro, Info, BarChart3, Users, FolderOpen } from "lucide-react"
 import { useAuth, UserRole } from "@/contexts/auth-context"
 import { useLanguage } from "@/contexts/language-context"
@@ -8,20 +9,21 @@ import { deleteProject } from "@/lib/projects"
 import { deleteQuote } from "@/lib/quotes"
 import { useDashboardData } from "@/hooks/use-dashboard-data"
 import { useDashboardNavigation } from "@/hooks/use-dashboard-navigation"
-import { GlobalFinances } from "@/components/global-finances"
-import { GlobalDocuments } from "@/components/global-documents"
-import { ProfileSection } from "@/components/dashboard/profile-section"
-import { EngineerClients } from "@/components/dashboard/engineer-clients"
 import { AboutSection } from "@/components/dashboard/about-section"
 import { ClientMessagesSection } from "@/components/dashboard/client-messages-section"
 import { DeleteProjectModal, ClientProfileModal, DeleteQuoteModal } from "@/components/dashboard/confirmation-modals"
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar"
-import { EngineerOverview } from "@/components/dashboard/engineer-overview"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { EngineerProjectList } from "@/components/dashboard/engineer-project-list"
 import { ClientProjectDetail } from "@/components/dashboard/client-project-detail"
 import { ClientProjectList } from "@/components/dashboard/client-project-list"
 import { EngineerProjectDetail } from "@/components/dashboard/engineer-project-detail"
+
+const EngineerOverview = dynamic(() => import('@/components/dashboard/engineer-overview').then(m => ({ default: m.EngineerOverview })))
+const GlobalFinances = dynamic(() => import('@/components/global-finances').then(m => ({ default: m.GlobalFinances })))
+const GlobalDocuments = dynamic(() => import('@/components/global-documents').then(m => ({ default: m.GlobalDocuments })))
+const ProfileSection = dynamic(() => import('@/components/dashboard/profile-section').then(m => ({ default: m.ProfileSection })))
+const EngineerClients = dynamic(() => import('@/components/dashboard/engineer-clients').then(m => ({ default: m.EngineerClients })))
 
 export default function DashboardPage() {
   const { user, session, loading, signOut, updateProfile } = useAuth()

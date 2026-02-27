@@ -1,18 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Send } from "lucide-react"
+import { Send, CheckCircle } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
 
 export function ContactDialog() {
   const { t } = useLanguage()
   const { isOpen, closeDialog } = useContact()
+  const [submitted, setSubmitted] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,11 +22,29 @@ export function ContactDialog() {
     message: ""
   })
 
+  // Auto-close dialog 3 seconds after successful submission
+  useEffect(() => {
+    if (submitted) {
+      const timer = setTimeout(() => {
+        setSubmitted(false)
+        closeDialog()
+      }, 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [submitted, closeDialog])
+
+  // Reset submitted state when dialog is reopened
+  useEffect(() => {
+    if (isOpen) {
+      setSubmitted(false)
+    }
+  }, [isOpen])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // TODO: Ajouter la logique d'envoi du formulaire
     console.log("Form submitted:", formData)
-    closeDialog()
+    setSubmitted(true)
     // Réinitialiser le formulaire
     setFormData({
       name: "",
@@ -39,6 +58,15 @@ export function ContactDialog() {
   return (
     <Dialog open={isOpen} onOpenChange={closeDialog}>
       <DialogContent className="sm:max-w-[500px] bg-white">
+        {submitted ? (
+          <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
+            <CheckCircle className="w-12 h-12 text-green-500" />
+            <p className="text-lg font-medium text-foreground">
+              Merci ! Votre demande a bien été envoyée. Nous vous recontacterons rapidement.
+            </p>
+          </div>
+        ) : (
+        <>
         <DialogHeader>
           <DialogTitle>{t('cta.title')}</DialogTitle>
           <DialogDescription>
@@ -102,6 +130,8 @@ export function ContactDialog() {
             Envoyer la demande
           </Button>
         </form>
+        </>
+        )}
       </DialogContent>
     </Dialog>
   )

@@ -25,14 +25,15 @@ import { MessageThread } from "@/components/message-thread"
 import { DetailSubsection } from "@/components/dashboard/client-detail/detail-subsection"
 import { QuotesSubsection } from "@/components/dashboard/client-detail/quotes-subsection"
 import { DocumentsSubsection } from "@/components/dashboard/client-detail/documents-subsection"
+import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
 interface ClientProjectDetailProps {
   project: Project
   user: { id: string; email?: string; user_metadata?: any }
   avatarUrl: string
   userRole: UserRole
-  projectSubSection: 'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | 'contracts' | 'finances'
-  onSubSectionChange: (sub: 'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | 'contracts' | 'finances') => void
+  projectSubSection: SubSection
+  onSubSectionChange: (sub: SubSection) => void
   quotes: Quote[]
   quotesLoading: boolean
   documents: ProjectDocument[]

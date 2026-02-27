@@ -74,6 +74,7 @@ export function DashboardSidebar({
               <button
                 className="lg:hidden p-2 hover:bg-muted rounded-lg"
                 onClick={() => onSidebarOpenChange(false)}
+                aria-label="Fermer le menu lateral"
               >
                 <X className="w-5 h-5" />
               </button>

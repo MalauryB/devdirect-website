@@ -21,8 +21,16 @@ export function loadCompanySettings(): CompanySettings {
   const saved = localStorage.getItem('nimli_company_settings')
   if (!saved) return defaultSettings
   try {
-    const settings = JSON.parse(saved)
-    return { ...defaultSettings, ...settings }
+    const parsed = JSON.parse(saved)
+    if (typeof parsed !== 'object' || parsed === null) return defaultSettings
+    return {
+      name: typeof parsed.name === 'string' ? parsed.name : defaultSettings.name,
+      address: typeof parsed.address === 'string' ? parsed.address : defaultSettings.address,
+      siret: typeof parsed.siret === 'string' ? parsed.siret : defaultSettings.siret,
+      email: typeof parsed.email === 'string' ? parsed.email : defaultSettings.email,
+      phone: typeof parsed.phone === 'string' ? parsed.phone : defaultSettings.phone,
+      vat: typeof parsed.vat === 'string' ? parsed.vat : defaultSettings.vat,
+    }
   } catch {
     return defaultSettings
   }

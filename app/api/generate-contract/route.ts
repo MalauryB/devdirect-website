@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { Project, Quote, ContractType, Profile } from '@/lib/types'
 import { calculateQuoteData } from '@/lib/quote-export'
-import { requireAuth } from '@/lib/auth'
+import { requireEngineer } from '@/lib/auth'
+import { parseAIJsonResponse } from '@/lib/ai-helpers'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -24,7 +25,7 @@ interface ContractGenerationRequest {
 }
 
 export async function POST(request: NextRequest) {
-  const { user, error: authError } = await requireAuth(request)
+  const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
 
   try {
@@ -54,12 +55,9 @@ export async function POST(request: NextRequest) {
     const responseText = message.content[0].type === 'text' ? message.content[0].text : ''
 
     // Parse the JSON response from Claude
-    const jsonMatch = responseText.match(/```json\n?([\s\S]*?)\n?```/)
-    const jsonString = jsonMatch ? jsonMatch[1] : responseText
-
     let contract: { title: string; content: string }
     try {
-      contract = JSON.parse(jsonString)
+      contract = parseAIJsonResponse(responseText)
     } catch {
       console.error('Failed to parse Claude response:', responseText)
       return NextResponse.json({ error: 'Failed to parse AI response' }, { status: 500 })
@@ -67,11 +65,8 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ contract })
   } catch (error) {
-    console.error('Error generating contract:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to generate contract' },
-      { status: 500 }
-    )
+    console.error('Generate contract error:', error)
+    return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }
 

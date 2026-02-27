@@ -34,6 +34,7 @@ export function DashboardHeader({
       <button
         className="lg:hidden p-2 hover:bg-muted rounded-md"
         onClick={onOpenSidebar}
+        aria-label="Ouvrir le menu lateral"
       >
         <Menu className="w-5 h-5" />
       </button>

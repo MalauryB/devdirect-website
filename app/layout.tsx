@@ -30,7 +30,11 @@ export default function RootLayout({
         <LanguageProvider>
           <AuthProvider>
             <ContactProvider>
-              <Suspense fallback={null}>{children}</Suspense>
+              <Suspense fallback={
+                <div className="min-h-screen bg-white flex items-center justify-center">
+                  <div className="animate-pulse text-foreground">Chargement...</div>
+                </div>
+              }>{children}</Suspense>
               <ContactDialog />
               <AuthModal />
               {process.env.NODE_ENV === 'production' && <Analytics />}

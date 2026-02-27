@@ -29,6 +29,7 @@ export function StepGeneral({ formData, setFormData, loading, addProfile, update
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           placeholder={t("quotes.form.namePlaceholder")}
           disabled={loading}
+          aria-required="true"
           className="bg-white border-border focus:border-primary"
         />
       </div>

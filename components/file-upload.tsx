@@ -36,10 +36,10 @@ export function FileUpload({
   const files = Array.isArray(value) ? value : value ? [value] : []
 
   const acceptTypes = accept === 'images'
-    ? 'image/jpeg,image/png,image/gif,image/webp,image/svg+xml'
+    ? 'image/jpeg,image/png,image/gif,image/webp'
     : accept === 'documents'
     ? 'application/pdf,.doc,.docx'
-    : 'image/jpeg,image/png,image/gif,image/webp,image/svg+xml,application/pdf,.doc,.docx'
+    : 'image/jpeg,image/png,image/gif,image/webp,application/pdf,.doc,.docx'
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFiles = Array.from(e.target.files || [])
@@ -52,7 +52,7 @@ export function FileUpload({
     for (const file of selectedFiles) {
       const validation = validateFile(file, accept)
       if (!validation.valid) {
-        setError(validation.error || 'Fichier invalide')
+        setError(validation.error || 'Fichier invalide') // TODO: i18n
         setUploading(false)
         return
       }
@@ -61,7 +61,7 @@ export function FileUpload({
     if (multiple) {
       const { data, errors } = await uploadMultipleFiles(selectedFiles, bucket, folder)
       if (errors.length > 0) {
-        setError('Erreur lors de l\'upload de certains fichiers')
+        setError('Erreur lors de l\'upload de certains fichiers') // TODO: i18n
       }
       if (data.length > 0) {
         onChange([...files, ...data])
@@ -69,7 +69,7 @@ export function FileUpload({
     } else {
       const { data, error: uploadError } = await uploadFile(selectedFiles[0], bucket, folder)
       if (uploadError) {
-        setError('Erreur lors de l\'upload du fichier')
+        setError('Erreur lors de l\'upload du fichier') // TODO: i18n
       } else if (data) {
         onChange(data)
       }
@@ -140,6 +140,7 @@ export function FileUpload({
                 <button
                   type="button"
                   onClick={() => handleRemove(file)}
+                  aria-label="Supprimer le fichier" // TODO: i18n
                   className="p-1 hover:bg-muted rounded transition-colors"
                 >
                   <X className="w-4 h-4 text-foreground/50" />
@@ -175,10 +176,12 @@ export function FileUpload({
                 <Upload className="w-6 h-6 text-foreground/50" />
               )}
               <span className="text-sm text-foreground/60">
+                {/* TODO: i18n */}
                 {uploading ? 'Upload en cours...' : 'Cliquez pour ajouter un fichier'}
               </span>
+              {/* TODO: i18n */}
               <span className="text-xs text-foreground/40">
-                {accept === 'images' && 'PNG, JPG, GIF, SVG (max 2MB)'}
+                {accept === 'images' && 'PNG, JPG, GIF (max 2MB)'}
                 {accept === 'documents' && 'PDF, DOC, DOCX (max 10MB)'}
                 {accept === 'all' && 'Images (max 2MB) ou documents (max 10MB)'}
               </span>

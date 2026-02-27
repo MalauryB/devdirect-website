@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import {
   User,
   FileText,
@@ -25,8 +26,7 @@ import { loadCompanySettings } from "@/lib/company-settings"
 import { DetailSubsection } from "@/components/dashboard/engineer-detail/detail-subsection"
 import { QuotesSubsection } from "@/components/dashboard/engineer-detail/quotes-subsection"
 import { DocumentsSubsection } from "@/components/dashboard/engineer-detail/documents-subsection"
-
-type SubSection = 'details' | 'quotes' | 'messages' | 'documents' | 'time' | 'roadmap' | 'contracts' | 'finances'
+import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
 interface EngineerProjectDetailProps {
   project: Project
@@ -70,6 +70,7 @@ export function EngineerProjectDetail({
   onLoadDocuments,
 }: EngineerProjectDetailProps) {
   const { t } = useLanguage()
+  const companySettings = useMemo(() => loadCompanySettings(), [])
 
   return (
     <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
@@ -358,7 +359,7 @@ export function EngineerProjectDetail({
               quotes={quotes}
               client={project.profiles as Profile | undefined}
               isEngineer={isEngineer}
-              provider={loadCompanySettings()}
+              provider={companySettings}
             />
           </div>
         )}

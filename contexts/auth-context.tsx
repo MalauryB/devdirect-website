@@ -102,8 +102,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   const updateProfile = async (metadata: UserMetadata) => {
+    // Strip role from metadata to prevent role escalation
+    const { role, ...safeMetadata } = metadata
     const { data, error } = await supabase.auth.updateUser({
-      data: metadata
+      data: safeMetadata
     })
     if (data?.user) {
       setUser(data.user)

@@ -77,7 +77,15 @@ export function ClientProjectList({
           {projects.map((project) => (
             <div
               key={project.id}
+              role="button"
+              tabIndex={0}
               onClick={() => onSelectProject(project)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault()
+                  onSelectProject(project)
+                }
+              }}
               className="bg-white border border-border rounded-xl p-5 hover:border-primary/30 transition-colors cursor-pointer"
             >
               <div className="flex items-start justify-between gap-4">
