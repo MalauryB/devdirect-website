@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/contexts/language-context"
 import { QuoteFormData } from "@/lib/types"
 import { X, Send, Loader2, Sparkles, Bot, User, PanelRightOpen } from "lucide-react"
+import { useAuth } from "@/contexts/auth-context"
 
 interface Message {
   id: string
@@ -26,6 +27,7 @@ interface QuoteAIAssistantProps {
 
 export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription, isOpen, onToggle, onGenerateFullQuote, isGenerating }: QuoteAIAssistantProps) {
   const { t } = useLanguage()
+  const { session } = useAuth()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
@@ -73,7 +75,10 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
     try {
       const response = await fetch("/api/quote-ai-assistant", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...(session?.access_token ? { "Authorization": `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({
           message: userMessage.content,
           quoteData,

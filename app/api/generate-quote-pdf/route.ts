@@ -2,8 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import puppeteer from 'puppeteer'
 import { generateQuotePdfHtml } from '@/lib/quote-pdf-template'
 import { Quote, Project, Profile } from '@/lib/types'
+import { requireAuth } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
+  const { user, error: authError } = await requireAuth(request)
+  if (authError) return authError
+
   try {
     const { quote, project, engineer, client } = await request.json() as {
       quote: Quote

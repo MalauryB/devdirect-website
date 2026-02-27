@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { Project, Quote, ContractType, Profile } from '@/lib/types'
 import { calculateQuoteData } from '@/lib/quote-export'
+import { requireAuth } from '@/lib/auth'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -23,6 +24,9 @@ interface ContractGenerationRequest {
 }
 
 export async function POST(request: NextRequest) {
+  const { user, error: authError } = await requireAuth(request)
+  if (authError) return authError
+
   try {
     const data = await request.json() as ContractGenerationRequest
 

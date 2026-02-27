@@ -17,6 +17,7 @@ interface ContractPdfParams {
   signedQuoteDocument?: ProjectDocument | null // Physical signed quote document for annex
   specificationDocument?: ProjectDocument | null
   planningDocument?: ProjectDocument | null
+  accessToken?: string
 }
 
 // Generate a signed URL for a document
@@ -59,7 +60,8 @@ export async function generateContractPdfUrl(
     includeAnnexes = true,
     signedQuoteDocument,
     specificationDocument,
-    planningDocument
+    planningDocument,
+    accessToken
   } = params
 
   // Generate signed URLs for documents
@@ -80,11 +82,16 @@ export async function generateContractPdfUrl(
     })
   }
 
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+  if (accessToken) {
+    headers['Authorization'] = `Bearer ${accessToken}`
+  }
+
   const response = await fetch('/api/generate-contract-pdf', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: JSON.stringify({
       contract,
       project,

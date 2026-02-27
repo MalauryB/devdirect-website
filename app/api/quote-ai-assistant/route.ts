@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { QuoteFormData } from '@/lib/types'
+import { requireAuth } from '@/lib/auth'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -19,6 +20,9 @@ interface RequestBody {
 }
 
 export async function POST(request: NextRequest) {
+  const { user, error: authError } = await requireAuth(request)
+  if (authError) return authError
+
   try {
     const { message, quoteData, projectDescription, conversationHistory } = await request.json() as RequestBody
 

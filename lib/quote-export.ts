@@ -147,7 +147,7 @@ const styles = {
   }
 }
 
-interface CalculatedQuoteData {
+export interface CalculatedQuoteData {
   totalDays: number
   totalHT: number
   totalTVA: number

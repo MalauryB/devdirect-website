@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
+import { validateRedirectUrl } from "@/lib/validate-redirect"
 import { Loader2, CheckCircle } from "lucide-react"
 
 export default function ConfirmPage() {
@@ -15,7 +16,7 @@ export default function ConfirmPage() {
     const confirmEmail = async () => {
       const token_hash = searchParams.get('token_hash')
       const type = searchParams.get('type') as 'signup' | 'recovery' | 'email'
-      const next = searchParams.get('next') ?? '/dashboard'
+      const next = validateRedirectUrl(searchParams.get('next'))
 
       if (!token_hash || !type) {
         setStatus('error')

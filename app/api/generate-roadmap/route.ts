@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { Project } from '@/lib/types'
+import { requireAuth } from '@/lib/auth'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -13,6 +14,9 @@ interface GeneratedMilestone {
 }
 
 export async function POST(request: NextRequest) {
+  const { user, error: authError } = await requireAuth(request)
+  if (authError) return authError
+
   try {
     const { project, startDate } = await request.json() as { project: Project; startDate?: string }
 

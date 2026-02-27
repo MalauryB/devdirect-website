@@ -3,6 +3,7 @@ import puppeteer, { Browser } from 'puppeteer'
 import { PDFDocument } from 'pdf-lib'
 import { generateContractPdfHtml, generateTimeAndMaterialsContractPdfHtml } from '@/lib/contract-pdf-template'
 import { ProjectContract, Project, Profile, Quote, ProjectDocument } from '@/lib/types'
+import { requireAuth } from '@/lib/auth'
 
 // Generate an annex cover page
 function generateAnnexCoverPage(annexNumber: number, title: string, description: string, documentInfo?: { name: string; version: number; date: string } | null): string {
@@ -89,6 +90,9 @@ async function generateCoverPagePdf(browser: Browser, html: string): Promise<Uin
 }
 
 export async function POST(request: NextRequest) {
+  const { user, error: authError } = await requireAuth(request)
+  if (authError) return authError
+
   let browser: Browser | null = null
 
   try {

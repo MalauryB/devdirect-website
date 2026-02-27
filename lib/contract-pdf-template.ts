@@ -1,4 +1,5 @@
 import { ProjectContract, Project, Profile, Quote } from './types'
+import { escapeHtml } from './sanitize'
 import { calculateQuoteData } from './quote-export'
 
 interface ContractPdfData {
@@ -143,7 +144,7 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${contract.title}</title>
+  <title>${escapeHtml(contract.title)}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -489,22 +490,22 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
     <div class="parties-container">
       <div class="party-box">
         <div class="party-label">Le Prestataire</div>
-        <div class="party-name">${providerName}</div>
+        <div class="party-name">${escapeHtml(providerName)}</div>
         <div class="party-details">
-          <p>${providerAddress}</p>
-          <p>SIRET : ${providerSiret}</p>
-          <p>${providerEmail}</p>
-          <p>${providerPhone}</p>
+          <p>${escapeHtml(providerAddress)}</p>
+          <p>SIRET : ${escapeHtml(providerSiret)}</p>
+          <p>${escapeHtml(providerEmail)}</p>
+          <p>${escapeHtml(providerPhone)}</p>
         </div>
       </div>
       <div class="party-box right">
         <div class="party-label">Le Client</div>
-        <div class="party-name">${clientName}</div>
+        <div class="party-name">${escapeHtml(clientName)}</div>
         <div class="party-details">
-          ${clientAddress ? `<p>${clientAddress}</p>` : ''}
-          ${clientSiret ? `<p>SIRET : ${clientSiret}</p>` : ''}
-          ${clientEmail ? `<p>${clientEmail}</p>` : ''}
-          ${clientPhone ? `<p>${clientPhone}</p>` : ''}
+          ${clientAddress ? `<p>${escapeHtml(clientAddress)}</p>` : ''}
+          ${clientSiret ? `<p>SIRET : ${escapeHtml(clientSiret)}</p>` : ''}
+          ${clientEmail ? `<p>${escapeHtml(clientEmail)}</p>` : ''}
+          ${clientPhone ? `<p>${escapeHtml(clientPhone)}</p>` : ''}
         </div>
       </div>
     </div>
@@ -523,8 +524,8 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       <div class="article-title">Article 1 - Objet du contrat</div>
       <div class="article-content">
         <p>Le présent contrat a pour objet de définir les conditions dans lesquelles le Prestataire s'engage à réaliser pour le compte du Client la prestation suivante :</p>
-        <p><strong>Projet : ${projectTitle}</strong></p>
-        ${projectDescription ? `<p>${projectDescription}</p>` : ''}
+        <p><strong>Projet : ${escapeHtml(projectTitle)}</strong></p>
+        ${projectDescription ? `<p>${escapeHtml(projectDescription)}</p>` : ''}
         <p>La prestation est réalisée au forfait, ce qui signifie que le Prestataire s'engage sur un résultat déterminé pour un prix global et définitif.</p>
       </div>
     </div>
@@ -580,7 +581,7 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
           <li><strong>30% à la recette finale</strong>, soit ${formatCurrency(totalTTC * 0.3)}</li>
         </ul>
         <p>Les factures sont payables à réception, par virement bancaire.</p>
-        ${paymentSchedule ? `<p><em>Conditions particulières : ${paymentSchedule}</em></p>` : ''}
+        ${paymentSchedule ? `<p><em>Conditions particulières : ${escapeHtml(paymentSchedule)}</em></p>` : ''}
       </div>
     </div>
 
@@ -771,13 +772,13 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
       <div class="signatures-container">
         <div class="signature-box">
           <div class="signature-label">Pour le Prestataire</div>
-          <div class="signature-name">${providerName}</div>
+          <div class="signature-name">${escapeHtml(providerName)}</div>
           <div class="signature-mention">Précédé de la mention "Lu et approuvé"</div>
           <div class="signature-area">Signature</div>
         </div>
         <div class="signature-box">
           <div class="signature-label">Pour le Client</div>
-          <div class="signature-name">${clientName}</div>
+          <div class="signature-name">${escapeHtml(clientName)}</div>
           <div class="signature-mention">Précédé de la mention "Lu et approuvé"</div>
           <div class="signature-area">Signature</div>
         </div>
@@ -850,7 +851,7 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
   const profilesTableRows = profiles.length > 0
     ? profiles.map(p => `
         <tr>
-          <td>${p.profile_name}</td>
+          <td>${escapeHtml(p.profile_name)}</td>
           <td style="text-align: right;">${formatCurrency(p.daily_rate)} HT</td>
           <td style="text-align: right;">${formatCurrency(p.daily_rate / 2)} HT</td>
           <td style="text-align: center;">${p.estimated_days || '-'}</td>
@@ -864,7 +865,7 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${contract.title}</title>
+  <title>${escapeHtml(contract.title)}</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -1210,22 +1211,22 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
     <div class="parties-container">
       <div class="party-box">
         <div class="party-label">Le Prestataire</div>
-        <div class="party-name">${providerName}</div>
+        <div class="party-name">${escapeHtml(providerName)}</div>
         <div class="party-details">
-          <p>${providerAddress}</p>
-          <p>SIRET : ${providerSiret}</p>
-          <p>${providerEmail}</p>
-          <p>${providerPhone}</p>
+          <p>${escapeHtml(providerAddress)}</p>
+          <p>SIRET : ${escapeHtml(providerSiret)}</p>
+          <p>${escapeHtml(providerEmail)}</p>
+          <p>${escapeHtml(providerPhone)}</p>
         </div>
       </div>
       <div class="party-box right">
         <div class="party-label">Le Client</div>
-        <div class="party-name">${clientName}</div>
+        <div class="party-name">${escapeHtml(clientName)}</div>
         <div class="party-details">
-          ${clientAddress ? `<p>${clientAddress}</p>` : ''}
-          ${clientSiret ? `<p>SIRET : ${clientSiret}</p>` : ''}
-          ${clientEmail ? `<p>${clientEmail}</p>` : ''}
-          ${clientPhone ? `<p>${clientPhone}</p>` : ''}
+          ${clientAddress ? `<p>${escapeHtml(clientAddress)}</p>` : ''}
+          ${clientSiret ? `<p>SIRET : ${escapeHtml(clientSiret)}</p>` : ''}
+          ${clientEmail ? `<p>${escapeHtml(clientEmail)}</p>` : ''}
+          ${clientPhone ? `<p>${escapeHtml(clientPhone)}</p>` : ''}
         </div>
       </div>
     </div>
@@ -1242,7 +1243,7 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       <div class="article-title">Article 1 - Objet du contrat</div>
       <div class="article-content">
         <p>Le présent contrat a pour objet de définir les conditions dans lesquelles le Prestataire met à disposition du Client ses compétences techniques pour la réalisation de missions d'assistance informatique.</p>
-        <p><strong>Mission : ${projectTitle}</strong></p>
+        <p><strong>Mission : ${escapeHtml(projectTitle)}</strong></p>
         <p>Les missions pourront notamment porter sur :</p>
         <ul>
           <li>Développement et maintenance d'applications</li>
@@ -1480,13 +1481,13 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
       <div class="signatures-container">
         <div class="signature-box">
           <div class="signature-label">Pour le Prestataire</div>
-          <div class="signature-name">${providerName}</div>
+          <div class="signature-name">${escapeHtml(providerName)}</div>
           <div class="signature-mention">Précédé de la mention "Lu et approuvé"</div>
           <div class="signature-area">Signature</div>
         </div>
         <div class="signature-box">
           <div class="signature-label">Pour le Client</div>
-          <div class="signature-name">${clientName}</div>
+          <div class="signature-name">${escapeHtml(clientName)}</div>
           <div class="signature-mention">Précédé de la mention "Lu et approuvé"</div>
           <div class="signature-area">Signature</div>
         </div>

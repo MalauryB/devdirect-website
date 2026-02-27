@@ -4,14 +4,20 @@ export async function exportQuoteToPdf(
   quote: Quote,
   project?: Project | null,
   engineer?: Profile | null,
-  client?: Profile | null
+  client?: Profile | null,
+  accessToken?: string
 ): Promise<void> {
   try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`
+    }
+
     const response = await fetch('/api/generate-quote-pdf', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ quote, project, engineer, client }),
     })
 

@@ -1,8 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
+import { useState, useEffect } from "react"
 import { useLanguage } from "@/contexts/language-context"
 import { Message, Profile, MessageAttachment } from "@/lib/types"
 import {
@@ -14,14 +12,10 @@ import {
   softDeleteMessage,
   hardDeleteMessage
 } from "@/lib/messages"
-import { uploadFile, validateFile, getSignedUrl } from "@/lib/storage"
-import { Loader2, Send, Paperclip, X, FileText, Image as ImageIcon, Download, MoreVertical, Pencil, Trash2 } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { getSignedUrl } from "@/lib/storage"
+import { Loader2 } from "lucide-react"
+import { MessageList } from "@/components/messages/message-list"
+import { MessageInput } from "@/components/messages/message-input"
 
 interface MessageThreadProps {
   projectId: string
@@ -39,23 +33,13 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
   const { t } = useLanguage()
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(true)
-  const [sending, setSending] = useState(false)
-  const [newMessage, setNewMessage] = useState("")
-  const [attachment, setAttachment] = useState<MessageAttachment | null>(null)
-  const [uploading, setUploading] = useState(false)
   const [error, setError] = useState("")
-  const [editingMessageId, setEditingMessageId] = useState<string | null>(null)
-  const [editContent, setEditContent] = useState("")
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
-  const messagesEndRef = useRef<HTMLDivElement>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const isEngineer = currentUser.role === 'engineer'
 
   // Load messages and refresh signed URLs for attachments
   useEffect(() => {
     const loadMessages = async () => {
       setLoading(true)
-      setIsInitialLoad(true) // Reset initial load state when changing project
       const { messages: loadedMessages } = await getProjectMessages(projectId)
 
       // Refresh signed URLs for messages with attachments
@@ -116,62 +100,13 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
     }
   }, [projectId, currentUser.id])
 
-  // Scroll to bottom helper function
-  const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior })
-    }
-  }
-
-  // Scroll to bottom when messages change and loading is complete
-  useEffect(() => {
-    if (messages.length > 0 && !loading) {
-      // Use multiple scroll attempts to ensure we reach the bottom
-      // First scroll immediately after render
-      const scrollSequence = () => {
-        scrollToBottom(isInitialLoad ? "instant" : "smooth")
-      }
-
-      // Immediate scroll
-      scrollSequence()
-
-      // Scroll again after a short delay to handle layout shifts
-      const timer1 = setTimeout(scrollSequence, 50)
-
-      // And one more time for good measure (handles images, etc.)
-      const timer2 = setTimeout(scrollSequence, 200)
-
-      if (isInitialLoad) {
-        // Final scroll after longer delay for any async content
-        const timer3 = setTimeout(() => {
-          scrollToBottom("instant")
-          setIsInitialLoad(false)
-        }, 400)
-
-        return () => {
-          clearTimeout(timer1)
-          clearTimeout(timer2)
-          clearTimeout(timer3)
-        }
-      }
-
-      return () => {
-        clearTimeout(timer1)
-        clearTimeout(timer2)
-      }
-    }
-  }, [messages, loading, isInitialLoad])
-
-  const handleSend = async () => {
-    if (!newMessage.trim() && !attachment) return
-
-    setSending(true)
+  const handleSend = async (content: string, attachment: MessageAttachment | null) => {
     setError("")
 
     const { message, error: sendError } = await sendMessage(
       projectId,
       currentUser.id,
-      newMessage.trim(),
+      content,
       attachment
     )
 
@@ -183,70 +118,17 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
         if (prev.find(m => m.id === message.id)) return prev
         return [...prev, message]
       })
-      setNewMessage("")
-      setAttachment(null)
     }
-
-    setSending(false)
   }
 
-  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    const validation = validateFile(file, 'all')
-    if (!validation.valid) {
-      setError(validation.error || 'Fichier invalide')
-      return
-    }
-
-    setUploading(true)
-    setError("")
-
-    const { data, error: uploadError } = await uploadFile(file, 'messages', projectId)
-
-    if (uploadError) {
-      setError(t('messages.uploadError'))
-    } else if (data) {
-      setAttachment({
-        url: data.url,
-        path: data.path,
-        name: file.name,
-        type: file.type,
-        size: file.size
-      })
-    }
-
-    setUploading(false)
-    if (e.target) e.target.value = ''
-  }
-
-  const removeAttachment = () => {
-    setAttachment(null)
-  }
-
-  const handleStartEdit = (message: Message) => {
-    setEditingMessageId(message.id)
-    setEditContent(message.content)
-  }
-
-  const handleCancelEdit = () => {
-    setEditingMessageId(null)
-    setEditContent("")
-  }
-
-  const handleSaveEdit = async () => {
-    if (!editingMessageId || !editContent.trim()) return
-
-    const { message: updatedMessage, error: updateError } = await updateMessage(editingMessageId, editContent.trim())
+  const handleEditMessage = async (messageId: string, newContent: string) => {
+    const { message: updatedMessage, error: updateError } = await updateMessage(messageId, newContent)
     if (!updateError && updatedMessage) {
-      setMessages(prev => prev.map(m => m.id === editingMessageId ? updatedMessage : m))
+      setMessages(prev => prev.map(m => m.id === messageId ? updatedMessage : m))
     }
-    setEditingMessageId(null)
-    setEditContent("")
   }
 
-  const handleDelete = async (messageId: string) => {
+  const handleDeleteMessage = async (messageId: string) => {
     if (isEngineer) {
       // Engineer can hard delete
       const { error: deleteError } = await hardDeleteMessage(messageId)
@@ -264,71 +146,6 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
     }
   }
 
-  const formatTime = (dateString: string) => {
-    const date = new Date(dateString)
-    return date.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
-  }
-
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString)
-    const today = new Date()
-    const yesterday = new Date(today)
-    yesterday.setDate(yesterday.getDate() - 1)
-
-    if (date.toDateString() === today.toDateString()) {
-      return "Aujourd'hui"
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return "Hier"
-    } else {
-      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
-    }
-  }
-
-  const getSenderName = (message: Message) => {
-    if (message.sender_id === currentUser.id) {
-      return "Vous"
-    }
-    if (message.sender) {
-      const name = `${message.sender.first_name || ''} ${message.sender.last_name || ''}`.trim()
-      return name || message.sender.company_name || 'Utilisateur'
-    }
-    return otherParty
-      ? `${otherParty.first_name || ''} ${otherParty.last_name || ''}`.trim() || otherParty.company_name || 'Client'
-      : 'Utilisateur'
-  }
-
-  const getSenderAvatar = (message: Message) => {
-    if (message.sender_id === currentUser.id) {
-      return currentUser.avatar_url
-    }
-    return message.sender?.avatar_url || otherParty?.avatar_url
-  }
-
-  const getSenderInitial = (message: Message) => {
-    if (message.sender_id === currentUser.id) {
-      return (currentUser.first_name?.[0] || 'M').toUpperCase()
-    }
-    if (message.sender) {
-      return (message.sender.first_name?.[0] || message.sender.company_name?.[0] || 'U').toUpperCase()
-    }
-    return (otherParty?.first_name?.[0] || otherParty?.company_name?.[0] || 'C').toUpperCase()
-  }
-
-  const isImage = (type: string) => type.startsWith('image/')
-
-  // Group messages by date
-  const groupedMessages: { date: string; messages: Message[] }[] = []
-  let currentDate = ''
-  for (const msg of messages) {
-    const msgDate = new Date(msg.created_at).toDateString()
-    if (msgDate !== currentDate) {
-      currentDate = msgDate
-      groupedMessages.push({ date: msg.created_at, messages: [msg] })
-    } else {
-      groupedMessages[groupedMessages.length - 1].messages.push(msg)
-    }
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -339,234 +156,18 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
 
   return (
     <div className="flex flex-col h-full">
-      {/* Messages area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-foreground/50">{t('messages.noMessages')}</p>
-            <p className="text-sm text-foreground/30 mt-1">{t('messages.startConversation')}</p>
-          </div>
-        ) : (
-          groupedMessages.map((group, groupIndex) => (
-            <div key={groupIndex}>
-              {/* Date separator */}
-              <div className="flex items-center gap-4 my-4">
-                <div className="flex-1 h-px bg-muted" />
-                <span className="text-xs text-foreground/40 font-medium">
-                  {formatDate(group.date)}
-                </span>
-                <div className="flex-1 h-px bg-muted" />
-              </div>
-
-              {/* Messages for this date */}
-              {group.messages.map((message) => {
-                const isOwn = message.sender_id === currentUser.id
-                const isEditing = editingMessageId === message.id
-                const isDeleted = message.is_deleted
-
-                return (
-                  <div
-                    key={message.id}
-                    className={`flex gap-3 mb-4 group ${isOwn ? 'flex-row-reverse' : ''}`}
-                  >
-                    {/* Avatar */}
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
-                      {getSenderAvatar(message) ? (
-                        <img
-                          src={getSenderAvatar(message)}
-                          alt={getSenderName(message)}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <span className="text-sm font-bold text-white">
-                          {getSenderInitial(message)}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Message content */}
-                    <div className={`max-w-[70%] ${isOwn ? 'text-right' : ''}`}>
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className={`text-xs font-medium text-foreground/70 ${isOwn ? 'order-2' : ''}`}>
-                          {getSenderName(message)}
-                        </span>
-                        <span className={`text-xs text-foreground/40 ${isOwn ? 'order-1' : ''}`}>
-                          {formatTime(message.created_at)}
-                        </span>
-                        {/* Actions menu - only for own messages */}
-                        {isOwn && !isDeleted && !isEditing && (
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <button className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded ${isOwn ? 'order-0' : 'order-3'}`}>
-                                <MoreVertical className="w-3 h-3 text-foreground/50" />
-                              </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align={isOwn ? "end" : "start"}>
-                              <DropdownMenuItem onClick={() => handleStartEdit(message)}>
-                                <Pencil className="w-3 h-3 mr-2" />
-                                {t('messages.edit')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(message.id)}
-                                className="text-red-600 focus:text-red-600"
-                              >
-                                <Trash2 className="w-3 h-3 mr-2" />
-                                {t('messages.delete')}
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        )}
-                      </div>
-
-                      <div
-                        className={`rounded-2xl px-4 py-2 ${
-                          isDeleted
-                            ? 'bg-muted text-foreground/40'
-                            : isOwn
-                              ? 'bg-[rgb(239,239,239)] text-foreground rounded-tr-sm'
-                              : 'bg-muted text-foreground rounded-tl-sm'
-                        }`}
-                      >
-                        {isEditing ? (
-                          <div className="space-y-2">
-                            <Textarea
-                              value={editContent}
-                              onChange={(e) => setEditContent(e.target.value)}
-                              className="min-h-[60px] text-sm"
-                              autoFocus
-                            />
-                            <div className="flex gap-2 justify-end">
-                              <Button variant="ghost" size="sm" onClick={handleCancelEdit}>
-                                {t('common.cancel')}
-                              </Button>
-                              <Button size="sm" onClick={handleSaveEdit}>
-                                {t('common.save')}
-                              </Button>
-                            </div>
-                          </div>
-                        ) : isDeleted ? (
-                          <p className="text-sm italic line-through">{message.content}</p>
-                        ) : message.content ? (
-                          <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                        ) : null}
-
-                        {/* Attachment */}
-                        {message.attachment && (
-                          <div className={`mt-2 ${message.content ? 'pt-2 border-t border-border' : ''}`}>
-                            {isImage(message.attachment.type) ? (
-                              <a
-                                href={message.attachment.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="block"
-                              >
-                                <img
-                                  src={message.attachment.url}
-                                  alt={message.attachment.name}
-                                  className="max-w-full rounded-lg max-h-48 object-cover"
-                                />
-                              </a>
-                            ) : (
-                              <a
-                                href={message.attachment.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center gap-2 p-2 rounded-lg ${
-                                  isOwn ? 'bg-muted hover:bg-muted' : 'bg-muted hover:bg-muted'
-                                } transition-colors`}
-                              >
-                                <FileText className="w-4 h-4" />
-                                <span className="text-xs truncate flex-1">{message.attachment.name}</span>
-                                <Download className="w-3 h-3" />
-                              </a>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          ))
-        )}
-        <div ref={messagesEndRef} />
-      </div>
-
-      {/* Input area */}
-      <div className="border-t border-border p-4">
-        {error && (
-          <p className="text-sm text-red-600 mb-2">{error}</p>
-        )}
-
-        {/* Attachment preview */}
-        {attachment && (
-          <div className="flex items-center gap-2 mb-2 p-2 bg-muted rounded-lg">
-            {isImage(attachment.type) ? (
-              <ImageIcon className="w-4 h-4 text-foreground/50" />
-            ) : (
-              <FileText className="w-4 h-4 text-foreground/50" />
-            )}
-            <span className="text-sm text-foreground/70 truncate flex-1">{attachment.name}</span>
-            <button
-              onClick={removeAttachment}
-              className="p-1 hover:bg-muted rounded"
-            >
-              <X className="w-4 h-4 text-foreground/50" />
-            </button>
-          </div>
-        )}
-
-        <div className="flex gap-2">
-          <input
-            ref={fileInputRef}
-            type="file"
-            className="hidden"
-            onChange={handleFileSelect}
-          />
-
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploading || sending}
-            className="shrink-0"
-          >
-            {uploading ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Paperclip className="w-4 h-4" />
-            )}
-          </Button>
-
-          <Textarea
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder={t('messages.placeholder')}
-            className="resize-none min-h-[44px] max-h-32"
-            rows={1}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault()
-                handleSend()
-              }
-            }}
-          />
-
-          <Button
-            onClick={handleSend}
-            disabled={sending || (!newMessage.trim() && !attachment)}
-            className="shrink-0 bg-primary hover:bg-primary/90"
-          >
-            {sending ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Send className="w-4 h-4" />
-            )}
-          </Button>
-        </div>
-      </div>
+      <MessageList
+        messages={messages}
+        currentUser={currentUser}
+        otherParty={otherParty}
+        onEditMessage={handleEditMessage}
+        onDeleteMessage={handleDeleteMessage}
+      />
+      <MessageInput
+        projectId={projectId}
+        onSend={handleSend}
+        error={error}
+      />
     </div>
   )
 }

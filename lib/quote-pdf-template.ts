@@ -1,5 +1,6 @@
 import { Quote, Project, Profile } from './types'
 import { calculateQuoteData } from './quote-export'
+import { escapeHtml } from './sanitize'
 
 interface PdfData {
   quote: Quote
@@ -391,14 +392,14 @@ export function generateQuotePdfHtml(data: PdfData): string {
     <!-- Parties -->
     <div class="parties">
       <div class="party">
-        <h3>${engineerName}</h3>
-        ${engineerPhone ? `<p>${engineerPhone}</p>` : ''}
-        <p>${engineerEmail}</p>
+        <h3>${escapeHtml(engineerName)}</h3>
+        ${engineerPhone ? `<p>${escapeHtml(engineerPhone)}</p>` : ''}
+        <p>${escapeHtml(engineerEmail)}</p>
       </div>
       <div class="party party-right">
         <h3>À l'attention de</h3>
-        <p><strong>${clientName}</strong></p>
-        ${clientPhone ? `<p>${clientPhone}</p>` : ''}
+        <p><strong>${escapeHtml(clientName)}</strong></p>
+        ${clientPhone ? `<p>${escapeHtml(clientPhone)}</p>` : ''}
         ${clientAddress ? `<p>${clientAddress}</p>` : ''}
       </div>
     </div>
@@ -416,7 +417,7 @@ export function generateQuotePdfHtml(data: PdfData): string {
       <tbody>
         ${lineItems.map(item => `
         <tr>
-          <td>${item.description}</td>
+          <td>${escapeHtml(item.description)}</td>
           <td>${formatCurrency(item.unitPrice)}</td>
           <td>${item.quantity.toFixed(1)} j</td>
           <td>${formatCurrency(item.total)}</td>
@@ -447,7 +448,7 @@ export function generateQuotePdfHtml(data: PdfData): string {
     <div class="footer-section">
       <div class="terms">
         <h4>Termes et conditions</h4>
-        ${quote.payment_terms ? quote.payment_terms.split('\n').map(line => `<p>${line}</p>`).join('') : `
+        ${quote.payment_terms ? quote.payment_terms.split('\n').map(line => `<p>${escapeHtml(line)}</p>`).join('') : `
         <p>Le paiement sera dû sous un mois</p>
         <p>Un acompte de 30% est requis</p>
         `}

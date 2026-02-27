@@ -2,11 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Label } from "@/components/ui/label"
 import { useLanguage } from "@/contexts/language-context"
-import { Project, ProjectMilestone, MilestoneStatus, MilestoneSubtask, Profile } from "@/lib/types"
+import { Project, ProjectMilestone, MilestoneStatus, Profile } from "@/lib/types"
 import {
   getProjectMilestones,
   createMilestone,
@@ -26,27 +23,6 @@ import {
   deleteAllSubtasks
 } from "@/lib/milestones"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -57,29 +33,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {
   Loader2,
   Plus,
   Sparkles,
-  MoreVertical,
-  Pencil,
-  Trash2,
-  Check,
-  Circle,
-  Clock,
-  AlertTriangle,
   ChevronRight,
-  ChevronDown,
-  Calendar,
   RotateCcw,
-  Users,
-  ListTodo,
-  X
 } from "lucide-react"
+import { useAuth } from "@/contexts/auth-context"
+import { MilestoneCard } from "@/components/roadmap/milestone-card"
+import { MilestoneDialog } from "@/components/roadmap/milestone-dialog"
 
 interface ProjectRoadmapProps {
   project: Project
@@ -93,35 +55,9 @@ interface ProjectRoadmapProps {
   engineers?: Partial<Profile>[]
 }
 
-const STATUS_CONFIG: Record<MilestoneStatus, { icon: React.ReactNode; color: string; bgColor: string; label: string }> = {
-  pending: {
-    icon: <Circle className="w-4 h-4" />,
-    color: 'text-muted-foreground',
-    bgColor: 'bg-muted',
-    label: 'roadmap.status.pending'
-  },
-  in_progress: {
-    icon: <Clock className="w-4 h-4" />,
-    color: 'text-[#ea4c89]',
-    bgColor: 'bg-[#ea4c89]/10',
-    label: 'roadmap.status.inProgress'
-  },
-  completed: {
-    icon: <Check className="w-4 h-4" />,
-    color: 'text-[#ea4c89]',
-    bgColor: 'bg-[#ea4c89]/10',
-    label: 'roadmap.status.completed'
-  },
-  blocked: {
-    icon: <AlertTriangle className="w-4 h-4" />,
-    color: 'text-red-500',
-    bgColor: 'bg-red-100',
-    label: 'roadmap.status.blocked'
-  }
-}
-
 export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [] }: ProjectRoadmapProps) {
   const { t } = useLanguage()
+  const { session } = useAuth()
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
   const [stats, setStats] = useState<{ total: number; completed: number; progress: number } | null>(null)
   const [loading, setLoading] = useState(true)
@@ -250,7 +186,10 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
     try {
       const response = await fetch('/api/generate-roadmap', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({ project })
       })
 
@@ -320,7 +259,10 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
     try {
       const response = await fetch('/api/generate-subtasks', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({
           milestone,
           projectContext: `${project.title}: ${project.description}`
@@ -359,22 +301,6 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
       }
       return newSet
     })
-  }
-
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr)
-    return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' })
-  }
-
-  const isOverdue = (dueDate: string | null, status: MilestoneStatus) => {
-    if (!dueDate || status === 'completed') return false
-    return new Date(dueDate) < new Date()
-  }
-
-  const getSubtaskProgress = (subtasks: MilestoneSubtask[] | undefined) => {
-    if (!subtasks || subtasks.length === 0) return null
-    const completed = subtasks.filter(s => s.is_completed).length
-    return { completed, total: subtasks.length, percent: Math.round((completed / subtasks.length) * 100) }
   }
 
   if (loading) {
@@ -474,412 +400,56 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
         </div>
       ) : (
         <div className="space-y-3">
-          {milestones.map((milestone) => {
-            const statusConfig = STATUS_CONFIG[milestone.status]
-            const overdue = isOverdue(milestone.due_date, milestone.status)
-            const isExpanded = expandedMilestones.has(milestone.id)
-            const subtaskProgress = getSubtaskProgress(milestone.subtasks)
-            const hasSubtasks = milestone.subtasks && milestone.subtasks.length > 0
-
-            return (
-              <div
-                key={milestone.id}
-                className={`bg-white border rounded-xl transition-all ${
-                  milestone.status === 'completed' ? 'border-[#ea4c89]/30 bg-[#ea4c89]/5' : 'border-border'
-                } ${overdue ? 'border-red-200' : ''}`}
-              >
-                <div className="p-4">
-                  <div className="flex items-start gap-4">
-                    {/* Expand/collapse button */}
-                    <button
-                      onClick={() => toggleMilestoneExpanded(milestone.id)}
-                      className="mt-0.5 p-1 hover:bg-muted rounded flex-shrink-0"
-                    >
-                      {isExpanded ? (
-                        <ChevronDown className="w-4 h-4 text-foreground/50" />
-                      ) : (
-                        <ChevronRight className="w-4 h-4 text-foreground/50" />
-                      )}
-                    </button>
-
-                    {/* Status indicator / checkbox */}
-                    <button
-                      onClick={() => isEngineer && handleToggleComplete(milestone)}
-                      disabled={!isEngineer}
-                      className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-                        milestone.status === 'completed'
-                          ? 'bg-[#ea4c89] text-white'
-                          : 'border-2 border-border hover:border-[#ea4c89]'
-                      } ${!isEngineer ? 'cursor-default' : 'cursor-pointer'}`}
-                    >
-                      {milestone.status === 'completed' && <Check className="w-4 h-4" />}
-                    </button>
-
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <h4 className={`font-medium ${milestone.status === 'completed' ? 'line-through text-foreground/50' : ''}`}>
-                            {milestone.title}
-                          </h4>
-                          {milestone.description && (
-                            <p className={`text-sm mt-1 ${milestone.status === 'completed' ? 'text-foreground/40' : 'text-foreground/60'}`}>
-                              {milestone.description}
-                            </p>
-                          )}
-                        </div>
-
-                        {/* Assignees */}
-                        {isEngineer && engineers.length > 0 && (
-                          <Popover>
-                            <PopoverTrigger asChild>
-                              <button className="flex items-center gap-1 px-2 py-1 rounded-lg hover:bg-muted flex-shrink-0">
-                                {milestone.assignees && milestone.assignees.length > 0 ? (
-                                  <div className="flex -space-x-2">
-                                    {milestone.assignees.slice(0, 3).map((a) => (
-                                      <div
-                                        key={a.id}
-                                        className="w-6 h-6 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden border-2 border-white"
-                                        title={a.engineer ? `${a.engineer.first_name} ${a.engineer.last_name}` : ''}
-                                      >
-                                        {a.engineer?.avatar_url ? (
-                                          <img
-                                            src={a.engineer.avatar_url}
-                                            alt=""
-                                            className="w-full h-full object-cover"
-                                          />
-                                        ) : (
-                                          <span className="text-[10px] font-bold text-white">
-                                            {a.engineer?.first_name?.[0]?.toUpperCase() || '?'}
-                                          </span>
-                                        )}
-                                      </div>
-                                    ))}
-                                    {milestone.assignees.length > 3 && (
-                                      <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center border-2 border-white">
-                                        <span className="text-[10px] font-medium text-foreground/70">
-                                          +{milestone.assignees.length - 3}
-                                        </span>
-                                      </div>
-                                    )}
-                                  </div>
-                                ) : (
-                                  <Users className="w-4 h-4 text-foreground/40" />
-                                )}
-                              </button>
-                            </PopoverTrigger>
-                            <PopoverContent className="w-64 p-2" align="end">
-                              <div className="text-sm font-medium mb-2">{t('roadmap.assignees')}</div>
-                              <div className="space-y-1 max-h-48 overflow-y-auto">
-                                {engineers.map((eng) => {
-                                  const isAssigned = milestone.assignees?.some(a => a.engineer_id === eng.id)
-                                  return (
-                                    <button
-                                      key={eng.id}
-                                      onClick={() => {
-                                        if (isAssigned) {
-                                          handleUnassignEngineer(milestone.id, eng.id!)
-                                        } else {
-                                          handleAssignEngineer(milestone.id, eng.id!)
-                                        }
-                                      }}
-                                      className={`w-full flex items-center gap-2 px-2 py-1.5 rounded-lg text-left text-sm transition-colors ${
-                                        isAssigned ? 'bg-[#ea4c89]/10 text-[#ea4c89]' : 'hover:bg-muted'
-                                      }`}
-                                    >
-                                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
-                                        {eng.avatar_url ? (
-                                          <img src={eng.avatar_url} alt="" className="w-full h-full object-cover" />
-                                        ) : (
-                                          <span className="text-[10px] font-bold text-white">
-                                            {eng.first_name?.[0]?.toUpperCase() || '?'}
-                                          </span>
-                                        )}
-                                      </div>
-                                      <span className="flex-1 truncate">{eng.first_name} {eng.last_name}</span>
-                                      {isAssigned && <Check className="w-4 h-4 text-[#ea4c89]" />}
-                                    </button>
-                                  )
-                                })}
-                              </div>
-                            </PopoverContent>
-                          </Popover>
-                        )}
-
-                        {/* Actions */}
-                        {isEngineer && (
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <button className="p-1 hover:bg-muted rounded flex-shrink-0">
-                                <MoreVertical className="w-4 h-4 text-foreground/50" />
-                              </button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => handleOpenEdit(milestone)}>
-                                <Pencil className="w-3 h-3 mr-2" />
-                                {t('common.edit')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleGenerateSubtasks(milestone)}
-                                disabled={generatingSubtasks === milestone.id}
-                              >
-                                {generatingSubtasks === milestone.id ? (
-                                  <Loader2 className="w-3 h-3 mr-2 animate-spin" />
-                                ) : (
-                                  <Sparkles className="w-3 h-3 mr-2" />
-                                )}
-                                {t('roadmap.generateSubtasks')}
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                onClick={() => handleStatusChange(milestone, 'pending')}
-                                disabled={milestone.status === 'pending'}
-                              >
-                                <Circle className="w-3 h-3 mr-2" />
-                                {t('roadmap.status.pending')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleStatusChange(milestone, 'in_progress')}
-                                disabled={milestone.status === 'in_progress'}
-                              >
-                                <Clock className="w-3 h-3 mr-2" />
-                                {t('roadmap.status.inProgress')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleStatusChange(milestone, 'completed')}
-                                disabled={milestone.status === 'completed'}
-                              >
-                                <Check className="w-3 h-3 mr-2" />
-                                {t('roadmap.status.completed')}
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                onClick={() => handleStatusChange(milestone, 'blocked')}
-                                disabled={milestone.status === 'blocked'}
-                              >
-                                <AlertTriangle className="w-3 h-3 mr-2" />
-                                {t('roadmap.status.blocked')}
-                              </DropdownMenuItem>
-                              <DropdownMenuSeparator />
-                              <DropdownMenuItem
-                                onClick={() => handleDelete(milestone.id)}
-                                className="text-red-600 focus:text-red-600"
-                              >
-                                <Trash2 className="w-3 h-3 mr-2" />
-                                {t('common.delete')}
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        )}
-                      </div>
-
-                      {/* Meta info */}
-                      <div className="flex flex-wrap items-center gap-3 mt-3">
-                        {/* Status badge */}
-                        {milestone.status !== 'pending' && milestone.status !== 'completed' && (
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs ${statusConfig.bgColor} ${statusConfig.color}`}>
-                            {statusConfig.icon}
-                            {t(statusConfig.label)}
-                          </span>
-                        )}
-
-                        {/* Due date */}
-                        {milestone.due_date && (
-                          <span className={`inline-flex items-center gap-1 text-xs ${overdue ? 'text-red-500' : 'text-foreground/50'}`}>
-                            <Calendar className="w-3 h-3" />
-                            {formatDate(milestone.due_date)}
-                            {overdue && <span className="font-medium">({t('roadmap.overdue')})</span>}
-                          </span>
-                        )}
-
-                        {/* Subtask progress */}
-                        {subtaskProgress && (
-                          <span className="inline-flex items-center gap-1 text-xs text-foreground/50">
-                            <ListTodo className="w-3 h-3" />
-                            {subtaskProgress.completed}/{subtaskProgress.total} {t('roadmap.subtasks')}
-                          </span>
-                        )}
-
-                        {/* Completed info */}
-                        {milestone.status === 'completed' && milestone.completed_at && (
-                          <span className="text-xs text-[#ea4c89]">
-                            {t('roadmap.completedOn')} {formatDate(milestone.completed_at)}
-                            {milestone.completer && (
-                              <span> {t('roadmap.by')} {milestone.completer.first_name}</span>
-                            )}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Expanded content: Subtasks */}
-                {isExpanded && (
-                  <div className="border-t border-muted px-4 py-3 bg-muted/50">
-                    <div className="ml-12">
-                      {/* Subtasks list */}
-                      {hasSubtasks && (
-                        <div className="space-y-2 mb-3">
-                          {milestone.subtasks!.map((subtask) => (
-                            <div
-                              key={subtask.id}
-                              className="flex items-center gap-3 group"
-                            >
-                              <button
-                                onClick={() => isEngineer && handleToggleSubtask(subtask.id)}
-                                disabled={!isEngineer}
-                                className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 transition-colors border-2 ${
-                                  subtask.is_completed
-                                    ? 'bg-[#ea4c89] border-[#ea4c89] text-white'
-                                    : 'border-border hover:border-[#ea4c89]'
-                                } ${!isEngineer ? 'cursor-default' : 'cursor-pointer'}`}
-                              >
-                                {subtask.is_completed && <Check className="w-3 h-3" />}
-                              </button>
-                              <span className={`flex-1 text-sm ${subtask.is_completed ? 'line-through text-foreground/40' : ''}`}>
-                                {subtask.title}
-                              </span>
-                              {isEngineer && (
-                                <button
-                                  onClick={() => handleDeleteSubtask(subtask.id)}
-                                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-muted rounded transition-opacity"
-                                >
-                                  <X className="w-3 h-3 text-foreground/50" />
-                                </button>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
-
-                      {/* Add subtask */}
-                      {isEngineer && (
-                        addingSubtaskTo === milestone.id ? (
-                          <div className="flex items-center gap-2">
-                            <Input
-                              value={subtaskTitle}
-                              onChange={(e) => setSubtaskTitle(e.target.value)}
-                              placeholder={t('roadmap.subtaskTitlePlaceholder')}
-                              className="h-8 text-sm"
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') handleAddSubtask(milestone.id)
-                                if (e.key === 'Escape') {
-                                  setAddingSubtaskTo(null)
-                                  setSubtaskTitle("")
-                                }
-                              }}
-                              autoFocus
-                            />
-                            <Button
-                              size="sm"
-                              onClick={() => handleAddSubtask(milestone.id)}
-                              disabled={!subtaskTitle.trim()}
-                              className="h-8"
-                            >
-                              {t('common.add')}
-                            </Button>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => {
-                                setAddingSubtaskTo(null)
-                                setSubtaskTitle("")
-                              }}
-                              className="h-8"
-                            >
-                              {t('common.cancel')}
-                            </Button>
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => setAddingSubtaskTo(milestone.id)}
-                            className="inline-flex items-center gap-1 text-sm text-foreground/50 hover:text-foreground transition-colors"
-                          >
-                            <Plus className="w-3 h-3" />
-                            {t('roadmap.addSubtask')}
-                          </button>
-                        )
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )
-          })}
+          {milestones.map((milestone) => (
+            <MilestoneCard
+              key={milestone.id}
+              milestone={milestone}
+              isEngineer={isEngineer}
+              engineers={engineers}
+              isExpanded={expandedMilestones.has(milestone.id)}
+              generatingSubtasks={generatingSubtasks === milestone.id}
+              addingSubtaskTo={addingSubtaskTo === milestone.id}
+              subtaskTitle={addingSubtaskTo === milestone.id ? subtaskTitle : ""}
+              onToggleExpand={() => toggleMilestoneExpanded(milestone.id)}
+              onToggleComplete={() => handleToggleComplete(milestone)}
+              onStatusChange={(status) => handleStatusChange(milestone, status)}
+              onEdit={() => handleOpenEdit(milestone)}
+              onDelete={() => handleDelete(milestone.id)}
+              onGenerateSubtasks={() => handleGenerateSubtasks(milestone)}
+              onAssignEngineer={(engineerId) => handleAssignEngineer(milestone.id, engineerId)}
+              onUnassignEngineer={(engineerId) => handleUnassignEngineer(milestone.id, engineerId)}
+              onAddSubtask={() => handleAddSubtask(milestone.id)}
+              onToggleSubtask={handleToggleSubtask}
+              onDeleteSubtask={handleDeleteSubtask}
+              setSubtaskTitle={setSubtaskTitle}
+              setAddingSubtaskTo={(adding) => {
+                if (adding) {
+                  setAddingSubtaskTo(milestone.id)
+                } else {
+                  setAddingSubtaskTo(null)
+                }
+              }}
+            />
+          ))}
         </div>
       )}
 
       {/* Add/Edit Dialog */}
-      <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>
-              {editingMilestone ? t('roadmap.editMilestone') : t('roadmap.addMilestone')}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-4 py-4">
-            {/* Title */}
-            <div className="space-y-2">
-              <Label>{t('roadmap.milestoneTitle')}</Label>
-              <Input
-                placeholder={t('roadmap.milestoneTitlePlaceholder')}
-                value={formTitle}
-                onChange={(e) => setFormTitle(e.target.value)}
-              />
-            </div>
-
-            {/* Description */}
-            <div className="space-y-2">
-              <Label>{t('roadmap.milestoneDescription')}</Label>
-              <Textarea
-                placeholder={t('roadmap.milestoneDescriptionPlaceholder')}
-                value={formDescription}
-                onChange={(e) => setFormDescription(e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            {/* Due date */}
-            <div className="space-y-2">
-              <Label>{t('roadmap.dueDate')}</Label>
-              <Input
-                type="date"
-                value={formDueDate}
-                onChange={(e) => setFormDueDate(e.target.value)}
-              />
-            </div>
-
-            {/* Status (only when editing) */}
-            {editingMilestone && (
-              <div className="space-y-2">
-                <Label>{t('roadmap.status.label')}</Label>
-                <Select value={formStatus} onValueChange={(v) => setFormStatus(v as MilestoneStatus)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">{t('roadmap.status.pending')}</SelectItem>
-                    <SelectItem value="in_progress">{t('roadmap.status.inProgress')}</SelectItem>
-                    <SelectItem value="completed">{t('roadmap.status.completed')}</SelectItem>
-                    <SelectItem value="blocked">{t('roadmap.status.blocked')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
-          </div>
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setShowAddDialog(false)}>
-              {t('common.cancel')}
-            </Button>
-            <Button onClick={handleSave} disabled={saving || !formTitle.trim()}>
-              {saving && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-              {editingMilestone ? t('common.save') : t('roadmap.addMilestone')}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <MilestoneDialog
+        open={showAddDialog}
+        editingMilestone={editingMilestone}
+        formTitle={formTitle}
+        formDescription={formDescription}
+        formDueDate={formDueDate}
+        formStatus={formStatus}
+        saving={saving}
+        onSave={handleSave}
+        onClose={() => setShowAddDialog(false)}
+        setFormTitle={setFormTitle}
+        setFormDescription={setFormDescription}
+        setFormDueDate={setFormDueDate}
+        setFormStatus={setFormStatus}
+      />
 
       {/* Regenerate Confirmation Dialog */}
       <AlertDialog open={showRegenerateDialog} onOpenChange={setShowRegenerateDialog}>
