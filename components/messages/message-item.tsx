@@ -125,7 +125,7 @@ export function MessageItem({ message, isOwn, currentUser, otherParty, onEdit, o
           {isOwn && !isDeleted && !isEditing && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded ${isOwn ? 'order-0' : 'order-3'}`}>
+                <button className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded ${isOwn ? 'order-0' : 'order-3'}`} aria-label="Options du message">
                   <MoreVertical className="w-3 h-3 text-foreground/50" />
                 </button>
               </DropdownMenuTrigger>

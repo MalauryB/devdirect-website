@@ -170,7 +170,7 @@ export function MilestoneCard({
               {isEngineer && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <button className="p-1 hover:bg-muted rounded flex-shrink-0">
+                    <button className="p-1 hover:bg-muted rounded flex-shrink-0" aria-label="Options du jalon">
                       <MoreVertical className="w-4 h-4 text-foreground/50" />
                     </button>
                   </DropdownMenuTrigger>
@@ -303,6 +303,7 @@ export function MilestoneCard({
                       <button
                         onClick={() => onDeleteSubtask(subtask.id)}
                         className="opacity-0 group-hover:opacity-100 p-1 hover:bg-muted rounded transition-opacity"
+                        aria-label="Supprimer la sous-tache"
                       >
                         <X className="w-3 h-3 text-foreground/50" />
                       </button>

@@ -15,12 +15,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/contexts/language-context"
 import type { Project, ProjectDocument, ProjectDocumentType } from "@/lib/types"
 import { uploadDocument, getDocumentDownloadUrl, getFileIcon, formatFileSize } from "@/lib/documents"
+import type { UserMetadata } from "@/contexts/auth-context"
 
 interface DocumentsSubsectionProps {
   project: Project
   documents: ProjectDocument[]
   documentsLoading: boolean
-  user: { id: string; email?: string; user_metadata?: any }
+  user: { id: string; email?: string; user_metadata?: UserMetadata }
   accessToken?: string
   onLoadDocuments: (projectId: string) => void
 }
@@ -207,6 +208,7 @@ export function DocumentsSubsection({
                           if (url) window.open(url, '_blank')
                         }}
                         className="text-foreground/70 hover:text-foreground"
+                        aria-label="Telecharger le document"
                       >
                         <Download className="w-4 h-4" />
                       </Button>

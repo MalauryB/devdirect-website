@@ -10,7 +10,6 @@ export async function getProjectContracts(projectId: string): Promise<ProjectCon
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching contracts:', error)
     return []
   }
 
@@ -46,7 +45,6 @@ export async function getContract(contractId: string): Promise<ProjectContract |
     .single()
 
   if (error) {
-    console.error('Error fetching contract:', error)
     return null
   }
 
@@ -124,7 +122,6 @@ export async function createContract(contract: {
     .single()
 
   if (error) {
-    console.error('Error creating contract:', error)
     return null
   }
 
@@ -143,7 +140,7 @@ export async function createContract(contract: {
       .select()
 
     if (profilesError) {
-      console.error('Error creating contract profiles:', profilesError)
+      // Profile creation failed but contract was created
     } else {
       data.profiles = profiles
     }
@@ -189,7 +186,6 @@ export async function updateContract(
     .single()
 
   if (error) {
-    console.error('Error updating contract:', error)
     return null
   }
 
@@ -216,7 +212,7 @@ export async function updateContract(
         .select()
 
       if (profilesError) {
-        console.error('Error updating contract profiles:', profilesError)
+        // Profile update failed but contract was updated
       } else {
         data.profiles = newProfiles
       }
@@ -257,7 +253,6 @@ export async function updateContractStatus(
     .single()
 
   if (error) {
-    console.error('Error updating contract status:', error)
     return null
   }
 
@@ -273,7 +268,6 @@ export async function deleteContract(contractId: string): Promise<boolean> {
     .eq('status', 'draft')
 
   if (error) {
-    console.error('Error deleting contract:', error)
     return false
   }
 
@@ -288,7 +282,6 @@ export async function saveContractPdf(contractId: string, pdfUrl: string): Promi
     .eq('id', contractId)
 
   if (error) {
-    console.error('Error saving contract PDF URL:', error)
     return false
   }
 
@@ -318,7 +311,6 @@ export async function signContract(
     .single()
 
   if (error) {
-    console.error('Error signing contract:', error)
     return null
   }
 
@@ -356,7 +348,6 @@ export async function createAmendment(
     .single()
 
   if (error) {
-    console.error('Error creating amendment:', error)
     return null
   }
 

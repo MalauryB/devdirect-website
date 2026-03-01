@@ -11,6 +11,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { createProject, updateProject } from "@/lib/projects"
 import { ProjectFormData, Project, ProjectFile, getProjectFormData } from "@/lib/types"
+import { createArrayToggleHandler } from "@/lib/form-utils"
 import { FileUpload } from "@/components/file-upload"
 import { Loader2, Check, Send } from "lucide-react"
 
@@ -29,32 +30,9 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
 
   const [formData, setFormData] = useState<ProjectFormData>(getProjectFormData(project))
 
-  const handleProjectTypeToggle = (type: string) => {
-    setFormData(prev => ({
-      ...prev,
-      project_types: prev.project_types.includes(type)
-        ? prev.project_types.filter(t => t !== type)
-        : [...prev.project_types, type]
-    }))
-  }
-
-  const handleServiceToggle = (service: string) => {
-    setFormData(prev => ({
-      ...prev,
-      services: prev.services.includes(service)
-        ? prev.services.filter(s => s !== service)
-        : [...prev.services, service]
-    }))
-  }
-
-  const handlePlatformToggle = (platform: string) => {
-    setFormData(prev => ({
-      ...prev,
-      platforms: prev.platforms.includes(platform)
-        ? prev.platforms.filter(p => p !== platform)
-        : [...prev.platforms, platform]
-    }))
-  }
+  const handleProjectTypeToggle = createArrayToggleHandler(setFormData, 'project_types')
+  const handleServiceToggle = createArrayToggleHandler(setFormData, 'services')
+  const handlePlatformToggle = createArrayToggleHandler(setFormData, 'platforms')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

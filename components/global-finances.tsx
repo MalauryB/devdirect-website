@@ -70,7 +70,6 @@ export function GlobalFinances({ onSelectProject }: GlobalFinancesProps) {
       // Get all projects
       const { projects, error } = await getAllProjects()
       if (error || !projects) {
-        console.error("Error loading projects:", error)
         setLoading(false)
         return
       }
@@ -92,8 +91,8 @@ export function GlobalFinances({ onSelectProject }: GlobalFinancesProps) {
         getContractsForProject
       )
       setFinanceData(data)
-    } catch (error) {
-      console.error("Error loading global finances:", error)
+    } catch {
+      // Error handled by state
     } finally {
       setLoading(false)
     }

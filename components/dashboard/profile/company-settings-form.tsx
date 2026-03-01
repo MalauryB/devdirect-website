@@ -42,8 +42,8 @@ export function CompanySettingsForm({ saving, onSettingsChange }: CompanySetting
           if (settings.email) setEmail(settings.email)
           if (settings.phone) setPhone(settings.phone)
           if (settings.vat) setVat(settings.vat)
-        } catch (e) {
-          console.error('Failed to parse company settings:', e)
+        } catch {
+          // Invalid stored settings, use defaults
         }
       }
     }

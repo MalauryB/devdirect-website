@@ -7,82 +7,59 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { ClientType } from "@/contexts/auth-context"
 
+export interface PersonalInfoFormData {
+  // Common fields
+  firstName: string
+  lastName: string
+  phone: string
+  // Engineer-specific fields
+  jobTitle: string
+  bio: string
+  // Client-specific fields
+  clientType: ClientType
+  companyName: string
+  legalForm: string
+  professionalEmail: string
+  contactPosition: string
+  siret: string
+  vatNumber: string
+  address: string
+  postalCode: string
+  city: string
+  country: string
+}
+
 interface PersonalInfoFormProps {
   isEngineer: boolean
   saving: boolean
-  // Common fields
-  firstName: string
-  setFirstName: (v: string) => void
-  lastName: string
-  setLastName: (v: string) => void
-  phone: string
-  setPhone: (v: string) => void
-  // Engineer-specific fields
-  jobTitle: string
-  setJobTitle: (v: string) => void
-  bio: string
-  setBio: (v: string) => void
-  // Client-specific fields
-  clientType: ClientType
-  setClientType: (v: ClientType) => void
-  companyName: string
-  setCompanyName: (v: string) => void
-  legalForm: string
-  setLegalForm: (v: string) => void
-  professionalEmail: string
-  setProfessionalEmail: (v: string) => void
-  contactPosition: string
-  setContactPosition: (v: string) => void
-  siret: string
-  setSiret: (v: string) => void
-  vatNumber: string
-  setVatNumber: (v: string) => void
-  address: string
-  setAddress: (v: string) => void
-  postalCode: string
-  setPostalCode: (v: string) => void
-  city: string
-  setCity: (v: string) => void
-  country: string
-  setCountry: (v: string) => void
+  formData: PersonalInfoFormData
+  onChange: (field: keyof PersonalInfoFormData, value: string) => void
 }
 
 export function PersonalInfoForm({
   isEngineer,
   saving,
-  firstName,
-  setFirstName,
-  lastName,
-  setLastName,
-  phone,
-  setPhone,
-  jobTitle,
-  setJobTitle,
-  bio,
-  setBio,
-  clientType,
-  setClientType,
-  companyName,
-  setCompanyName,
-  legalForm,
-  setLegalForm,
-  professionalEmail,
-  setProfessionalEmail,
-  contactPosition,
-  setContactPosition,
-  siret,
-  setSiret,
-  vatNumber,
-  setVatNumber,
-  address,
-  setAddress,
-  postalCode,
-  setPostalCode,
-  city,
-  setCity,
-  country,
-  setCountry,
+  formData,
+  onChange,
 }: PersonalInfoFormProps) {
+  const {
+    firstName,
+    lastName,
+    phone,
+    jobTitle,
+    bio,
+    clientType,
+    companyName,
+    legalForm,
+    professionalEmail,
+    contactPosition,
+    siret,
+    vatNumber,
+    address,
+    postalCode,
+    city,
+    country,
+  } = formData
   const { t } = useLanguage()
 
   return (
@@ -98,7 +75,7 @@ export function PersonalInfoForm({
               type="text"
               placeholder={t('profile.firstNamePlaceholder')}
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
+              onChange={(e) => onChange('firstName', e.target.value)}
               disabled={saving}
               className="border-border focus:border-primary"
             />
@@ -110,7 +87,7 @@ export function PersonalInfoForm({
               type="text"
               placeholder={t('profile.lastNamePlaceholder')}
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
+              onChange={(e) => onChange('lastName', e.target.value)}
               disabled={saving}
               className="border-border focus:border-primary"
             />
@@ -123,7 +100,7 @@ export function PersonalInfoForm({
             type="tel"
             placeholder={t('profile.phonePlaceholder')}
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => onChange('phone', e.target.value)}
             disabled={saving}
             className="border-border focus:border-primary"
           />
@@ -141,7 +118,7 @@ export function PersonalInfoForm({
               type="text"
               placeholder={t('profile.jobTitlePlaceholder')}
               value={jobTitle}
-              onChange={(e) => setJobTitle(e.target.value)}
+              onChange={(e) => onChange('jobTitle', e.target.value)}
               disabled={saving}
               className="border-border focus:border-primary"
             />
@@ -154,7 +131,7 @@ export function PersonalInfoForm({
               id="bio"
               placeholder={t('profile.bioPlaceholder')}
               value={bio}
-              onChange={(e) => setBio(e.target.value)}
+              onChange={(e) => onChange('bio', e.target.value)}
               disabled={saving}
               rows={4}
               className="border-border focus:border-primary resize-none bg-white"
@@ -168,7 +145,7 @@ export function PersonalInfoForm({
             <h3 className="text-sm font-medium text-foreground">{t('profile.clientType')}</h3>
             <RadioGroup
               value={clientType}
-              onValueChange={(value) => setClientType(value as ClientType)}
+              onValueChange={(value) => onChange('clientType', value)}
               disabled={saving}
               className="flex gap-4"
             >
@@ -199,7 +176,7 @@ export function PersonalInfoForm({
                     type="text"
                     placeholder={t('profile.companyNamePlaceholder')}
                     value={companyName}
-                    onChange={(e) => setCompanyName(e.target.value)}
+                    onChange={(e) => onChange('companyName', e.target.value)}
                     disabled={saving}
                     className="border-border focus:border-primary"
                   />
@@ -211,7 +188,7 @@ export function PersonalInfoForm({
                     type="text"
                     placeholder={t('profile.legalFormPlaceholder')}
                     value={legalForm}
-                    onChange={(e) => setLegalForm(e.target.value)}
+                    onChange={(e) => onChange('legalForm', e.target.value)}
                     disabled={saving}
                     className="border-border focus:border-primary"
                   />
@@ -225,7 +202,7 @@ export function PersonalInfoForm({
                     type="text"
                     placeholder={t('profile.siretPlaceholder')}
                     value={siret}
-                    onChange={(e) => setSiret(e.target.value)}
+                    onChange={(e) => onChange('siret', e.target.value)}
                     disabled={saving}
                     className="border-border focus:border-primary"
                   />
@@ -237,7 +214,7 @@ export function PersonalInfoForm({
                     type="text"
                     placeholder={t('profile.vatNumberPlaceholder')}
                     value={vatNumber}
-                    onChange={(e) => setVatNumber(e.target.value)}
+                    onChange={(e) => onChange('vatNumber', e.target.value)}
                     disabled={saving}
                     className="border-border focus:border-primary"
                   />
@@ -251,7 +228,7 @@ export function PersonalInfoForm({
                     type="email"
                     placeholder={t('profile.professionalEmailPlaceholder')}
                     value={professionalEmail}
-                    onChange={(e) => setProfessionalEmail(e.target.value)}
+                    onChange={(e) => onChange('professionalEmail', e.target.value)}
                     disabled={saving}
                     className="border-border focus:border-primary"
                   />
@@ -263,7 +240,7 @@ export function PersonalInfoForm({
                     type="text"
                     placeholder={t('profile.contactPositionPlaceholder')}
                     value={contactPosition}
-                    onChange={(e) => setContactPosition(e.target.value)}
+                    onChange={(e) => onChange('contactPosition', e.target.value)}
                     disabled={saving}
                     className="border-border focus:border-primary"
                   />
@@ -282,7 +259,7 @@ export function PersonalInfoForm({
                 type="text"
                 placeholder={t('profile.addressPlaceholder')}
                 value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                onChange={(e) => onChange('address', e.target.value)}
                 disabled={saving}
                 className="border-border focus:border-primary"
               />
@@ -295,7 +272,7 @@ export function PersonalInfoForm({
                   type="text"
                   placeholder={t('profile.postalCodePlaceholder')}
                   value={postalCode}
-                  onChange={(e) => setPostalCode(e.target.value)}
+                  onChange={(e) => onChange('postalCode', e.target.value)}
                   disabled={saving}
                   className="border-border focus:border-primary"
                 />
@@ -307,7 +284,7 @@ export function PersonalInfoForm({
                   type="text"
                   placeholder={t('profile.cityPlaceholder')}
                   value={city}
-                  onChange={(e) => setCity(e.target.value)}
+                  onChange={(e) => onChange('city', e.target.value)}
                   disabled={saving}
                   className="border-border focus:border-primary"
                 />
@@ -319,7 +296,7 @@ export function PersonalInfoForm({
                   type="text"
                   placeholder={t('profile.countryPlaceholder')}
                   value={country}
-                  onChange={(e) => setCountry(e.target.value)}
+                  onChange={(e) => onChange('country', e.target.value)}
                   disabled={saving}
                   className="border-border focus:border-primary"
                 />

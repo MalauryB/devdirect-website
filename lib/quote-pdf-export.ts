@@ -39,7 +39,6 @@ export async function exportQuoteToPdf(
     document.body.removeChild(link)
     window.URL.revokeObjectURL(url)
   } catch (error) {
-    console.error('Error exporting PDF:', error)
     throw error
   }
 }

@@ -202,14 +202,14 @@ export function FinanceFilters({
                     return (
                       <div className="bg-white border rounded-lg shadow-lg p-3 text-sm">
                         <p className="font-medium mb-2">{label}</p>
-                        {payload.map((item: any, idx: number) => (
+                        {payload.map((item, idx) => (
                           <p key={idx} className="flex items-center gap-2">
                             <span
                               className="w-2 h-2 rounded-full"
-                              style={{ backgroundColor: item.stroke }}
+                              style={{ backgroundColor: String(item.stroke || '') }}
                             />
-                            <span className="text-muted-foreground">{item.name}:</span>
-                            <span className="font-medium">{item.value?.toFixed(1)} jours</span>
+                            <span className="text-muted-foreground">{String(item.name || '')}:</span>
+                            <span className="font-medium">{Number(item.value || 0).toFixed(1)} jours</span>
                           </p>
                         ))}
                       </div>
@@ -295,6 +295,7 @@ export function FinanceFilters({
                           size="sm"
                           onClick={() => onSelectProject(project.id)}
                           className="text-[#ea4c89] hover:text-[#ea4c89]/80"
+                          aria-label="Voir le projet"
                         >
                           <ArrowRight className="w-4 h-4" />
                         </Button>

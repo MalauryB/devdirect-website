@@ -65,7 +65,6 @@ export async function getGlobalDocuments(): Promise<{
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching global documents:', error)
     return { documents: [], error: error.message }
   }
 
@@ -88,7 +87,6 @@ export async function getGlobalDocumentsByType(type: GlobalDocumentType): Promis
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching global documents by type:', error)
     return { documents: [], error: error.message }
   }
 
@@ -111,7 +109,6 @@ export async function getGlobalDocumentsByCategory(category: string): Promise<{
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching global documents by category:', error)
     return { documents: [], error: error.message }
   }
 
@@ -152,7 +149,6 @@ export async function getGlobalDocumentVersions(documentId: string): Promise<{
     .order('version', { ascending: false })
 
   if (error) {
-    console.error('Error fetching document versions:', error)
     return { versions: [], error: error.message }
   }
 
@@ -188,7 +184,6 @@ export async function uploadGlobalDocument(
     })
 
   if (uploadError) {
-    console.error('Error uploading file:', uploadError)
     return { document: null, error: uploadError.message }
   }
 
@@ -216,7 +211,6 @@ export async function uploadGlobalDocument(
     .single()
 
   if (insertError) {
-    console.error('Error inserting document record:', insertError)
     // Delete uploaded file on error
     await supabase.storage.from(BUCKET_NAME).remove([fileName])
     return { document: null, error: insertError.message }
@@ -264,7 +258,6 @@ export async function uploadGlobalDocumentVersion(
     })
 
   if (uploadError) {
-    console.error('Error uploading file:', uploadError)
     return { document: null, error: uploadError.message }
   }
 
@@ -275,7 +268,6 @@ export async function uploadGlobalDocumentVersion(
     .eq('id', documentId)
 
   if (updateError) {
-    console.error('Error updating old document:', updateError)
     await supabase.storage.from(BUCKET_NAME).remove([fileName])
     return { document: null, error: updateError.message }
   }
@@ -304,7 +296,6 @@ export async function uploadGlobalDocumentVersion(
     .single()
 
   if (insertError) {
-    console.error('Error inserting new version:', insertError)
     // Restore old document as latest
     await supabase.from('global_documents').update({ is_latest: true }).eq('id', documentId)
     await supabase.storage.from(BUCKET_NAME).remove([fileName])
@@ -333,7 +324,6 @@ export async function deleteGlobalDocument(documentId: string): Promise<{ error:
     .remove([document.file_path])
 
   if (storageError) {
-    console.error('Error deleting file from storage:', storageError)
     // Continue to delete DB entry anyway
   }
 

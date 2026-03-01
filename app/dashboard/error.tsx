@@ -8,7 +8,7 @@ export default function DashboardError({ error, reset }: { error: Error & { dige
   const router = useRouter()
 
   useEffect(() => {
-    console.error('Dashboard error:', error)
+    // Error boundary caught an error
   }, [error])
 
   return (

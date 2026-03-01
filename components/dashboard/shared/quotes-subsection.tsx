@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
-import type { UserRole } from "@/contexts/auth-context"
+import type { UserRole, UserMetadata } from "@/contexts/auth-context"
 import type { Project, Quote, Profile } from "@/lib/types"
 import { getQuoteStatusBadgeClass, formatCurrency } from "@/lib/dashboard-utils"
 import { QuoteForm } from "@/components/quote-form"
@@ -28,7 +28,7 @@ interface QuotesSubsectionProps {
   isEngineer: boolean
   accessToken?: string
   // Engineer-only props
-  user?: { id: string; email?: string; user_metadata?: any }
+  user?: { id: string; email?: string; user_metadata?: UserMetadata }
   session?: { access_token?: string } | null
   userRole?: UserRole
   onDeleteQuote?: (quote: Quote) => void
@@ -75,6 +75,7 @@ export function QuotesSubsection({
                 setEditingQuote(null)
               }}
               className="text-foreground/50 hover:text-foreground"
+              aria-label="Fermer le formulaire de devis"
             >
               <X className="w-5 h-5" />
             </Button>
@@ -147,6 +148,7 @@ export function QuotesSubsection({
                         variant="ghost"
                         onClick={() => exportQuoteToExcel(quote, project?.title)}
                         title={t('quotes.exportExcel')}
+                        aria-label="Exporter en Excel"
                         className="text-green-600 hover:text-green-700 hover:bg-green-50"
                       >
                         <FileSpreadsheet className="w-4 h-4" />
@@ -156,6 +158,7 @@ export function QuotesSubsection({
                         variant="ghost"
                         onClick={() => exportQuoteToPdf(quote, project, user?.user_metadata as Profile | undefined, undefined, resolvedAccessToken)}
                         title={t('quotes.exportPdf')}
+                        aria-label="Exporter en PDF"
                         className="text-red-500 hover:text-red-600 hover:bg-red-50"
                       >
                         <FileText className="w-4 h-4" />
@@ -170,6 +173,7 @@ export function QuotesSubsection({
                               setEditingQuote(quote)
                               setShowQuoteForm(true)
                             }}
+                            aria-label="Modifier le devis"
                           >
                             <Pencil className="w-4 h-4" />
                           </Button>
@@ -179,6 +183,7 @@ export function QuotesSubsection({
                               variant="ghost"
                               onClick={() => onDeleteQuote(quote)}
                               className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                              aria-label="Supprimer le devis"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>
@@ -252,6 +257,7 @@ export function QuotesSubsection({
                       size="sm"
                       onClick={() => exportQuoteToPdf(quote, project, undefined, undefined, resolvedAccessToken)}
                       title={t('quotes.downloadPdf')}
+                      aria-label="Telecharger en PDF"
                     >
                       <Download className="w-4 h-4" />
                     </Button>
@@ -261,6 +267,7 @@ export function QuotesSubsection({
                       size="sm"
                       onClick={() => exportQuoteToExcel(quote, project?.title)}
                       title={t('quotes.downloadExcel')}
+                      aria-label="Telecharger en Excel"
                     >
                       <FileSpreadsheet className="w-4 h-4" />
                     </Button>

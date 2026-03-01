@@ -9,9 +9,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/contexts/language-context"
+import type { UserMetadata } from "@/contexts/auth-context"
 
 interface DashboardHeaderProps {
-  user: { email?: string; user_metadata?: any }
+  user: { email?: string; user_metadata?: UserMetadata }
   displayName: string
   avatarUrl: string
   onOpenSidebar: () => void
@@ -43,7 +44,7 @@ export function DashboardHeader({
       {/* User account dropdown */}
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <button className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center hover:bg-muted transition-colors focus:outline-none overflow-hidden">
+          <button className="w-8 h-8 rounded-full bg-muted text-muted-foreground flex items-center justify-center hover:bg-muted transition-colors focus:outline-none overflow-hidden" aria-label="Menu du compte utilisateur">
             {avatarUrl ? (
               <img
                 src={avatarUrl}

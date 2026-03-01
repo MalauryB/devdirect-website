@@ -59,7 +59,7 @@ export function Header() {
             {user ? (
               <DropdownMenu modal={false}>
                 <DropdownMenuTrigger asChild>
-                  <button className="w-9 h-9 rounded-full bg-white border-2 border-action text-action flex items-center justify-center hover:bg-action/10 transition-colors focus:outline-none">
+                  <button className="w-9 h-9 rounded-full bg-white border-2 border-action text-action flex items-center justify-center hover:bg-action/10 transition-colors focus:outline-none" aria-label="Menu du compte utilisateur">
                     <span className="text-sm font-semibold">
                       {user.email?.charAt(0).toUpperCase()}
                     </span>

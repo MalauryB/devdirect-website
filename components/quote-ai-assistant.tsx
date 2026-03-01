@@ -106,8 +106,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
       if (data.modifications) {
         onQuoteUpdate(data.modifications)
       }
-    } catch (error) {
-      console.error("AI Assistant error:", error)
+    } catch {
       setMessages(prev => [...prev, {
         id: `error-${Date.now()}`,
         role: "assistant",
@@ -183,6 +182,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
                 onToggle()
               }}
               className="p-1.5 hover:bg-white/20 rounded-lg transition-colors"
+              aria-label="Fermer l'assistant IA"
             >
               <X className="w-4 h-4" />
             </button>
@@ -291,6 +291,7 @@ export function QuoteAIAssistant({ quoteData, onQuoteUpdate, projectDescription,
                 onClick={handleSubmit}
                 disabled={!input.trim() || loading}
                 className="bg-action hover:bg-action/90 rounded-lg px-3 h-10"
+                aria-label="Envoyer le message"
               >
                 {loading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />

@@ -116,7 +116,7 @@ export function TimeEntryList({
                 {isOwn && isEngineer && (
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <button className="p-1 hover:bg-muted rounded">
+                      <button className="p-1 hover:bg-muted rounded" aria-label="Options de la saisie">
                         <MoreVertical className="w-4 h-4 text-foreground/50" />
                       </button>
                     </DropdownMenuTrigger>

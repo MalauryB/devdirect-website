@@ -211,8 +211,8 @@ export const ProjectContracts = memo(function ProjectContracts({ project, quotes
         accessToken: session?.access_token,
       })
       setPreviewPdfUrl(url)
-    } catch (error) {
-      console.error('Error generating PDF preview:', error)
+    } catch {
+      // Error handled by state
     } finally {
       setPreviewLoading(false)
     }
@@ -333,8 +333,8 @@ export const ProjectContracts = memo(function ProjectContracts({ project, quotes
       })
       downloadContractPdf(url, contract.id)
       window.URL.revokeObjectURL(url)
-    } catch (error) {
-      console.error('Error exporting PDF:', error)
+    } catch {
+      // Error handled silently
     }
     setExporting(null)
   }

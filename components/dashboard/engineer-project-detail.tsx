@@ -14,7 +14,7 @@ import {
   FileSignature
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
-import { UserRole } from "@/contexts/auth-context"
+import { UserRole, type UserMetadata } from "@/contexts/auth-context"
 import { Project, Quote, Profile, ProjectDocument, CurrentUser } from "@/lib/types"
 import { getStatusBadgeClass } from "@/lib/dashboard-utils"
 import { MessageThread } from "@/components/message-thread"
@@ -30,7 +30,7 @@ import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
 interface EngineerProjectDetailProps {
   project: Project
-  user: { id: string; email?: string; user_metadata?: any }
+  user: { id: string; email?: string; user_metadata?: UserMetadata }
   session: { access_token?: string } | null
   userRole: UserRole
   isEngineer: boolean

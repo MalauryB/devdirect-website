@@ -46,6 +46,7 @@ export function StepCosting({
                   onClick={() => removeCategory(categoryIndex)}
                   disabled={loading}
                   className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  aria-label="Supprimer la categorie"
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -78,6 +79,7 @@ export function StepCosting({
                         onClick={() => removeCostingActivity(categoryIndex, activityIndex)}
                         disabled={loading}
                         className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                        aria-label="Supprimer l'activite"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -162,6 +164,7 @@ export function StepCosting({
                               onClick={() => removeCostingComponent(categoryIndex, activityIndex, componentIndex)}
                               disabled={loading}
                               className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                              aria-label="Supprimer le composant"
                             >
                               <Trash2 className="w-4 h-4" />
                             </Button>

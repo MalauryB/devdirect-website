@@ -181,7 +181,7 @@ export function ContractListItem({
           {isEngineer && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="p-2 hover:bg-muted rounded-lg">
+                <button className="p-2 hover:bg-muted rounded-lg" aria-label="Options du contrat">
                   <MoreVertical className="w-4 h-4 text-foreground/50" />
                 </button>
               </DropdownMenuTrigger>

@@ -4,19 +4,18 @@ import { useCallback, useEffect, useState } from "react"
 import { Loader2, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
-import { UserMetadata, ClientType } from "@/contexts/auth-context"
+import { UserMetadata } from "@/contexts/auth-context"
 import { uploadFile, validateFile } from "@/lib/storage"
 import { updateProfileAvatarUrl } from "@/lib/supabase"
 import { AvatarUploader } from "@/components/dashboard/profile/avatar-uploader"
-import { PersonalInfoForm } from "@/components/dashboard/profile/personal-info-form"
+import { PersonalInfoForm, PersonalInfoFormData } from "@/components/dashboard/profile/personal-info-form"
 import { CompanySettingsForm, CompanySettings } from "@/components/dashboard/profile/company-settings-form"
 import { SkillsManager } from "@/components/dashboard/profile/skills-manager"
 
 interface ProfileSectionUser {
   id: string
   email?: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  user_metadata?: Record<string, any>
+  user_metadata?: UserMetadata
 }
 
 interface ProfileSectionProps {
@@ -28,29 +27,30 @@ interface ProfileSectionProps {
 export function ProfileSection({ user, isEngineer, onUpdateProfile }: ProfileSectionProps) {
   const { t } = useLanguage()
 
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  const [phone, setPhone] = useState("")
-  const [clientType, setClientType] = useState<ClientType>("individual")
-  const [companyName, setCompanyName] = useState("")
-  const [legalForm, setLegalForm] = useState("")
-  const [professionalEmail, setProfessionalEmail] = useState("")
-  const [contactPosition, setContactPosition] = useState("")
-  const [siret, setSiret] = useState("")
-  const [vatNumber, setVatNumber] = useState("")
-  const [address, setAddress] = useState("")
-  const [postalCode, setPostalCode] = useState("")
-  const [city, setCity] = useState("")
-  const [country, setCountry] = useState("France")
+  const [personalInfo, setPersonalInfo] = useState<PersonalInfoFormData>({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    jobTitle: "",
+    bio: "",
+    clientType: "individual",
+    companyName: "",
+    legalForm: "",
+    professionalEmail: "",
+    contactPosition: "",
+    siret: "",
+    vatNumber: "",
+    address: "",
+    postalCode: "",
+    city: "",
+    country: "France",
+  })
   const [avatarUrl, setAvatarUrl] = useState("")
   const [avatarUploading, setAvatarUploading] = useState(false)
   const [saving, setSaving] = useState(false)
   const [profileSuccess, setProfileSuccess] = useState(false)
   const [profileError, setProfileError] = useState("")
   const [profileInitialized, setProfileInitialized] = useState(false)
-  // Engineer-specific profile fields
-  const [jobTitle, setJobTitle] = useState("")
-  const [bio, setBio] = useState("")
   const [skills, setSkills] = useState<string[]>([])
 
   // Company settings ref for form submission (managed internally by CompanySettingsForm)
@@ -66,28 +66,33 @@ export function ProfileSection({ user, isEngineer, onUpdateProfile }: ProfileSec
   useEffect(() => {
     // Only initialize profile once to avoid resetting form values when user reference changes
     if (user?.user_metadata && !profileInitialized) {
-      setFirstName(user.user_metadata.first_name || "")
-      setLastName(user.user_metadata.last_name || "")
-      setPhone(user.user_metadata.phone || "")
-      setClientType(user.user_metadata.client_type || "individual")
-      setCompanyName(user.user_metadata.company_name || "")
-      setLegalForm(user.user_metadata.legal_form || "")
-      setProfessionalEmail(user.user_metadata.professional_email || "")
-      setContactPosition(user.user_metadata.contact_position || "")
-      setSiret(user.user_metadata.siret || "")
-      setVatNumber(user.user_metadata.vat_number || "")
-      setAddress(user.user_metadata.address || "")
-      setPostalCode(user.user_metadata.postal_code || "")
-      setCity(user.user_metadata.city || "")
-      setCountry(user.user_metadata.country || "France")
+      setPersonalInfo({
+        firstName: user.user_metadata.first_name || "",
+        lastName: user.user_metadata.last_name || "",
+        phone: user.user_metadata.phone || "",
+        jobTitle: user.user_metadata.job_title || "",
+        bio: user.user_metadata.bio || "",
+        clientType: user.user_metadata.client_type || "individual",
+        companyName: user.user_metadata.company_name || "",
+        legalForm: user.user_metadata.legal_form || "",
+        professionalEmail: user.user_metadata.professional_email || "",
+        contactPosition: user.user_metadata.contact_position || "",
+        siret: user.user_metadata.siret || "",
+        vatNumber: user.user_metadata.vat_number || "",
+        address: user.user_metadata.address || "",
+        postalCode: user.user_metadata.postal_code || "",
+        city: user.user_metadata.city || "",
+        country: user.user_metadata.country || "France",
+      })
       setAvatarUrl(user.user_metadata.avatar_url || "")
-      // Engineer-specific fields
-      setJobTitle(user.user_metadata.job_title || "")
-      setBio(user.user_metadata.bio || "")
       setSkills(user.user_metadata.skills || [])
       setProfileInitialized(true)
     }
   }, [user, profileInitialized])
+
+  const handlePersonalInfoChange = useCallback((field: keyof PersonalInfoFormData, value: string) => {
+    setPersonalInfo(prev => ({ ...prev, [field]: value }))
+  }, [])
 
   const handleCompanySettingsChange = useCallback((settings: CompanySettings) => {
     setCompanySettings(settings)
@@ -100,23 +105,23 @@ export function ProfileSection({ user, isEngineer, onUpdateProfile }: ProfileSec
     setProfileSuccess(false)
 
     const metadata: UserMetadata = {
-      first_name: firstName,
-      last_name: lastName,
-      phone: phone,
-      client_type: clientType,
-      company_name: companyName,
-      legal_form: legalForm,
-      professional_email: professionalEmail,
-      contact_position: contactPosition,
-      siret: siret,
-      vat_number: vatNumber,
-      address: address,
-      postal_code: postalCode,
-      city: city,
-      country: country,
+      first_name: personalInfo.firstName,
+      last_name: personalInfo.lastName,
+      phone: personalInfo.phone,
+      client_type: personalInfo.clientType,
+      company_name: personalInfo.companyName,
+      legal_form: personalInfo.legalForm,
+      professional_email: personalInfo.professionalEmail,
+      contact_position: personalInfo.contactPosition,
+      siret: personalInfo.siret,
+      vat_number: personalInfo.vatNumber,
+      address: personalInfo.address,
+      postal_code: personalInfo.postalCode,
+      city: personalInfo.city,
+      country: personalInfo.country,
       // Engineer-specific fields
-      job_title: jobTitle,
-      bio: bio,
+      job_title: personalInfo.jobTitle,
+      bio: personalInfo.bio,
       skills: skills,
     }
 
@@ -152,10 +157,8 @@ export function ProfileSection({ user, isEngineer, onUpdateProfile }: ProfileSec
     const { data, error } = await uploadFile(file, 'avatars', 'profile')
 
     if (error) {
-      console.error('Upload error:', error)
       setProfileError(`${t('profile.avatarError')}: ${error.message}`)
     } else if (data && user) {
-      console.log('Avatar uploaded:', data.url)
       setAvatarUrl(data.url)
       // Save avatar URL to auth.users metadata
       const { error: updateError } = await onUpdateProfile({ avatar_url: data.url })
@@ -163,10 +166,7 @@ export function ProfileSection({ user, isEngineer, onUpdateProfile }: ProfileSec
         setProfileError(t('profile.error'))
       }
       // Also update the profiles table for other users to see
-      const { error: profileError } = await updateProfileAvatarUrl(user.id, data.url)
-      if (profileError) {
-        console.error('Failed to update profiles table:', profileError)
-      }
+      await updateProfileAvatarUrl(user.id, data.url)
     }
 
     setAvatarUploading(false)
@@ -190,38 +190,8 @@ export function ProfileSection({ user, isEngineer, onUpdateProfile }: ProfileSec
         <PersonalInfoForm
           isEngineer={isEngineer}
           saving={saving}
-          firstName={firstName}
-          setFirstName={setFirstName}
-          lastName={lastName}
-          setLastName={setLastName}
-          phone={phone}
-          setPhone={setPhone}
-          jobTitle={jobTitle}
-          setJobTitle={setJobTitle}
-          bio={bio}
-          setBio={setBio}
-          clientType={clientType}
-          setClientType={setClientType}
-          companyName={companyName}
-          setCompanyName={setCompanyName}
-          legalForm={legalForm}
-          setLegalForm={setLegalForm}
-          professionalEmail={professionalEmail}
-          setProfessionalEmail={setProfessionalEmail}
-          contactPosition={contactPosition}
-          setContactPosition={setContactPosition}
-          siret={siret}
-          setSiret={setSiret}
-          vatNumber={vatNumber}
-          setVatNumber={setVatNumber}
-          address={address}
-          setAddress={setAddress}
-          postalCode={postalCode}
-          setPostalCode={setPostalCode}
-          city={city}
-          setCity={setCity}
-          country={country}
-          setCountry={setCountry}
+          formData={personalInfo}
+          onChange={handlePersonalInfoChange}
         />
 
         {/* Engineer-only: Skills */}

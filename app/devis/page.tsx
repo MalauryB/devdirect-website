@@ -10,6 +10,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { createProject } from "@/lib/projects"
 import { ProjectFormData, DEFAULT_PROJECT_FORM_DATA } from "@/lib/types"
+import { createArrayToggleHandler } from "@/lib/form-utils"
 import { Textarea } from "@/components/ui/textarea"
 import { DevisAuthForm } from "@/components/devis/devis-auth-form"
 
@@ -88,32 +89,9 @@ export default function DevisPage() {
     transferPendingProject()
   }, [user, mainStep, router, t])
 
-  const handleProjectTypeToggle = (type: string) => {
-    setFormData(prev => ({
-      ...prev,
-      project_types: prev.project_types.includes(type)
-        ? prev.project_types.filter(t => t !== type)
-        : [...prev.project_types, type]
-    }))
-  }
-
-  const handlePlatformToggle = (platform: string) => {
-    setFormData(prev => ({
-      ...prev,
-      platforms: prev.platforms.includes(platform)
-        ? prev.platforms.filter(p => p !== platform)
-        : [...prev.platforms, platform]
-    }))
-  }
-
-  const handleServiceToggle = (service: string) => {
-    setFormData(prev => ({
-      ...prev,
-      services: prev.services.includes(service)
-        ? prev.services.filter(s => s !== service)
-        : [...prev.services, service]
-    }))
-  }
+  const handleProjectTypeToggle = createArrayToggleHandler(setFormData, 'project_types')
+  const handlePlatformToggle = createArrayToggleHandler(setFormData, 'platforms')
+  const handleServiceToggle = createArrayToggleHandler(setFormData, 'services')
 
   // Build description from guided answers
   const buildDescriptionFromGuided = () => {

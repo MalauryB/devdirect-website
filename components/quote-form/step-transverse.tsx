@@ -43,6 +43,7 @@ export function StepTransverse({ formData, loading, addLevel, removeLevel, addAc
                   onClick={() => removeLevel(levelIndex)}
                   disabled={loading}
                   className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  aria-label="Supprimer le niveau"
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>
@@ -131,6 +132,7 @@ export function StepTransverse({ formData, loading, addLevel, removeLevel, addAc
                             onClick={() => removeActivity(levelIndex, activityIndex)}
                             disabled={loading}
                             className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                            aria-label="Supprimer l'activite"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

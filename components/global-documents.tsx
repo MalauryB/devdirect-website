@@ -57,26 +57,20 @@ export function GlobalDocuments() {
   async function loadDocuments() {
     setLoading(true)
     try {
-      const { documents: docs, error } = await getGlobalDocuments()
-      if (error) {
-        console.error('Error loading global documents:', error)
-      }
+      const { documents: docs } = await getGlobalDocuments()
       setDocuments(docs)
-    } catch (err) {
-      console.error('Exception loading global documents:', err)
+    } catch {
+      // Error handled by state
     }
     setLoading(false)
   }
 
   async function loadCategories() {
     try {
-      const { categories: cats, error } = await getGlobalDocumentCategories()
-      if (error) {
-        console.error('Error loading categories:', error)
-      }
+      const { categories: cats } = await getGlobalDocumentCategories()
       setCategories(cats)
-    } catch (err) {
-      console.error('Exception loading categories:', err)
+    } catch {
+      // Error handled by state
     }
   }
 

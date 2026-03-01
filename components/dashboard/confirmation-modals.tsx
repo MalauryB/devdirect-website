@@ -62,7 +62,7 @@ export function ClientProfileModal({ profile, onClose }: ClientProfileModalProps
           <h3 className="text-lg font-semibold text-foreground">
             {t('projects.details.clientProfile')}
           </h3>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fermer">
             <X className="w-4 h-4" />
           </Button>
         </div>

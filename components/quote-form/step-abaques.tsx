@@ -93,6 +93,7 @@ export function StepAbaques({ formData, loading, addAbaque, updateAbaque, remove
                   onClick={() => removeAbaque(index)}
                   disabled={loading}
                   className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                  aria-label="Supprimer l'abaque"
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>

@@ -210,8 +210,8 @@ export const ProjectRoadmap = memo(function ProjectRoadmap({ project, currentUse
           await loadData()
         }
       }
-    } catch (error) {
-      console.error('Error generating roadmap:', error)
+    } catch {
+      // Error handled silently
     }
 
     setGenerating(false)
@@ -284,8 +284,8 @@ export const ProjectRoadmap = memo(function ProjectRoadmap({ project, currentUse
         setExpandedMilestones(prev => new Set([...prev, milestone.id]))
         await loadData()
       }
-    } catch (error) {
-      console.error('Error generating subtasks:', error)
+    } catch {
+      // Error handled silently
     }
 
     setGeneratingSubtasks(null)

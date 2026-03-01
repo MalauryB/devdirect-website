@@ -36,13 +36,11 @@ async function getSignedUrlForDocument(
       .createSignedUrl(document.file_path, 300) // 5 minutes validity
 
     if (error || !data?.signedUrl) {
-      console.error('Error creating signed URL:', error)
       return null
     }
 
     return data.signedUrl
-  } catch (err) {
-    console.error('Error generating signed URL:', err)
+  } catch {
     return null
   }
 }
@@ -75,11 +73,6 @@ export async function generateContractPdfUrl(
       getSignedUrlForDocument(specificationDocument),
       getSignedUrlForDocument(planningDocument)
     ])
-    console.log('Generated signed URLs:', {
-      signedQuoteUrl: signedQuoteUrl ? 'yes' : 'no',
-      specificationUrl: specificationUrl ? 'yes' : 'no',
-      planningUrl: planningUrl ? 'yes' : 'no'
-    })
   }
 
   const headers: Record<string, string> = {
@@ -160,7 +153,6 @@ export async function exportContractToPdf(
     downloadContractPdf(url, contract.id)
     window.URL.revokeObjectURL(url)
   } catch (error) {
-    console.error('Error exporting PDF:', error)
     throw error
   }
 }

@@ -21,7 +21,6 @@ export async function getProjectDocuments(projectId: string): Promise<{
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('Error fetching project documents:', error)
     return { documents: [], error: error.message }
   }
 
@@ -63,7 +62,6 @@ export async function getDocumentVersions(documentId: string): Promise<{
     .order('version', { ascending: false })
 
   if (error) {
-    console.error('Error fetching document versions:', error)
     return { versions: [], error: error.message }
   }
 
@@ -99,7 +97,6 @@ export async function uploadDocument(
     })
 
   if (uploadError) {
-    console.error('Error uploading file:', uploadError)
     return { document: null, error: uploadError.message }
   }
 
@@ -127,7 +124,6 @@ export async function uploadDocument(
     .single()
 
   if (insertError) {
-    console.error('Error inserting document record:', insertError)
     // Supprimer le fichier uploadé en cas d'erreur
     await supabase.storage.from(BUCKET_NAME).remove([fileName])
     return { document: null, error: insertError.message }
@@ -175,7 +171,6 @@ export async function uploadNewVersion(
     })
 
   if (uploadError) {
-    console.error('Error uploading file:', uploadError)
     return { document: null, error: uploadError.message }
   }
 
@@ -186,7 +181,6 @@ export async function uploadNewVersion(
     .eq('id', documentId)
 
   if (updateError) {
-    console.error('Error updating old document:', updateError)
     // Supprimer le fichier uploadé en cas d'erreur
     await supabase.storage.from(BUCKET_NAME).remove([fileName])
     return { document: null, error: updateError.message }
@@ -216,7 +210,6 @@ export async function uploadNewVersion(
     .single()
 
   if (insertError) {
-    console.error('Error inserting new version:', insertError)
     // Remettre l'ancien document comme latest
     await supabase.from('project_documents').update({ is_latest: true }).eq('id', documentId)
     // Supprimer le fichier uploadé
@@ -246,7 +239,6 @@ export async function deleteDocument(documentId: string): Promise<{ error: strin
     .remove([document.file_path])
 
   if (storageError) {
-    console.error('Error deleting file from storage:', storageError)
     // On continue quand même pour supprimer l'entrée DB
   }
 

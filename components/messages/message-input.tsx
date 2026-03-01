@@ -94,6 +94,7 @@ export function MessageInput({ projectId, onSend, disabled, error }: MessageInpu
           <button
             onClick={removeAttachment}
             className="p-1 hover:bg-muted rounded"
+            aria-label="Retirer la piece jointe"
           >
             <X className="w-4 h-4 text-foreground/50" />
           </button>
@@ -115,6 +116,7 @@ export function MessageInput({ projectId, onSend, disabled, error }: MessageInpu
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading || sending || disabled}
           className="shrink-0"
+          aria-label="Joindre un fichier"
         >
           {uploading ? (
             <Loader2 className="w-4 h-4 animate-spin" />
@@ -141,6 +143,7 @@ export function MessageInput({ projectId, onSend, disabled, error }: MessageInpu
           onClick={handleSend}
           disabled={sending || disabled || (!newMessage.trim() && !attachment)}
           className="shrink-0 bg-primary hover:bg-primary/90"
+          aria-label="Envoyer le message"
         >
           {sending ? (
             <Loader2 className="w-4 h-4 animate-spin" />

@@ -17,7 +17,7 @@ interface ServiceDetailProps {
 
 export function ServiceDetail({ slug }: ServiceDetailProps) {
   const router = useRouter()
-  const { t } = useLanguage()
+  const { t, tRaw } = useLanguage()
   const { openDialog } = useContact()
 
   const title = t(`serviceDetail.${slug}.title`)
@@ -32,14 +32,14 @@ export function ServiceDetail({ slug }: ServiceDetailProps) {
     )
   }
 
-  const subtitle = t(`serviceDetail.${slug}.subtitle`) as string
-  const description = t(`serviceDetail.${slug}.description`) as string
-  const image = t(`serviceDetail.${slug}.image`) as string
-  const whatWeOffer = t(`serviceDetail.${slug}.whatWeOffer`) as string[]
-  const technologies = t(`serviceDetail.${slug}.technologies`) as Array<{ name: string; items: string[] }>
-  const process = t(`serviceDetail.${slug}.process`) as Array<{ title: string; description: string; duration: string }>
-  const pricing = t(`serviceDetail.${slug}.pricing`) as Record<string, { title: string; marketPrice?: string; price: string; features: string[] }>
-  const faqs = t(`serviceDetail.${slug}.faqs`) as Array<{ question: string; answer: string }>
+  const subtitle = t(`serviceDetail.${slug}.subtitle`)
+  const description = t(`serviceDetail.${slug}.description`)
+  const image = t(`serviceDetail.${slug}.image`)
+  const whatWeOffer = tRaw(`serviceDetail.${slug}.whatWeOffer`) as string[]
+  const technologies = tRaw(`serviceDetail.${slug}.technologies`) as Array<{ name: string; items: string[] }>
+  const process = tRaw(`serviceDetail.${slug}.process`) as Array<{ title: string; description: string; duration: string }>
+  const pricing = tRaw(`serviceDetail.${slug}.pricing`) as Record<string, { title: string; marketPrice?: string; price: string; features: string[] }>
+  const faqs = tRaw(`serviceDetail.${slug}.faqs`) as Array<{ question: string; answer: string }>
 
   return (
     <>

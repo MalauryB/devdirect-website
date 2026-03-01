@@ -18,6 +18,8 @@ function makeRequest(headers: Record<string, string> = {}): Request {
 describe('requireAuth', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_URL', 'https://test.supabase.co')
+    vi.stubEnv('NEXT_PUBLIC_SUPABASE_ANON_KEY', 'test-anon-key')
   })
 
   it('returns 401 when no Authorization header is present', async () => {

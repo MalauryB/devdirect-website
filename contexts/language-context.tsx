@@ -1,12 +1,13 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { Language, getTranslation } from '@/lib/translations'
+import { Language, getTranslation, getRawTranslation } from '@/lib/translations'
 
 interface LanguageContextType {
   language: Language
   setLanguage: (lang: Language) => void
-  t: (key: string) => any
+  t: (key: string) => string
+  tRaw: (key: string) => unknown
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
@@ -30,6 +31,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [language, mounted])
 
   const t = (key: string) => getTranslation(language, key)
+  const tRaw = (key: string) => getRawTranslation(language, key)
 
   if (!mounted) {
     return (
@@ -42,7 +44,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, setLanguage, t, tRaw }}>
       {children}
     </LanguageContext.Provider>
   )
@@ -55,7 +57,8 @@ export function useLanguage() {
     return {
       language: 'fr' as Language,
       setLanguage: () => {},
-      t: (key: string) => getTranslation('fr', key)
+      t: (key: string) => getTranslation('fr', key),
+      tRaw: (key: string) => getRawTranslation('fr', key)
     }
   }
   return context

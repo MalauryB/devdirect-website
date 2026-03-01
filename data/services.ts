@@ -1,8 +1,8 @@
-import { Globe, Smartphone, Cpu, Palette } from "lucide-react"
+import { Globe, Smartphone, Cpu, Palette, type LucideIcon } from "lucide-react"
 
 export interface Service {
   id: string
-  icon: any
+  icon: LucideIcon
   title: string
   description: string
   image?: string

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
 import { createProject, updateProject } from "@/lib/projects"
 import { ProjectFormData, Project, getProjectFormData } from "@/lib/types"
+import { createArrayToggleHandler } from "@/lib/form-utils"
 import { Loader2, Check, ChevronRight, ChevronLeft, Sparkles, Code, Rocket, Palette, FileText, Euro, Upload, CheckCircle2 } from "lucide-react"
 import { StepTechLevel } from "@/components/wizard/step-tech-level"
 import { StepProjectType } from "@/components/wizard/step-project-type"
@@ -43,32 +44,9 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
     inspiration: ""
   })
 
-  const handleProjectTypeToggle = (type: string) => {
-    setFormData(prev => ({
-      ...prev,
-      project_types: prev.project_types.includes(type)
-        ? prev.project_types.filter(t => t !== type)
-        : [...prev.project_types, type]
-    }))
-  }
-
-  const handleServiceToggle = (service: string) => {
-    setFormData(prev => ({
-      ...prev,
-      services: prev.services.includes(service)
-        ? prev.services.filter(s => s !== service)
-        : [...prev.services, service]
-    }))
-  }
-
-  const handlePlatformToggle = (platform: string) => {
-    setFormData(prev => ({
-      ...prev,
-      platforms: prev.platforms.includes(platform)
-        ? prev.platforms.filter(p => p !== platform)
-        : [...prev.platforms, platform]
-    }))
-  }
+  const handleProjectTypeToggle = createArrayToggleHandler(setFormData, 'project_types')
+  const handleServiceToggle = createArrayToggleHandler(setFormData, 'services')
+  const handlePlatformToggle = createArrayToggleHandler(setFormData, 'platforms')
 
   // Build description from guided answers
   const buildDescriptionFromGuided = () => {

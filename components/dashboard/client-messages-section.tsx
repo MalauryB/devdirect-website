@@ -6,7 +6,7 @@ import { useLanguage } from "@/contexts/language-context"
 import { MessageThread } from "@/components/message-thread"
 import { getStatusBadgeClass } from "@/lib/dashboard-utils"
 import type { Project } from "@/lib/types"
-import type { UserRole } from "@/contexts/auth-context"
+import type { UserRole, UserMetadata } from "@/contexts/auth-context"
 
 interface ClientMessagesSectionProps {
   projects: Project[]
@@ -15,7 +15,7 @@ interface ClientMessagesSectionProps {
   onSelectProject: (project: Project) => void
   onNavigateToProjects: () => void
   onViewProject: (project: Project) => void
-  user: { id: string; user_metadata?: any }
+  user: { id: string; user_metadata?: UserMetadata }
   userRole: UserRole
   unreadCounts: Record<string, number>
 }

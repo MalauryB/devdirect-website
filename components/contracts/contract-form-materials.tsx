@@ -91,6 +91,7 @@ export function ContractFormMaterials({
                     size="sm"
                     onClick={() => onRemoveProfile(index)}
                     className="h-6 w-6 p-0 text-red-500 hover:text-red-700 hover:bg-red-50"
+                    aria-label="Supprimer le profil"
                   >
                     <X className="w-3 h-3" />
                   </Button>

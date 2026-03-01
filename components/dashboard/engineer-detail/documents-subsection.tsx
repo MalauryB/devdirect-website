@@ -19,10 +19,11 @@ import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/contexts/language-context"
 import { Project, ProjectDocument, ProjectDocumentType } from "@/lib/types"
 import { uploadDocument, deleteDocument, getDocumentDownloadUrl, getFileIcon, formatFileSize, uploadNewVersion, getDocumentVersions } from "@/lib/documents"
+import type { UserMetadata } from "@/contexts/auth-context"
 
 interface DocumentsSubsectionProps {
   project: Project
-  user: { id: string; email?: string; user_metadata?: any }
+  user: { id: string; email?: string; user_metadata?: UserMetadata }
   session: { access_token?: string } | null
   isEngineer: boolean
   documents: ProjectDocument[]
@@ -228,6 +229,7 @@ export function DocumentsSubsection({
                         }}
                         className="text-foreground/60 hover:text-foreground"
                         title={t('documents.download')}
+                        aria-label="Telecharger le document"
                       >
                         <Download className="w-4 h-4" />
                       </Button>
@@ -282,6 +284,7 @@ export function DocumentsSubsection({
                             disabled={deletingDocumentId === doc.id}
                             className="text-red-500 hover:text-red-600 hover:bg-red-50"
                             title={t('documents.delete')}
+                            aria-label="Supprimer le document"
                           >
                             {deletingDocumentId === doc.id ? (
                               <Loader2 className="w-4 h-4 animate-spin" />
@@ -350,6 +353,7 @@ export function DocumentsSubsection({
                               }
                             }}
                             className="h-6 w-6 p-0 text-foreground/50 hover:text-foreground"
+                            aria-label={`Telecharger la version ${version.version}`}
                           >
                             <Download className="w-3 h-3" />
                           </Button>

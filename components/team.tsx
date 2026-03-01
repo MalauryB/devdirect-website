@@ -7,9 +7,9 @@ import { useLanguage } from "@/contexts/language-context"
 import { getImagePath } from "@/lib/assets"
 
 export function Team() {
-  const { t } = useLanguage()
+  const { t, tRaw } = useLanguage()
 
-  const teamMembers = t('team.members')
+  const teamMembers = tRaw('team.members') as Array<{ name: string; role: string; description: string }>
 
   const stats = [
     {
@@ -48,7 +48,7 @@ export function Team() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teamMembers.map((member: { name: string; role: string; description: string }, index: number) => (
+          {teamMembers.map((member, index) => (
             <Card key={index} className="bg-white group">
               <CardHeader className="text-center">
                 <CardTitle className="text-lg font-semibold leading-tight">{member.name}</CardTitle>

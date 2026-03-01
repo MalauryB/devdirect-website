@@ -11,7 +11,6 @@ export function useTeam() {
     if (member) {
       setSelectedMember(member)
       // Ici on pourrait ajouter de la logique comme ouvrir une modal, router, etc.
-      console.log(`Showing profile for: ${member.role}`)
     }
   }, [teamMembers])
 

@@ -10,7 +10,6 @@ export function useServices() {
     if (service) {
       setSelectedService(service)
       // Ici on pourrait ajouter de la logique comme ouvrir une modal, router, etc.
-      console.log(`Showing details for: ${service.title}`)
     }
   }, [services])
 

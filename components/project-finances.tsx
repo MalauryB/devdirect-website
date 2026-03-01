@@ -79,8 +79,8 @@ export function ProjectFinances({ project, isEngineer, onNavigateToContracts }: 
       // Calculate finance data
       const data = calculateProjectFinances(quotes, contracts, timeStats)
       setFinanceData(data)
-    } catch (error) {
-      console.error("Error loading finance data:", error)
+    } catch {
+      // Error handled by state
     } finally {
       setLoading(false)
     }

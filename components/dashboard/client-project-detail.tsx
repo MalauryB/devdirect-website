@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/contexts/language-context"
 import type { Project, Quote, ProjectDocument, CurrentUser } from "@/lib/types"
-import type { UserRole } from "@/contexts/auth-context"
+import type { UserRole, UserMetadata } from "@/contexts/auth-context"
 import { getStatusBadgeClass } from "@/lib/dashboard-utils"
 import { MessageThread } from "@/components/message-thread"
 import { DetailSubsection } from "@/components/dashboard/shared/detail-subsection"
@@ -29,7 +29,7 @@ import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
 interface ClientProjectDetailProps {
   project: Project
-  user: { id: string; email?: string; user_metadata?: any }
+  user: { id: string; email?: string; user_metadata?: UserMetadata }
   avatarUrl: string
   userRole: UserRole
   projectSubSection: SubSection
@@ -198,7 +198,7 @@ export function ClientProjectDetail({
                   </span>
                   {project.status === 'pending' && (
                     <DropdownMenu>
-                      <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-muted">
+                      <DropdownMenuTrigger className="h-8 w-8 p-0 flex items-center justify-center rounded-md hover:bg-muted" aria-label="Options du projet">
                         <MoreHorizontal className="w-4 h-4" />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="z-50">
