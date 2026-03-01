@@ -1,6 +1,6 @@
 import { escapeHtml } from './sanitize'
 import { calculateQuoteData } from './quote-export'
-import { ContractPdfData, formatDate, formatCurrency, formatCurrencyWords } from './contract-pdf-helpers'
+import { ContractPdfData, formatDate, formatCurrency, formatCurrencyWords, extractPartyInfo } from './contract-pdf-helpers'
 
 export function generateContractPdfHtml(data: ContractPdfData): string {
   const { contract, project, client, quote, provider } = data
@@ -9,20 +9,10 @@ export function generateContractPdfHtml(data: ContractPdfData): string {
   const contractDate = formatDate(contract.created_at)
   const today = new Date()
 
-  // Provider info
-  const providerName = provider?.name || 'Nimli'
-  const providerAddress = provider?.address || '123 Rue de l\'Innovation, 75001 Paris'
-  const providerSiret = provider?.siret || '123 456 789 00001'
-  const providerEmail = provider?.email || 'contact@nimli.fr'
-  const providerPhone = provider?.phone || '+33 1 23 45 67 89'
-
-  // Client info
-  const clientName = client?.company_name || `${client?.first_name || ''} ${client?.last_name || ''}`.trim() || 'Client'
-  const clientAddress = client ? [client.address, client.postal_code, client.city].filter(Boolean).join(', ') : ''
-  const clientSiret = client?.siret || ''
-  const clientEmail = client?.email || ''
-  const clientPhone = client?.phone || ''
-  const clientRepresentative = `${client?.first_name || ''} ${client?.last_name || ''}`.trim()
+  const {
+    providerName, providerAddress, providerSiret, providerEmail, providerPhone,
+    clientName, clientAddress, clientSiret, clientEmail, clientPhone, clientRepresentative,
+  } = extractPartyInfo(client, provider)
 
   // Project info
   const projectTitle = project?.title || contract.title || 'Prestation informatique'

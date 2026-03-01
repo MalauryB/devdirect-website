@@ -9,6 +9,7 @@ import { deleteProject } from "@/lib/projects"
 import { deleteQuote } from "@/lib/quotes"
 import { useDashboardData } from "@/hooks/use-dashboard-data"
 import { useDashboardNavigation } from "@/hooks/use-dashboard-navigation"
+import { ErrorBoundary } from "@/components/error-boundary"
 import { AboutSection } from "@/components/dashboard/about-section"
 import { ClientMessagesSection } from "@/components/dashboard/client-messages-section"
 import { DeleteProjectModal, ClientProfileModal, DeleteQuoteModal } from "@/components/dashboard/confirmation-modals"
@@ -19,11 +20,25 @@ import { ClientProjectDetail } from "@/components/dashboard/client-project-detai
 import { ClientProjectList } from "@/components/dashboard/client-project-list"
 import { EngineerProjectDetail } from "@/components/dashboard/engineer-project-detail"
 
-const EngineerOverview = dynamic(() => import('@/components/dashboard/engineer-overview').then(m => ({ default: m.EngineerOverview })))
-const GlobalFinances = dynamic(() => import('@/components/global-finances').then(m => ({ default: m.GlobalFinances })))
-const GlobalDocuments = dynamic(() => import('@/components/global-documents').then(m => ({ default: m.GlobalDocuments })))
-const ProfileSection = dynamic(() => import('@/components/dashboard/profile-section').then(m => ({ default: m.ProfileSection })))
-const EngineerClients = dynamic(() => import('@/components/dashboard/engineer-clients').then(m => ({ default: m.EngineerClients })))
+function DashboardSkeleton() {
+  return (
+    <div className="w-full space-y-4 animate-pulse">
+      <div className="h-8 bg-muted rounded w-1/3" />
+      <div className="h-4 bg-muted rounded w-1/2" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+        <div className="h-32 bg-muted rounded-lg" />
+        <div className="h-32 bg-muted rounded-lg" />
+        <div className="h-32 bg-muted rounded-lg" />
+      </div>
+    </div>
+  )
+}
+
+const EngineerOverview = dynamic(() => import('@/components/dashboard/engineer-overview').then(m => ({ default: m.EngineerOverview })), { loading: () => <DashboardSkeleton /> })
+const GlobalFinances = dynamic(() => import('@/components/global-finances').then(m => ({ default: m.GlobalFinances })), { loading: () => <DashboardSkeleton /> })
+const GlobalDocuments = dynamic(() => import('@/components/global-documents').then(m => ({ default: m.GlobalDocuments })), { loading: () => <DashboardSkeleton /> })
+const ProfileSection = dynamic(() => import('@/components/dashboard/profile-section').then(m => ({ default: m.ProfileSection })), { loading: () => <DashboardSkeleton /> })
+const EngineerClients = dynamic(() => import('@/components/dashboard/engineer-clients').then(m => ({ default: m.EngineerClients })), { loading: () => <DashboardSkeleton /> })
 
 export default function DashboardPage() {
   const { user, session, loading, signOut, updateProfile } = useAuth()
@@ -157,7 +172,9 @@ export default function DashboardPage() {
 
         <main className="flex-1 p-4 lg:p-6 overflow-x-hidden">
           {activeSection === "profile" && (
-            <ProfileSection user={user} isEngineer={isEngineer} onUpdateProfile={updateProfile} />
+            <ErrorBoundary>
+              <ProfileSection user={user} isEngineer={isEngineer} onUpdateProfile={updateProfile} />
+            </ErrorBoundary>
           )}
 
           {activeSection === "projects" && (
@@ -216,18 +233,20 @@ export default function DashboardPage() {
           )}
 
           {activeSection === "overview" && isEngineer && (
-            <EngineerOverview
-              allProjects={data.allProjects}
-              allQuotes={data.allQuotes}
-              unreadCounts={data.unreadCounts}
-              unreadOldestDates={data.unreadOldestDates}
-              assignments={data.assignments}
-              engineers={data.engineers}
-              onNavigateToProject={navigateToProjectFromOverview}
-              onNavigateToAllProjects={() => navigateToSection('allProjects')}
-              onAssignAction={data.handleAssignAction}
-              onMarkAsHandled={data.handleMarkAsHandled}
-            />
+            <ErrorBoundary>
+              <EngineerOverview
+                allProjects={data.allProjects}
+                allQuotes={data.allQuotes}
+                unreadCounts={data.unreadCounts}
+                unreadOldestDates={data.unreadOldestDates}
+                assignments={data.assignments}
+                engineers={data.engineers}
+                onNavigateToProject={navigateToProjectFromOverview}
+                onNavigateToAllProjects={() => navigateToSection('allProjects')}
+                onAssignAction={data.handleAssignAction}
+                onMarkAsHandled={data.handleMarkAsHandled}
+              />
+            </ErrorBoundary>
           )}
 
           {activeSection === "allProjects" && isEngineer && (
@@ -264,12 +283,14 @@ export default function DashboardPage() {
           )}
 
           {activeSection === "clients" && isEngineer && (
-            <EngineerClients
-              allProjects={data.allProjects}
-              selectedClientId={selectedClientId}
-              onSelectClient={setSelectedClientId}
-              onNavigateToProject={navigateToProjectFromClients}
-            />
+            <ErrorBoundary>
+              <EngineerClients
+                allProjects={data.allProjects}
+                selectedClientId={selectedClientId}
+                onSelectClient={setSelectedClientId}
+                onNavigateToProject={navigateToProjectFromClients}
+              />
+            </ErrorBoundary>
           )}
 
           {activeSection === "finances" && isEngineer && (
@@ -280,12 +301,14 @@ export default function DashboardPage() {
                   <p className="text-foreground/60 text-sm">{t('finances.globalSubtitle')}</p>
                 </div>
               </div>
-              <GlobalFinances
-                onSelectProject={(projectId) => {
-                  const project = data.allProjects.find(p => p.id === projectId)
-                  if (project) navigateToProjectFromFinances(project)
-                }}
-              />
+              <ErrorBoundary>
+                <GlobalFinances
+                  onSelectProject={(projectId) => {
+                    const project = data.allProjects.find(p => p.id === projectId)
+                    if (project) navigateToProjectFromFinances(project)
+                  }}
+                />
+              </ErrorBoundary>
             </div>
           )}
 
@@ -297,7 +320,9 @@ export default function DashboardPage() {
                   <p className="text-foreground/60 text-sm">{t('globalDocuments.subtitle')}</p>
                 </div>
               </div>
-              <GlobalDocuments />
+              <ErrorBoundary>
+                <GlobalDocuments />
+              </ErrorBoundary>
             </div>
           )}
         </main>

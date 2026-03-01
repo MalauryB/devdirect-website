@@ -136,6 +136,12 @@ export async function getGlobalDocumentVersions(documentId: string): Promise<{
 
   const originalId = doc.parent_id || doc.id
 
+  // Validate UUID format to prevent query injection
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!uuidRegex.test(originalId)) {
+    return { versions: [], error: 'Invalid document ID format' }
+  }
+
   const { data, error } = await supabase
     .from('global_documents')
     .select(`

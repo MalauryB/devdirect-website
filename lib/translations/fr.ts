@@ -1227,7 +1227,7 @@ export const fr = {
         title: "Développement Web",
         subtitle: "Applications web modernes, développées avec l'IA dans notre workflow",
         description: "On conçoit des applications web sur mesure en React, Next.js et Node.js. Notre équipe couvre design, développement, DevOps et déploiement — zéro sous-traitance. L'IA dans notre workflow de développement nous permet de livrer plus vite sans sacrifier la qualité.",
-        image: "/webdev.jpg",
+        image: "/webdev.webp",
         whatWeOffer: [
           "Sites vitrine et portfolios professionnels",
           "Applications web complexes (SaaS, plateformes métier)",
@@ -1317,7 +1317,7 @@ export const fr = {
         title: "Développement Mobile",
         subtitle: "Apps iOS & Android, du design à la publication sur les stores",
         description: "On développe des applications mobiles natives et cross-platform, livrées clés en main. Notre développeur mobile a livré des apps à plus de 10 millions d'utilisateurs. Du design Figma à la publication App Store — la même équipe gère tout.",
-        image: "/mobile.jpg",
+        image: "/mobile.webp",
         whatWeOffer: [
           "Applications iOS natives (Swift, SwiftUI)",
           "Applications Android natives (Kotlin)",
@@ -1408,7 +1408,7 @@ export const fr = {
         title: "IoT & Systèmes Embarqués",
         subtitle: "Du capteur au cloud, tout en interne",
         description: "On conçoit des solutions IoT complètes : firmware embarqué, plateformes cloud, dashboards de visualisation. Notre force : une équipe qui maîtrise toute la chaîne, du microcontrôleur au machine learning en edge. Pas besoin de coordonner 3 prestataires.",
-        image: "/iot.jpg",
+        image: "/iot.webp",
         whatWeOffer: [
           "Firmware embarqué sur mesure (C/C++, MicroPython, Rust)",
           "Objets connectés et capteurs intelligents",
@@ -1499,7 +1499,7 @@ export const fr = {
         title: "Intelligence Artificielle",
         subtitle: "Des chercheurs et data scientists dans l'équipe, pas juste des wrappers d'API",
         description: "On intègre l'IA dans vos produits et processus : LLMs, computer vision, NLP, modèles de ML personnalisés. Notre différence : un data scientist doctorant et un chercheur en IA dans l'équipe. On ne fait pas que brancher des APIs — on construit des solutions IA de production.",
-        image: "/IA.jpg",
+        image: "/IA.webp",
         whatWeOffer: [
           "Intégration de LLMs (GPT, Claude, Mistral, Llama)",
           "Chatbots et assistants intelligents",
@@ -1591,7 +1591,7 @@ export const fr = {
         title: "Design & Maquettes",
         subtitle: "Une designer avec background dev — des designs toujours buildables",
         description: "On crée des interfaces intuitives qui convertissent. Notre designer a une formation en développement : les maquettes sont toujours réalistes et buildables. Du wireframe au design system complet, livrés avec tous les assets pour le développement.",
-        image: "/maquettes.jpg",
+        image: "/maquettes.webp",
         whatWeOffer: [
           "Recherche utilisateur et personas",
           "Architecture de l'information",
@@ -1679,5 +1679,30 @@ export const fr = {
           }
         ]
       }
-    }
+    },
+    fileUpload: {
+      errors: {
+        invalidType: "Type de fichier non autorisé",
+        tooLarge: "Fichier trop volumineux (max {max}MB)",
+        uploadPartial: "Erreur lors de l'upload de certains fichiers",
+        uploadFailed: "Erreur lors de l'upload du fichier",
+      },
+      removeFile: "Supprimer le fichier",
+      uploading: "Upload en cours...",
+      clickToAdd: "Cliquez pour ajouter un fichier",
+      hints: {
+        images: "PNG, JPG, GIF (max 2MB)",
+        documents: "PDF, DOC, DOCX (max 10MB)",
+        all: "Images (max 2MB) ou documents (max 10MB)",
+      },
+    },
+    contact: {
+      success: "Merci ! Votre demande a bien été envoyée. Nous vous recontacterons rapidement.",
+      fullName: "Nom complet",
+      phone: "Téléphone",
+      company: "Entreprise",
+      companyPlaceholder: "Nom de votre entreprise",
+      messagePlaceholder: "Décrivez votre projet...",
+      send: "Envoyer la demande",
+    },
 }

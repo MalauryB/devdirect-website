@@ -23,7 +23,7 @@ import type { UserRole } from "@/contexts/auth-context"
 import { getStatusBadgeClass } from "@/lib/dashboard-utils"
 import { MessageThread } from "@/components/message-thread"
 import { DetailSubsection } from "@/components/dashboard/shared/detail-subsection"
-import { QuotesSubsection } from "@/components/dashboard/client-detail/quotes-subsection"
+import { QuotesSubsection } from "@/components/dashboard/shared/quotes-subsection"
 import { DocumentsSubsection } from "@/components/dashboard/shared/documents-subsection"
 import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
@@ -234,6 +234,7 @@ export function ClientProjectDetail({
             quotes={quotes}
             quotesLoading={quotesLoading}
             project={project}
+            isEngineer={false}
             accessToken={accessToken}
           />
         )}

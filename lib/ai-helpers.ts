@@ -1,4 +1,4 @@
-export function parseAIJsonResponse(responseText: string): any {
+export function parseAIJsonResponse(responseText: string): unknown {
   const jsonMatch = responseText.match(/```json\n?([\s\S]*?)\n?```/)
   if (jsonMatch) {
     return JSON.parse(jsonMatch[1])

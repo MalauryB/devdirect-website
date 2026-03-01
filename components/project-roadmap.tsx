@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, memo } from "react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
 import { Project, ProjectMilestone, MilestoneStatus, Profile } from "@/lib/types"
@@ -41,7 +41,7 @@ import {
 } from "lucide-react"
 import { useAuth } from "@/contexts/auth-context"
 import { MilestoneCard } from "@/components/roadmap/milestone-card"
-import { MilestoneDialog } from "@/components/roadmap/milestone-dialog"
+import { MilestoneForm } from "@/components/roadmap/milestone-form"
 
 interface ProjectRoadmapProps {
   project: Project
@@ -55,7 +55,7 @@ interface ProjectRoadmapProps {
   engineers?: Partial<Profile>[]
 }
 
-export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [] }: ProjectRoadmapProps) {
+export const ProjectRoadmap = memo(function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [] }: ProjectRoadmapProps) {
   const { t } = useLanguage()
   const { session } = useAuth()
   const [milestones, setMilestones] = useState<ProjectMilestone[]>([])
@@ -435,7 +435,7 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
       )}
 
       {/* Add/Edit Dialog */}
-      <MilestoneDialog
+      <MilestoneForm
         open={showAddDialog}
         editingMilestone={editingMilestone}
         formTitle={formTitle}
@@ -470,4 +470,4 @@ export function ProjectRoadmap({ project, currentUser, isEngineer, engineers = [
       </AlertDialog>
     </div>
   )
-}
+})

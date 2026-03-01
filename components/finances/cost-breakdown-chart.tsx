@@ -72,14 +72,14 @@ export function CostBreakdownChart({
                     return (
                       <div className="bg-white border rounded-lg shadow-lg p-3 text-sm">
                         <p className="font-medium mb-2">{label}</p>
-                        {payload.map((item: any, idx: number) => (
+                        {payload.map((item, idx) => (
                           <p key={idx} className="flex items-center gap-2">
                             <span
                               className="w-2 h-2 rounded-full"
                               style={{ backgroundColor: item.fill }}
                             />
                             <span className="text-muted-foreground">{item.name}:</span>
-                            <span className="font-medium">{item.value?.toFixed(1)} jours</span>
+                            <span className="font-medium">{Number(item.value)?.toFixed(1)} jours</span>
                           </p>
                         ))}
                       </div>

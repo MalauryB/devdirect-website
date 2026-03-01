@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 import { QuoteFormData } from '@/lib/types'
 import { requireEngineer } from '@/lib/auth'
+import { rateLimit } from '@/lib/rate-limit'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -23,6 +24,11 @@ export async function POST(request: NextRequest) {
   const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
 
+  const { success: rateLimitOk } = rateLimit(`quote-ai-assistant:${user.id}`, 10, 60000)
+  if (!rateLimitOk) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
+
   try {
     const { message, quoteData, projectDescription, conversationHistory } = await request.json() as RequestBody
 
@@ -39,8 +45,8 @@ export async function POST(request: NextRequest) {
     const MAX_MESSAGE_LENGTH = 10000
     const sanitizedHistory = (conversationHistory || [])
       .slice(-MAX_HISTORY)
-      .filter((msg: any) => ['user', 'assistant'].includes(msg.role))
-      .map((msg: any) => ({
+      .filter((msg: ConversationMessage) => ['user', 'assistant'].includes(msg.role))
+      .map((msg: ConversationMessage) => ({
         role: msg.role as 'user' | 'assistant',
         content: String(msg.content).slice(0, MAX_MESSAGE_LENGTH)
       }))
@@ -120,7 +126,7 @@ export async function POST(request: NextRequest) {
       modifications
     })
   } catch (error) {
-    console.error('Quote AI assistant error:', error)
+    console.error('Quote AI assistant error:', error instanceof Error ? error.message : 'Unknown error')
     return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }

@@ -113,7 +113,7 @@ export function ServiceDetail({ slug }: ServiceDetailProps) {
               {t('serviceDetail.common.technologies')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {technologies.map((category: any, index: number) => (
+              {technologies.map((category: { name: string; items: string[] }, index: number) => (
                 <Card key={index} className="bg-white">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base font-medium">{category.name}</CardTitle>
@@ -140,7 +140,7 @@ export function ServiceDetail({ slug }: ServiceDetailProps) {
               {t('serviceDetail.common.ourProcess')}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {process.map((step: any, index: number) => (
+              {process.map((step: { title: string; description: string; duration: string }, index: number) => (
                 <Card key={index} className="bg-white relative h-full">
                   <div className="absolute -top-3 -left-3 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-bold text-sm">
                     {index + 1}
@@ -220,7 +220,7 @@ export function ServiceDetail({ slug }: ServiceDetailProps) {
               {t('serviceDetail.common.faq')}
             </h2>
             <Accordion type="single" collapsible className="space-y-3">
-              {faqs.map((faq: any, index: number) => (
+              {faqs.map((faq: { question: string; answer: string }, index: number) => (
                 <AccordionItem key={index} value={`faq-${index}`} className="border rounded-lg px-4">
                   <AccordionTrigger className="text-left font-medium">
                     {faq.question}

@@ -48,7 +48,7 @@ export function Team() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teamMembers.map((member: any, index: number) => (
+          {teamMembers.map((member: { name: string; role: string; description: string }, index: number) => (
             <Card key={index} className="bg-white group">
               <CardHeader className="text-center">
                 <CardTitle className="text-lg font-semibold leading-tight">{member.name}</CardTitle>

@@ -12,10 +12,17 @@ import { PersonalInfoForm } from "@/components/dashboard/profile/personal-info-f
 import { CompanySettingsForm, CompanySettings } from "@/components/dashboard/profile/company-settings-form"
 import { SkillsManager } from "@/components/dashboard/profile/skills-manager"
 
+interface ProfileSectionUser {
+  id: string
+  email?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  user_metadata?: Record<string, any>
+}
+
 interface ProfileSectionProps {
-  user: any // Supabase User
+  user: ProfileSectionUser
   isEngineer: boolean
-  onUpdateProfile: (metadata: UserMetadata) => Promise<{ error: any }>
+  onUpdateProfile: (metadata: UserMetadata) => Promise<{ error: Error | null }>
 }
 
 export function ProfileSection({ user, isEngineer, onUpdateProfile }: ProfileSectionProps) {

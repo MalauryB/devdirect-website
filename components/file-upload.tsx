@@ -5,6 +5,7 @@ import { Upload, X, FileText, Image as ImageIcon, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { uploadFile, uploadMultipleFiles, deleteFile, validateFile, UploadedFile } from "@/lib/storage"
 import { ProjectFile } from "@/lib/types"
+import { useLanguage } from "@/contexts/language-context"
 
 interface FileUploadProps {
   bucket: string
@@ -29,6 +30,7 @@ export function FileUpload({
   description,
   disabled = false
 }: FileUploadProps) {
+  const { t } = useLanguage()
   const [uploading, setUploading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -52,7 +54,13 @@ export function FileUpload({
     for (const file of selectedFiles) {
       const validation = validateFile(file, accept)
       if (!validation.valid) {
-        setError(validation.error || 'Fichier invalide') // TODO: i18n
+        const errKey = validation.error || ''
+        if (errKey.startsWith('fileUpload.errors.tooLarge:')) {
+          const maxMB = errKey.split(':')[1]
+          setError((t('fileUpload.errors.tooLarge') as string).replace('{max}', maxMB))
+        } else {
+          setError(t(errKey) as string)
+        }
         setUploading(false)
         return
       }
@@ -61,7 +69,7 @@ export function FileUpload({
     if (multiple) {
       const { data, errors } = await uploadMultipleFiles(selectedFiles, bucket, folder)
       if (errors.length > 0) {
-        setError('Erreur lors de l\'upload de certains fichiers') // TODO: i18n
+        setError(t('fileUpload.errors.uploadPartial'))
       }
       if (data.length > 0) {
         onChange([...files, ...data])
@@ -69,7 +77,7 @@ export function FileUpload({
     } else {
       const { data, error: uploadError } = await uploadFile(selectedFiles[0], bucket, folder)
       if (uploadError) {
-        setError('Erreur lors de l\'upload du fichier') // TODO: i18n
+        setError(t('fileUpload.errors.uploadFailed'))
       } else if (data) {
         onChange(data)
       }
@@ -140,7 +148,7 @@ export function FileUpload({
                 <button
                   type="button"
                   onClick={() => handleRemove(file)}
-                  aria-label="Supprimer le fichier" // TODO: i18n
+                  aria-label={t('fileUpload.removeFile')}
                   className="p-1 hover:bg-muted rounded transition-colors"
                 >
                   <X className="w-4 h-4 text-foreground/50" />
@@ -176,14 +184,12 @@ export function FileUpload({
                 <Upload className="w-6 h-6 text-foreground/50" />
               )}
               <span className="text-sm text-foreground/60">
-                {/* TODO: i18n */}
-                {uploading ? 'Upload en cours...' : 'Cliquez pour ajouter un fichier'}
+                {uploading ? t('fileUpload.uploading') : t('fileUpload.clickToAdd')}
               </span>
-              {/* TODO: i18n */}
               <span className="text-xs text-foreground/40">
-                {accept === 'images' && 'PNG, JPG, GIF (max 2MB)'}
-                {accept === 'documents' && 'PDF, DOC, DOCX (max 10MB)'}
-                {accept === 'all' && 'Images (max 2MB) ou documents (max 10MB)'}
+                {accept === 'images' && t('fileUpload.hints.images')}
+                {accept === 'documents' && t('fileUpload.hints.documents')}
+                {accept === 'all' && t('fileUpload.hints.all')}
               </span>
             </div>
           </button>

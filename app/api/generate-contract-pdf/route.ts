@@ -6,6 +6,7 @@ import { ProjectContract, Project, Profile, Quote, ProjectDocument } from '@/lib
 import { requireEngineer } from '@/lib/auth'
 import { isValidSupabaseStorageUrl } from '@/lib/validate-url'
 import { escapeHtml } from '@/lib/sanitize'
+import { rateLimit } from '@/lib/rate-limit'
 
 // Generate an annex cover page
 function generateAnnexCoverPage(annexNumber: number, title: string, description: string, documentInfo?: { name: string; version: number; date: string } | null): string {
@@ -44,19 +45,17 @@ function generateAnnexCoverPage(annexNumber: number, title: string, description:
 // Download PDF from a signed URL
 async function downloadPdfFromSignedUrl(signedUrl: string): Promise<Uint8Array | null> {
   try {
-    console.log('Downloading PDF from signed URL...')
     const response = await fetch(signedUrl)
 
     if (!response.ok) {
-      console.error('Failed to fetch from signed URL:', response.status, response.statusText)
+      console.error('Failed to fetch PDF:', response.status)
       return null
     }
 
     const arrayBuffer = await response.arrayBuffer()
-    console.log('PDF downloaded successfully, size:', arrayBuffer.byteLength)
     return new Uint8Array(arrayBuffer)
   } catch (error) {
-    console.error('Error downloading PDF from signed URL:', error)
+    console.error('Error downloading PDF:', error instanceof Error ? error.message : 'Unknown error')
     return null
   }
 }
@@ -94,6 +93,11 @@ async function generateCoverPagePdf(browser: Browser, html: string): Promise<Uin
 export async function POST(request: NextRequest) {
   const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
+
+  const { success: rateLimitOk } = rateLimit(`generate-contract-pdf:${user.id}`, 20, 60000)
+  if (!rateLimitOk) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
 
   let browser: Browser | null = null
 
@@ -154,7 +158,7 @@ export async function POST(request: NextRequest) {
     // Launch browser once
     browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: process.env.PUPPETEER_SANDBOX === 'false' ? ['--no-sandbox', '--disable-setuid-sandbox'] : []
     })
 
     // Generate main contract HTML based on contract type
@@ -204,14 +208,7 @@ export async function POST(request: NextRequest) {
       document: ProjectDocument | null | undefined,
       signedUrl: string | null | undefined
     ) {
-      console.log(`\n=== Adding Annex ${annexNumber}: ${title} ===`)
-      console.log('Document:', document ? {
-        id: document.id,
-        name: document.name,
-        file_path: document.file_path,
-        file_type: document.file_type
-      } : 'null')
-      console.log('Signed URL:', signedUrl ? 'provided' : 'not provided')
+      console.log(`Adding Annex ${annexNumber}: ${title}`)
 
       const docInfo = document ? {
         name: document.name,
@@ -230,30 +227,20 @@ export async function POST(request: NextRequest) {
       const coverPdf = await PDFDocument.load(coverPdfBytes)
       const coverPages = await mergedPdf.copyPages(coverPdf, coverPdf.getPageIndices())
       coverPages.forEach(page => mergedPdf.addPage(page))
-      console.log('Cover page added')
 
       // If we have a signed URL, download and merge the PDF
       if (signedUrl) {
-        console.log('Attempting to download and merge PDF from signed URL...')
         const pdfBytes = await downloadPdfFromSignedUrl(signedUrl)
         if (pdfBytes) {
-          console.log(`Downloaded ${pdfBytes.length} bytes`)
           try {
             const annexPdf = await PDFDocument.load(pdfBytes, { ignoreEncryption: true })
-            const pageCount = annexPdf.getPageCount()
-            console.log(`PDF loaded successfully with ${pageCount} pages`)
             const annexPages = await mergedPdf.copyPages(annexPdf, annexPdf.getPageIndices())
             annexPages.forEach(page => mergedPdf.addPage(page))
-            console.log(`Added ${annexPages.length} pages from annex`)
           } catch (err) {
-            console.error(`Failed to load annex PDF for ${title}:`, err)
+            console.error(`Failed to load annex PDF for ${title}:`, err instanceof Error ? err.message : 'Unknown error')
             // Continue without the annex content - cover page already added
           }
-        } else {
-          console.log('Failed to download PDF - no bytes returned')
         }
-      } else {
-        console.log('No signed URL provided, skipping PDF merge')
       }
     }
 
@@ -277,7 +264,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Generate contract PDF error:', error)
+    console.error('Generate contract PDF error:', error instanceof Error ? error.message : 'Unknown error')
     if (browser) {
       await browser.close()
     }

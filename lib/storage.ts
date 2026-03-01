@@ -23,13 +23,13 @@ export function validateFile(file: File, allowedTypes: 'images' | 'documents' | 
   const types = allowedTypes === 'images' ? IMAGE_TYPES : allowedTypes === 'documents' ? DOCUMENT_TYPES : ALL_ALLOWED_TYPES
 
   if (!types.includes(file.type)) {
-    return { valid: false, error: 'Type de fichier non autorisé' } // TODO: i18n
+    return { valid: false, error: 'fileUpload.errors.invalidType' }
   }
 
   const maxSize = IMAGE_TYPES.includes(file.type) ? MAX_IMAGE_SIZE : MAX_DOCUMENT_SIZE
   if (file.size > maxSize) {
     const maxMB = maxSize / (1024 * 1024)
-    return { valid: false, error: `Fichier trop volumineux (max ${maxMB}MB)` } // TODO: i18n
+    return { valid: false, error: `fileUpload.errors.tooLarge:${maxMB}` }
   }
 
   return { valid: true }

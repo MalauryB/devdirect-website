@@ -3,6 +3,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { ProjectMilestone } from '@/lib/types'
 import { requireEngineer } from '@/lib/auth'
 import { parseAIJsonResponse } from '@/lib/ai-helpers'
+import { rateLimit } from '@/lib/rate-limit'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -16,6 +17,11 @@ interface GeneratedSubtask {
 export async function POST(request: NextRequest) {
   const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
+
+  const { success: rateLimitOk } = rateLimit(`generate-subtasks:${user.id}`, 10, 60000)
+  if (!rateLimitOk) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
 
   try {
     const { milestone, projectContext } = await request.json() as {
@@ -49,16 +55,16 @@ export async function POST(request: NextRequest) {
     // Parse the JSON response from Claude
     let subtasks: GeneratedSubtask[]
     try {
-      const parsed = parseAIJsonResponse(responseText)
-      subtasks = parsed.subtasks || parsed
+      const parsed = parseAIJsonResponse(responseText) as Record<string, unknown>
+      subtasks = (parsed.subtasks || parsed) as GeneratedSubtask[]
     } catch {
-      console.error('Failed to parse Claude response:', responseText)
+      console.error('Failed to parse AI response')
       return NextResponse.json({ error: 'Failed to parse AI response' }, { status: 500 })
     }
 
     return NextResponse.json({ subtasks })
   } catch (error) {
-    console.error('Generate subtasks error:', error)
+    console.error('Generate subtasks error:', error instanceof Error ? error.message : 'Unknown error')
     return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }

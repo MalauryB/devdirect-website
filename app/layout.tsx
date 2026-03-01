@@ -17,6 +17,19 @@ export const metadata: Metadata = {
     icon: "/nimli-favicon.svg",
     apple: "/nimli-favicon.svg",
   },
+  openGraph: {
+    title: 'Nimli - Solutions numériques sur mesure',
+    description: 'Services informatiques de qualité à prix justes. Applications web, mobiles, IoT. Équipe de développeurs expérimentés.',
+    url: 'https://nimli.fr',
+    siteName: 'Nimli',
+    locale: 'fr_FR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Nimli - Solutions numériques sur mesure',
+    description: 'Services informatiques de qualité à prix justes. Applications web, mobiles, IoT. Équipe de développeurs expérimentés.',
+  },
 }
 
 export default function RootLayout({

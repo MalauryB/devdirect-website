@@ -42,17 +42,13 @@ export function ContactDialog() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Ajouter la logique d'envoi du formulaire
-    console.log("Form submitted:", formData)
+    const subject = encodeURIComponent(`Contact from ${formData.name} - ${formData.company || 'N/A'}`)
+    const body = encodeURIComponent(
+      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || 'N/A'}\nCompany: ${formData.company || 'N/A'}\n\nMessage:\n${formData.message}`
+    )
+    window.open(`mailto:contact@nimli.fr?subject=${subject}&body=${body}`, '_blank')
     setSubmitted(true)
-    // Réinitialiser le formulaire
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      company: "",
-      message: ""
-    })
+    setFormData({ name: "", email: "", phone: "", company: "", message: "" })
   }
 
   return (
@@ -62,7 +58,7 @@ export function ContactDialog() {
           <div className="flex flex-col items-center justify-center py-8 text-center space-y-4">
             <CheckCircle className="w-12 h-12 text-green-500" />
             <p className="text-lg font-medium text-foreground">
-              Merci ! Votre demande a bien été envoyée. Nous vous recontacterons rapidement.
+              {t('contact.success')}
             </p>
           </div>
         ) : (
@@ -75,13 +71,13 @@ export function ContactDialog() {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Nom complet *</Label>
+            <Label htmlFor="name">{t('contact.fullName')} *</Label>
             <Input
               id="name"
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Votre nom"
+              placeholder={t('contact.fullName')}
             />
           </div>
           <div className="space-y-2">
@@ -96,7 +92,7 @@ export function ContactDialog() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">Téléphone</Label>
+            <Label htmlFor="phone">{t('contact.phone')}</Label>
             <Input
               id="phone"
               type="tel"
@@ -106,12 +102,12 @@ export function ContactDialog() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="company">Entreprise</Label>
+            <Label htmlFor="company">{t('contact.company')}</Label>
             <Input
               id="company"
               value={formData.company}
               onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-              placeholder="Nom de votre entreprise"
+              placeholder={t('contact.companyPlaceholder')}
             />
           </div>
           <div className="space-y-2">
@@ -121,13 +117,13 @@ export function ContactDialog() {
               required
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-              placeholder="Décrivez votre projet..."
+              placeholder={t('contact.messagePlaceholder')}
               rows={4}
             />
           </div>
           <Button type="submit" className="w-full" size="lg">
             <Send className="mr-2 w-4 h-4" />
-            Envoyer la demande
+            {t('contact.send')}
           </Button>
         </form>
         </>

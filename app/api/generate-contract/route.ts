@@ -4,6 +4,7 @@ import { Project, Quote, ContractType, Profile } from '@/lib/types'
 import { calculateQuoteData } from '@/lib/quote-export'
 import { requireEngineer } from '@/lib/auth'
 import { parseAIJsonResponse } from '@/lib/ai-helpers'
+import { rateLimit } from '@/lib/rate-limit'
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -27,6 +28,11 @@ interface ContractGenerationRequest {
 export async function POST(request: NextRequest) {
   const { user, error: authError } = await requireEngineer(request)
   if (authError) return authError
+
+  const { success: rateLimitOk } = rateLimit(`generate-contract:${user.id}`, 10, 60000)
+  if (!rateLimitOk) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
 
   try {
     const data = await request.json() as ContractGenerationRequest
@@ -57,15 +63,15 @@ export async function POST(request: NextRequest) {
     // Parse the JSON response from Claude
     let contract: { title: string; content: string }
     try {
-      contract = parseAIJsonResponse(responseText)
+      contract = parseAIJsonResponse(responseText) as { title: string; content: string }
     } catch {
-      console.error('Failed to parse Claude response:', responseText)
+      console.error('Failed to parse AI response')
       return NextResponse.json({ error: 'Failed to parse AI response' }, { status: 500 })
     }
 
     return NextResponse.json({ contract })
   } catch (error) {
-    console.error('Generate contract error:', error)
+    console.error('Generate contract error:', error instanceof Error ? error.message : 'Unknown error')
     return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }

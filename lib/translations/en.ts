@@ -1227,7 +1227,7 @@ export const en = {
         title: "Web Development",
         subtitle: "Modern web apps, built with AI in our workflow",
         description: "We build custom web applications in React, Next.js and Node.js. Our team covers design, development, DevOps and deployment — zero outsourcing. AI in our development workflow lets us deliver faster without sacrificing quality.",
-        image: "/webdev.jpg",
+        image: "/webdev.webp",
         whatWeOffer: [
           "Professional showcase sites and portfolios",
           "Complex web applications (SaaS, business platforms)",
@@ -1317,7 +1317,7 @@ export const en = {
         title: "Mobile Development",
         subtitle: "iOS & Android apps, from design to store publication",
         description: "We develop native and cross-platform mobile apps, delivered turnkey. Our mobile developer has shipped apps to over 10 million users. From Figma design to App Store publication — the same team handles everything.",
-        image: "/mobile.jpg",
+        image: "/mobile.webp",
         whatWeOffer: [
           "Native iOS applications (Swift, SwiftUI)",
           "Native Android applications (Kotlin)",
@@ -1408,7 +1408,7 @@ export const en = {
         title: "IoT & Embedded Systems",
         subtitle: "From sensor to cloud, all in-house",
         description: "We build complete IoT solutions: embedded firmware, cloud platforms, visualization dashboards. Our strength: a team that masters the entire chain, from microcontroller to edge machine learning. No need to coordinate 3 vendors.",
-        image: "/iot.jpg",
+        image: "/iot.webp",
         whatWeOffer: [
           "Custom embedded firmware (C/C++, MicroPython, Rust)",
           "Connected objects and smart sensors",
@@ -1499,7 +1499,7 @@ export const en = {
         title: "Artificial Intelligence",
         subtitle: "Researchers and data scientists on staff, not just API wrappers",
         description: "We integrate AI into your products and processes: LLMs, computer vision, NLP, custom ML models. Our difference: a PhD data scientist and an AI researcher on the team. We don't just plug APIs — we build production-grade AI solutions.",
-        image: "/IA.jpg",
+        image: "/IA.webp",
         whatWeOffer: [
           "LLM integration (GPT, Claude, Mistral, Llama)",
           "Smart chatbots and assistants",
@@ -1591,7 +1591,7 @@ export const en = {
         title: "Design & Mockups",
         subtitle: "A designer with a dev background — designs that are always buildable",
         description: "We create intuitive interfaces that convert. Our designer has a development background: mockups are always realistic and buildable. From wireframe to complete design system, delivered with all assets for development.",
-        image: "/maquettes.jpg",
+        image: "/maquettes.webp",
         whatWeOffer: [
           "User research and personas",
           "Information architecture",
@@ -1679,5 +1679,30 @@ export const en = {
           }
         ]
       }
-    }
+    },
+    fileUpload: {
+      errors: {
+        invalidType: "File type not allowed",
+        tooLarge: "File too large (max {max}MB)",
+        uploadPartial: "Error uploading some files",
+        uploadFailed: "Error uploading file",
+      },
+      removeFile: "Remove file",
+      uploading: "Uploading...",
+      clickToAdd: "Click to add a file",
+      hints: {
+        images: "PNG, JPG, GIF (max 2MB)",
+        documents: "PDF, DOC, DOCX (max 10MB)",
+        all: "Images (max 2MB) or documents (max 10MB)",
+      },
+    },
+    contact: {
+      success: "Thank you! Your request has been sent. We'll get back to you shortly.",
+      fullName: "Full name",
+      phone: "Phone",
+      company: "Company",
+      companyPlaceholder: "Your company name",
+      messagePlaceholder: "Describe your project...",
+      send: "Send request",
+    },
 }

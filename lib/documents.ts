@@ -47,6 +47,12 @@ export async function getDocumentVersions(documentId: string): Promise<{
   // Le parent_id du premier document est null, donc on cherche par l'id original
   const originalId = doc.parent_id || doc.id
 
+  // Validate UUID format to prevent query injection
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+  if (!uuidRegex.test(originalId)) {
+    return { versions: [], error: 'Invalid document ID format' }
+  }
+
   const { data, error } = await supabase
     .from('project_documents')
     .select(`

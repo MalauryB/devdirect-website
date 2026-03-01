@@ -1,5 +1,5 @@
 import { escapeHtml } from './sanitize'
-import { ContractPdfData, formatDate, formatCurrency } from './contract-pdf-helpers'
+import { ContractPdfData, formatDate, formatCurrency, extractPartyInfo } from './contract-pdf-helpers'
 
 // Time and Materials Contract (Régie)
 export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): string {
@@ -8,21 +8,11 @@ export function generateTimeAndMaterialsContractPdfHtml(data: ContractPdfData): 
   const contractNumber = contract.id.slice(0, 8).toUpperCase()
   const contractDate = formatDate(contract.created_at)
 
-  // Provider info
-  const providerName = provider?.name || 'Nimli'
-  const providerAddress = provider?.address || '123 Rue de l\'Innovation, 75001 Paris'
-  const providerSiret = provider?.siret || '123 456 789 00001'
-  const providerEmail = provider?.email || 'contact@nimli.fr'
-  const providerPhone = provider?.phone || '+33 1 23 45 67 89'
-
-  // Client info
-  const clientName = client?.company_name || `${client?.first_name || ''} ${client?.last_name || ''}`.trim() || 'Client'
-  const clientAddress = client ? [client.address, client.postal_code, client.city].filter(Boolean).join(', ') : ''
+  const {
+    providerName, providerAddress, providerSiret, providerEmail, providerPhone,
+    clientName, clientAddress, clientSiret, clientEmail, clientPhone, clientRepresentative,
+  } = extractPartyInfo(client, provider)
   const clientCity = client?.city || ''
-  const clientSiret = client?.siret || ''
-  const clientEmail = client?.email || ''
-  const clientPhone = client?.phone || ''
-  const clientRepresentative = `${client?.first_name || ''} ${client?.last_name || ''}`.trim()
 
   // Project info
   const projectTitle = project?.title || contract.title || 'Assistance technique informatique'

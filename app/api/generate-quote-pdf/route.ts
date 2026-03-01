@@ -3,10 +3,16 @@ import puppeteer from 'puppeteer'
 import { generateQuotePdfHtml } from '@/lib/quote-pdf-template'
 import { Quote, Project, Profile } from '@/lib/types'
 import { requireAuth } from '@/lib/auth'
+import { rateLimit } from '@/lib/rate-limit'
 
 export async function POST(request: NextRequest) {
   const { user, error: authError } = await requireAuth(request)
   if (authError) return authError
+
+  const { success: rateLimitOk } = rateLimit(`generate-quote-pdf:${user.id}`, 20, 60000)
+  if (!rateLimitOk) {
+    return NextResponse.json({ error: 'Too many requests. Please try again later.' }, { status: 429 })
+  }
 
   try {
     const { quote, project, engineer, client } = await request.json() as {
@@ -26,7 +32,7 @@ export async function POST(request: NextRequest) {
     // Launch Puppeteer and generate PDF
     const browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: process.env.PUPPETEER_SANDBOX === 'false' ? ['--no-sandbox', '--disable-setuid-sandbox'] : []
     })
 
     const page = await browser.newPage()
@@ -57,7 +63,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (error) {
-    console.error('Generate quote PDF error:', error)
+    console.error('Generate quote PDF error:', error instanceof Error ? error.message : 'Unknown error')
     return NextResponse.json({ error: 'An internal error occurred' }, { status: 500 })
   }
 }

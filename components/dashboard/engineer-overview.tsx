@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, memo } from "react"
 import { useLanguage } from "@/contexts/language-context"
 import { getTimeElapsed, getUrgencyLevel } from "@/lib/dashboard-utils"
 import type { Project, Quote, Profile } from "@/lib/types"
@@ -22,7 +22,7 @@ interface EngineerOverviewProps {
   onMarkAsHandled: (projectId: string) => Promise<void>
 }
 
-export function EngineerOverview({
+export const EngineerOverview = memo(function EngineerOverview({
   allProjects,
   allQuotes,
   unreadCounts,
@@ -248,4 +248,4 @@ export function EngineerOverview({
       </div>
     </div>
   )
-}
+})

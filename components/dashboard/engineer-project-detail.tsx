@@ -24,7 +24,7 @@ import { ProjectContracts } from "@/components/project-contracts"
 import { ProjectFinances } from "@/components/project-finances"
 import { loadCompanySettings } from "@/lib/company-settings"
 import { DetailSubsection } from "@/components/dashboard/shared/detail-subsection"
-import { QuotesSubsection } from "@/components/dashboard/engineer-detail/quotes-subsection"
+import { QuotesSubsection } from "@/components/dashboard/shared/quotes-subsection"
 import { DocumentsSubsection } from "@/components/dashboard/shared/documents-subsection"
 import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
@@ -280,7 +280,7 @@ export function EngineerProjectDetail({
             isEngineer={isEngineer}
             quotes={quotes}
             quotesLoading={quotesLoading}
-            onSetDeletingQuote={onSetDeletingQuote}
+            onDeleteQuote={onSetDeletingQuote}
             onLoadQuotes={onLoadQuotes}
           />
         )}

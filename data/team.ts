@@ -1,4 +1,5 @@
 import { Users, Award, Clock } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
 export interface TeamMember {
   id: string
@@ -11,7 +12,7 @@ export interface TeamMember {
 
 export interface TeamStat {
   id: string
-  icon: any
+  icon: LucideIcon
   value: string
   label: string
   description?: string

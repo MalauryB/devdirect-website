@@ -1,16 +1,48 @@
 import { ProjectContract, Project, Profile, Quote } from './types'
 
+export interface ProviderInfo {
+  name: string
+  address: string
+  siret: string
+  email: string
+  phone: string
+}
+
 export interface ContractPdfData {
   contract: ProjectContract
   project?: Project | null
   client?: Profile | null
   quote?: Quote | null
-  provider?: {
-    name: string
-    address: string
-    siret: string
-    email: string
-    phone: string
+  provider?: ProviderInfo
+}
+
+export interface ExtractedPartyInfo {
+  providerName: string
+  providerAddress: string
+  providerSiret: string
+  providerEmail: string
+  providerPhone: string
+  clientName: string
+  clientAddress: string
+  clientSiret: string
+  clientEmail: string
+  clientPhone: string
+  clientRepresentative: string
+}
+
+export function extractPartyInfo(client?: Profile | null, provider?: ProviderInfo): ExtractedPartyInfo {
+  return {
+    providerName: provider?.name || 'Nimli',
+    providerAddress: provider?.address || '123 Rue de l\'Innovation, 75001 Paris',
+    providerSiret: provider?.siret || '123 456 789 00001',
+    providerEmail: provider?.email || 'contact@nimli.fr',
+    providerPhone: provider?.phone || '+33 1 23 45 67 89',
+    clientName: client?.company_name || `${client?.first_name || ''} ${client?.last_name || ''}`.trim() || 'Client',
+    clientAddress: client ? [client.address, client.postal_code, client.city].filter(Boolean).join(', ') : '',
+    clientSiret: client?.siret || '',
+    clientEmail: client?.email || '',
+    clientPhone: client?.phone || '',
+    clientRepresentative: `${client?.first_name || ''} ${client?.last_name || ''}`.trim(),
   }
 }
 
