@@ -25,34 +25,36 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
   const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [error, setError] = useState("")
+  const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string; confirmPassword?: string; general?: string }>({})
   const [authSuccess, setAuthSuccess] = useState("")
   const [loading, setLoading] = useState(false)
 
   const isLoading = loading || externalLoading
+  const errorBorder = "border-red-400 focus-visible:ring-red-300"
 
   const handleAuthSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
+    setFieldErrors({})
     setAuthSuccess("")
 
+    const errors: typeof fieldErrors = {}
+
     if (!email) {
-      setError(t('auth.errors.emailRequired'))
-      return
+      errors.email = t('auth.errors.emailRequired')
     }
 
     if (authMode !== "forgot" && !password) {
-      setError(t('auth.errors.fieldsRequired'))
-      return
+      errors.password = t('auth.errors.fieldsRequired')
+    } else if (authMode !== "forgot" && password.length < 6) {
+      errors.password = t('auth.errors.passwordTooShort')
     }
 
     if (authMode === "register" && password !== confirmPassword) {
-      setError(t('auth.errors.passwordMismatch'))
-      return
+      errors.confirmPassword = t('auth.errors.passwordMismatch')
     }
 
-    if (authMode !== "forgot" && password.length < 6) {
-      setError(t('auth.errors.passwordTooShort'))
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
       return
     }
 
@@ -62,14 +64,14 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
       if (authMode === "login") {
         const { error } = await signIn(email, password)
         if (error) {
-          setError(t('auth.errors.invalidCredentials'))
+          setFieldErrors({ general: t('auth.errors.invalidCredentials') })
         }
       } else if (authMode === "register") {
         const { error, data } = await signUp(email, password)
         if (error) {
-          setError(error.message)
+          setFieldErrors({ general: error.message })
         } else if (data?.user && !data.user.identities?.length) {
-          setError(t('auth.errors.generic'))
+          setFieldErrors({ general: t('auth.errors.generic') })
         } else if (data?.session) {
           // User is automatically logged in
         } else {
@@ -78,13 +80,13 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
       } else if (authMode === "forgot") {
         const { error } = await resetPassword(email)
         if (error) {
-          setError(error.message)
+          setFieldErrors({ general: error.message })
         } else {
           setAuthSuccess(t('auth.success.resetEmail'))
         }
       }
     } catch {
-      setError(t('auth.errors.generic'))
+      setFieldErrors({ general: t('auth.errors.generic') })
     } finally {
       setLoading(false)
     }
@@ -115,32 +117,35 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
 
       <form onSubmit={handleAuthSubmit} className="max-w-md mx-auto space-y-6">
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email" className={fieldErrors.email ? 'text-red-600' : ''}>Email</Label>
           <Input
             id="email"
             type="email"
             autoComplete="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }}
             placeholder={t('auth.emailPlaceholder')}
             disabled={isLoading}
-            className="border-border focus:border-primary"
+            className={fieldErrors.email ? errorBorder : 'border-border focus:border-primary'}
           />
+          {fieldErrors.email && (
+            <p className="text-xs text-red-600">{fieldErrors.email}</p>
+          )}
         </div>
 
         {authMode !== "forgot" && (
           <div className="space-y-1.5">
-            <Label htmlFor="password">{t('auth.password')}</Label>
+            <Label htmlFor="password" className={fieldErrors.password ? 'text-red-600' : ''}>{t('auth.password')}</Label>
             <div className="relative">
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
                 autoComplete={authMode === "register" ? "new-password" : "current-password"}
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => ({ ...prev, password: undefined })) }}
                 placeholder="••••••••"
                 disabled={isLoading}
-                className="border-border focus:border-primary pr-10"
+                className={`pr-10 ${fieldErrors.password ? errorBorder : 'border-border focus:border-primary'}`}
               />
               <button
                 type="button"
@@ -151,22 +156,25 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+            {fieldErrors.password && (
+              <p className="text-xs text-red-600">{fieldErrors.password}</p>
+            )}
           </div>
         )}
 
         {authMode === "register" && (
           <div className="space-y-1.5">
-            <Label htmlFor="confirmPassword">{t('auth.confirmPassword')}</Label>
+            <Label htmlFor="confirmPassword" className={fieldErrors.confirmPassword ? 'text-red-600' : ''}>{t('auth.confirmPassword')}</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 autoComplete="new-password"
                 value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
+                onChange={(e) => { setConfirmPassword(e.target.value); setFieldErrors(prev => ({ ...prev, confirmPassword: undefined })) }}
                 placeholder="••••••••"
                 disabled={isLoading}
-                className="border-border focus:border-primary pr-10"
+                className={`pr-10 ${fieldErrors.confirmPassword ? errorBorder : 'border-border focus:border-primary'}`}
               />
               <button
                 type="button"
@@ -177,11 +185,14 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
                 {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
+            {fieldErrors.confirmPassword && (
+              <p className="text-xs text-red-600">{fieldErrors.confirmPassword}</p>
+            )}
           </div>
         )}
 
-        {error && (
-          <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
+        {fieldErrors.general && (
+          <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{fieldErrors.general}</p>
         )}
 
         {authSuccess && (

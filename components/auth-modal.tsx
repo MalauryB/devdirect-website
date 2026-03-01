@@ -17,6 +17,13 @@ import { Loader2, Eye, EyeOff } from "lucide-react"
 
 type AuthMode = "login" | "register" | "forgot"
 
+interface FieldErrors {
+  email?: string
+  password?: string
+  confirmPassword?: string
+  general?: string
+}
+
 export function AuthModal() {
   const { isAuthModalOpen, closeAuthModal, signIn, signUp, resetPassword } = useAuth()
   const { t } = useLanguage()
@@ -25,7 +32,7 @@ export function AuthModal() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  const [error, setError] = useState("")
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({})
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState("")
   const [showPassword, setShowPassword] = useState(false)
@@ -35,7 +42,7 @@ export function AuthModal() {
     setEmail("")
     setPassword("")
     setConfirmPassword("")
-    setError("")
+    setFieldErrors({})
     setSuccess("")
   }
 
@@ -47,26 +54,27 @@ export function AuthModal() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError("")
+    setFieldErrors({})
     setSuccess("")
 
+    const errors: FieldErrors = {}
+
     if (!email) {
-      setError(t('auth.errors.emailRequired'))
-      return
+      errors.email = t('auth.errors.emailRequired')
     }
 
     if (mode !== "forgot" && !password) {
-      setError(t('auth.errors.fieldsRequired'))
-      return
+      errors.password = t('auth.errors.fieldsRequired')
+    } else if (mode !== "forgot" && password.length < 6) {
+      errors.password = t('auth.errors.passwordTooShort')
     }
 
     if (mode === "register" && password !== confirmPassword) {
-      setError(t('auth.errors.passwordMismatch'))
-      return
+      errors.confirmPassword = t('auth.errors.passwordMismatch')
     }
 
-    if (mode !== "forgot" && password.length < 6) {
-      setError(t('auth.errors.passwordTooShort'))
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
       return
     }
 
@@ -76,7 +84,7 @@ export function AuthModal() {
       if (mode === "login") {
         const { error } = await signIn(email, password)
         if (error) {
-          setError(t('auth.errors.invalidCredentials'))
+          setFieldErrors({ general: t('auth.errors.invalidCredentials') })
         } else {
           handleClose()
           router.push("/dashboard")
@@ -84,28 +92,30 @@ export function AuthModal() {
       } else if (mode === "register") {
         const { error } = await signUp(email, password)
         if (error) {
-          setError(error.message)
+          setFieldErrors({ general: error.message })
         } else {
           setSuccess(t('auth.success.checkEmail'))
         }
       } else if (mode === "forgot") {
         const { error } = await resetPassword(email)
         if (error) {
-          setError(error.message)
+          setFieldErrors({ general: error.message })
         } else {
           setSuccess(t('auth.success.resetEmail'))
         }
       }
     } catch {
-      setError(t('auth.errors.generic'))
+      setFieldErrors({ general: t('auth.errors.generic') })
     } finally {
       setLoading(false)
     }
   }
 
+  const errorBorder = "border-red-400 focus-visible:ring-red-300"
+
   const switchMode = () => {
     setMode(mode === "login" ? "register" : "login")
-    setError("")
+    setFieldErrors({})
     setSuccess("")
   }
 
@@ -122,21 +132,25 @@ export function AuthModal() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="email">{t('auth.email')}</Label>
+            <Label htmlFor="email" className={fieldErrors.email ? 'text-red-600' : ''}>{t('auth.email')}</Label>
             <Input
               id="email"
               type="email"
               autoComplete="email"
               placeholder={t('auth.emailPlaceholder')}
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => { setEmail(e.target.value); setFieldErrors(prev => ({ ...prev, email: undefined })) }}
               disabled={loading}
+              className={fieldErrors.email ? errorBorder : ''}
             />
+            {fieldErrors.email && (
+              <p className="text-xs text-red-600">{fieldErrors.email}</p>
+            )}
           </div>
 
           {mode !== "forgot" && (
             <div className="space-y-2">
-              <Label htmlFor="password">{t('auth.password')}</Label>
+              <Label htmlFor="password" className={fieldErrors.password ? 'text-red-600' : ''}>{t('auth.password')}</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -144,9 +158,9 @@ export function AuthModal() {
                   autoComplete={mode === "register" ? "new-password" : "current-password"}
                   placeholder={t('auth.passwordPlaceholder')}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => ({ ...prev, password: undefined })) }}
                   disabled={loading}
-                  className="pr-10"
+                  className={`pr-10 ${fieldErrors.password ? errorBorder : ''}`}
                 />
                 <button
                   type="button"
@@ -157,12 +171,15 @@ export function AuthModal() {
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              {fieldErrors.password && (
+                <p className="text-xs text-red-600">{fieldErrors.password}</p>
+              )}
             </div>
           )}
 
           {mode === "register" && (
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">{t('auth.confirmPassword')}</Label>
+              <Label htmlFor="confirmPassword" className={fieldErrors.confirmPassword ? 'text-red-600' : ''}>{t('auth.confirmPassword')}</Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
@@ -170,9 +187,9 @@ export function AuthModal() {
                   autoComplete="new-password"
                   placeholder={t('auth.confirmPasswordPlaceholder')}
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => { setConfirmPassword(e.target.value); setFieldErrors(prev => ({ ...prev, confirmPassword: undefined })) }}
                   disabled={loading}
-                  className="pr-10"
+                  className={`pr-10 ${fieldErrors.confirmPassword ? errorBorder : ''}`}
                 />
                 <button
                   type="button"
@@ -183,12 +200,15 @@ export function AuthModal() {
                   {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
+              {fieldErrors.confirmPassword && (
+                <p className="text-xs text-red-600">{fieldErrors.confirmPassword}</p>
+              )}
             </div>
           )}
 
-          {error && (
+          {fieldErrors.general && (
             <p className="text-sm text-red-600 bg-red-50 p-3 rounded-md">
-              {error}
+              {fieldErrors.general}
             </p>
           )}
 
@@ -208,7 +228,7 @@ export function AuthModal() {
           {mode === "login" && (
             <button
               type="button"
-              onClick={() => { setMode("forgot"); setError(""); setSuccess(""); }}
+              onClick={() => { setMode("forgot"); setFieldErrors({}); setSuccess(""); }}
               className="text-sm text-muted-foreground hover:text-foreground w-full text-center"
             >
               {t('auth.login.forgotPassword')}
@@ -228,7 +248,7 @@ export function AuthModal() {
                 } else {
                   setMode(mode === "login" ? "register" : "login")
                 }
-                setError("")
+                setFieldErrors({})
                 setSuccess("")
               }}
               className="text-action hover:underline font-medium"
