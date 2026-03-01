@@ -12,8 +12,8 @@ export const en = {
       dashboard: "Dashboard"
     },
     hero: {
-      title: "Your full-stack tech team, powered by AI.",
-      subtitle: "Design, development, data and deployment — all in-house. AI in our workflow = ~30% below standard market rates.",
+      title: "Your digital project from A to Z, delivered turnkey.",
+      subtitle: "Website, mobile app, custom software — our team handles everything, from design to launch. Our AI-powered methods allow us to offer prices around 30% below market rates.",
       cta: "Free Quote",
       moreDetails: "More details",
       features: {
@@ -26,73 +26,88 @@ export const en = {
           description: "Clear and detailed pricing, no surprises"
         },
         fullSupport: {
-          title: "~30% cheaper",
-          description: "AI in our workflow cuts development costs and timelines"
+          title: "About 30% cheaper",
+          description: "Our AI tools let us work faster, so you pay less"
         },
         turnkey: {
           title: "Complete team",
-          description: "Design, dev, data, DevOps: zero outsourcing"
+          description: "Design, development, hosting — everything is done in-house, nothing is outsourced"
         }
       }
     },
     services: {
       title: "Our Services",
+      tags: {
+        websites: "Websites",
+        mobileApps: "Mobile apps",
+        platforms: "Online platforms",
+        showcaseSites: "Showcase sites",
+        webApps: "Web applications",
+        businessTools: "Business tools",
+        multiPlatform: "Multi-platform",
+        automation: "Automation",
+        dataAnalysis: "Data analysis",
+        smartChatbots: "Smart chatbots",
+        connectedDevices: "Connected devices",
+        sensors: "Sensors",
+        prototyping: "Prototyping",
+      },
       webDev: {
-        title: "Web Development",
-        description: "High-performance web apps in React, Next.js, Node.js. Scalable architecture, maintainable code, continuous deployment."
+        title: "Websites & Web Apps",
+        description: "We build custom websites and web applications — fast, reliable, and easy to grow as your needs evolve."
       },
       mobileDev: {
-        title: "Mobile Development",
-        description: "Native iOS/Android and cross-platform Flutter apps. From banking apps with 10M+ users to your MVP."
+        title: "Mobile Apps",
+        description: "Apps for iPhone and Android tailored to your project, from a first prototype to an app used by millions."
       },
       iot: {
-        title: "IoT & Embedded",
-        description: "Embedded systems, connected sensors, real-time processing. From prototype to production."
+        title: "Connected Devices",
+        description: "We design custom connected devices: sensors, smart hardware, from first prototype to mass production."
       },
       ai: {
         title: "Artificial Intelligence",
-        description: "LLM integration, computer vision and NLP in your products. Custom AI solutions, not gimmicks."
+        description: "Chatbots, image recognition, automated text analysis — we add AI to your tools. Real solutions, not gimmicks."
       },
       consulting: {
-        title: "Technical Consulting",
-        description: "Architecture audits, tech stack selection and technical guidance for your projects."
+        title: "Consulting & Guidance",
+        description: "Audit of your existing tools, technical recommendations and hands-on support throughout your project."
       },
       maintenance: {
         title: "Maintenance & Support",
-        description: "Monitoring, updates and technical support for your applications in production."
+        description: "Monitoring, updates and technical support to keep your applications running smoothly."
       },
       design: {
         title: "Mockups & Design",
-        description: "User research, Figma prototypes and interfaces that convert. Delivered with a complete design system."
+        description: "We study your users' needs and create visual mockups. You approve every screen before development begins."
       }
     },
     process: {
-      title: "Our Process",
-      subtitle: "A proven process, accelerated by AI at every step.",
+      title: "How It Works",
+      subtitle: "A proven method, in 4 clear steps.",
       analysis: {
         title: "Scoping",
-        description: "We analyze your needs, choose the optimal stack and produce a precise specification.",
+        description: "We listen to your needs, choose the best tools for your project and write a clear specification.",
         duration: "2-3 days"
       },
       development: {
-        title: "Development",
-        description: "AI-assisted agile development. Regular deliveries, systematic code review.",
+        title: "Building",
+        description: "We build in short iterations — you see regular progress and can give feedback at every delivery.",
         duration: "Depends on project"
       },
       testing: {
-        title: "Testing & QA",
-        description: "Automated testing, quality review and functional validation before each delivery.",
+        title: "Quality Check",
+        description: "We make sure everything works perfectly before delivering: thorough testing and quality control at every step.",
         duration: "Continuous"
       },
       deployment: {
-        title: "Deployment",
-        description: "Production deployment, monitoring and training. You're autonomous from day one.",
+        title: "Launch",
+        description: "We put your project online, train your team and stay available. You're autonomous from day one.",
         duration: "1-2 days"
       }
     },
     team: {
       title: "Our Team",
-      subtitle: "7 complementary profiles covering the full chain: design, development, mobile, DevOps, data science and AI. Zero outsourcing.",
+      subtitle: "7 complementary experts covering every digital skill. Everything is done in-house, nothing is outsourced.",
       stats: {
         experts: "Experts",
         experience: "Years of experience"
@@ -100,44 +115,44 @@ export const en = {
       members: [
         {
           name: "Victor",
-          role: "Technical Leader .NET/Java",
-          description: "Technical Leader with 12+ years of full-stack development experience (.NET/Java, Angular, Android/Kotlin). Expert in software architecture, information systems modernization and technical leadership of complex project teams.",
+          role: "Technical Project Lead",
+          description: "Over 12 years of experience building software and applications. He oversees technical projects and ensures everything runs smoothly.",
           image: "/nobody.jpg"
         },
         {
           name: "Juliette",
-          role: "UX UI Designer",
-          description: "UX/UI Designer with 5+ years of experience and development background. Expert in user research, design systems, Figma and design thinking methodologies.",
+          role: "Interface Designer",
+          description: "Over 5 years of experience in interface design. She studies user needs and creates clear, intuitive and pleasant screens.",
           image: "/nobody.jpg"
         },
         {
           name: "Malaury",
-          role: "Full Stack Developer",
-          description: "Computer engineer with 6+ years of experience, specialized in web and mobile development. Expertise in React, Angular, Java, Node.js, Flutter and Agile project management.",
+          role: "Web & Mobile Developer",
+          description: "Software engineer with over 6 years of experience. She builds websites and mobile apps, and coordinates team projects.",
           image: "/nobody.jpg"
         },
         {
           name: "Thomas",
-          role: "iOS & Android Mobile Developer",
-          description: "INSA Lyon engineer with 5+ years of mobile development experience. Specialized in native iOS (Swift, SwiftUI) and Flutter. Expertise in banking apps (+10M users), NFC contactless technology and native/Flutter integration.",
+          role: "Mobile App Developer",
+          description: "Engineer with over 5 years of experience building iPhone and Android apps. He has contributed to apps used by over 10 million people.",
           image: "/nobody.jpg"
         },
         {
           name: "Alexandre",
-          role: "Full Stack Developer & DevOps",
-          description: "Passionate developer with 5+ years of experience, specialized in modern architecture and Linux environments. Expert in full stack development, server management, DevOps and cloud infrastructure (Kubernetes, Docker, CI/CD).",
+          role: "Developer & Server Admin",
+          description: "Over 5 years of experience. He manages the invisible technical side: servers, hosting, security and automatic updates for your applications.",
           image: "/nobody.jpg"
         },
         {
           name: "Alex",
-          role: "Data Scientist & Statistician",
-          description: "PhD candidate in statistics with 3+ years of experience in risk modeling. Specialized in machine learning, extreme value theory (EVT) and big data analysis. Expert in Python, R, PyTorch and advanced statistical modeling.",
+          role: "Data Analysis Expert",
+          description: "PhD candidate in statistics with over 3 years of experience. He builds smart models to extract value from your data and automate your analyses.",
           image: "/nobody.jpg"
         },
         {
           name: "Luc",
-          role: "AI & Machine Learning Researcher",
-          description: "Researcher specialized in artificial intelligence with 2+ years of experience. Expert in natural language processing, LLMs, formal logic and machine learning.",
+          role: "AI Specialist",
+          description: "Researcher with over 2 years of experience in AI. He designs tools that can understand and generate text, images and analyses automatically.",
           image: "/nobody.jpg"
         }
       ]
@@ -146,10 +161,10 @@ export const en = {
       title: "Got a project in mind?",
       description: "Tell us about your needs — we'll get back to you within 24h with an initial estimate.",
       button: "Get a quote",
-      guarantee: "~30% below market rates • Response within 24h • Free quote"
+      guarantee: "About 30% below market rates • Response within 24h • Free quote"
     },
     footer: {
-      description: "Full-stack tech team powered by AI. We deliver fast, right, and at fair prices.",
+      description: "We build your websites, apps and custom software. Fast, carefully, and at fair prices.",
       services: "Services",
       company: "Company",
       about: "About",

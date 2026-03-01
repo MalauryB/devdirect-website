@@ -12,8 +12,8 @@ export const fr = {
       dashboard: "Tableau de bord"
     },
     hero: {
-      title: "Votre équipe tech full-stack, boostée par l'IA.",
-      subtitle: "Design, développement, data et déploiement : tout en interne. L'IA dans notre workflow = ~30% moins cher que les tarifs classiques du marché.",
+      title: "Votre projet numérique de A à Z, livré clé en main.",
+      subtitle: "Site web, application mobile, logiciel sur mesure : notre équipe s'occupe de tout, du design à la mise en ligne. Nos méthodes de travail assistées par l'IA nous permettent de vous proposer des prix environ 30% en dessous du marché.",
       cta: "Devis Gratuit",
       moreDetails: "Plus de détails",
       features: {
@@ -26,73 +26,88 @@ export const fr = {
           description: "Prix clairs et détaillés, sans surprise"
         },
         fullSupport: {
-          title: "~30% moins cher",
-          description: "L'IA dans notre workflow réduit les coûts et les délais de développement"
+          title: "Environ 30% moins cher",
+          description: "Nos outils d'intelligence artificielle nous permettent de travailler plus vite, et vous payez moins"
         },
         turnkey: {
           title: "Équipe complète",
-          description: "Design, dev, data, DevOps : zéro sous-traitance"
+          description: "Design, création, hébergement : tout est fait par notre équipe, rien n'est sous-traité"
         }
       }
     },
     services: {
       title: "Nos Services",
+      tags: {
+        websites: "Sites web",
+        mobileApps: "Applications mobiles",
+        platforms: "Plateformes en ligne",
+        showcaseSites: "Sites vitrines",
+        webApps: "Applications web",
+        businessTools: "Outils métier",
+        multiPlatform: "Multi-plateforme",
+        automation: "Automatisation",
+        dataAnalysis: "Analyse de données",
+        smartChatbots: "Chatbots intelligents",
+        connectedDevices: "Objets connectés",
+        sensors: "Capteurs",
+        prototyping: "Prototypage",
+      },
       webDev: {
-        title: "Développement Web",
-        description: "Applications web performantes en React, Next.js, Node.js. Architecture scalable, code maintenable, déploiement continu."
+        title: "Sites & Applications Web",
+        description: "Nous créons des sites internet et des applications web sur mesure : rapides, fiables et faciles à faire évoluer au fil de vos besoins."
       },
       mobileDev: {
-        title: "Développement Mobile",
-        description: "Apps natives iOS/Android et cross-platform Flutter. De l'app bancaire à 10M d'utilisateurs à votre MVP."
+        title: "Applications Mobiles",
+        description: "Des applications pour iPhone et Android adaptées à votre projet, du premier prototype à une application utilisée par des millions de personnes."
       },
       iot: {
-        title: "IoT & Embarqué",
-        description: "Systèmes embarqués, capteurs connectés, traitement temps réel. Du prototype à la production."
+        title: "Objets Connectés",
+        description: "Nous concevons des objets connectés sur mesure : capteurs, boîtiers intelligents, du premier prototype jusqu'à la fabrication en série."
       },
       ai: {
         title: "Intelligence Artificielle",
-        description: "Intégration de LLMs, computer vision et NLP dans vos produits. Des solutions IA sur mesure, pas des gadgets."
+        description: "Chatbots, reconnaissance d'images, analyse automatique de textes : nous ajoutons de l'IA à vos outils. Des solutions concrètes, pas des gadgets."
       },
       consulting: {
-        title: "Conseil Technique",
-        description: "Audit, choix d'architecture et accompagnement technique pour vos projets."
+        title: "Conseil & Accompagnement",
+        description: "Audit de vos outils existants, recommandations techniques et accompagnement tout au long de votre projet."
       },
       maintenance: {
         title: "Maintenance & Support",
-        description: "Monitoring, mises à jour et support technique pour vos applications en production."
+        description: "Surveillance, mises à jour et assistance technique pour que vos applications fonctionnent sans interruption."
       },
       design: {
         title: "Maquettes & Design",
-        description: "Recherche utilisateur, prototypes Figma et interfaces qui convertissent. Livrées avec design system complet."
+        description: "Nous étudions les besoins de vos utilisateurs et créons des maquettes visuelles. Vous validez chaque écran avant le développement."
       }
     },
     process: {
-      title: "Notre Processus",
-      subtitle: "Un process rodé, accéléré par l'IA à chaque étape.",
+      title: "Comment ça se passe",
+      subtitle: "Une méthode de travail éprouvée, en 4 étapes claires.",
       analysis: {
         title: "Cadrage",
-        description: "On analyse votre besoin, on choisit la stack optimale et on produit un cahier des charges précis.",
+        description: "On écoute votre besoin, on choisit les meilleurs outils pour votre projet et on rédige un cahier des charges précis.",
         duration: "2-3 jours"
       },
       development: {
-        title: "Développement",
-        description: "Développement agile assisté par IA. Livraisons régulières, code review systématique.",
+        title: "Création",
+        description: "On développe par étapes courtes : vous voyez l'avancement régulièrement et pouvez donner votre avis à chaque livraison.",
         duration: "Selon le projet"
       },
       testing: {
-        title: "Tests & QA",
-        description: "Tests automatisés, revue qualité et validation fonctionnelle avant chaque livraison.",
+        title: "Vérification",
+        description: "On vérifie que tout fonctionne parfaitement avant de vous livrer : tests rigoureux et contrôle qualité à chaque étape.",
         duration: "Continu"
       },
       deployment: {
-        title: "Déploiement",
-        description: "Mise en production, monitoring et formation. Vous êtes autonomes dès la livraison.",
+        title: "Mise en ligne",
+        description: "On met votre projet en ligne, on vous forme et on reste disponibles. Vous êtes autonomes dès la livraison.",
         duration: "1-2 jours"
       }
     },
     team: {
       title: "Notre Équipe",
-      subtitle: "7 profils complémentaires qui couvrent toute la chaîne : design, développement, mobile, DevOps, data science et IA. Zéro sous-traitance.",
+      subtitle: "7 experts complémentaires qui couvrent tous les métiers du numérique. Tout est fait en interne, rien n'est sous-traité.",
       stats: {
         experts: "Experts",
         experience: "Années d'expérience"
@@ -100,44 +115,44 @@ export const fr = {
       members: [
         {
           name: "Victor",
-          role: "Technical Leader .NET/Java",
-          description: "Technical Leader avec 12+ ans d'expérience en développement full-stack (.NET/Java, Angular, Android/Kotlin). Expert en architecture logicielle, modernisation de systèmes d'information et pilotage technique d'équipes projets complexes.",
+          role: "Chef de projet technique",
+          description: "Plus de 12 ans d'expérience dans la création de logiciels et d'applications. Il supervise les projets techniques et s'assure que tout fonctionne parfaitement.",
           image: "/nobody.jpg"
         },
         {
           name: "Juliette",
-          role: "UX UI Designer",
-          description: "Designer UX/UI avec 5+ ans d'expérience et formation en développement. Experte en recherche utilisateur, design system, Figma et méthodes de design thinking.",
+          role: "Designer d'interfaces",
+          description: "Plus de 5 ans d'expérience en design d'interfaces. Elle étudie les besoins des utilisateurs et conçoit des écrans clairs, intuitifs et agréables à utiliser.",
           image: "/nobody.jpg"
         },
         {
           name: "Malaury",
-          role: "Développeuse Full Stack",
-          description: "Ingénieure en informatique avec 6+ ans d'expérience, spécialisée en développement web et mobile. Expertise en React, Angular, Java, Node.js, Flutter et gestion de projet Agile.",
+          role: "Développeuse web & mobile",
+          description: "Ingénieure en informatique avec plus de 6 ans d'expérience. Elle crée des sites web et des applications mobiles, et coordonne les projets de l'équipe.",
           image: "/nobody.jpg"
         },
         {
           name: "Thomas",
-          role: "Développeur Mobile iOS & Android",
-          description: "Ingénieur INSA Lyon avec 5+ ans d'expérience en développement mobile. Spécialisé en iOS natif (Swift, SwiftUI) et Flutter. Expertise en applications bancaires (+10M utilisateurs), billettique NFC et intégration native/Flutter.",
+          role: "Développeur d'applications mobiles",
+          description: "Ingénieur avec plus de 5 ans d'expérience en applications iPhone et Android. Il a contribué à des applications utilisées par plus de 10 millions de personnes.",
           image: "/nobody.jpg"
         },
         {
           name: "Alexandre",
-          role: "Développeur Full Stack & DevOps",
-          description: "Développeur passionné avec 5+ ans d'expérience, spécialisé en architecture moderne et environnements Linux. Expert en développement full stack, gestion de serveurs, DevOps et infrastructure cloud (Kubernetes, Docker, CI/CD).",
+          role: "Développeur & administrateur serveurs",
+          description: "Plus de 5 ans d'expérience. Il gère toute la partie technique invisible : serveurs, hébergement, sécurité et mises à jour automatiques de vos applications.",
           image: "/nobody.jpg"
         },
         {
           name: "Alex",
-          role: "Data Scientist & Statisticien",
-          description: "Doctorant en statistique avec 3+ ans d'expérience en modélisation des risques. Spécialisé en machine learning, théorie des valeurs extrêmes (EVT) et analyse de données massives. Expert en Python, R, PyTorch et modélisation statistique avancée.",
+          role: "Expert en analyse de données",
+          description: "Doctorant en statistique avec plus de 3 ans d'expérience. Il crée des modèles intelligents pour extraire de la valeur de vos données et automatiser vos analyses.",
           image: "/nobody.jpg"
         },
         {
           name: "Luc",
-          role: "Chercheur en IA & Machine Learning",
-          description: "Chercheur spécialisé en intelligence artificielle avec 2+ ans d'expérience. Expert en traitement du langage naturel, LLMs, logique formelle et apprentissage automatique.",
+          role: "Spécialiste en intelligence artificielle",
+          description: "Chercheur avec plus de 2 ans d'expérience en IA. Il conçoit des outils capables de comprendre et de générer du texte, des images et des analyses automatiquement.",
           image: "/nobody.jpg"
         }
       ]
@@ -146,10 +161,10 @@ export const fr = {
       title: "Un projet en tête ?",
       description: "Décrivez-nous votre besoin, on vous répond sous 24h avec une première estimation.",
       button: "Obtenir un devis",
-      guarantee: "~30% sous les prix du marché • Réponse sous 24h • Devis gratuit"
+      guarantee: "Environ 30% sous les prix du marché • Réponse sous 24h • Devis gratuit"
     },
     footer: {
-      description: "Équipe tech full-stack boostée par l'IA. On livre vite, bien et à prix justes.",
+      description: "Nous créons vos sites, applications et logiciels sur mesure. Rapidement, soigneusement et à prix justes.",
       services: "Services",
       company: "Entreprise",
       about: "À propos",
