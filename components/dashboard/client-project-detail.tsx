@@ -18,13 +18,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/contexts/language-context"
-import type { Project, Quote, ProjectDocument } from "@/lib/types"
+import type { Project, Quote, ProjectDocument, CurrentUser } from "@/lib/types"
 import type { UserRole } from "@/contexts/auth-context"
 import { getStatusBadgeClass } from "@/lib/dashboard-utils"
 import { MessageThread } from "@/components/message-thread"
-import { DetailSubsection } from "@/components/dashboard/client-detail/detail-subsection"
+import { DetailSubsection } from "@/components/dashboard/shared/detail-subsection"
 import { QuotesSubsection } from "@/components/dashboard/client-detail/quotes-subsection"
-import { DocumentsSubsection } from "@/components/dashboard/client-detail/documents-subsection"
+import { DocumentsSubsection } from "@/components/dashboard/shared/documents-subsection"
 import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
 interface ClientProjectDetailProps {
@@ -65,6 +65,13 @@ export function ClientProjectDetail({
   onLoadDocuments,
 }: ClientProjectDetailProps) {
   const { t } = useLanguage()
+  const currentUser: CurrentUser = {
+    id: user?.id || '',
+    first_name: user?.user_metadata?.first_name,
+    last_name: user?.user_metadata?.last_name,
+    avatar_url: user?.user_metadata?.avatar_url,
+    role: userRole,
+  }
 
   return (
     <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
@@ -245,13 +252,7 @@ export function ClientProjectDetail({
             <div className="flex-1 bg-muted/50 overflow-hidden">
               <MessageThread
                 projectId={project.id}
-                currentUser={{
-                  id: user?.id || '',
-                  first_name: user?.user_metadata?.first_name,
-                  last_name: user?.user_metadata?.last_name,
-                  avatar_url: user?.user_metadata?.avatar_url,
-                  role: userRole
-                }}
+                currentUser={currentUser}
               />
             </div>
           </>
@@ -261,10 +262,9 @@ export function ClientProjectDetail({
         {projectSubSection === 'documents' && (
           <DocumentsSubsection
             project={project}
+            isEngineer={false}
             documents={documents}
             documentsLoading={documentsLoading}
-            user={user}
-            accessToken={accessToken}
             onLoadDocuments={onLoadDocuments}
           />
         )}

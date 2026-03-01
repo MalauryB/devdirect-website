@@ -8,6 +8,16 @@ export const formatCurrency = (amount: number): string => {
   }).format(amount)
 }
 
+// Format currency with decimals
+export const formatCurrencyPrecise = (amount: number): string => {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(amount)
+}
+
 // Format date helper (short format)
 export const formatDate = (dateString: string): string => {
   const date = new Date(dateString)

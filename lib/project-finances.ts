@@ -301,25 +301,8 @@ export function calculateProjectFinances(
   }
 }
 
-// Helper to format currency
-export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(amount)
-}
-
-// Helper to format currency with decimals
-export function formatCurrencyPrecise(amount: number): string {
-  return new Intl.NumberFormat('fr-FR', {
-    style: 'currency',
-    currency: 'EUR',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(amount)
-}
+// Re-export formatting helpers from canonical location
+export { formatCurrency, formatCurrencyPrecise } from './dashboard-utils'
 
 // Helper to get consumption status color
 export function getConsumptionColor(percent: number): string {

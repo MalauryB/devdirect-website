@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
 import type { Project, Quote } from "@/lib/types"
-import { formatCurrency } from "@/lib/dashboard-utils"
+import { formatCurrency, getQuoteStatusBadgeClass } from "@/lib/dashboard-utils"
 import { exportQuoteToExcel, calculateQuoteData } from "@/lib/quote-export"
 import { exportQuoteToPdf } from "@/lib/quote-pdf-export"
 
@@ -55,12 +55,7 @@ export function QuotesSubsection({ quotes, quotesLoading, project, accessToken }
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-2">
                       <h4 className="font-semibold text-foreground">{quote.name}</h4>
-                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                        quote.status === 'draft' ? 'bg-muted text-foreground/70' :
-                        quote.status === 'sent' ? 'bg-blue-100 text-blue-700' :
-                        quote.status === 'accepted' ? 'bg-green-100 text-green-700' :
-                        'bg-red-100 text-red-700'
-                      }`}>
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getQuoteStatusBadgeClass(quote.status)}`}>
                         {t(`quotes.status.${quote.status}`)}
                       </span>
                     </div>

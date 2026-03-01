@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { useLanguage } from "@/contexts/language-context"
 import { createProject, updateProject } from "@/lib/projects"
-import { ProjectFormData, Project, ProjectFile } from "@/lib/types"
+import { ProjectFormData, Project, ProjectFile, getProjectFormData } from "@/lib/types"
 import { FileUpload } from "@/components/file-upload"
 import { Loader2, Check, Send } from "lucide-react"
 
@@ -27,26 +27,7 @@ export function ProjectForm({ project, onSuccess, onCancel }: ProjectFormProps) 
   const [success, setSuccess] = useState(false)
   const isEditing = !!project
 
-  const [formData, setFormData] = useState<ProjectFormData>({
-    title: project?.title || "",
-    project_types: project?.project_types || [],
-    services: project?.services || [],
-    platforms: project?.platforms || [],
-    description: project?.description || "",
-    features: project?.features || "",
-    target_audience: project?.target_audience || "",
-    has_existing_project: project?.has_existing_project || false,
-    existing_technologies: project?.existing_technologies || "",
-    needs_design: project?.needs_design || "",
-    budget: project?.budget || "",
-    deadline: project?.deadline || "",
-    additional_info: project?.additional_info || "",
-    specifications_file: project?.specifications_file || null,
-    design_files: project?.design_files || null,
-    brand_assets: project?.brand_assets || null,
-    inspiration_images: project?.inspiration_images || null,
-    other_documents: project?.other_documents || null
-  })
+  const [formData, setFormData] = useState<ProjectFormData>(getProjectFormData(project))
 
   const handleProjectTypeToggle = (type: string) => {
     setFormData(prev => ({

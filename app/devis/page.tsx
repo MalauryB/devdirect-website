@@ -4,23 +4,23 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowLeft, Loader2, Check, Eye, EyeOff, Sparkles, Code, Lightbulb, Users, Globe, Smartphone, Monitor, Cpu, Brain, HelpCircle, FileText, Palette, Euro, Clock, CheckCircle2, ChevronRight, ChevronLeft, Rocket } from "lucide-react"
+import { ArrowLeft, Sparkles, Code, Lightbulb, Users, Globe, Smartphone, Monitor, Cpu, Brain, HelpCircle, FileText, Palette, Euro, Clock, Check, CheckCircle2, ChevronRight, ChevronLeft, Rocket } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
 import { createProject } from "@/lib/projects"
-import { ProjectFormData } from "@/lib/types"
+import { ProjectFormData, DEFAULT_PROJECT_FORM_DATA } from "@/lib/types"
 import { Textarea } from "@/components/ui/textarea"
+import { DevisAuthForm } from "@/components/devis/devis-auth-form"
 
 const DEVIS_STORAGE_KEY = "pending_devis_project"
 
-type AuthMode = "login" | "register" | "forgot"
 type TechLevel = 'beginner' | 'intermediate' | 'advanced' | ''
 
 export default function DevisPage() {
   const router = useRouter()
   const { t } = useLanguage()
-  const { user, signIn, signUp, resetPassword } = useAuth()
+  const { user } = useAuth()
 
   const [mainStep, setMainStep] = useState(1) // 1 = project form, 2 = auth
   const [wizardStep, setWizardStep] = useState(0)
@@ -29,31 +29,10 @@ export default function DevisPage() {
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
 
-  // Auth state
-  const [authMode, setAuthMode] = useState<AuthMode>("login")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [authSuccess, setAuthSuccess] = useState("")
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  // Auth state managed by DevisAuthForm component
 
   // Project form state
-  const [formData, setFormData] = useState<ProjectFormData>({
-    title: "",
-    project_types: [],
-    services: [],
-    platforms: [],
-    description: "",
-    features: "",
-    target_audience: "",
-    has_existing_project: false,
-    existing_technologies: "",
-    needs_design: "",
-    budget: "",
-    deadline: "",
-    additional_info: ""
-  })
+  const [formData, setFormData] = useState<ProjectFormData>({ ...DEFAULT_PROJECT_FORM_DATA })
 
   // Guided description for beginners
   const [guidedDescription, setGuidedDescription] = useState({
@@ -189,64 +168,6 @@ export default function DevisPage() {
     setMainStep(2)
   }
 
-  const handleAuthSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError("")
-    setAuthSuccess("")
-
-    if (!email) {
-      setError(t('auth.errors.emailRequired'))
-      return
-    }
-
-    if (authMode !== "forgot" && !password) {
-      setError(t('auth.errors.fieldsRequired'))
-      return
-    }
-
-    if (authMode === "register" && password !== confirmPassword) {
-      setError(t('auth.errors.passwordMismatch'))
-      return
-    }
-
-    if (authMode !== "forgot" && password.length < 6) {
-      setError(t('auth.errors.passwordTooShort'))
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      if (authMode === "login") {
-        const { error } = await signIn(email, password)
-        if (error) {
-          setError(t('auth.errors.invalidCredentials'))
-        }
-      } else if (authMode === "register") {
-        const { error, data } = await signUp(email, password)
-        if (error) {
-          setError(error.message)
-        } else if (data?.user && !data.user.identities?.length) {
-          setError(t('auth.errors.generic'))
-        } else if (data?.session) {
-          // User is automatically logged in
-        } else {
-          setAuthSuccess(t('auth.success.checkEmail'))
-        }
-      } else if (authMode === "forgot") {
-        const { error } = await resetPassword(email)
-        if (error) {
-          setError(error.message)
-        } else {
-          setAuthSuccess(t('auth.success.resetEmail'))
-        }
-      }
-    } catch {
-      setError(t('auth.errors.generic'))
-    } finally {
-      setLoading(false)
-    }
-  }
 
   // Wizard steps configuration
   const getWizardSteps = () => {
@@ -874,158 +795,7 @@ export default function DevisPage() {
 
           {/* Step 2: Authentication */}
           {mainStep === 2 && (
-            <>
-              {success ? (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <Check className="w-8 h-8 text-green-600" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-foreground mb-2">{t('projectWizard.projectSent')}</h2>
-                  <p className="text-foreground/60">{t('projectWizard.redirecting')}</p>
-                </div>
-              ) : (
-                <>
-                  <div className="mb-10 text-center">
-                    <h1 className="text-3xl font-bold mb-3">
-                      {t(`auth.${authMode}.title`)}
-                    </h1>
-                    <p className="text-foreground/60">
-                      {t(`auth.${authMode}.subtitle`)}
-                    </p>
-                  </div>
-
-                  <form onSubmit={handleAuthSubmit} className="max-w-md mx-auto space-y-6">
-                    <div className="space-y-1.5">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder={t('auth.emailPlaceholder')}
-                        disabled={loading}
-                        className="border-border focus:border-primary"
-                      />
-                    </div>
-
-                    {authMode !== "forgot" && (
-                      <div className="space-y-1.5">
-                        <Label htmlFor="password">{t('auth.password')}</Label>
-                        <div className="relative">
-                          <Input
-                            id="password"
-                            type={showPassword ? "text" : "password"}
-                            autoComplete={authMode === "register" ? "new-password" : "current-password"}
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            placeholder="••••••••"
-                            disabled={loading}
-                            className="border-border focus:border-primary pr-10"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground"
-                          >
-                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {authMode === "register" && (
-                      <div className="space-y-1.5">
-                        <Label htmlFor="confirmPassword">{t('auth.confirmPassword')}</Label>
-                        <div className="relative">
-                          <Input
-                            id="confirmPassword"
-                            type={showConfirmPassword ? "text" : "password"}
-                            autoComplete="new-password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            placeholder="••••••••"
-                            disabled={loading}
-                            className="border-border focus:border-primary pr-10"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground"
-                          >
-                            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {error && (
-                      <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
-                    )}
-
-                    {authSuccess && (
-                      <p className="text-sm text-green-600 bg-green-50 p-3 rounded-lg">{authSuccess}</p>
-                    )}
-
-                    <Button
-                      type="submit"
-                      disabled={loading}
-                      className="w-full bg-primary hover:bg-primary/90"
-                    >
-                      {loading ? (
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      ) : null}
-                      {t(`auth.${authMode}.button`)}
-                    </Button>
-
-                    <div className="text-center space-y-2">
-                      {authMode === "login" && (
-                        <>
-                          <button
-                            type="button"
-                            onClick={() => setAuthMode("forgot")}
-                            className="text-sm text-foreground/60 hover:text-foreground"
-                          >
-                            {t('auth.login.forgotPassword')}
-                          </button>
-                          <p className="text-sm text-foreground/60">
-                            {t('auth.login.noAccount')}{" "}
-                            <button
-                              type="button"
-                              onClick={() => setAuthMode("register")}
-                              className="text-foreground font-medium hover:underline"
-                            >
-                              {t('auth.login.createAccount')}
-                            </button>
-                          </p>
-                        </>
-                      )}
-                      {authMode === "register" && (
-                        <p className="text-sm text-foreground/60">
-                          {t('auth.register.hasAccount')}{" "}
-                          <button
-                            type="button"
-                            onClick={() => setAuthMode("login")}
-                            className="text-foreground font-medium hover:underline"
-                          >
-                            {t('auth.register.login')}
-                          </button>
-                        </p>
-                      )}
-                      {authMode === "forgot" && (
-                        <button
-                          type="button"
-                          onClick={() => setAuthMode("login")}
-                          className="text-sm text-foreground/60 hover:text-foreground"
-                        >
-                          {t('auth.forgot.backToLogin')}
-                        </button>
-                      )}
-                    </div>
-                  </form>
-                </>
-              )}
-            </>
+            <DevisAuthForm loading={loading} success={success} />
           )}
         </div>
       </main>

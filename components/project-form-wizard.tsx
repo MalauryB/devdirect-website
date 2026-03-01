@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/contexts/language-context"
 import { createProject, updateProject } from "@/lib/projects"
-import { ProjectFormData, Project } from "@/lib/types"
+import { ProjectFormData, Project, getProjectFormData } from "@/lib/types"
 import { Loader2, Check, ChevronRight, ChevronLeft, Sparkles, Code, Rocket, Palette, FileText, Euro, Upload, CheckCircle2 } from "lucide-react"
 import { StepTechLevel } from "@/components/wizard/step-tech-level"
 import { StepProjectType } from "@/components/wizard/step-project-type"
@@ -33,26 +33,7 @@ export function ProjectFormWizard({ project, onSuccess, onCancel }: ProjectFormW
   const [currentStep, setCurrentStep] = useState(0)
   const [techLevel, setTechLevel] = useState<TechLevel>(project ? 'advanced' : '')
 
-  const [formData, setFormData] = useState<ProjectFormData>({
-    title: project?.title || "",
-    project_types: project?.project_types || [],
-    services: project?.services || [],
-    platforms: project?.platforms || [],
-    description: project?.description || "",
-    features: project?.features || "",
-    target_audience: project?.target_audience || "",
-    has_existing_project: project?.has_existing_project || false,
-    existing_technologies: project?.existing_technologies || "",
-    needs_design: project?.needs_design || "",
-    budget: project?.budget || "",
-    deadline: project?.deadline || "",
-    additional_info: project?.additional_info || "",
-    specifications_file: project?.specifications_file || null,
-    design_files: project?.design_files || null,
-    brand_assets: project?.brand_assets || null,
-    inspiration_images: project?.inspiration_images || null,
-    other_documents: project?.other_documents || null
-  })
+  const [formData, setFormData] = useState<ProjectFormData>(getProjectFormData(project))
 
   // Guided description for beginners
   const [guidedDescription, setGuidedDescription] = useState({

@@ -15,7 +15,7 @@ import {
 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { UserRole } from "@/contexts/auth-context"
-import { Project, Quote, Profile, ProjectDocument } from "@/lib/types"
+import { Project, Quote, Profile, ProjectDocument, CurrentUser } from "@/lib/types"
 import { getStatusBadgeClass } from "@/lib/dashboard-utils"
 import { MessageThread } from "@/components/message-thread"
 import { TimeTracking } from "@/components/time-tracking"
@@ -23,9 +23,9 @@ import { ProjectRoadmap } from "@/components/project-roadmap"
 import { ProjectContracts } from "@/components/project-contracts"
 import { ProjectFinances } from "@/components/project-finances"
 import { loadCompanySettings } from "@/lib/company-settings"
-import { DetailSubsection } from "@/components/dashboard/engineer-detail/detail-subsection"
+import { DetailSubsection } from "@/components/dashboard/shared/detail-subsection"
 import { QuotesSubsection } from "@/components/dashboard/engineer-detail/quotes-subsection"
-import { DocumentsSubsection } from "@/components/dashboard/engineer-detail/documents-subsection"
+import { DocumentsSubsection } from "@/components/dashboard/shared/documents-subsection"
 import type { SubSection } from "@/hooks/use-dashboard-navigation"
 
 interface EngineerProjectDetailProps {
@@ -71,6 +71,13 @@ export function EngineerProjectDetail({
 }: EngineerProjectDetailProps) {
   const { t } = useLanguage()
   const companySettings = useMemo(() => loadCompanySettings(), [])
+  const currentUser: CurrentUser = useMemo(() => ({
+    id: user?.id || '',
+    first_name: user?.user_metadata?.first_name,
+    last_name: user?.user_metadata?.last_name,
+    avatar_url: user?.user_metadata?.avatar_url,
+    role: userRole,
+  }), [user?.id, user?.user_metadata?.first_name, user?.user_metadata?.last_name, user?.user_metadata?.avatar_url, userRole])
 
   return (
     <div className={`flex gap-0 -m-4 lg:-m-6 ${projectSubSection === 'messages' ? 'h-[calc(100vh-65px)]' : 'min-h-[calc(100vh-65px)]'}`}>
@@ -292,13 +299,7 @@ export function EngineerProjectDetail({
             <div className="flex-1 bg-muted/50 overflow-hidden">
               <MessageThread
                 projectId={project.id}
-                currentUser={{
-                  id: user?.id || '',
-                  first_name: user?.user_metadata?.first_name,
-                  last_name: user?.user_metadata?.last_name,
-                  avatar_url: user?.user_metadata?.avatar_url,
-                  role: userRole
-                }}
+                currentUser={currentUser}
                 otherParty={project.profiles}
               />
             </div>
@@ -309,8 +310,6 @@ export function EngineerProjectDetail({
         {projectSubSection === 'documents' && (
           <DocumentsSubsection
             project={project}
-            user={user}
-            session={session}
             isEngineer={isEngineer}
             documents={documents}
             documentsLoading={documentsLoading}
@@ -323,12 +322,7 @@ export function EngineerProjectDetail({
           <div className="bg-white border border-border rounded-xl p-6">
             <TimeTracking
               projectId={project.id}
-              currentUser={{
-                id: user?.id || '',
-                first_name: user?.user_metadata?.first_name,
-                last_name: user?.user_metadata?.last_name,
-                role: user?.user_metadata?.role
-              }}
+              currentUser={currentUser}
               isEngineer={isEngineer}
             />
           </div>
@@ -339,12 +333,7 @@ export function EngineerProjectDetail({
           <div className="bg-white border border-border rounded-xl p-6">
             <ProjectRoadmap
               project={project}
-              currentUser={{
-                id: user?.id || '',
-                first_name: user?.user_metadata?.first_name,
-                last_name: user?.user_metadata?.last_name,
-                role: user?.user_metadata?.role
-              }}
+              currentUser={currentUser}
               isEngineer={isEngineer}
               engineers={engineers}
             />
