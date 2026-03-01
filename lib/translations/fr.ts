@@ -261,6 +261,10 @@ export const fr = {
       cityPlaceholder: "Paris",
       country: "Pays",
       countryPlaceholder: "France",
+      completion: "Progression",
+      requiredFieldsFilled: "champs obligatoires remplis",
+      requiredFieldsNote: "Champs obligatoires",
+      optional: "facultatif",
       save: "Enregistrer les modifications",
       success: "Profil mis à jour avec succès",
       error: "Une erreur est survenue lors de la mise à jour",
@@ -1719,5 +1723,7 @@ export const fr = {
       companyPlaceholder: "Nom de votre entreprise",
       messagePlaceholder: "Décrivez votre projet...",
       send: "Envoyer la demande",
+      requiredFields: "Champs obligatoires",
+      optional: "facultatif",
     },
 }

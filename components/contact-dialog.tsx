@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Send, CheckCircle } from "lucide-react"
+import { Send, CheckCircle, Check } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
 
@@ -70,18 +70,28 @@ export function ContactDialog() {
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <p className="text-xs text-muted-foreground">
+            <span className="text-red-500">*</span> {t('contact.requiredFields')}
+          </p>
           <div className="space-y-2">
-            <Label htmlFor="name">{t('contact.fullName')} *</Label>
+            <Label htmlFor="name" className="flex items-center gap-1.5">
+              {t('contact.fullName')} <span className="text-red-500">*</span>
+              {formData.name.trim() && <Check className="w-3.5 h-3.5 text-green-500" />}
+            </Label>
             <Input
               id="name"
               required
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               placeholder={t('contact.fullName')}
+              className={formData.name.trim() ? 'border-green-300' : ''}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email" className="flex items-center gap-1.5">
+              Email <span className="text-red-500">*</span>
+              {formData.email.trim() && <Check className="w-3.5 h-3.5 text-green-500" />}
+            </Label>
             <Input
               id="email"
               type="email"
@@ -89,10 +99,14 @@ export function ContactDialog() {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               placeholder="votre@email.com"
+              className={formData.email.trim() ? 'border-green-300' : ''}
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">{t('contact.phone')}</Label>
+            <Label htmlFor="phone" className="flex items-center gap-1.5">
+              {t('contact.phone')}
+              <span className="text-xs text-muted-foreground font-normal">({t('contact.optional')})</span>
+            </Label>
             <Input
               id="phone"
               type="tel"
@@ -102,7 +116,10 @@ export function ContactDialog() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="company">{t('contact.company')}</Label>
+            <Label htmlFor="company" className="flex items-center gap-1.5">
+              {t('contact.company')}
+              <span className="text-xs text-muted-foreground font-normal">({t('contact.optional')})</span>
+            </Label>
             <Input
               id="company"
               value={formData.company}
@@ -111,7 +128,10 @@ export function ContactDialog() {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="message">Message *</Label>
+            <Label htmlFor="message" className="flex items-center gap-1.5">
+              Message <span className="text-red-500">*</span>
+              {formData.message.trim() && <Check className="w-3.5 h-3.5 text-green-500" />}
+            </Label>
             <Textarea
               id="message"
               required
@@ -119,6 +139,7 @@ export function ContactDialog() {
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               placeholder={t('contact.messagePlaceholder')}
               rows={4}
+              className={formData.message.trim() ? 'border-green-300' : ''}
             />
           </div>
           <Button type="submit" className="w-full" size="lg">

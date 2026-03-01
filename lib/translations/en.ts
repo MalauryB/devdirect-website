@@ -261,6 +261,10 @@ export const en = {
       cityPlaceholder: "New York",
       country: "Country",
       countryPlaceholder: "United States",
+      completion: "Progress",
+      requiredFieldsFilled: "required fields filled",
+      requiredFieldsNote: "Required fields",
+      optional: "optional",
       save: "Save changes",
       success: "Profile updated successfully",
       error: "An error occurred while updating",
@@ -1719,5 +1723,7 @@ export const en = {
       companyPlaceholder: "Your company name",
       messagePlaceholder: "Describe your project...",
       send: "Send request",
+      requiredFields: "Required fields",
+      optional: "optional",
     },
 }

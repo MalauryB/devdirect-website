@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Check } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { ClientType } from "@/contexts/auth-context"
 
@@ -62,14 +63,54 @@ export function PersonalInfoForm({
   } = formData
   const { t } = useLanguage()
 
+  const requiredFields = isEngineer
+    ? ['firstName', 'lastName'] as const
+    : clientType === 'company'
+      ? ['firstName', 'lastName', 'companyName', 'siret'] as const
+      : ['firstName', 'lastName'] as const
+
+  const filledRequired = requiredFields.filter(f => formData[f]?.trim()).length
+  const totalRequired = requiredFields.length
+  const progressPercent = totalRequired > 0 ? Math.round((filledRequired / totalRequired) * 100) : 100
+
+  const fieldStatus = (value: string, required: boolean) => ({
+    filled: value.trim().length > 0,
+    required,
+    className: value.trim() ? 'border-green-300 focus:border-green-400' : required ? 'border-border focus:border-primary' : 'border-border focus:border-primary',
+  })
+
   return (
     <>
+      {/* Progress indicator */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-sm">
+          <span className="text-foreground/70">
+            {t('profile.completion')}: {filledRequired}/{totalRequired} {t('profile.requiredFieldsFilled')}
+          </span>
+          <span className={`font-medium ${progressPercent === 100 ? 'text-green-600' : 'text-amber-600'}`}>
+            {progressPercent}%
+          </span>
+        </div>
+        <div className="w-full bg-muted rounded-full h-2">
+          <div
+            className={`h-2 rounded-full transition-all duration-300 ${progressPercent === 100 ? 'bg-green-500' : 'bg-amber-500'}`}
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground">
+          <span className="text-red-500">*</span> {t('profile.requiredFieldsNote')}
+        </p>
+      </div>
+
       {/* Personal information */}
       <div className="space-y-4">
         <h3 className="text-sm font-medium text-foreground">{t('profile.personalInfo')}</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-1">
-            <Label htmlFor="firstName" className="text-sm text-foreground/70">{t('profile.firstName')}</Label>
+            <Label htmlFor="firstName" className="text-sm text-foreground/70 flex items-center gap-1.5">
+              {t('profile.firstName')} <span className="text-red-500">*</span>
+              {firstName.trim() && <Check className="w-3.5 h-3.5 text-green-500" />}
+            </Label>
             <Input
               id="firstName"
               type="text"
@@ -77,11 +118,14 @@ export function PersonalInfoForm({
               value={firstName}
               onChange={(e) => onChange('firstName', e.target.value)}
               disabled={saving}
-              className="border-border focus:border-primary"
+              className={fieldStatus(firstName, true).className}
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="lastName" className="text-sm text-foreground/70">{t('profile.lastName')}</Label>
+            <Label htmlFor="lastName" className="text-sm text-foreground/70 flex items-center gap-1.5">
+              {t('profile.lastName')} <span className="text-red-500">*</span>
+              {lastName.trim() && <Check className="w-3.5 h-3.5 text-green-500" />}
+            </Label>
             <Input
               id="lastName"
               type="text"
@@ -89,12 +133,15 @@ export function PersonalInfoForm({
               value={lastName}
               onChange={(e) => onChange('lastName', e.target.value)}
               disabled={saving}
-              className="border-border focus:border-primary"
+              className={fieldStatus(lastName, true).className}
             />
           </div>
         </div>
         <div className="space-y-1">
-          <Label htmlFor="phone" className="text-sm text-foreground/70">{t('profile.phone')}</Label>
+          <Label htmlFor="phone" className="text-sm text-foreground/70 flex items-center gap-1.5">
+            {t('profile.phone')}
+            <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+          </Label>
           <Input
             id="phone"
             type="tel"
@@ -112,7 +159,10 @@ export function PersonalInfoForm({
         <>
           {/* Job title */}
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-foreground">{t('profile.jobTitle')}</h3>
+            <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
+              {t('profile.jobTitle')}
+              <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+            </h3>
             <Input
               id="jobTitle"
               type="text"
@@ -126,7 +176,10 @@ export function PersonalInfoForm({
 
           {/* Bio */}
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-foreground">{t('profile.bio')}</h3>
+            <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
+              {t('profile.bio')}
+              <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+            </h3>
             <Textarea
               id="bio"
               placeholder={t('profile.bioPlaceholder')}
@@ -170,7 +223,10 @@ export function PersonalInfoForm({
               <h3 className="text-sm font-medium text-foreground">{t('profile.companyInfo')}</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <Label htmlFor="companyName" className="text-sm text-foreground/70">{t('profile.companyName')}</Label>
+                  <Label htmlFor="companyName" className="text-sm text-foreground/70 flex items-center gap-1.5">
+                    {t('profile.companyName')} <span className="text-red-500">*</span>
+                    {companyName.trim() && <Check className="w-3.5 h-3.5 text-green-500" />}
+                  </Label>
                   <Input
                     id="companyName"
                     type="text"
@@ -178,11 +234,14 @@ export function PersonalInfoForm({
                     value={companyName}
                     onChange={(e) => onChange('companyName', e.target.value)}
                     disabled={saving}
-                    className="border-border focus:border-primary"
+                    className={fieldStatus(companyName, true).className}
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="legalForm" className="text-sm text-foreground/70">{t('profile.legalForm')}</Label>
+                  <Label htmlFor="legalForm" className="text-sm text-foreground/70 flex items-center gap-1.5">
+                    {t('profile.legalForm')}
+                    <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+                  </Label>
                   <Input
                     id="legalForm"
                     type="text"
@@ -196,7 +255,10 @@ export function PersonalInfoForm({
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <Label htmlFor="siret" className="text-sm text-foreground/70">{t('profile.siret')}</Label>
+                  <Label htmlFor="siret" className="text-sm text-foreground/70 flex items-center gap-1.5">
+                    {t('profile.siret')} <span className="text-red-500">*</span>
+                    {siret.trim() && <Check className="w-3.5 h-3.5 text-green-500" />}
+                  </Label>
                   <Input
                     id="siret"
                     type="text"
@@ -204,11 +266,14 @@ export function PersonalInfoForm({
                     value={siret}
                     onChange={(e) => onChange('siret', e.target.value)}
                     disabled={saving}
-                    className="border-border focus:border-primary"
+                    className={fieldStatus(siret, true).className}
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="vatNumber" className="text-sm text-foreground/70">{t('profile.vatNumber')}</Label>
+                  <Label htmlFor="vatNumber" className="text-sm text-foreground/70 flex items-center gap-1.5">
+                    {t('profile.vatNumber')}
+                    <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+                  </Label>
                   <Input
                     id="vatNumber"
                     type="text"
@@ -222,7 +287,10 @@ export function PersonalInfoForm({
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <Label htmlFor="professionalEmail" className="text-sm text-foreground/70">{t('profile.professionalEmail')}</Label>
+                  <Label htmlFor="professionalEmail" className="text-sm text-foreground/70 flex items-center gap-1.5">
+                    {t('profile.professionalEmail')}
+                    <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+                  </Label>
                   <Input
                     id="professionalEmail"
                     type="email"
@@ -234,7 +302,10 @@ export function PersonalInfoForm({
                   />
                 </div>
                 <div className="space-y-1">
-                  <Label htmlFor="contactPosition" className="text-sm text-foreground/70">{t('profile.contactPosition')}</Label>
+                  <Label htmlFor="contactPosition" className="text-sm text-foreground/70 flex items-center gap-1.5">
+                    {t('profile.contactPosition')}
+                    <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+                  </Label>
                   <Input
                     id="contactPosition"
                     type="text"
@@ -251,7 +322,10 @@ export function PersonalInfoForm({
 
           {/* Billing address */}
           <div className="space-y-4">
-            <h3 className="text-sm font-medium text-foreground">{t('profile.billingAddress')}</h3>
+            <h3 className="text-sm font-medium text-foreground flex items-center gap-1.5">
+              {t('profile.billingAddress')}
+              <span className="text-xs text-muted-foreground font-normal">({t('profile.optional')})</span>
+            </h3>
             <div className="space-y-1">
               <Label htmlFor="address" className="text-sm text-foreground/70">{t('profile.address')}</Label>
               <Input
