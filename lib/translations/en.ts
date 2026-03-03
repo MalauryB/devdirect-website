@@ -178,9 +178,9 @@ export const en = {
       email: "Email",
       emailPlaceholder: "your@email.com",
       password: "Password",
-      passwordPlaceholder: "••••••••",
+      passwordPlaceholder: "Enter your password",
       confirmPassword: "Confirm password",
-      confirmPasswordPlaceholder: "••••••••",
+      confirmPasswordPlaceholder: "Confirm your password",
       role: "I am a",
       roles: {
         client: "Client",
