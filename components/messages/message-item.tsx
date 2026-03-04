@@ -79,12 +79,12 @@ export function MessageItem({ message, isOwn, currentUser, otherParty, onEdit, o
 
   const getSenderInitial = () => {
     if (message.sender_id === currentUser.id) {
-      return (currentUser.first_name?.[0] || 'M').toUpperCase()
+      return (currentUser.first_name?.[0] || currentUser.last_name?.[0] || '?').toUpperCase()
     }
     if (message.sender) {
-      return (message.sender.first_name?.[0] || message.sender.company_name?.[0] || 'U').toUpperCase()
+      return (message.sender.first_name?.[0] || message.sender.last_name?.[0] || message.sender.company_name?.[0] || '?').toUpperCase()
     }
-    return (otherParty?.first_name?.[0] || otherParty?.company_name?.[0] || 'C').toUpperCase()
+    return (otherParty?.first_name?.[0] || otherParty?.last_name?.[0] || otherParty?.company_name?.[0] || '?').toUpperCase()
   }
 
   const isImage = (type: string) => type.startsWith('image/')

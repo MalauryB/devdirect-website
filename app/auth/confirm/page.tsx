@@ -16,33 +16,42 @@ export default function ConfirmPage() {
     const confirmEmail = async () => {
       const token_hash = searchParams.get('token_hash')
       const type = searchParams.get('type') as 'signup' | 'recovery' | 'email'
+      const code = searchParams.get('code')
       const next = validateRedirectUrl(searchParams.get('next'))
 
-      if (!token_hash || !type) {
-        setStatus('error')
-        setMessage('Paramètres manquants')
-        return
-      }
-
       try {
-        const { error } = await supabase.auth.verifyOtp({
-          type,
-          token_hash,
-        })
-
-        if (error) {
-          setStatus('error')
-          setMessage(error.message)
-          setTimeout(() => router.push('/auth/error'), 2000)
+        if (code) {
+          // PKCE flow: exchange code for session
+          const { error } = await supabase.auth.exchangeCodeForSession(code)
+          if (error) {
+            setStatus('error')
+            setMessage(error.message)
+            setTimeout(() => router.push('/auth/error'), 2000)
+            return
+          }
+        } else if (token_hash && type) {
+          // OTP flow: verify token hash
+          const { error } = await supabase.auth.verifyOtp({
+            type,
+            token_hash,
+          })
+          if (error) {
+            setStatus('error')
+            setMessage(error.message)
+            setTimeout(() => router.push('/auth/error'), 2000)
+            return
+          }
         } else {
-          setStatus('success')
-          setMessage('Email confirmé ! Redirection...')
-
-          // Small delay to show success message
-          setTimeout(() => {
-            router.push(next)
-          }, 1500)
+          // No token/code — redirect to destination (session already established)
+          router.push(next)
+          return
         }
+
+        setStatus('success')
+        setMessage('Email confirmé ! Redirection...')
+        setTimeout(() => {
+          router.push(next)
+        }, 1500)
       } catch {
         setStatus('error')
         setMessage('Une erreur est survenue')

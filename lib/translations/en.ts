@@ -214,6 +214,7 @@ export const en = {
         passwordMismatch: "Passwords do not match.",
         passwordTooShort: "Password must be at least 6 characters.",
         invalidCredentials: "Invalid email or password.",
+        emailAlreadyUsed: "An account already exists with this email. Try logging in.",
         generic: "An error occurred. Please try again."
       },
       success: {
@@ -318,47 +319,56 @@ export const en = {
         aboutDesc: "Discover what Nimli can do for you"
       },
       about: {
-        title: "About Nimli",
-        intro: "Experts in computer science, mathematics and AI, we support you in all your digital projects.",
-        whyUs: "Why choose us?",
-        features: {
-          freeMeeting: {
-            title: "Free meeting",
-            description: "Free initial consultation to analyze your needs"
+        welcome: "Welcome",
+        welcomeSubtitle: "Nimli supports you from idea to launch for your digital project.",
+        ctaDevis: "Request a free quote",
+        ctaProjects: "View my projects",
+        processTitle: "How does it work?",
+        processSubtitle: "A simple, step-by-step process.",
+        steps: {
+          meeting: {
+            title: "Let's talk",
+            description: "A free first call to understand your needs and advise you."
           },
-          transparentQuote: {
-            title: "Transparent quote",
-            description: "Clear and detailed pricing with no surprises"
+          quote: {
+            title: "Detailed quote",
+            description: "You receive a clear quote with no surprises, including the planned timeline."
           },
-          fullSupport: {
-            title: "Full support",
-            description: "End-to-end support until deployment"
+          build: {
+            title: "We build it",
+            description: "Our team develops your project. You follow progress in real time."
+          },
+          delivery: {
+            title: "Delivery",
+            description: "Your project is delivered, tested and ready to use. We stay available after."
           }
         },
-        servicesTitle: "Our areas of expertise",
+        servicesTitle: "What we can do for you",
         services: {
           web: {
-            title: "Web Development",
-            description: "Modern and performant web applications with latest technologies."
+            title: "Websites & web apps",
+            description: "Your showcase site, online store or custom business application."
           },
           mobile: {
-            title: "Mobile Development",
-            description: "Native and cross-platform applications for iOS and Android."
+            title: "Mobile apps",
+            description: "An iPhone and Android app for your customers or your team."
           },
           iot: {
-            title: "IoT & Embedded",
-            description: "Connected solutions and innovative embedded systems."
+            title: "Connected devices",
+            description: "Sensors, dashboards, remote control of your equipment."
           },
           ai: {
-            title: "Artificial Intelligence",
-            description: "AI integration and machine learning solutions."
+            title: "Artificial intelligence",
+            description: "Automate repetitive tasks and make better decisions with AI."
           },
           design: {
-            title: "Mockups & Design",
-            description: "Creation of mockups and prototypes to visualize your project."
+            title: "Design & mockups",
+            description: "We design your project before building it, so you can visualize it."
           }
         },
-        cta: "Create a project"
+        ctaTitle: "Ready to launch your project?",
+        ctaDescription: "Tell us about your idea, we'll get back to you within 24h with a first estimate.",
+        ctaGuarantee: "Free first call — No-commitment quote"
       },
       engineer: {
         title: "Dashboard",

@@ -29,6 +29,7 @@ export default function DevisPage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState("")
+  const [isTransferring, setIsTransferring] = useState(false)
 
   // Auth state managed by DevisAuthForm component
 
@@ -60,34 +61,42 @@ export default function DevisPage() {
     }
   }, [])
 
-  // If user is already logged in and we have a pending project, transfer it
+  // If user is logged in and we have a pending project, create it and redirect
   useEffect(() => {
     const transferPendingProject = async () => {
-      if (user && mainStep === 2) {
-        const saved = localStorage.getItem(DEVIS_STORAGE_KEY)
-        if (saved) {
-          setLoading(true)
-          try {
-            const projectData = JSON.parse(saved) as ProjectFormData
-            const { error: createError } = await createProject(projectData)
-            if (!createError) {
-              localStorage.removeItem(DEVIS_STORAGE_KEY)
-              setSuccess(true)
-              setTimeout(() => {
-                router.push("/dashboard?section=projects")
-              }, 2000)
-            } else {
-              setError(t('projects.errors.createFailed'))
-            }
-          } catch {
-            setError(t('projects.errors.createFailed'))
-          }
-          setLoading(false)
+      if (!user || isTransferring || success) return
+
+      const saved = localStorage.getItem(DEVIS_STORAGE_KEY)
+      if (!saved) return
+
+      setIsTransferring(true)
+      setLoading(true)
+
+      // Remove from localStorage FIRST to prevent double creation on re-render
+      localStorage.removeItem(DEVIS_STORAGE_KEY)
+
+      try {
+        const projectData = JSON.parse(saved) as ProjectFormData
+        const { error: createError } = await createProject(projectData)
+        if (!createError) {
+          setSuccess(true)
+          setMainStep(2)
+          setTimeout(() => {
+            router.push("/dashboard?section=projects")
+          }, 2000)
+        } else {
+          // Restore localStorage on failure so user can retry
+          localStorage.setItem(DEVIS_STORAGE_KEY, saved)
+          setError(t('projects.errors.createFailed'))
         }
+      } catch {
+        localStorage.setItem(DEVIS_STORAGE_KEY, saved)
+        setError(t('projects.errors.createFailed'))
       }
+      setLoading(false)
     }
     transferPendingProject()
-  }, [user, mainStep, router, t])
+  }, [user, mainStep, isTransferring, success, router, t])
 
   const handleProjectTypeToggle = createArrayToggleHandler(setFormData, 'project_types')
   const handlePlatformToggle = createArrayToggleHandler(setFormData, 'platforms')

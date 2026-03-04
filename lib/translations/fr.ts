@@ -214,6 +214,7 @@ export const fr = {
         passwordMismatch: "Les mots de passe ne correspondent pas.",
         passwordTooShort: "Le mot de passe doit contenir au moins 6 caractères.",
         invalidCredentials: "Email ou mot de passe incorrect.",
+        emailAlreadyUsed: "Un compte existe déjà avec cet email. Essayez de vous connecter.",
         generic: "Une erreur est survenue. Veuillez réessayer."
       },
       success: {
@@ -318,47 +319,56 @@ export const fr = {
         aboutDesc: "Découvrez ce que Nimli peut faire pour vous"
       },
       about: {
-        title: "À propos de Nimli",
-        intro: "Experts en informatique, mathématiques et IA, nous vous accompagnons dans tous vos projets numériques.",
-        whyUs: "Pourquoi nous choisir ?",
-        features: {
-          freeMeeting: {
-            title: "Rencontre gratuite",
-            description: "Première consultation gratuite pour analyser vos besoins"
+        welcome: "Bienvenue",
+        welcomeSubtitle: "Nimli vous accompagne de l'idée à la mise en ligne de votre projet numérique.",
+        ctaDevis: "Demander un devis gratuit",
+        ctaProjects: "Voir mes projets",
+        processTitle: "Comment ça se passe ?",
+        processSubtitle: "Un accompagnement simple, étape par étape.",
+        steps: {
+          meeting: {
+            title: "On en discute",
+            description: "Un premier échange gratuit pour comprendre votre besoin et vous conseiller."
           },
-          transparentQuote: {
-            title: "Devis transparent",
-            description: "Prix clairs et détaillés sans surprise"
+          quote: {
+            title: "Devis détaillé",
+            description: "Vous recevez un devis clair, sans surprise, avec le planning prévu."
           },
-          fullSupport: {
-            title: "Support complet",
-            description: "Accompagnement de A à Z jusqu'à la mise en ligne"
+          build: {
+            title: "On construit",
+            description: "Notre équipe développe votre projet. Vous suivez l'avancement en temps réel."
+          },
+          delivery: {
+            title: "Livraison",
+            description: "Votre projet est livré, testé et prêt à être utilisé. On reste disponible après."
           }
         },
-        servicesTitle: "Nos domaines d'expertise",
+        servicesTitle: "Ce qu'on peut faire pour vous",
         services: {
           web: {
-            title: "Développement Web",
-            description: "Applications web modernes et performantes avec les dernières technologies."
+            title: "Sites & applications web",
+            description: "Votre site vitrine, boutique en ligne ou application métier, sur mesure."
           },
           mobile: {
-            title: "Développement Mobile",
-            description: "Applications natives et cross-platform pour iOS et Android."
+            title: "Applications mobiles",
+            description: "Une appli iPhone et Android pour vos clients ou votre équipe."
           },
           iot: {
-            title: "IoT & Embarqué",
-            description: "Solutions connectées et systèmes embarqués innovants."
+            title: "Objets connectés",
+            description: "Capteurs, tableaux de bord, pilotage à distance de vos équipements."
           },
           ai: {
-            title: "Intelligence Artificielle",
-            description: "Intégration d'IA et solutions d'apprentissage automatique."
+            title: "Intelligence artificielle",
+            description: "Automatisez vos tâches répétitives et prenez de meilleures décisions grâce à l'IA."
           },
           design: {
-            title: "Maquettes & Design",
-            description: "Création de maquettes et prototypes pour visualiser votre projet."
+            title: "Design & maquettes",
+            description: "On dessine votre projet avant de le construire, pour que vous puissiez le visualiser."
           }
         },
-        cta: "Créer un projet"
+        ctaTitle: "Prêt à lancer votre projet ?",
+        ctaDescription: "Décrivez-nous votre idée, on vous répond sous 24h avec une première estimation.",
+        ctaGuarantee: "Premier échange gratuit — Devis sans engagement"
       },
       engineer: {
         title: "Tableau de bord",

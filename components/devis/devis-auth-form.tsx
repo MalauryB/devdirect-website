@@ -67,11 +67,11 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
           setFieldErrors({ general: t('auth.errors.invalidCredentials') })
         }
       } else if (authMode === "register") {
-        const { error, data } = await signUp(email, password)
+        const { error, data } = await signUp(email, password, `${window.location.origin}/auth/callback?next=/devis`)
         if (error) {
           setFieldErrors({ general: error.message })
         } else if (data?.user && !data.user.identities?.length) {
-          setFieldErrors({ general: t('auth.errors.generic') })
+          setFieldErrors({ email: t('auth.errors.emailAlreadyUsed') })
         } else if (data?.session) {
           // User is automatically logged in
         } else {
@@ -143,7 +143,7 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
                 autoComplete={authMode === "register" ? "new-password" : "current-password"}
                 value={password}
                 onChange={(e) => { setPassword(e.target.value); setFieldErrors(prev => ({ ...prev, password: undefined })) }}
-                placeholder="••••••••"
+                placeholder={t('auth.passwordPlaceholder')}
                 disabled={isLoading}
                 className={`pr-10 ${fieldErrors.password ? errorBorder : 'border-border focus:border-primary'}`}
               />
@@ -172,7 +172,7 @@ export function DevisAuthForm({ loading: externalLoading, success }: DevisAuthFo
                 autoComplete="new-password"
                 value={confirmPassword}
                 onChange={(e) => { setConfirmPassword(e.target.value); setFieldErrors(prev => ({ ...prev, confirmPassword: undefined })) }}
-                placeholder="••••••••"
+                placeholder={t('auth.confirmPasswordPlaceholder')}
                 disabled={isLoading}
                 className={`pr-10 ${fieldErrors.confirmPassword ? errorBorder : 'border-border focus:border-primary'}`}
               />

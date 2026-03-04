@@ -90,9 +90,11 @@ export function AuthModal() {
           router.push("/dashboard")
         }
       } else if (mode === "register") {
-        const { error } = await signUp(email, password)
+        const { error, data } = await signUp(email, password)
         if (error) {
           setFieldErrors({ general: error.message })
+        } else if (data?.user && !data.user.identities?.length) {
+          setFieldErrors({ email: t('auth.errors.emailAlreadyUsed') })
         } else {
           setSuccess(t('auth.success.checkEmail'))
         }

@@ -213,7 +213,7 @@ export default function DashboardPage() {
             </div>
           )}
 
-          {activeSection === "about" && <AboutSection />}
+          {activeSection === "about" && <AboutSection onNavigateToProjects={() => navigateToSection('projects')} userName={displayName || ''} />}
 
           {activeSection === "messages" && !isEngineer && (
             <ClientMessagesSection
