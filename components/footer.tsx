@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Code2, Mail, Phone, MapPin } from "lucide-react"
+import { Code2 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
 
@@ -21,16 +21,6 @@ export function Footer() {
             <p className="text-muted-foreground mb-4 max-w-md">
               {t('footer.description')}
             </p>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-center space-x-2">
-                <Mail className="w-4 h-4" />
-                <span>contact@nimli.fr</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="w-4 h-4" />
-                <span>+33 1 23 45 67 89</span>
-              </div>
-            </div>
           </div>
 
           {/* Services */}
