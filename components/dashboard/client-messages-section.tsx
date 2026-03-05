@@ -38,16 +38,16 @@ export function ClientMessagesSection({
       <div className="w-56 bg-muted/50 border-r border-border flex-shrink-0 flex flex-col">
         <div className="p-4 border-b border-border">
           <h2 className="font-semibold text-foreground">{t('messages.title')}</h2>
-          <p className="text-xs text-foreground/50 mt-1">{t('messages.sectionDescription')}</p>
+          <p className="text-xs text-muted-foreground mt-1">{t('messages.sectionDescription')}</p>
         </div>
 
         {projectsLoading ? (
           <div className="flex items-center justify-center py-12">
-            <Loader2 className="w-5 h-5 animate-spin text-foreground/50" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           </div>
         ) : projects.length === 0 ? (
           <div className="p-4 text-center">
-            <p className="text-sm text-foreground/50 mb-3">{t('messages.noProjects')}</p>
+            <p className="text-sm text-muted-foreground mb-3">{t('messages.noProjects')}</p>
             <Button
               onClick={onNavigateToProjects}
               size="sm"
@@ -59,7 +59,7 @@ export function ClientMessagesSection({
           </div>
         ) : (
           <nav className="p-2 flex-1 overflow-y-auto">
-            <p className="text-xs font-medium text-foreground/40 uppercase tracking-wide px-2 mb-2">
+            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-2 mb-2">
               {t('messages.selectProject')}
             </p>
             {projects.map((project) => (
@@ -73,7 +73,7 @@ export function ClientMessagesSection({
                 }`}
               >
                 <MessageCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                  selectedProject?.id === project.id ? 'text-[#6cb1bb]' : ''
+                  selectedProject?.id === project.id ? 'text-primary' : ''
                 }`} />
                 <div className="flex-1 min-w-0">
                   <span className="block font-medium truncate">
@@ -97,7 +97,7 @@ export function ClientMessagesSection({
             <div className="p-4 border-b border-border bg-white flex items-center justify-between">
               <div>
                 <h3 className="font-semibold text-foreground">{selectedProject.title || t('projects.untitled')}</h3>
-                <p className="text-sm text-foreground/50">{t('messages.conversationWith')}</p>
+                <p className="text-sm text-muted-foreground">{t('messages.conversationWith')}</p>
               </div>
               <Button
                 variant="outline"
@@ -127,8 +127,8 @@ export function ClientMessagesSection({
         ) : (
           <div className="flex-1 flex items-center justify-center bg-muted/50">
             <div className="text-center">
-              <MessageSquare className="w-12 h-12 text-foreground/20 mx-auto mb-4" />
-              <p className="text-foreground/50">{t('messages.selectToView')}</p>
+              <MessageSquare className="w-12 h-12 text-muted-foreground/50 mx-auto mb-4" />
+              <p className="text-muted-foreground">{t('messages.selectToView')}</p>
             </div>
           </div>
         )}

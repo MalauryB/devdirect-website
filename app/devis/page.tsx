@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowLeft, Sparkles, Code, Lightbulb, Users, Globe, Smartphone, Monitor, Cpu, Brain, HelpCircle, FileText, Palette, Euro, Clock, Check, CheckCircle2, ChevronRight, ChevronLeft, Rocket } from "lucide-react"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useLanguage } from "@/contexts/language-context"
 import { useAuth } from "@/contexts/auth-context"
@@ -699,7 +700,7 @@ export default function DevisPage() {
               <ArrowLeft className="w-4 h-4" />
               {mainStep === 2 ? t('projectWizard.backToForm') : wizardStep === 0 ? t('navigation.accueil') : t('projectWizard.previous')}
             </Button>
-            <h1 className="text-base md:text-3xl font-bold logo-cubic text-foreground">{t('name')}</h1>
+            <Image src="/logo_nimli.png" alt="Nimli" width={100} height={40} className="h-7 w-auto" />
           </div>
         </div>
       </header>

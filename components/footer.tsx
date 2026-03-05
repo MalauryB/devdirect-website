@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { Code2, Mail, Phone, MapPin } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
@@ -15,7 +16,7 @@ export function Footer() {
           {/* Logo & Description */}
           <div className="col-span-1 md:col-span-2">
             <div className="mb-4">
-              <span className="logo-cubic text-3xl text-foreground">Nimli</span>
+              <Image src="/logo_nimli.png" alt="Nimli" width={100} height={40} className="h-8 w-auto" />
             </div>
             <p className="text-muted-foreground mb-4 max-w-md">
               {t('footer.description')}

@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Menu, X, User, LogOut, LayoutDashboard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -26,7 +27,7 @@ export function Header() {
         <div className="mx-auto max-w-7xl">
           <div className="flex items-center justify-between">
           <Link href="/" className="flex items-center">
-            <span className="logo-cubic text-3xl text-foreground">Nimli</span>
+            <Image src="/logo_nimli.png" alt="Nimli" width={100} height={40} className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -95,7 +96,7 @@ export function Header() {
               <Button
                 variant="outline"
                 size="sm"
-                className="flex items-center gap-2 border-primary/30"
+                className="flex items-center gap-2 bg-white border-border hover:bg-white/80"
                 onClick={openAuthModal}
               >
                 <User className="w-4 h-4" />

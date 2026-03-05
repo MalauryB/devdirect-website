@@ -86,17 +86,17 @@ export function MessageInput({ projectId, onSend, disabled, error }: MessageInpu
       {attachment && (
         <div className="flex items-center gap-2 mb-2 p-2 bg-muted rounded-lg">
           {isImage(attachment.type) ? (
-            <ImageIcon className="w-4 h-4 text-foreground/50" />
+            <ImageIcon className="w-4 h-4 text-muted-foreground" />
           ) : (
-            <FileText className="w-4 h-4 text-foreground/50" />
+            <FileText className="w-4 h-4 text-muted-foreground" />
           )}
-          <span className="text-sm text-foreground/70 truncate flex-1">{attachment.name}</span>
+          <span className="text-sm text-foreground/80 truncate flex-1">{attachment.name}</span>
           <button
             onClick={removeAttachment}
             className="p-1 hover:bg-muted rounded"
             aria-label="Retirer la piece jointe"
           >
-            <X className="w-4 h-4 text-foreground/50" />
+            <X className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
       )}

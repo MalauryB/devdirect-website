@@ -12,92 +12,81 @@
 }
 
 :root {
-  /* Updated to use the new natural color palette - HSL format for Tailwind compatibility */
-  /* New palette: 38392c,faf8f2,9c9899,9c984d,7f7074,bda3cc,d3cfc2,6cb1bb,cbc3a3,d0d1d9 */
-  --background: 48 50% 97%; /* Cream white background #faf8f2 */
-  --foreground: 64 16% 20%; /* Dark olive green for text #38392c */
-  --card: 48 50% 97%; /* Same as background for cards */
-  --card-foreground: 64 16% 20%;
-  --popover: 48 50% 97%;
-  --popover-foreground: 64 16% 20%;
-  /* Updated primary color to pink */
-  --primary: 340 81% 61%; /* Pink as primary #ea4c89 */
-  --primary-foreground: 48 50% 97%;
-  --secondary: 189 40% 58%; /* Moved turquoise to secondary #6cb1bb */
-  --secondary-foreground: 64 16% 20%;
-  --muted: 43 17% 80%; /* Light beige #d3cfc2 */
-  --muted-foreground: 340 7% 47%; /* Gray-violet for muted text #7f7074 */
-  --accent: 332 75% 95%; /* Light pink accent for hover states */
-  --accent-foreground: 332 75% 45%;
-  --action: 332 75% 61%; /* Pink action color #ea4c89 */
-  --action-foreground: 48 50% 97%;
-  --destructive: 340 7% 47%; /* #7f7074 */
-  --destructive-foreground: 48 50% 97%;
-  --border: 233 10% 82%; /* Very light gray for borders #d0d1d9 */
-  --input: 48 50% 97%;
-  /* Updated ring color to match action (pink) */
-  --ring: 332 75% 61%;
-  /* Updated chart colors to include new primary */
-  --chart-1: 340 81% 61%;
-  --chart-2: 189 40% 58%;
-  --chart-3: 57 35% 46%;
-  --chart-4: 340 7% 47%;
-  --chart-5: 47 20% 72%;
+  /* Nimli palette: rose, beige, noir */
+  --background: 30 33% 96%; /* Warm beige background #f5f0eb */
+  --foreground: 0 0% 10%; /* Near-black text #1a1a1a */
+  --card: 30 33% 96%;
+  --card-foreground: 0 0% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+  --primary: 340 82% 52%; /* Rose/pink #e2196b */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 30 20% 90%; /* Light beige #ebe5de */
+  --secondary-foreground: 0 0% 10%;
+  --muted: 30 18% 90%; /* Muted beige #ebe5df */
+  --muted-foreground: 0 0% 45%; /* Neutral gray #737373 */
+  --accent: 340 60% 95%; /* Light rose tint for hover */
+  --accent-foreground: 340 82% 40%;
+  --action: 340 82% 52%; /* Rose action color */
+  --action-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%; /* Red for errors */
+  --destructive-foreground: 0 0% 100%;
+  --border: 30 15% 85%; /* Warm beige border #ddd6cc */
+  --input: 30 33% 96%;
+  --ring: 340 82% 52%;
+  --chart-1: 340 82% 52%;
+  --chart-2: 30 40% 60%;
+  --chart-3: 0 0% 30%;
+  --chart-4: 340 30% 70%;
+  --chart-5: 30 20% 75%;
   --radius: 1rem;
-  --sidebar: 48 50% 97%;
-  --sidebar-foreground: 64 16% 20%;
-  /* Updated sidebar primary to match new primary */
-  --sidebar-primary: 340 81% 61%;
-  --sidebar-primary-foreground: 48 50% 97%;
-  --sidebar-accent: 189 40% 58%;
-  --sidebar-accent-foreground: 64 16% 20%;
-  --sidebar-border: 233 10% 82%;
-  /* Updated sidebar ring to match new primary */
-  --sidebar-ring: 340 81% 61%;
-  --font-inter: "Inter", sans-serif; /* Added font configuration */
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 0 0% 10%;
+  --sidebar-primary: 340 82% 52%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 30 20% 90%;
+  --sidebar-accent-foreground: 0 0% 10%;
+  --sidebar-border: 30 15% 85%;
+  --sidebar-ring: 340 82% 52%;
+  --font-inter: "Inter", sans-serif;
 }
 
 .dark {
-  /* Updated dark mode colors to complement the new palette - HSL format */
-  --background: 64 16% 20%; /* Dark olive as background #38392c */
-  --foreground: 48 50% 97%; /* Cream as text #faf8f2 */
-  --card: 64 16% 20%;
-  --card-foreground: 48 50% 97%;
-  --popover: 64 16% 20%;
-  --popover-foreground: 48 50% 97%;
-  /* Updated dark mode primary color */
-  --primary: 340 81% 61%;
-  --primary-foreground: 64 16% 20%;
-  --secondary: 189 40% 58%;
-  --secondary-foreground: 64 16% 20%;
-  --muted: 340 7% 47%;
-  --muted-foreground: 0 1% 61%;
-  --accent: 332 75% 30%; /* Dark pink accent for hover states */
-  --accent-foreground: 332 75% 90%;
-  --action: 332 75% 61%; /* Pink action color #ea4c89 */
-  --action-foreground: 48 50% 97%;
-  --destructive: 340 7% 47%;
-  --destructive-foreground: 48 50% 97%;
-  --border: 340 7% 47%;
-  --input: 340 7% 47%;
-  /* Updated dark mode ring color to match action (pink) */
-  --ring: 332 75% 61%;
-  /* Updated dark mode chart colors */
-  --chart-1: 340 81% 61%;
-  --chart-2: 189 40% 58%;
-  --chart-3: 57 35% 46%;
-  --chart-4: 0 1% 61%;
-  --chart-5: 47 20% 72%;
-  --sidebar: 64 16% 20%;
-  --sidebar-foreground: 48 50% 97%;
-  /* Updated dark mode sidebar primary */
-  --sidebar-primary: 340 81% 61%;
-  --sidebar-primary-foreground: 48 50% 97%;
-  --sidebar-accent: 189 40% 58%;
-  --sidebar-accent-foreground: 64 16% 20%;
-  --sidebar-border: 340 7% 47%;
-  /* Updated dark mode sidebar ring */
-  --sidebar-ring: 340 81% 61%;
+  /* Dark mode: rose, dark beige, light text */
+  --background: 0 0% 8%; /* Near-black background */
+  --foreground: 30 20% 92%; /* Light beige text */
+  --card: 0 0% 12%;
+  --card-foreground: 30 20% 92%;
+  --popover: 0 0% 12%;
+  --popover-foreground: 30 20% 92%;
+  --primary: 340 82% 58%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 30 10% 20%;
+  --secondary-foreground: 30 20% 92%;
+  --muted: 0 0% 18%;
+  --muted-foreground: 0 0% 60%;
+  --accent: 340 50% 20%;
+  --accent-foreground: 340 60% 85%;
+  --action: 340 82% 58%;
+  --action-foreground: 0 0% 100%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 22%;
+  --input: 0 0% 18%;
+  --ring: 340 82% 58%;
+  --chart-1: 340 82% 58%;
+  --chart-2: 30 40% 50%;
+  --chart-3: 0 0% 60%;
+  --chart-4: 340 30% 60%;
+  --chart-5: 30 20% 50%;
+  --sidebar: 0 0% 10%;
+  --sidebar-foreground: 30 20% 92%;
+  --sidebar-primary: 340 82% 58%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 30 10% 20%;
+  --sidebar-accent-foreground: 30 20% 92%;
+  --sidebar-border: 0 0% 22%;
+  --sidebar-ring: 340 82% 58%;
 }
 
 

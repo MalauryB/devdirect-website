@@ -107,8 +107,8 @@ export function MessageList({ messages, currentUser, otherParty, onEditMessage, 
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
       {messages.length === 0 ? (
         <div className="text-center py-12">
-          <p className="text-foreground/50">{t('messages.noMessages')}</p>
-          <p className="text-sm text-foreground/30 mt-1">{t('messages.startConversation')}</p>
+          <p className="text-muted-foreground">{t('messages.noMessages')}</p>
+          <p className="text-sm text-muted-foreground/70 mt-1">{t('messages.startConversation')}</p>
         </div>
       ) : (
         groupedMessages.map((group, groupIndex) => (
@@ -116,7 +116,7 @@ export function MessageList({ messages, currentUser, otherParty, onEditMessage, 
             {/* Date separator */}
             <div className="flex items-center gap-4 my-4">
               <div className="flex-1 h-px bg-muted" />
-              <span className="text-xs text-foreground/40 font-medium">
+              <span className="text-xs text-muted-foreground font-medium">
                 {formatDate(group.date)}
               </span>
               <div className="flex-1 h-px bg-muted" />

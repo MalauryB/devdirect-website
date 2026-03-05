@@ -149,7 +149,7 @@ export function MessageThread({ projectId, currentUser, otherParty }: MessageThr
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="w-6 h-6 animate-spin text-foreground/50" />
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
       </div>
     )
   }

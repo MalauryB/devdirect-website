@@ -98,7 +98,7 @@ export function MessageItem({ message, isOwn, currentUser, otherParty, onEdit, o
       className={`flex gap-3 mb-4 group ${isOwn ? 'flex-row-reverse' : ''}`}
     >
       {/* Avatar */}
-      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#e8c4c4] to-[#c48b8b] flex items-center justify-center overflow-hidden flex-shrink-0">
+      <div className="w-8 h-8 rounded-full bg-primary/80 flex items-center justify-center overflow-hidden flex-shrink-0">
         {avatarUrl ? (
           <img
             src={avatarUrl}
@@ -115,10 +115,10 @@ export function MessageItem({ message, isOwn, currentUser, otherParty, onEdit, o
       {/* Message content */}
       <div className={`max-w-[70%] ${isOwn ? 'text-right' : ''}`}>
         <div className="flex items-center gap-2 mb-1">
-          <span className={`text-xs font-medium text-foreground/70 ${isOwn ? 'order-2' : ''}`}>
+          <span className={`text-xs font-medium text-foreground/80 ${isOwn ? 'order-2' : ''}`}>
             {senderName}
           </span>
-          <span className={`text-xs text-foreground/40 ${isOwn ? 'order-1' : ''}`}>
+          <span className={`text-xs text-muted-foreground ${isOwn ? 'order-1' : ''}`}>
             {formatTime(message.created_at)}
           </span>
           {/* Actions menu - only for own messages */}
@@ -126,7 +126,7 @@ export function MessageItem({ message, isOwn, currentUser, otherParty, onEdit, o
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button className={`opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-muted rounded ${isOwn ? 'order-0' : 'order-3'}`} aria-label="Options du message">
-                  <MoreVertical className="w-3 h-3 text-foreground/50" />
+                  <MoreVertical className="w-3 h-3 text-muted-foreground" />
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align={isOwn ? "end" : "start"}>
@@ -149,9 +149,9 @@ export function MessageItem({ message, isOwn, currentUser, otherParty, onEdit, o
         <div
           className={`rounded-2xl px-4 py-2 ${
             isDeleted
-              ? 'bg-muted text-foreground/40'
+              ? 'bg-muted text-muted-foreground'
               : isOwn
-                ? 'bg-[rgb(239,239,239)] text-foreground rounded-tr-sm'
+                ? 'bg-white text-foreground rounded-tr-sm border border-border'
                 : 'bg-muted text-foreground rounded-tl-sm'
           }`}
         >
@@ -199,12 +199,10 @@ export function MessageItem({ message, isOwn, currentUser, otherParty, onEdit, o
                   href={message.attachment.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-2 p-2 rounded-lg ${
-                    isOwn ? 'bg-muted hover:bg-muted' : 'bg-muted hover:bg-muted'
-                  } transition-colors`}
+                  className="flex items-center gap-2 p-2 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
                 >
-                  <FileText className="w-4 h-4" />
-                  <span className="text-xs truncate flex-1">{message.attachment.name}</span>
+                  <FileText className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-xs truncate flex-1 text-foreground/80">{message.attachment.name}</span>
                   <Download className="w-3 h-3" />
                 </a>
               )}

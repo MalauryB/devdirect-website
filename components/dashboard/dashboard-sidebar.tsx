@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { X } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import type { LucideIcon } from "lucide-react"
@@ -64,12 +65,12 @@ export function DashboardSidebar({
           {/* Sidebar header */}
           <div className={`px-4 h-14 border-b border-border flex items-center ${!sidebarExpanded && !sidebarOpen ? "lg:px-3" : ""}`}>
             <div className="flex items-center justify-between w-full">
-              <Link href="/" className={`text-xl font-bold logo-cubic text-foreground transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : ""}`}>
-                {t('name')}
+              <Link href="/" className={`transition-opacity duration-200 ${!sidebarExpanded && !sidebarOpen ? "lg:opacity-0 lg:w-0 lg:overflow-hidden" : ""}`}>
+                <Image src="/logo_nimli.png" alt="Nimli" width={100} height={40} className="h-7 w-auto" />
               </Link>
               {/* Logo icon when collapsed */}
               <div className={`hidden ${!sidebarExpanded && !sidebarOpen ? "lg:flex" : "lg:hidden"} items-center justify-center w-10 h-10`}>
-                <span className="text-xl font-bold logo-cubic text-foreground">M</span>
+                <Image src="/logo_nimli.png" alt="Nimli" width={32} height={32} className="h-6 w-auto" />
               </div>
               <button
                 className="lg:hidden p-2 hover:bg-muted rounded-lg"
