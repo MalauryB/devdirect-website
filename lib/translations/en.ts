@@ -1735,5 +1735,6 @@ export const en = {
       send: "Send request",
       requiredFields: "Required fields",
       optional: "optional",
+      error: "An error occurred while sending. Please try again.",
     },
 }

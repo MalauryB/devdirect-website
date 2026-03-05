@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Send, CheckCircle, Check } from "lucide-react"
+import { Send, CheckCircle, Check, Loader2 } from "lucide-react"
 import { useLanguage } from "@/contexts/language-context"
 import { useContact } from "@/contexts/contact-context"
 
@@ -14,6 +14,8 @@ export function ContactDialog() {
   const { t } = useLanguage()
   const { isOpen, closeDialog } = useContact()
   const [submitted, setSubmitted] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -40,15 +42,31 @@ export function ContactDialog() {
     }
   }, [isOpen])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const subject = encodeURIComponent(`Contact from ${formData.name} - ${formData.company || 'N/A'}`)
-    const body = encodeURIComponent(
-      `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone || 'N/A'}\nCompany: ${formData.company || 'N/A'}\n\nMessage:\n${formData.message}`
-    )
-    window.open(`mailto:contact@nimli.fr?subject=${subject}&body=${body}`, '_blank')
-    setSubmitted(true)
-    setFormData({ name: "", email: "", phone: "", company: "", message: "" })
+    setLoading(true)
+    setError("")
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        setError(data.error || t('contact.error'))
+        return
+      }
+
+      setSubmitted(true)
+      setFormData({ name: "", email: "", phone: "", company: "", message: "" })
+    } catch {
+      setError(t('contact.error'))
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -142,8 +160,11 @@ export function ContactDialog() {
               className={formData.message.trim() ? 'border-green-300' : ''}
             />
           </div>
-          <Button type="submit" className="w-full" size="lg">
-            <Send className="mr-2 w-4 h-4" />
+          {error && (
+            <p className="text-sm text-red-600 bg-red-50 p-3 rounded-lg">{error}</p>
+          )}
+          <Button type="submit" className="w-full" size="lg" disabled={loading}>
+            {loading ? <Loader2 className="mr-2 w-4 h-4 animate-spin" /> : <Send className="mr-2 w-4 h-4" />}
             {t('contact.send')}
           </Button>
         </form>

@@ -1735,5 +1735,6 @@ export const fr = {
       send: "Envoyer la demande",
       requiredFields: "Champs obligatoires",
       optional: "facultatif",
+      error: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
     },
 }
