@@ -3,6 +3,7 @@ export const fr = {
     navigation: {
       accueil: "Accueil",
       services: "Services",
+      projets: "Projets",
       processus: "Processus",
       equipe: "Équipe",
       contact: "Contact",
@@ -1736,5 +1737,21 @@ export const fr = {
       requiredFields: "Champs obligatoires",
       optional: "facultatif",
       error: "Une erreur est survenue lors de l'envoi. Veuillez réessayer.",
+    },
+    portfolio: {
+      title: "Nos Projets",
+      subtitle: "Retrouvez nos realisations et les projets en cours de developpement.",
+      status: {
+        completed: "Termine",
+        inProgress: "En cours",
+      },
+      viewProject: "Voir le projet",
+      comingSoon: "D'autres projets arrivent bientot... Restez connectes !",
+      projects: {
+        quiserapresident: {
+          title: "Qui pour l'Elysee ?",
+          description: "Simulateur interactif de l'election presidentielle 2027. Modele mathematique permettant aux citoyens d'explorer differents scenarios electoraux.",
+        },
+      },
     },
 }

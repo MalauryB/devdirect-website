@@ -3,6 +3,7 @@ export const en = {
     navigation: {
       accueil: "Home",
       services: "Services",
+      projets: "Projects",
       processus: "Process",
       equipe: "Team",
       contact: "Contact",
@@ -1736,5 +1737,21 @@ export const en = {
       requiredFields: "Required fields",
       optional: "optional",
       error: "An error occurred while sending. Please try again.",
+    },
+    portfolio: {
+      title: "Our Projects",
+      subtitle: "Discover our completed work and ongoing projects.",
+      status: {
+        completed: "Completed",
+        inProgress: "In progress",
+      },
+      viewProject: "View project",
+      comingSoon: "More projects coming soon... Stay tuned!",
+      projects: {
+        quiserapresident: {
+          title: "Who for the Elysee?",
+          description: "Interactive simulator for France's 2027 presidential election. A mathematical model that lets citizens explore different electoral scenarios.",
+        },
+      },
     },
 }

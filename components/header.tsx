@@ -38,6 +38,9 @@ export function Header() {
             >
               {t('navigation.services')}
             </a>
+            <Link href="/projets" className="text-foreground hover:text-primary transition-colors duration-300 font-medium">
+              {t('navigation.projets')}
+            </Link>
             <a href="/#team" className="text-foreground hover:text-primary transition-colors duration-300 font-medium">
               {t('navigation.equipe')}
             </a>
@@ -121,6 +124,9 @@ export function Header() {
               <a href="/#services" className="text-foreground hover:text-primary transition-colors font-medium">
                 {t('navigation.services')}
               </a>
+              <Link href="/projets" className="text-foreground hover:text-primary transition-colors font-medium">
+                {t('navigation.projets')}
+              </Link>
               <a href="/#team" className="text-foreground hover:text-primary transition-colors font-medium">
                 {t('navigation.equipe')}
               </a>
